@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import queryString from "query-string";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { useLazyQuery } from "@apollo/client";
 import { GET_BOARD } from "../../../queries/sharedQuery";
 import {
   getBoardByCategory_getBoardByCategory_data,
   getBoardById,
 } from "../../../typings/api";
-import { Button, Descriptions } from "antd";
-import { Container } from "./styles";
+import { Descriptions, Typography } from "antd";
+import { Button, Container } from "./styles";
+import { getDate } from "../../../hooks/getDate";
 
 interface locationProps {
   search: string;
@@ -16,11 +17,12 @@ interface locationProps {
 
 const BoardDetail: React.VFC = () => {
   const { search } = useLocation<locationProps>();
+  const history = useHistory();
   const queryObj = queryString.parse(search);
-  const { category, id } = queryObj;
+  const { id } = queryObj;
   const [board, setBoard] =
     useState<getBoardByCategory_getBoardByCategory_data>();
-  const [getBoardById, { loading, data, refetch }] =
+  const [getBoardById, { loading, data }] =
     useLazyQuery<getBoardById>(GET_BOARD);
 
   useEffect(() => {
@@ -35,39 +37,40 @@ const BoardDetail: React.VFC = () => {
     }
   }, [data]);
 
-  console.log(board);
-
   if (loading) {
     return <>loading</>;
   }
 
   return (
     <Container>
+      <Button type="ghost" onClick={() => history.goBack()}>
+        뒤로
+      </Button>
       <Descriptions
         bordered
-        title="Custom Size"
-        extra={<Button type="primary">Edit</Button>}
+        column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+        layout="horizontal"
       >
-        <Descriptions.Item label="Product">Cloud Database</Descriptions.Item>
-        <Descriptions.Item label="Billing">Prepaid</Descriptions.Item>
-        <Descriptions.Item label="time">18:00:00</Descriptions.Item>
-        <Descriptions.Item label="Amount">$80.00</Descriptions.Item>
-        <Descriptions.Item label="Discount">$20.00</Descriptions.Item>
-        <Descriptions.Item label="Official">$60.00</Descriptions.Item>
-        <Descriptions.Item label="Config Info">
-          Data disk type: MongoDB
+        <Descriptions.Item label="제목" span={3} labelStyle={{ width: 100 }}>
+          <Typography.Title level={3}>{board?.title}</Typography.Title>
+        </Descriptions.Item>
+        <Descriptions.Item label="작성일" span={3} labelStyle={{ width: 100 }}>
+          {getDate(board?.createdAt || "")}
+        </Descriptions.Item>
+        <Descriptions.Item label="내용" span={3}>
+          {board?.content}
           <br />
-          Database version: 3.4
+          test
           <br />
-          Package: dds.mongo.mid
-          <br />
-          Storage space: 10 GB
-          <br />
-          Replication factor: 3
-          <br />
-          Region: East China 1<br />
+          testest
         </Descriptions.Item>
       </Descriptions>
+      <div className="button-group">
+        <Button type="primary">수정</Button>
+        <Button type="primary" danger>
+          삭제
+        </Button>
+      </div>
     </Container>
   );
 };

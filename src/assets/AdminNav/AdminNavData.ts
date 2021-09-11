@@ -170,6 +170,47 @@ export const AdminNavData: NavProps[] = [
     ],
   },
   {
+    title: "press",
+    ko_title: "사업성과",
+    subMenu: [
+      {
+        key: "press-main",
+        title: "main",
+        ko_title: "주요 사업 성과",
+      },
+      {
+        key: "press-news",
+        title: "news",
+        ko_title: "사업단 소식",
+      },
+      {
+        key: "press-swvalue-news",
+        title: "news-value",
+        ko_title: "SW가치확산 소식",
+      },
+      {
+        key: "press-swedu-news",
+        title: "news-edu",
+        ko_title: "SW교육지원 소식",
+      },
+      {
+        key: "press-startup",
+        title: "news-startup",
+        ko_title: "창업지원 소식",
+      },
+      {
+        key: "press-onpress",
+        title: "news-press",
+        ko_title: "보도자료",
+      },
+      {
+        key: "press-storage",
+        title: "storage",
+        ko_title: "자료실",
+      },
+    ],
+  },
+  {
     title: "community",
     ko_title: "알림마당",
     subMenu: [

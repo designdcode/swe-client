@@ -1,6 +1,8 @@
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 export const Container = styled.div`
-	height:100%;
-	width: 100%;
-`
+  & .link-checkbox {
+    margin: 20px;
+    margin-left: 40px;
+  }
+`;

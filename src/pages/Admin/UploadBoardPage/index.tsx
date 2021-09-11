@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import queryString from "query-string";
 import useInput from "../../../hooks/useInput";
 import { Container } from "./styles";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Checkbox } from "antd";
 import { useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_BOARD } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { useHistory, useLocation } from "react-router";
+import { isLinkNeeded } from "../../../utils/isLinkNeeded";
 
 interface locationProps {
   search: string;
@@ -24,8 +25,15 @@ const UploadBoardPage: React.FC = () => {
   const { category, param, subparam } = queryObj;
   const [title, onChangeTitle, setTitle] = useInput("");
   const [content, onChangeContent, setContent] = useInput("");
-  const [showLink, setShowLink] = useState<boolean>(true);
   const [link, onChangeLink, setLink] = useInput("");
+  const [showLink, setShowLink] = useState<boolean>(false);
+  const [linkAdd, setLinkAdd] = useState<boolean>(false);
+
+  console.log(subparam?.includes("storage"), link);
+
+  useEffect(() => {
+    setLinkAdd(isLinkNeeded(subparam as string));
+  }, [subparam]);
 
   const [createBoard, { loading }] = useMutation(CREATE_BOARD, {
     onCompleted: ({ createBoard }) => {
@@ -46,6 +54,15 @@ const UploadBoardPage: React.FC = () => {
     },
   });
 
+  const handleLinkAdd = useCallback(() => {
+    setShowLink(!showLink);
+    if (!showLink) {
+      setLink("");
+    }
+  }, [showLink, setLink, setShowLink]);
+
+  console.log(link);
+
   const onFinish = useCallback(() => {
     createBoard({
       variables: {
@@ -61,12 +78,21 @@ const UploadBoardPage: React.FC = () => {
     <Container>
       <Form {...layout} name="upload-board" onFinish={onFinish}>
         <Form.Item name={["title"]} label="제목">
-          <Input onChange={onChangeTitle} value={title} />
+          <Input type="text" onChange={onChangeTitle} value={title} />
         </Form.Item>
-        {showLink && (
-          <Form.Item name={["link"]} label="링크">
-            <Input onChange={onChangeLink} value={link} />
-          </Form.Item>
+        {linkAdd && (
+          <>
+            <div className="link-checkbox">
+              <Checkbox onChange={handleLinkAdd}>
+                {showLink ? "링크제거" : "링크추가"}
+              </Checkbox>
+            </div>
+            {showLink && (
+              <Form.Item name={["link"]} label="링크">
+                <Input type="text" onChange={onChangeLink} value={link} />
+              </Form.Item>
+            )}
+          </>
         )}
         <Form.Item name={["content"]} label="내용">
           <Input.TextArea

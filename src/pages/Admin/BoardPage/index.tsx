@@ -10,6 +10,7 @@ import {
   GET_BOARD_BY_CATEGORY,
 } from "../../../queries/adminQuery";
 import { getBoardByCategory } from "../../../typings/api";
+import { Container } from "./styles";
 
 interface ParamProps {
   param: string;
@@ -87,11 +88,11 @@ const BoardPage = () => {
   }
 
   return (
-    <>
+    <Container>
       <Link
         to={`/admin/${param}/create-${param}?category=${subparam}&param=${param}&subparam=${subparam}`}
       >
-        <Button type="primary" style={{ marginBottom: 20 }}>
+        <Button type="primary" style={{ marginTop: 15, marginBottom: 20 }}>
           글쓰기
         </Button>
       </Link>
@@ -136,7 +137,7 @@ const BoardPage = () => {
           )}
         />
       </Table>
-    </>
+    </Container>
   );
 };
 
