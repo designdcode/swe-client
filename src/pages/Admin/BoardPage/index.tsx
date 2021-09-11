@@ -1,91 +1,143 @@
-import { useLazyQuery, useQuery } from '@apollo/client'
-import { Table, Tag, Space } from 'antd'
-import Column from 'antd/lib/table/Column'
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
-import { GET_BOARD_BY_CATEGORY } from '../../../queries/adminQuery'
-import { getBoardByCategory } from '../../../typings/api'
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { Table, Space, Button } from "antd";
+import Column from "antd/lib/table/Column";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getDate } from "../../../hooks/getDate";
+import {
+  DELETE_BOARD,
+  GET_BOARD_BY_CATEGORY,
+} from "../../../queries/adminQuery";
+import { getBoardByCategory } from "../../../typings/api";
 
 interface ParamProps {
-	param: string;
-	subparam: string;
+  param: string;
+  subparam: string;
 }
-
 interface TableBoardProps {
-	title: string | null
-	content: string | null
+  id: number | null;
+  index: number | null;
+  title: string | null;
+  createdAt: string | null;
+  category: string;
 }
 
+interface LocationProps {
+  refresh?: boolean;
+}
 
 const BoardPage = () => {
-	const { param, subparam } = useParams<ParamProps>()
-	const [boards, setBoards] = useState<Array<TableBoardProps>>()
+  const { param, subparam } = useParams<ParamProps>();
+  const { state } = useLocation<LocationProps>();
+  const [boards, setBoards] = useState<Array<TableBoardProps>>();
+  const [getBoard, { loading, data, refetch }] =
+    useLazyQuery<getBoardByCategory>(GET_BOARD_BY_CATEGORY);
 
-	const [getBoard, { loading, data, refetch }] = useLazyQuery<getBoardByCategory>(GET_BOARD_BY_CATEGORY)
+  const [deleteBoard] = useMutation(DELETE_BOARD, {
+    onCompleted: ({ deleteBoard }) => {
+      const { ok, err } = deleteBoard;
+      if (ok) {
+        toast.success("게시물이 삭제 되었습니다");
+        if (refetch) {
+          refetch();
+        }
+      } else {
+        toast.error(err);
+      }
+    },
+  });
 
-	const columns = [
-		{
-			title: '번호',
-			key: 'number',
-		},
-		{
-			title: '제목',
-			dataIndex: 'title',
-			key: 'title',
-		},
-		{
-			title: '내용',
-			dataIndex: 'content',
-			key: 'content',
-		},
-		{
-			title: 'Action',
-			key: 'action',
-			render: () => (
-				<Space size="middle">
-					<div>delete</div>
-				</Space>
-			)
-		}
-	];
+  useEffect(() => {
+    getBoard({ variables: { category: subparam } });
+  }, [getBoard, subparam]);
 
-	useEffect(() => {
-		getBoard({ variables: { category: 'test' } })
-	}, [getBoard])
+  useEffect(() => {
+    const excuteRefetch = () => {
+      if (refetch) {
+        refetch();
+      }
+    };
+    if (state && state.refresh) {
+      excuteRefetch();
+    }
+    return () => excuteRefetch();
+  }, [refetch, state]);
 
-	useEffect(() => {
-		if (data && data.getBoardByCategory && data.getBoardByCategory.data) {
-			const res = data.getBoardByCategory.data
-			const dataSource: Array<TableBoardProps> = []
-			res.map((elem) => {
-				const obj: TableBoardProps = {
-					title: elem.title,
-					content: elem.content
-				}
-				return dataSource.push(obj)
-			})
-			setBoards(dataSource)
-		}
-	}, [data])
+  useEffect(() => {
+    if (data && data.getBoardByCategory && data.getBoardByCategory.data) {
+      const res = data.getBoardByCategory.data;
+      const dataSource: Array<TableBoardProps> = [];
+      res.map((elem, i) => {
+        const obj: TableBoardProps = {
+          id: elem.id,
+          index: res.length - i,
+          title: elem.title,
+          createdAt: getDate(elem.createdAt || ""),
+          category: elem.category,
+        };
+        return dataSource.push(obj);
+      });
+      setBoards(dataSource);
+    }
+  }, [data]);
 
-	if (loading) {
-		return <>loading</>
-	}
+  if (loading) {
+    return <>loading</>;
+  }
 
-	return (
-		<>
-			<Table dataSource={boards}>
-				<Column title="번호" dataIndex="number" key="number" />
-				<Column title="제목" dataIndex="title" key="title" />
-				<Column title="내용" dataIndex="content" key="content" />
-				<Column title="Action" key="action" render={(text, record) => (
-					<Space size="middle">
-						<div>delete</div>
-					</Space>
-				)} />
-			</Table>
-		</>
-	)
-}
+  return (
+    <>
+      <Link
+        to={`/admin/${param}/create-${param}?category=${subparam}&param=${param}&subparam=${subparam}`}
+      >
+        <Button type="primary" style={{ marginBottom: 20 }}>
+          글쓰기
+        </Button>
+      </Link>
+      <Table dataSource={boards} rowKey={"id"}>
+        <Column title="번호" dataIndex="index" key="index" width={80} />
+        <Column
+          title="제목"
+          dataIndex="title"
+          key="title"
+          render={(text, record: TableBoardProps) => {
+            return (
+              <Space>
+                <Link
+                  to={`/admin/${param}/detail-${param}?category=${subparam}&id=${record.id}`}
+                >
+                  {text}
+                </Link>
+              </Space>
+            );
+          }}
+        />
+        <Column
+          title="작성일"
+          dataIndex="createdAt"
+          key="createdAt"
+          width={150}
+        />
+        <Column
+          title="Action"
+          key="action"
+          width={150}
+          render={(text, record: TableBoardProps) => (
+            <Space size="middle">
+              <Button
+                type="primary"
+                danger
+                onClick={() => deleteBoard({ variables: { id: record.id } })}
+              >
+                삭제
+              </Button>
+            </Space>
+          )}
+        />
+      </Table>
+    </>
+  );
+};
 
-export default BoardPage
+export default BoardPage;

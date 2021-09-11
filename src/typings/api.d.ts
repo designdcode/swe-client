@@ -83,6 +83,81 @@ export interface getBoardByCategoryVariables {
 // @generated
 // This file was automatically generated and should not be edited.
 
+// ====================================================
+// GraphQL mutation operation: deleteBoard
+// ====================================================
+
+export interface deleteBoard_deleteBoard {
+  __typename: "deleteBoardResponse";
+  ok: boolean;
+  err: string | null;
+}
+
+export interface deleteBoard {
+  deleteBoard: deleteBoard_deleteBoard;
+}
+
+export interface deleteBoardVariables {
+  id: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getBoardById
+// ====================================================
+
+export interface getBoardById_getBoardById_data_files {
+  __typename: "File";
+  id: number;
+  url: string;
+  fileName: string;
+}
+
+export interface getBoardById_getBoardById_data_images {
+  __typename: "Image";
+  id: number;
+  url: string;
+  fileName: string;
+}
+
+export interface getBoardById_getBoardById_data {
+  __typename: "Board";
+  id: number;
+  title: string | null;
+  content: string | null;
+  category: string;
+  files: (getBoardById_getBoardById_data_files | null)[] | null;
+  images: (getBoardById_getBoardById_data_images | null)[] | null;
+  link: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+  deleteAt: string | null;
+}
+
+export interface getBoardById_getBoardById {
+  __typename: "getBoardResponse";
+  ok: boolean;
+  err: string | null;
+  data: getBoardById_getBoardById_data | null;
+}
+
+export interface getBoardById {
+  getBoardById: getBoardById_getBoardById;
+}
+
+export interface getBoardByIdVariables {
+  id: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
 //==============================================================
 // START Enums and Input Objects
 //==============================================================

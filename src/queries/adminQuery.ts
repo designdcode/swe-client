@@ -51,3 +51,12 @@ export const GET_BOARD_BY_CATEGORY = gql`
     }
   }
 `;
+
+export const DELETE_BOARD = gql`
+  mutation deleteBoard($id: Int!) {
+    deleteBoard(id: $id) {
+      ok
+      err
+    }
+  }
+`;
