@@ -51,6 +51,7 @@ const UploadBoardPage: React.VFC = () => {
   const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
   const [isImageNeeded, setIsImageNeeded] = useState<boolean>(false);
   const [isContentNeeded, setIsContentNeeded] = useState<boolean>(true);
+  const [progress, setProgress] = useState<string>("empty");
 
   useEffect(() => {
     setIsLinkNeeded(linkSwitcher(subparam as string));
@@ -86,31 +87,20 @@ const UploadBoardPage: React.VFC = () => {
     }
   }, [showLink, setLink, setShowLink]);
 
-  const onFinish = useCallback(() => {
+  const onFinish = useCallback(async () => {
     if (file.length !== 0) {
-      for (let i = 0; i < file.length; i++) {
-        createBoard({
-          variables: {
-            title: title.trim() ? title : null,
-            content: content.trim() ? content : null,
-            link: link.trim() ? link : null,
-            category,
-            files: file,
-          },
-        });
-      }
-    } else if (imgUrl) {
-      createBoard({
+      await createBoard({
         variables: {
           title: title.trim() ? title : null,
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
           category,
-          images: [{ url: imgUrl, fileName: imgName }],
+          files: file.length !== 0 ? file : null,
+          images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
         },
       });
     } else {
-      createBoard({
+      await createBoard({
         variables: {
           title: title.trim() ? title : null,
           content: content.trim() ? content : null,
@@ -123,15 +113,24 @@ const UploadBoardPage: React.VFC = () => {
 
   const handleImageUpload = useCallback(
     (file: any) => {
+      setProgress("uploading");
       const filename = file.name;
       setImgName(file.name);
-      fileUploader("images", file, category as string, filename, setImgUrl);
+      fileUploader(
+        "images",
+        file,
+        category as string,
+        filename,
+        setImgUrl,
+        setProgress
+      );
     },
     [category]
   );
 
   const handleFileUpload = useCallback(
     (file: any) => {
+      setProgress("uploading");
       const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
       upload.on(
         "state_changed",
@@ -144,6 +143,7 @@ const UploadBoardPage: React.VFC = () => {
             .then((url) => {
               setFile((prev) => [...prev, { url: url, fileName: file.name }]);
               toast.success("파일 / 이미지가 업로드 되었습니다");
+              setProgress("empty");
             });
         }
       );
@@ -198,6 +198,7 @@ const UploadBoardPage: React.VFC = () => {
             style={{ marginBottom: 20 }}
             listType="picture"
             customRequest={({ file }) => handleImageUpload(file)}
+            progress={{ showInfo: true }}
             onChange={({ file }) => {
               if (imgUrl !== "") {
                 file.status = "done";
@@ -216,6 +217,7 @@ const UploadBoardPage: React.VFC = () => {
           <Upload
             multiple={true}
             customRequest={({ file }) => handleFileUpload(file)}
+            progress={{ showInfo: true }}
             onChange={({ file }) => {
               if (imgUrl !== "") {
                 file.status = "done";
@@ -241,8 +243,16 @@ const UploadBoardPage: React.VFC = () => {
           </Form.Item>
         )}
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button type="primary" htmlType="submit">
-            {!loading ? "Submit" : "Uploading..."}
+          <Button
+            type="primary"
+            htmlType="submit"
+            disabled={progress === "uploading" ? true : false}
+          >
+            {!loading
+              ? progress === "uploading"
+                ? "Uploading..."
+                : "Submit"
+              : "Uploading..."}
           </Button>
         </Form.Item>
       </Form>
