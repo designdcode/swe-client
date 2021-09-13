@@ -4,8 +4,6 @@ import BoardDetail from "../pages/Admin/BoardDetail";
 import BoardPage from "../pages/Admin/BoardPage";
 import Dashboard from "../pages/Admin/Dashboard";
 import UploadBoardPage from "../pages/Admin/UploadBoardPage";
-import UploadImagePage from "../pages/Admin/UploadImagePage";
-import UploadStoragePage from "../pages/Admin/UploadStoragePage";
 
 interface IProps {
   param: string;
@@ -17,19 +15,25 @@ const AdminRouteHandler: React.VFC = () => {
   const routehandler = (param: string, subparam: string) => {
     switch (param) {
       case "dashboard":
-        return <Dashboard />;
+        if (subparam === `create-${param}`) return <UploadBoardPage />;
+        else if (subparam === `detail-${param}`) return <BoardDetail />;
+        else return <Dashboard />;
       case "intro":
-        if (subparam === "intro-storage") return <UploadStoragePage />;
-        else return <UploadImagePage />;
+        if (subparam === `create-${param}`) return <UploadBoardPage />;
+        else if (subparam === `detail-${param}`) return <BoardDetail />;
+        else return <BoardPage />;
       case "value":
-        if (subparam === "value-storage") return <UploadStoragePage />;
-        else return <UploadImagePage />;
+        if (subparam === `create-${param}`) return <UploadBoardPage />;
+        else if (subparam === `detail-${param}`) return <BoardDetail />;
+        else return <BoardPage />;
       case "edu":
-        if (subparam === "edu-storage") return <UploadStoragePage />;
-        else return <UploadImagePage />;
+        if (subparam === `create-${param}`) return <UploadBoardPage />;
+        else if (subparam === `detail-${param}`) return <BoardDetail />;
+        else return <BoardPage />;
       case "cooperation":
-        if (subparam === "cooperation-storage") return <UploadStoragePage />;
-        else return <UploadImagePage />;
+        if (subparam === `create-${param}`) return <UploadBoardPage />;
+        else if (subparam === `detail-${param}`) return <BoardDetail />;
+        else return <BoardPage />;
       case "community":
         if (
           subparam === "community-notice" ||
@@ -39,7 +43,7 @@ const AdminRouteHandler: React.VFC = () => {
           return <BoardPage />;
         else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
-        else return <UploadImagePage />;
+        else return <BoardPage />;
       default:
         return;
     }

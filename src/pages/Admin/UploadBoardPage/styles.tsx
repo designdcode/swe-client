@@ -14,4 +14,7 @@ export const Container = styled.div`
   & .ant-upload-list-picture-container {
     width: 300px;
   }
+  & .ant-upload-list-item-info {
+    width: 300px;
+  }
 `;
