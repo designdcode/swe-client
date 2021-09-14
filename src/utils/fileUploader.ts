@@ -8,7 +8,8 @@ export const fileUploader = (
   category: string,
   filename: string,
   state: Dispatch<SetStateAction<string | undefined>>,
-  progress: Dispatch<SetStateAction<string>>
+  progress: number,
+  setProgress: Dispatch<SetStateAction<number>>
 ) => {
   const upload = storage.ref(`/${type}/${category}/${filename}`).put(file);
   upload.on(
@@ -22,7 +23,7 @@ export const fileUploader = (
         .then((url) => {
           state(url);
           toast.success("파일 / 이미지가 업로드 되었습니다");
-          progress("empty");
+          setProgress(progress - 1);
         });
     }
   );

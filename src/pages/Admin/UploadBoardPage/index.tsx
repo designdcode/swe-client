@@ -51,7 +51,7 @@ const UploadBoardPage: React.VFC = () => {
   const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
   const [isImageNeeded, setIsImageNeeded] = useState<boolean>(false);
   const [isContentNeeded, setIsContentNeeded] = useState<boolean>(true);
-  const [progress, setProgress] = useState<string>("empty");
+  const [progress, setProgress] = useState<number>(0);
 
   useEffect(() => {
     setIsLinkNeeded(linkSwitcher(subparam as string));
@@ -113,7 +113,7 @@ const UploadBoardPage: React.VFC = () => {
 
   const handleImageUpload = useCallback(
     (file: any) => {
-      setProgress("uploading");
+      setProgress(progress + 1);
       const filename = file.name;
       setImgName(file.name);
       fileUploader(
@@ -122,15 +122,16 @@ const UploadBoardPage: React.VFC = () => {
         category as string,
         filename,
         setImgUrl,
+        progress,
         setProgress
       );
     },
-    [category]
+    [category, progress]
   );
 
   const handleFileUpload = useCallback(
     (file: any) => {
-      setProgress("uploading");
+      setProgress(progress + 1);
       const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
       upload.on(
         "state_changed",
@@ -143,12 +144,12 @@ const UploadBoardPage: React.VFC = () => {
             .then((url) => {
               setFile((prev) => [...prev, { url: url, fileName: file.name }]);
               toast.success("파일 / 이미지가 업로드 되었습니다");
-              setProgress("empty");
+              setProgress(progress - 1);
             });
         }
       );
     },
-    [category]
+    [category, progress]
   );
 
   const handleImageRemover = useCallback(() => {
@@ -163,6 +164,7 @@ const UploadBoardPage: React.VFC = () => {
         .ref(`/files/${category}/${file.name}`)
         .delete()
         .then(() => {
+          console.log("success?");
           setFile(
             file.filter((elem: fileProps) => elem.fileName !== file.name)
           );
@@ -172,6 +174,10 @@ const UploadBoardPage: React.VFC = () => {
     },
     [category]
   );
+
+  useEffect(() => {
+    console.log(file);
+  }, [file]);
 
   return (
     <Container>
@@ -217,15 +223,14 @@ const UploadBoardPage: React.VFC = () => {
           <Upload
             multiple={true}
             customRequest={({ file }) => handleFileUpload(file)}
-            progress={{ showInfo: true }}
-            onChange={({ file }) => {
-              if (imgUrl !== "") {
-                file.status = "done";
+            maxCount={4}
+            onChange={({ file: callbackFile }) => {
+              if (file.length !== 0) {
+                callbackFile.status = "done";
               } else {
-                file.status = "removed";
+                callbackFile.status = "removed";
               }
             }}
-            maxCount={4}
             onRemove={(file) => handleFileRemover(file)}
           >
             <Button style={{ marginBottom: 20 }} icon={<UploadOutlined />}>
@@ -246,12 +251,12 @@ const UploadBoardPage: React.VFC = () => {
           <Button
             type="primary"
             htmlType="submit"
-            disabled={progress === "uploading" ? true : false}
+            disabled={progress !== 0 ? true : false}
           >
             {!loading
-              ? progress === "uploading"
-                ? "Uploading..."
-                : "Submit"
+              ? progress > 0
+                ? "이미지 / 파일 업로드 중입니다..."
+                : "올리기"
               : "Uploading..."}
           </Button>
         </Form.Item>
