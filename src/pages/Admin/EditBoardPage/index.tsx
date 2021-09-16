@@ -8,7 +8,11 @@ import {
 } from "../../../typings/api";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_BOARD } from "../../../queries/sharedQuery";
-import { DELETE_BOARD, DELETE_FILE } from "../../../queries/adminQuery";
+import {
+  CREATE_FILE,
+  DELETE_BOARD,
+  DELETE_FILE,
+} from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Container, Button } from "./styles";
 import { Descriptions, Input, Upload } from "antd";
@@ -73,6 +77,8 @@ const EditBoardPage: React.VFC = () => {
     },
   });
 
+  const [createFile] = useMutation(CREATE_FILE);
+
   const [editBoard] = useMutation(DELETE_BOARD, {
     onCompleted: ({ editBoard }) => {
       const { ok, err } = editBoard;
@@ -120,23 +126,43 @@ const EditBoardPage: React.VFC = () => {
     [deleteFile, category]
   );
 
-  const handleFileUpload = useCallback((file: any) => {
-    setProgress(progress + 1);
-    const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
-    upload.on(
-      "state_chaged",
-      (snapshot) => {},
-      (err) => console.log(err),
-      () => {
-        storage
-          .ref(`/files/${category}/${file.name}`)
-          .getDownloadURL()
-          .then((url) => {
-            toast.success("파일이 업로드 되었습니다");
-          });
-      }
-    );
-  }, []);
+  const handleFileUpload = useCallback(
+    (file: any) => {
+      setProgress(progress + 1);
+      const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
+      upload.on(
+        "state_changed",
+        (snapshot) => {},
+        (err) => console.log(err),
+        () => {
+          storage
+            .ref(`/files/${category}/${file.name}`)
+            .getDownloadURL()
+            .then(async (url) => {
+              await createFile({
+                variables: {
+                  url,
+                  fileName: file.name,
+                  boardId: parseInt(id as string, 10),
+                },
+                onCompleted: ({ createFile }) => {
+                  const { ok, err } = createFile;
+                  if (ok) {
+                    toast.success("파일이 업로드 되었습니다");
+                    if (refetch) refetch();
+                  } else {
+                    toast.error("파일 업로드에 실패 하였습니다");
+                    console.log(err);
+                  }
+                },
+              });
+              setProgress(progress - 1);
+            });
+        }
+      );
+    },
+    [createFile, id, category, progress, refetch]
+  );
 
   useEffect(() => {
     if (id) {
@@ -219,11 +245,7 @@ const EditBoardPage: React.VFC = () => {
             multiple={true}
             maxCount={4}
             className="upload-list-inline"
-            // onChange={({file:callbackFile}) =>{
-            // 	if(file.length !== 0){
-
-            // 	}
-            // }}
+            customRequest={({ file }) => handleFileUpload(file)}
           >
             <Button icon={<UploadOutlined />}>파일 업로드</Button>
           </Upload>
@@ -244,8 +266,16 @@ const EditBoardPage: React.VFC = () => {
         </Descriptions.Item>
       </Descriptions>
       <div className="button-group">
-        <Button type="primary" onClick={handleEditBoard}>
-          수정하기
+        <Button
+          type="primary"
+          onClick={handleEditBoard}
+          disabled={progress !== 0 ? true : false}
+        >
+          {!loading
+            ? progress <= 0
+              ? "올리기"
+              : "이미지 / 파일 업로드 중입니다..."
+            : "Uploading..."}
         </Button>
         <Button type="primary" danger onClick={handleDeleteBoard}>
           삭제하기

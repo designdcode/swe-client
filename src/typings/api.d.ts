@@ -229,6 +229,56 @@ export interface deleteImageVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: createFile
+// ====================================================
+
+export interface createFile_createFile {
+  __typename: "createFileResponse";
+  ok: boolean;
+  err: string | null;
+}
+
+export interface createFile {
+  createFile: createFile_createFile;
+}
+
+export interface createFileVariables {
+  url: string;
+  fileName: string;
+  boardId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: createImage
+// ====================================================
+
+export interface createImage_createImage {
+  __typename: "createFileResponse";
+  ok: boolean;
+  err: string | null;
+}
+
+export interface createImage {
+  createImage: createImage_createImage;
+}
+
+export interface createImageVariables {
+  url: string;
+  fileName: string;
+  boardId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: getBoardById
 // ====================================================
 

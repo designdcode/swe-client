@@ -110,3 +110,21 @@ export const DELETE_IMAGE = gql`
     }
   }
 `;
+
+export const CREATE_FILE = gql`
+  mutation createFile($url: String!, $fileName: String!, $boardId: Int!) {
+    createFile(url: $url, fileName: $fileName, boardId: $boardId) {
+      ok
+      err
+    }
+  }
+`;
+
+export const CREATE_IMAGE = gql`
+  mutation createImage($url: String!, $fileName: String!, $boardId: Int!) {
+    createImage(url: $url, fileName: $fileName, boardId: $boardId) {
+      ok
+      err
+    }
+  }
+`;
