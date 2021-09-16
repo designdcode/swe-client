@@ -60,3 +60,53 @@ export const DELETE_BOARD = gql`
     }
   }
 `;
+
+export const EDIT_BOARD = gql`
+  mutation editBoard(
+    $id: Int!
+    $title: String
+    $content: String
+    $link: String
+  ) {
+    editBoard(id: $id, title: $title, content: $content, link: $link) {
+      ok
+      err
+    }
+  }
+`;
+
+export const EDIT_FILE = gql`
+  mutation editFile($id: Int!, $url: String!, $fileName: String!) {
+    editFile(id: $id, url: $url, fileName: $fileName) {
+      ok
+      err
+    }
+  }
+`;
+
+export const EDIT_IMAGE = gql`
+  mutation editImage($id: Int!, $url: String!, $fileName: String!) {
+    editImage(id: $id, url: $url, fileName: $fileName) {
+      ok
+      err
+    }
+  }
+`;
+
+export const DELETE_FILE = gql`
+  mutation deleteFile($id: Int!) {
+    deleteFile(id: $id) {
+      ok
+      err
+    }
+  }
+`;
+
+export const DELETE_IMAGE = gql`
+  mutation deleteImage($id: Int!) {
+    deleteImage(id: $id) {
+      ok
+      err
+    }
+  }
+`;

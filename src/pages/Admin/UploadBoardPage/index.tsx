@@ -159,25 +159,26 @@ const UploadBoardPage: React.VFC = () => {
   }, [category, imgName]);
 
   const handleFileRemover = useCallback(
-    (file: any) => {
+    (propFile: any) => {
       storage
-        .ref(`/files/${category}/${file.name}`)
+        .ref(`/files/${category}/${propFile.name}`)
         .delete()
         .then(() => {
-          console.log("success?");
-          setFile(
-            file.filter((elem: fileProps) => elem.fileName !== file.name)
-          );
           toast.success("업로드 된 파일/이미지가 삭제 되었습니다");
+          setFile(
+            file.filter((elem: fileProps) => elem.fileName !== propFile.name)
+          );
         })
         .catch((err) => toast.error(err));
     },
-    [category]
+    [category, file]
   );
 
   useEffect(() => {
-    console.log(file);
-  }, [file]);
+    if (progress < 0) {
+      setProgress(0);
+    }
+  }, [progress]);
 
   return (
     <Container>
@@ -254,9 +255,9 @@ const UploadBoardPage: React.VFC = () => {
             disabled={progress !== 0 ? true : false}
           >
             {!loading
-              ? progress > 0
-                ? "이미지 / 파일 업로드 중입니다..."
-                : "올리기"
+              ? progress <= 0
+                ? "올리기"
+                : "이미지 / 파일 업로드 중입니다..."
               : "Uploading..."}
           </Button>
         </Form.Item>

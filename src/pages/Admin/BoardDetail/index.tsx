@@ -4,14 +4,16 @@ import { useHistory, useLocation, useParams } from "react-router";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_BOARD } from "../../../queries/sharedQuery";
 import {
-  getBoardByCategory_getBoardByCategory_data,
   getBoardById,
+  getBoardById_getBoardById_data,
+  getBoardById_getBoardById_data_files,
 } from "../../../typings/api";
 import { Descriptions, Typography } from "antd";
 import { Button, Container } from "./styles";
 import { getDate } from "../../../hooks/getDate";
 import { DELETE_BOARD } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 interface locationProps {
   search: string;
@@ -27,8 +29,9 @@ const BoardDetail: React.VFC = () => {
   const history = useHistory();
   const queryObj = queryString.parse(search);
   const { id, category } = queryObj;
-  const [board, setBoard] =
-    useState<getBoardByCategory_getBoardByCategory_data>();
+  const [board, setBoard] = useState<getBoardById_getBoardById_data>();
+  const [files, setFiles] =
+    useState<(getBoardById_getBoardById_data_files | undefined | null)[]>();
   const [getBoardById, { loading, data }] =
     useLazyQuery<getBoardById>(GET_BOARD);
 
@@ -66,6 +69,14 @@ const BoardDetail: React.VFC = () => {
     if (data && data.getBoardById && data.getBoardById.data) {
       setBoard(data.getBoardById.data);
     }
+    if (
+      data &&
+      data.getBoardById &&
+      data.getBoardById.data &&
+      data.getBoardById.data.files
+    ) {
+      setFiles(data.getBoardById.data.files);
+    }
   }, [data]);
 
   if (loading) {
@@ -88,12 +99,38 @@ const BoardDetail: React.VFC = () => {
         <Descriptions.Item label="작성일" span={3} labelStyle={{ width: 100 }}>
           {getDate(board?.createdAt || "")}
         </Descriptions.Item>
+        {files && (
+          <Descriptions.Item
+            label="첨부파일"
+            span={3}
+            labelStyle={{ width: 100 }}
+          >
+            {files.map((elem, idx) => {
+              return (
+                <div key={idx}>
+                  <a
+                    href={elem?.url}
+                    download
+                    target={"_blank"}
+                    rel="noreferrer"
+                  >
+                    {elem?.fileName}
+                  </a>
+                </div>
+              );
+            })}
+          </Descriptions.Item>
+        )}
         <Descriptions.Item label="내용" span={3}>
           {board?.content}
         </Descriptions.Item>
       </Descriptions>
       <div className="button-group">
-        <Button type="primary">수정</Button>
+        <Link
+          to={`/admin/${param}/edit-${param}?category=${category}&id=${id}`}
+        >
+          <Button type="primary">수정</Button>
+        </Link>
         <Button type="primary" danger onClick={handleDeleteBoard}>
           삭제
         </Button>
