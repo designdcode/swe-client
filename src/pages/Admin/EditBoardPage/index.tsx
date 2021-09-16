@@ -12,6 +12,7 @@ import {
   CREATE_FILE,
   DELETE_BOARD,
   DELETE_FILE,
+  EDIT_BOARD,
 } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Container, Button } from "./styles";
@@ -39,6 +40,9 @@ const EditBoardPage: React.VFC = () => {
     useState<
       (getBoardByCategory_getBoardByCategory_data_files | null | undefined)[]
     >();
+  const [tmpFiles, setTmpFiles] = useState<{ url: string; fileName: string }[]>(
+    []
+  );
   const [title, onChangeTitle, setTitle] = useInput("");
   const [content, onChangeContent, setContent] = useInput("");
   const [link, onChangeLink, setLink] = useInput("");
@@ -79,7 +83,7 @@ const EditBoardPage: React.VFC = () => {
 
   const [createFile] = useMutation(CREATE_FILE);
 
-  const [editBoard] = useMutation(DELETE_BOARD, {
+  const [editBoard] = useMutation(EDIT_BOARD, {
     onCompleted: ({ editBoard }) => {
       const { ok, err } = editBoard;
       if (ok) {
@@ -139,6 +143,10 @@ const EditBoardPage: React.VFC = () => {
             .ref(`/files/${category}/${file.name}`)
             .getDownloadURL()
             .then(async (url) => {
+              setTmpFiles((prev) => [
+                ...prev,
+                { url: url, fileName: file.name },
+              ]);
               await createFile({
                 variables: {
                   url,
@@ -187,11 +195,15 @@ const EditBoardPage: React.VFC = () => {
     }
   }, [data, setTitle, setContent, setLink]);
 
+  useEffect(() => {
+    if (progress < 0) {
+      setProgress(0);
+    }
+  }, [progress]);
+
   if (loading) {
     return <div>loading...</div>;
   }
-
-  console.log(files);
 
   return (
     <Container>
@@ -238,14 +250,23 @@ const EditBoardPage: React.VFC = () => {
                 );
               })}
             </>
+          ) : tmpFiles.length === 0 ? (
+            <div>첨부파일 없음</div>
           ) : (
-            <>첨부파일 없음</>
+            <></>
           )}
           <Upload
             multiple={true}
             maxCount={4}
             className="upload-list-inline"
             customRequest={({ file }) => handleFileUpload(file)}
+            onChange={({ file }) => {
+              if (tmpFiles.length !== 0) {
+                file.status = "done";
+              } else {
+                file.status = "removed";
+              }
+            }}
           >
             <Button icon={<UploadOutlined />}>파일 업로드</Button>
           </Upload>
@@ -268,7 +289,7 @@ const EditBoardPage: React.VFC = () => {
       <div className="button-group">
         <Button
           type="primary"
-          onClick={handleEditBoard}
+          onClick={() => handleEditBoard()}
           disabled={progress !== 0 ? true : false}
         >
           {!loading
