@@ -11,9 +11,10 @@ import { GET_BOARD } from "../../../queries/sharedQuery";
 import { DELETE_BOARD, DELETE_FILE } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Container, Button } from "./styles";
-import { Descriptions, Input } from "antd";
+import { Descriptions, Input, Upload } from "antd";
 import useInput from "../../../hooks/useInput";
-import { CloseCircleOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
+import { storage } from "../../../utils/firebase";
 
 interface locationProps {
   search: string;
@@ -37,6 +38,7 @@ const EditBoardPage: React.VFC = () => {
   const [title, onChangeTitle, setTitle] = useInput("");
   const [content, onChangeContent, setContent] = useInput("");
   const [link, onChangeLink, setLink] = useInput("");
+  const [progress, setProgress] = useState<number>(0);
 
   const [getBoardById, { loading, data, refetch }] =
     useLazyQuery<getBoardById>(GET_BOARD);
@@ -106,6 +108,36 @@ const EditBoardPage: React.VFC = () => {
     });
   }, [id, title, content, link, editBoard]);
 
+  const handleDeleteFile = useCallback(
+    async (id?: number, name?: string) => {
+      storage.ref(`/files/${category}/${name}`).delete();
+      await deleteFile({
+        variables: {
+          id,
+        },
+      });
+    },
+    [deleteFile, category]
+  );
+
+  const handleFileUpload = useCallback((file: any) => {
+    setProgress(progress + 1);
+    const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
+    upload.on(
+      "state_chaged",
+      (snapshot) => {},
+      (err) => console.log(err),
+      () => {
+        storage
+          .ref(`/files/${category}/${file.name}`)
+          .getDownloadURL()
+          .then((url) => {
+            toast.success("파일이 업로드 되었습니다");
+          });
+      }
+    );
+  }, []);
+
   useEffect(() => {
     if (id) {
       getBoardById({ variables: { id: parseInt(id as string, 10) } });
@@ -133,6 +165,8 @@ const EditBoardPage: React.VFC = () => {
     return <div>loading...</div>;
   }
 
+  console.log(files);
+
   return (
     <Container>
       <Button type="ghost" onClick={() => history.goBack()}>
@@ -144,41 +178,69 @@ const EditBoardPage: React.VFC = () => {
         layout="horizontal"
       >
         <Descriptions.Item label="제목" span={3} labelStyle={{ width: 100 }}>
-          <Input value={title} onChange={onChangeTitle} />
+          <Input
+            placeholder={board?.title || undefined}
+            value={title}
+            onChange={onChangeTitle}
+          />
         </Descriptions.Item>
-        {files && (
-          <Descriptions.Item
-            label="첨부파일"
-            span={3}
-            labelStyle={{ width: 100 }}
+        <Descriptions.Item
+          label="첨부파일"
+          span={3}
+          labelStyle={{ width: 100 }}
+        >
+          {files && files.length !== 0 ? (
+            <>
+              {files.map((elem, idx) => {
+                return (
+                  <div key={idx} className="attach-group">
+                    <a
+                      href={elem?.url}
+                      download
+                      target={"_blank"}
+                      rel="noreferrer"
+                    >
+                      {elem?.fileName}
+                    </a>
+                    <button
+                      className="attach-button"
+                      onClick={() => handleDeleteFile(elem?.id, elem?.fileName)}
+                    >
+                      <CloseCircleOutlined />
+                    </button>
+                  </div>
+                );
+              })}
+            </>
+          ) : (
+            <>첨부파일 없음</>
+          )}
+          <Upload
+            multiple={true}
+            maxCount={4}
+            className="upload-list-inline"
+            // onChange={({file:callbackFile}) =>{
+            // 	if(file.length !== 0){
+
+            // 	}
+            // }}
           >
-            {files.map((elem, idx) => {
-              return (
-                <div key={idx} className="attach-group">
-                  <a
-                    href={elem?.url}
-                    download
-                    target={"_blank"}
-                    rel="noreferrer"
-                  >
-                    {elem?.fileName}
-                  </a>
-                  <button
-                    className="attach-button"
-                    onClick={() => deleteFile({ variables: { id: elem?.id } })}
-                  >
-                    <CloseCircleOutlined />
-                  </button>
-                </div>
-              );
-            })}
-          </Descriptions.Item>
-        )}
+            <Button icon={<UploadOutlined />}>파일 업로드</Button>
+          </Upload>
+        </Descriptions.Item>
         <Descriptions.Item label="링크" span={3}>
-          <Input value={link} onChange={onChangeLink} />
+          <Input
+            placeholder={board?.link || undefined}
+            value={link}
+            onChange={onChangeLink}
+          />
         </Descriptions.Item>
         <Descriptions.Item label="내용" span={3}>
-          <Input value={content} onChange={onChangeContent} />
+          <Input
+            placeholder={board?.content || undefined}
+            value={content}
+            onChange={onChangeContent}
+          />
         </Descriptions.Item>
       </Descriptions>
       <div className="button-group">

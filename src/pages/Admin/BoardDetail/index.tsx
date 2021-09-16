@@ -99,28 +99,32 @@ const BoardDetail: React.VFC = () => {
         <Descriptions.Item label="작성일" span={3} labelStyle={{ width: 100 }}>
           {getDate(board?.createdAt || "")}
         </Descriptions.Item>
-        {files && (
-          <Descriptions.Item
-            label="첨부파일"
-            span={3}
-            labelStyle={{ width: 100 }}
-          >
-            {files.map((elem, idx) => {
-              return (
-                <div key={idx}>
-                  <a
-                    href={elem?.url}
-                    download
-                    target={"_blank"}
-                    rel="noreferrer"
-                  >
-                    {elem?.fileName}
-                  </a>
-                </div>
-              );
-            })}
-          </Descriptions.Item>
-        )}
+        <Descriptions.Item
+          label="첨부파일"
+          span={3}
+          labelStyle={{ width: 100 }}
+        >
+          {files && files.length !== 0 ? (
+            <>
+              {files.map((elem, idx) => {
+                return (
+                  <div key={idx}>
+                    <a
+                      href={elem?.url}
+                      download
+                      target={"_blank"}
+                      rel="noreferrer"
+                    >
+                      {elem?.fileName}
+                    </a>
+                  </div>
+                );
+              })}
+            </>
+          ) : (
+            <>첨부파일 없음</>
+          )}
+        </Descriptions.Item>
         <Descriptions.Item label="내용" span={3}>
           {board?.content}
         </Descriptions.Item>
