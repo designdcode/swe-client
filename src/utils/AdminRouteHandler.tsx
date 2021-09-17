@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router";
 import BoardDetail from "../pages/Admin/BoardDetail";
-import BoardPage from "../pages/Admin/BoardPage";
+import StoragePage from "../pages/Admin/StoragePage";
 import Dashboard from "../pages/Admin/Dashboard";
 import EditBoardPage from "../pages/Admin/EditBoardPage";
 import UploadBoardPage from "../pages/Admin/UploadBoardPage";
@@ -24,33 +24,41 @@ const AdminRouteHandler: React.VFC = () => {
         if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
-        else return <BoardPage />;
+        else if (subparam.includes("storage")) return <StoragePage />;
+        else return <Dashboard />;
       case "value":
         if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
-        else return <BoardPage />;
+        else if (subparam.includes("storage")) return <StoragePage />;
+        else return <Dashboard />;
+
       case "edu":
         if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
-        else return <BoardPage />;
+        else if (subparam.includes("storage")) return <StoragePage />;
+        else return <Dashboard />;
+
       case "cooperation":
         if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
-        else return <BoardPage />;
+        else if (subparam.includes("storage")) return <StoragePage />;
+        else return <Dashboard />;
+
       case "community":
         if (
           subparam === "community-notice" ||
-          subparam === "community-admission" ||
-          subparam === "community-storage"
+          subparam === "community-admission"
         )
-          return <BoardPage />;
+          return <StoragePage />;
         else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
-        else return <BoardPage />;
+        else if (subparam.includes("storage")) return <StoragePage />;
+        else return <Dashboard />;
+
       default:
         return;
     }

@@ -10,7 +10,7 @@ import {
   GET_BOARD_BY_CATEGORY,
 } from "../../../queries/adminQuery";
 import { getBoardByCategory } from "../../../typings/api";
-import { Container } from "../StoragePage/styles";
+import { Container } from "./styles";
 
 interface ParamProps {
   param: string;
@@ -28,7 +28,7 @@ interface LocationProps {
   refresh?: boolean;
 }
 
-const BoardPage = () => {
+const StoragePage = () => {
   const { param, subparam } = useParams<ParamProps>();
   const { state } = useLocation<LocationProps>();
   const [boards, setBoards] = useState<Array<TableBoardProps>>();
@@ -141,4 +141,4 @@ const BoardPage = () => {
   );
 };
 
-export default BoardPage;
+export default StoragePage;
