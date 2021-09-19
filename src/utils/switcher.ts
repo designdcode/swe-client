@@ -1,15 +1,9 @@
 export const linkSwitcher = (subparam?: string | null) => {
   switch (subparam) {
-    case "sw-value":
-      return true;
-    case "sw-platform":
-      return true;
-    case "news-press":
-      return true;
-    case "sitemap":
-      return true;
-    default:
+    case subparam?.includes("storage"):
       return false;
+    default:
+      return true;
   }
 };
 

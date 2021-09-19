@@ -5,6 +5,8 @@ import StoragePage from "../pages/Admin/StoragePage";
 import Dashboard from "../pages/Admin/Dashboard";
 import EditBoardPage from "../pages/Admin/EditBoardPage";
 import UploadBoardPage from "../pages/Admin/UploadBoardPage";
+import ImageBoardPage from "../pages/Admin/ImageBoardPage";
+import UploadImageBoardPage from "../pages/Admin/UploadImageBoardPage";
 
 interface IProps {
   param: string;
@@ -16,49 +18,52 @@ const AdminRouteHandler: React.VFC = () => {
   const routehandler = (param: string, subparam: string) => {
     switch (param) {
       case "dashboard":
-        if (subparam === `create-${param}`) return <UploadBoardPage />;
-        else if (subparam === `detail-${param}`) return <BoardDetail />;
-        else if (subparam === `edit-${param}`) return <EditBoardPage />;
-        else return <Dashboard />;
+        return <Dashboard />;
       case "intro":
-        if (subparam === `create-${param}`) return <UploadBoardPage />;
+        if (subparam === `create-image-${param}`)
+          return <UploadImageBoardPage />;
+        else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
-        else return <Dashboard />;
+        else return <ImageBoardPage />;
       case "value":
-        if (subparam === `create-${param}`) return <UploadBoardPage />;
+        if (subparam === `create-image-${param}`)
+          return <UploadImageBoardPage />;
+        else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
-        else return <Dashboard />;
-
+        else return <ImageBoardPage />;
       case "edu":
-        if (subparam === `create-${param}`) return <UploadBoardPage />;
+        if (subparam === `create-image-${param}`)
+          return <UploadImageBoardPage />;
+        else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
-        else return <Dashboard />;
-
+        else return <ImageBoardPage />;
       case "cooperation":
-        if (subparam === `create-${param}`) return <UploadBoardPage />;
+        if (subparam === `create-image-${param}`)
+          return <UploadImageBoardPage />;
+        else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
-        else return <Dashboard />;
-
+        else return <ImageBoardPage />;
       case "community":
         if (
           subparam === "community-notice" ||
           subparam === "community-admission"
         )
           return <StoragePage />;
+        if (subparam === `create-image-${param}`)
+          return <UploadImageBoardPage />;
         else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
-        else return <Dashboard />;
-
+        else return <ImageBoardPage />;
       default:
         return;
     }

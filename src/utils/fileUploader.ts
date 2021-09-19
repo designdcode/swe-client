@@ -23,7 +23,8 @@ export const fileUploader = (
         .then((url) => {
           state(url);
           toast.success("파일 / 이미지가 업로드 되었습니다");
-          setProgress(progress - 1);
+          // setProgress(progress - 1);
+          setProgress(0);
         });
     }
   );
