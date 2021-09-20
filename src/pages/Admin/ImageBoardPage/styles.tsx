@@ -6,6 +6,17 @@ export const Container = styled.div`
     display: flex;
     justify-content: space-between;
   }
+
+  &.attach-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  img {
+    object-fit: contain;
+    width: 400px;
+    height: 400px;
+  }
 `;
 
 export const Button = styled(Btn)`

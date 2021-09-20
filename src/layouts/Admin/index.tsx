@@ -70,7 +70,7 @@ const Admin: React.FC = () => {
   }, []);
 
   return (
-    <Layout style={{ height: "100vh" }}>
+    <Layout style={{ minHeight: "100vh" }}>
       {loginStatus ? (
         <>
           <Header className="header">

@@ -88,24 +88,37 @@ const ImageBoardPage: React.VFC = () => {
     return <>loading</>;
   }
 
-  console.log(image);
-
   return (
     <Container>
       <div className="button-group">
         <Button type="ghost" onClick={() => history.goBack()}>
           뒤로
         </Button>
-        <Button
-          type="primary"
-          onClick={() =>
-            history.push(
-              `/admin/${param}/create-image-${param}?category=${subparam}&param=${param}&subparam=${subparam}`
-            )
-          }
-        >
-          글쓰기
-        </Button>
+        {board && board[0] ? (
+          <Button
+            type="primary"
+            onClick={() =>
+              history.push(
+                `/admin/${param}/edit-image-${param}?category=${subparam}&id=${
+                  board && board[0]?.id
+                }`
+              )
+            }
+          >
+            수정하기
+          </Button>
+        ) : (
+          <Button
+            type="primary"
+            onClick={() =>
+              history.push(
+                `/admin/${param}/create-image-${param}?category=${subparam}&param=${param}&subparam=${subparam}`
+              )
+            }
+          >
+            글쓰기
+          </Button>
+        )}
       </div>
       <Descriptions
         bordered
@@ -129,15 +142,16 @@ const ImageBoardPage: React.VFC = () => {
           {file ? (
             file.map((elem, idx) => {
               return (
-                <a
-                  href={`${elem?.url}`}
-                  download
-                  target="_blank"
-                  rel="noreferrer"
-                  key={idx}
-                >
-                  {elem?.fileName}
-                </a>
+                <div key={idx} className={"attach-group"}>
+                  <a
+                    href={`${elem?.url}`}
+                    download
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {elem?.fileName}
+                  </a>
+                </div>
               );
             })
           ) : (
@@ -146,11 +160,7 @@ const ImageBoardPage: React.VFC = () => {
         </Descriptions.Item>
         <Descriptions.Item label="이미지" span={3} labelStyle={{ width: 100 }}>
           {image && image[0] ? (
-            <img
-              src={image[0].url}
-              alt={image[0].fileName}
-              style={{ width: 300, height: 300 }}
-            />
+            <img src={image[0].url} alt={image[0].fileName} />
           ) : (
             <Typography.Text>업로드 된 이미지가 없습니다</Typography.Text>
           )}

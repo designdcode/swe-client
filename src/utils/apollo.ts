@@ -10,7 +10,7 @@ import {
 import { onError } from "@apollo/client/link/error";
 import { getMainDefinition } from "@apollo/client/utilities";
 
-export const adminLoginVar = makeVar<boolean>(!localStorage.getItem("admin"));
+export const adminLoginVar = makeVar<boolean>(!!localStorage.getItem("admin"));
 const cache: InMemoryCache = new InMemoryCache();
 
 const httpLink = new HttpLink({

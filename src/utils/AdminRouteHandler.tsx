@@ -7,6 +7,7 @@ import EditBoardPage from "../pages/Admin/EditBoardPage";
 import UploadBoardPage from "../pages/Admin/UploadBoardPage";
 import ImageBoardPage from "../pages/Admin/ImageBoardPage";
 import UploadImageBoardPage from "../pages/Admin/UploadImageBoardPage";
+import EditImageBoardPage from "../pages/Admin/EditImageBoardPage";
 
 interface IProps {
   param: string;
@@ -22,6 +23,8 @@ const AdminRouteHandler: React.VFC = () => {
       case "intro":
         if (subparam === `create-image-${param}`)
           return <UploadImageBoardPage />;
+        else if (subparam === `edit-image-${param}`)
+          return <EditImageBoardPage />;
         else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
@@ -30,6 +33,8 @@ const AdminRouteHandler: React.VFC = () => {
       case "value":
         if (subparam === `create-image-${param}`)
           return <UploadImageBoardPage />;
+        else if (subparam === `edit-image-${param}`)
+          return <EditImageBoardPage />;
         else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
@@ -38,6 +43,8 @@ const AdminRouteHandler: React.VFC = () => {
       case "edu":
         if (subparam === `create-image-${param}`)
           return <UploadImageBoardPage />;
+        else if (subparam === `edit-image-${param}`)
+          return <EditImageBoardPage />;
         else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
@@ -46,6 +53,8 @@ const AdminRouteHandler: React.VFC = () => {
       case "cooperation":
         if (subparam === `create-image-${param}`)
           return <UploadImageBoardPage />;
+        else if (subparam === `edit-image-${param}`)
+          return <EditImageBoardPage />;
         else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
@@ -59,6 +68,8 @@ const AdminRouteHandler: React.VFC = () => {
           return <StoragePage />;
         if (subparam === `create-image-${param}`)
           return <UploadImageBoardPage />;
+        else if (subparam === `edit-image-${param}`)
+          return <EditImageBoardPage />;
         else if (subparam === `create-${param}`) return <UploadBoardPage />;
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
