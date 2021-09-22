@@ -7,8 +7,8 @@ import { useMutation } from "@apollo/client";
 import { CREATE_BOARD } from "../../../queries/adminQuery";
 import useInput from "../../../hooks/useInput";
 import { toast } from "react-toastify";
-import { Button, Checkbox, Descriptions, Form, Input, Upload } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input, Upload } from "antd";
+import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import { fileUploader } from "../../../utils/fileUploader";
 import { storage } from "../../../utils/firebase";
 import { fileRemover } from "../../../utils/fileRemover";
@@ -90,6 +90,7 @@ const UploadImageBoardPage = () => {
         progress,
         setProgress
       );
+      setProgress(0);
     },
     [category, progress]
   );
@@ -109,7 +110,7 @@ const UploadImageBoardPage = () => {
             .then((url) => {
               setFile((prev) => [...prev, { url: url, fileName: file.name }]);
               toast.success("파일 / 이미지가 업로드 되었습니다");
-              setProgress(progress - 1);
+              setProgress(0);
             });
         }
       );
@@ -199,11 +200,17 @@ const UploadImageBoardPage = () => {
             htmlType="submit"
             disabled={progress !== 0 ? true : false}
           >
-            {!loading
-              ? progress <= 0
-                ? "올리기"
-                : "이미지 / 파일 업로드 중입니다..."
-              : "Uploading..."}
+            {!loading ? (
+              progress <= 0 ? (
+                "올리기"
+              ) : (
+                <>
+                  <LoadingOutlined /> 이미지 / 파일 업로드 중입니다...
+                </>
+              )
+            ) : (
+              "Uploading..."
+            )}
           </Button>
         </Form.Item>
       </Form>

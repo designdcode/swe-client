@@ -14,7 +14,7 @@ import {
   imageSwitcher,
   linkSwitcher,
 } from "../../../utils/switcher";
-import { UploadOutlined } from "@ant-design/icons";
+import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import { fileUploader } from "../../../utils/fileUploader";
 import { fileRemover } from "../../../utils/fileRemover";
 import { storage } from "../../../utils/firebase";
@@ -254,11 +254,17 @@ const UploadBoardPage: React.VFC = () => {
             htmlType="submit"
             disabled={progress !== 0 ? true : false}
           >
-            {!loading
-              ? progress <= 0
-                ? "올리기"
-                : "이미지 / 파일 업로드 중입니다..."
-              : "Uploading..."}
+            {!loading ? (
+              progress <= 0 ? (
+                "올리기"
+              ) : (
+                <>
+                  <LoadingOutlined /> 이미지 / 파일 업로드 중입니다...
+                </>
+              )
+            ) : (
+              "Uploading..."
+            )}
           </Button>
         </Form.Item>
       </Form>

@@ -18,7 +18,11 @@ import { toast } from "react-toastify";
 import { Container, Button } from "./styles";
 import { Descriptions, Input, Upload } from "antd";
 import useInput from "../../../hooks/useInput";
-import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  LoadingOutlined,
+  UploadOutlined,
+} from "@ant-design/icons";
 import { storage } from "../../../utils/firebase";
 
 interface locationProps {
@@ -215,7 +219,7 @@ const EditBoardPage: React.VFC = () => {
         column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
         layout="horizontal"
       >
-        <Descriptions.Item label="제목" span={3} labelStyle={{ width: 100 }}>
+        <Descriptions.Item label="제목" span={4} labelStyle={{ width: 100 }}>
           <Input
             placeholder={board?.title || undefined}
             value={title}
@@ -224,7 +228,7 @@ const EditBoardPage: React.VFC = () => {
         </Descriptions.Item>
         <Descriptions.Item
           label="첨부파일"
-          span={3}
+          span={4}
           labelStyle={{ width: 100 }}
         >
           {files && files.length !== 0 ? (
@@ -244,7 +248,7 @@ const EditBoardPage: React.VFC = () => {
                       className="attach-button"
                       onClick={() => handleDeleteFile(elem?.id, elem?.fileName)}
                     >
-                      <CloseCircleOutlined />
+                      <DeleteOutlined />
                     </button>
                   </div>
                 );
@@ -271,14 +275,14 @@ const EditBoardPage: React.VFC = () => {
             <Button icon={<UploadOutlined />}>파일 업로드</Button>
           </Upload>
         </Descriptions.Item>
-        <Descriptions.Item label="링크" span={3}>
+        <Descriptions.Item label="링크" span={4}>
           <Input
             placeholder={board?.link || undefined}
             value={link}
             onChange={onChangeLink}
           />
         </Descriptions.Item>
-        <Descriptions.Item label="내용" span={3}>
+        <Descriptions.Item label="내용" span={4}>
           <Input
             placeholder={board?.content || undefined}
             value={content}
@@ -292,11 +296,17 @@ const EditBoardPage: React.VFC = () => {
           onClick={() => handleEditBoard()}
           disabled={progress !== 0 ? true : false}
         >
-          {!loading
-            ? progress <= 0
-              ? "올리기"
-              : "이미지 / 파일 업로드 중입니다..."
-            : "Uploading..."}
+          {!loading ? (
+            progress <= 0 ? (
+              "올리기"
+            ) : (
+              <>
+                <LoadingOutlined /> 이미지 / 파일 업로드 중입니다...
+              </>
+            )
+          ) : (
+            "Uploading..."
+          )}
         </Button>
         <Button type="primary" danger onClick={handleDeleteBoard}>
           삭제하기

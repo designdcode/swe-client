@@ -1,7 +1,7 @@
-import { Descriptions, Form, Input, Typography, Upload } from "antd";
+import { Descriptions, Input, Typography, Upload } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import queryString from "query-string";
-import { useHistory, useLocation } from "react-router";
+import { useHistory, useLocation, useParams } from "react-router";
 import { Container } from "./styles";
 import {
   getBoardById,
@@ -13,9 +13,19 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_BOARD } from "../../../queries/sharedQuery";
 import useInput from "../../../hooks/useInput";
 import { Button } from "../EditBoardPage/styles";
-import { CloseCircleOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  UploadOutlined,
+  DeleteOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
 import { storage } from "../../../utils/firebase";
-import { CREATE_FILE, DELETE_FILE } from "../../../queries/adminQuery";
+import {
+  CREATE_FILE,
+  CREATE_IMAGE,
+  DELETE_FILE,
+  DELETE_IMAGE,
+  EDIT_BOARD,
+} from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { fileUploader } from "../../../utils/fileUploader";
 import { fileRemover } from "../../../utils/fileRemover";
@@ -24,13 +34,13 @@ interface locationProps {
   search: string;
 }
 
-interface fileProps {
-  url: string;
-  fileName: string;
+interface paramProps {
+  param: string;
 }
 
 const EditImageBoardPage: React.VFC = () => {
   const history = useHistory();
+  const { param } = useParams<paramProps>();
   const { search } = useLocation<locationProps>();
   const queryObj = queryString.parse(search);
   const { category, id } = queryObj;
@@ -49,7 +59,36 @@ const EditImageBoardPage: React.VFC = () => {
 
   const [getBoardById, { loading, data, refetch }] =
     useLazyQuery<getBoardById>(GET_BOARD);
-  const [createFile] = useMutation(CREATE_FILE);
+  const [createImage] = useMutation(CREATE_IMAGE, {
+    onCompleted: ({ createImage }) => {
+      const { ok } = createImage;
+      if (ok) {
+        setProgress(0);
+        if (refetch) refetch();
+      }
+    },
+  });
+  const [deleteImage] = useMutation(DELETE_IMAGE, {
+    onCompleted: ({ deleteImage }) => {
+      const { ok, err } = deleteImage;
+      if (ok) {
+        if (refetch) refetch();
+        toast.error("이미지가 삭제 되었습니다");
+      } else {
+        console.log(err);
+        toast.error(err);
+      }
+    },
+  });
+  const [createFile] = useMutation(CREATE_FILE, {
+    onCompleted: ({ createFile }) => {
+      const { ok } = createFile;
+      if (ok) {
+        setProgress(0);
+        if (refetch) refetch();
+      }
+    },
+  });
   const [deleteFile] = useMutation(DELETE_FILE, {
     onCompleted: ({ deleteFile }) => {
       const { ok, err } = deleteFile;
@@ -63,6 +102,22 @@ const EditImageBoardPage: React.VFC = () => {
     },
   });
 
+  const [editBoard] = useMutation(EDIT_BOARD, {
+    onCompleted: ({ editBoard }) => {
+      const { ok, err } = editBoard;
+      if (ok) {
+        toast.success("게시물이 수정 되었습니다");
+        history.push({
+          pathname: `/admin/${param}/${category}`,
+          state: { refresh: true },
+        });
+      } else {
+        console.log(err);
+        toast.error("게시물을 삭제 할 수 없습니다");
+      }
+    },
+  });
+
   const handleImageRemover = useCallback(() => {
     if (imgName && imgName.trim()) {
       fileRemover("images", category as string, imgName, setImgUrl);
@@ -70,7 +125,7 @@ const EditImageBoardPage: React.VFC = () => {
   }, [category, imgName]);
 
   const handleImageUpload = useCallback(
-    (file: any) => {
+    async (file: any) => {
       handleImageRemover();
       setProgress(progress + 1);
       const filename = file.name;
@@ -82,15 +137,17 @@ const EditImageBoardPage: React.VFC = () => {
         filename,
         setImgUrl,
         progress,
-        setProgress
+        setProgress,
+        createImage,
+        parseInt(id as string, 10)
       );
     },
-    [category, progress, handleImageRemover]
+    [category, progress, handleImageRemover, createImage, id]
   );
 
   const handleFileUpload = useCallback(
     (file: any) => {
-      setProgress(progress + 1);
+      setProgress(1);
       const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
       upload.on(
         "state_changed",
@@ -165,15 +222,37 @@ const EditImageBoardPage: React.VFC = () => {
   }
   return (
     <Container>
-      <Button type="ghost" onClick={() => history.goBack()}>
-        뒤로
-      </Button>
+      <div className="button-group">
+        <Button type="ghost" onClick={() => history.goBack()}>
+          뒤로
+        </Button>
+        <Button
+          type="primary"
+          disabled={progress === 0 ? false : true}
+          onClick={() =>
+            editBoard({
+              variables: {
+                id: parseInt(id as string, 10),
+                link,
+              },
+            })
+          }
+        >
+          {progress === 0 ? (
+            "완료"
+          ) : (
+            <>
+              <LoadingOutlined /> 파일 / 이미지 업로딩 중
+            </>
+          )}
+        </Button>
+      </div>
       <Descriptions
         bordered
         column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
         layout="horizontal"
       >
-        <Descriptions.Item label="링크" span={3} labelStyle={{ width: 100 }}>
+        <Descriptions.Item label="링크" span={4} labelStyle={{ width: 100 }}>
           <Input
             placeholder={board?.link || undefined}
             value={link}
@@ -182,7 +261,7 @@ const EditImageBoardPage: React.VFC = () => {
         </Descriptions.Item>
         <Descriptions.Item
           label="첨부파일"
-          span={3}
+          span={4}
           labelStyle={{ width: 100 }}
         >
           {file && file.length !== 0 ? (
@@ -202,7 +281,7 @@ const EditImageBoardPage: React.VFC = () => {
                       className="attach-button"
                       onClick={() => handleDeleteFile(elem?.id, elem?.fileName)}
                     >
-                      <CloseCircleOutlined />
+                      <DeleteOutlined />
                     </button>
                   </div>
                 );
@@ -229,10 +308,32 @@ const EditImageBoardPage: React.VFC = () => {
             <Button icon={<UploadOutlined />}>파일 업로드</Button>
           </Upload>
         </Descriptions.Item>
-        <Descriptions.Item label="이미지" span={3} labelStyle={{ width: 100 }}>
+        <Descriptions.Item label="이미지" span={4} labelStyle={{ width: 100 }}>
+          {image && (
+            <Button
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => {
+                fileRemover(
+                  "images",
+                  category as string,
+                  image.fileName,
+                  setImgUrl
+                );
+                deleteImage({ variables: { id: image.id } });
+              }}
+            >
+              이미지 삭제
+            </Button>
+          )}
           <Upload
             listType="picture"
-            customRequest={({ file }) => handleImageUpload(file)}
+            customRequest={({ file }) => {
+              if (image) {
+                deleteImage({ variables: { id: image && image.id } });
+              }
+              handleImageUpload(file);
+            }}
             progress={{ showInfo: true }}
             onChange={({ file: callbackFile }) => {
               if (imgUrl) {

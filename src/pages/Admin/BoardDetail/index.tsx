@@ -93,15 +93,15 @@ const BoardDetail: React.VFC = () => {
         column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
         layout="horizontal"
       >
-        <Descriptions.Item label="제목" span={3} labelStyle={{ width: 100 }}>
+        <Descriptions.Item label="제목" span={4} labelStyle={{ width: 100 }}>
           <Typography.Title level={3}>{board?.title}</Typography.Title>
         </Descriptions.Item>
-        <Descriptions.Item label="작성일" span={3} labelStyle={{ width: 100 }}>
+        <Descriptions.Item label="작성일" span={4} labelStyle={{ width: 100 }}>
           {getDate(board?.createdAt || "")}
         </Descriptions.Item>
         <Descriptions.Item
           label="첨부파일"
-          span={3}
+          span={4}
           labelStyle={{ width: 100 }}
         >
           {files && files.length !== 0 ? (
@@ -125,7 +125,7 @@ const BoardDetail: React.VFC = () => {
             <>첨부파일 없음</>
           )}
         </Descriptions.Item>
-        <Descriptions.Item label="내용" span={3}>
+        <Descriptions.Item label="내용" span={4}>
           {board?.content}
         </Descriptions.Item>
       </Descriptions>

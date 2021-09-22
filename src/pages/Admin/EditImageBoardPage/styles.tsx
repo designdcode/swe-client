@@ -16,6 +16,10 @@ export const Container = styled.div`
       transition: linear 0.2s;
     }
   }
+  & .button-group {
+    display: flex;
+    justify-content: space-between;
+  }
 
   img {
     object-fit: contain;

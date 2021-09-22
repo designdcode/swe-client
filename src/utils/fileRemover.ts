@@ -13,7 +13,6 @@ export const fileRemover = (
     .delete()
     .then(() => {
       state("");
-      toast.success("업로드 된 파일/이미지가 삭제 되었습니다");
     })
     .catch((err) => toast.error(err));
 };

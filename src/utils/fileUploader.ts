@@ -9,7 +9,9 @@ export const fileUploader = (
   filename: string,
   state: Dispatch<SetStateAction<string | undefined>>,
   progress: number,
-  setProgress: Dispatch<SetStateAction<number>>
+  setProgress: Dispatch<SetStateAction<number>>,
+  createImage?: any,
+  boardId?: number
 ) => {
   const upload = storage.ref(`/${type}/${category}/${filename}`).put(file);
   upload.on(
@@ -17,14 +19,22 @@ export const fileUploader = (
     (snapshot) => {},
     (err) => console.log(err),
     () => {
+      setProgress(1);
       storage
         .ref(`/${type}/${category}/${filename}`)
         .getDownloadURL()
-        .then((url) => {
+        .then(async (url) => {
           state(url);
+          if (createImage && boardId) {
+            await createImage({
+              variables: {
+                url,
+                fileName: filename,
+                boardId,
+              },
+            });
+          }
           toast.success("파일 / 이미지가 업로드 되었습니다");
-          // setProgress(progress - 1);
-          setProgress(0);
         });
     }
   );

@@ -2,18 +2,14 @@ import { Descriptions, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import { Container, Button } from "./styles";
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   getBoardByCategory,
   getBoardByCategory_getBoardByCategory_data,
   getBoardByCategory_getBoardByCategory_data_files,
   getBoardByCategory_getBoardByCategory_data_images,
 } from "../../../typings/api";
-import {
-  DELETE_BOARD,
-  GET_BOARD_BY_CATEGORY,
-} from "../../../queries/adminQuery";
-import { toast } from "react-toastify";
+import { GET_BOARD_BY_CATEGORY } from "../../../queries/adminQuery";
 
 interface ParamProps {
   param: string;
@@ -33,46 +29,32 @@ const ImageBoardPage: React.VFC = () => {
     useState<
       (getBoardByCategory_getBoardByCategory_data | null | undefined)[]
     >();
-  const [file, setFile] =
-    useState<
-      (getBoardByCategory_getBoardByCategory_data_files | null | undefined)[]
-    >();
+  const [file, setFile] = useState<
+    (getBoardByCategory_getBoardByCategory_data_files | null)[] | undefined
+  >();
   const [image, setImage] =
     useState<
       (getBoardByCategory_getBoardByCategory_data_images | null | undefined)[]
     >();
   const { loading, data, refetch } = useQuery<getBoardByCategory>(
     GET_BOARD_BY_CATEGORY,
-    { variables: { category: subparam } }
+    {
+      variables: { category: subparam },
+    }
   );
-
-  const [deleteBoard] = useMutation(DELETE_BOARD, {
-    onCompleted: ({ deleteBoard }) => {
-      const { ok, err } = deleteBoard;
-      if (ok) {
-        toast.success("게시물이 삭제 되었습니다");
-        if (refetch) {
-          refetch();
-        }
-      } else {
-        toast.error(err);
-      }
-    },
-  });
 
   useEffect(() => {
     if (data && data.getBoardByCategory) {
-      if (data.getBoardByCategory.data) {
+      if (
+        data.getBoardByCategory.data &&
+        data.getBoardByCategory.data.length !== 0
+      ) {
         setBoard(data.getBoardByCategory.data);
-        if (board && board[0]?.files) {
-          if (data.getBoardByCategory.data[0].files)
-            setFile(data.getBoardByCategory.data[0].files);
-          if (data.getBoardByCategory.data[0].images)
-            setImage(data.getBoardByCategory.data[0].images);
-        }
+        if (board && board[0] && board[0].files) setFile(board[0].files);
+        if (board && board[0] && board[0].images) setImage(board[0].images);
       }
     }
-  }, [data, board]);
+  }, [data, board, setBoard, setFile, setImage]);
 
   useEffect(() => {
     const excuteRefetch = () => {
@@ -125,7 +107,7 @@ const ImageBoardPage: React.VFC = () => {
         column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
         layout="horizontal"
       >
-        <Descriptions.Item label="링크" span={3} labelStyle={{ width: 100 }}>
+        <Descriptions.Item label="링크" span={4} labelStyle={{ width: 100 }}>
           {board && board[0]?.link ? (
             <a href={`${board[0].link}`} target="_blank" rel="noreferrer">
               {board[0].link}
@@ -136,7 +118,7 @@ const ImageBoardPage: React.VFC = () => {
         </Descriptions.Item>
         <Descriptions.Item
           label="첨부파일"
-          span={3}
+          span={4}
           labelStyle={{ width: 100 }}
         >
           {file ? (
@@ -158,7 +140,7 @@ const ImageBoardPage: React.VFC = () => {
             <Typography.Text>첨부파일이 없습니다</Typography.Text>
           )}
         </Descriptions.Item>
-        <Descriptions.Item label="이미지" span={3} labelStyle={{ width: 100 }}>
+        <Descriptions.Item label="이미지" span={4} labelStyle={{ width: 100 }}>
           {image && image[0] ? (
             <img src={image[0].url} alt={image[0].fileName} />
           ) : (
