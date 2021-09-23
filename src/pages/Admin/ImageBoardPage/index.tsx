@@ -44,7 +44,10 @@ const ImageBoardPage: React.VFC = () => {
   );
 
   useEffect(() => {
-    if (data && data.getBoardByCategory) {
+    if (
+      data?.getBoardByCategory.ok &&
+      data.getBoardByCategory.data?.length !== 0
+    ) {
       if (
         data.getBoardByCategory.data &&
         data.getBoardByCategory.data.length !== 0
@@ -54,7 +57,7 @@ const ImageBoardPage: React.VFC = () => {
         if (board && board[0] && board[0].images) setImage(board[0].images);
       }
     }
-  }, [data, board, setBoard, setFile, setImage]);
+  }, [data, board, refetch]);
 
   useEffect(() => {
     const excuteRefetch = () => {
@@ -76,13 +79,17 @@ const ImageBoardPage: React.VFC = () => {
         <Button type="ghost" onClick={() => history.goBack()}>
           뒤로
         </Button>
-        {board && board[0] ? (
+        {/* {board && board[0] ? ( */}
+        {data?.getBoardByCategory.data?.length !== 0 &&
+        data?.getBoardByCategory.ok ? (
           <Button
             type="primary"
             onClick={() =>
               history.push(
+                // `/admin/${param}/edit-image-${param}?category=${subparam}&id=${board && board[0]?.id
                 `/admin/${param}/edit-image-${param}?category=${subparam}&id=${
-                  board && board[0]?.id
+                  data.getBoardByCategory.data &&
+                  data.getBoardByCategory.data[0].id
                 }`
               )
             }
@@ -108,9 +115,22 @@ const ImageBoardPage: React.VFC = () => {
         layout="horizontal"
       >
         <Descriptions.Item label="링크" span={4} labelStyle={{ width: 100 }}>
-          {board && board[0]?.link ? (
+          {/* {board && board[0]?.link ? (
             <a href={`${board[0].link}`} target="_blank" rel="noreferrer">
               {board[0].link}
+            </a> */}
+          {data?.getBoardByCategory.data?.length !== 0 &&
+          data?.getBoardByCategory.ok ? (
+            <a
+              href={`${
+                data.getBoardByCategory.data &&
+                data.getBoardByCategory.data[0].link
+              }`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {data.getBoardByCategory.data &&
+                data.getBoardByCategory.data[0].link}
             </a>
           ) : (
             <Typography.Text>링크가 없습니다</Typography.Text>
@@ -121,7 +141,9 @@ const ImageBoardPage: React.VFC = () => {
           span={4}
           labelStyle={{ width: 100 }}
         >
-          {file ? (
+          {/* {data?.getBoardByCategory.data && data.getBoardByCategory.data[0].files ? (
+          data.getBoardByCategory.data[0].files.length !== 0 && data.getBoardByCategory.data[0].files.map((elem, idx) => { */}
+          {file && file.length ? (
             file.map((elem, idx) => {
               return (
                 <div key={idx} className={"attach-group"}>

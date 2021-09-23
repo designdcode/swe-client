@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Layout, Menu, Breadcrumb, Form, Input, Button } from "antd";
 import "./admin.css";
 import {
@@ -67,6 +67,15 @@ const Admin: React.FC = () => {
       param: "dashboard",
       subparam: "dashboard",
     });
+  }, []);
+
+  useEffect(() => {
+    const time = localStorage.getItem("admin");
+    if (time) {
+      if (parseInt(time, 10) / 1000 < Date.now() / 1000) {
+        adminLogOut();
+      }
+    }
   }, []);
 
   return (
