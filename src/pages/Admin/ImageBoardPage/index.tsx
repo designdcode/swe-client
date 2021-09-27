@@ -141,10 +141,12 @@ const ImageBoardPage: React.VFC = () => {
           span={4}
           labelStyle={{ width: 100 }}
         >
-          {/* {data?.getBoardByCategory.data && data.getBoardByCategory.data[0].files ? (
-          data.getBoardByCategory.data[0].files.length !== 0 && data.getBoardByCategory.data[0].files.map((elem, idx) => { */}
-          {file && file.length ? (
-            file.map((elem, idx) => {
+          {/* {file && file.length ? (
+        file.map((elem, idx) => { */}
+          {data?.getBoardByCategory.data &&
+          data.getBoardByCategory.data[0].files ? (
+            data.getBoardByCategory.data[0].files.length !== 0 &&
+            data.getBoardByCategory.data[0].files.map((elem, idx) => {
               return (
                 <div key={idx} className={"attach-group"}>
                   <a
