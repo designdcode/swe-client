@@ -2,10 +2,9 @@ import { Descriptions, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import { Container, Button } from "./styles";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import {
   getBoardByCategory,
-  getBoardByCategory_getBoardByCategory_data,
   getBoardByCategory_getBoardByCategory_data_files,
   getBoardByCategory_getBoardByCategory_data_images,
 } from "../../../typings/api";
@@ -24,11 +23,8 @@ interface locationProps {
 const ImageBoardPage: React.VFC = () => {
   const history = useHistory();
   const { param, subparam } = useParams<ParamProps>();
+  let sub = subparam;
   const { state } = useLocation<locationProps>();
-  const [board, setBoard] =
-    useState<
-      (getBoardByCategory_getBoardByCategory_data | null | undefined)[]
-    >();
   const [file, setFile] = useState<
     (getBoardByCategory_getBoardByCategory_data_files | null)[] | undefined
   >();
@@ -36,28 +32,36 @@ const ImageBoardPage: React.VFC = () => {
     useState<
       (getBoardByCategory_getBoardByCategory_data_images | null | undefined)[]
     >();
-  const { loading, data, refetch } = useQuery<getBoardByCategory>(
-    GET_BOARD_BY_CATEGORY,
-    {
-      variables: { category: subparam },
-    }
-  );
+  const [getBoard, { loading, data, refetch }] =
+    useLazyQuery<getBoardByCategory>(GET_BOARD_BY_CATEGORY);
 
   useEffect(() => {
-    if (
-      data?.getBoardByCategory.ok &&
-      data.getBoardByCategory.data?.length !== 0
-    ) {
+    getBoard({ variables: { category: sub } });
+  }, [sub, getBoard]);
+
+  useEffect(() => {
+    const initData = () => {
       if (
-        data.getBoardByCategory.data &&
-        data.getBoardByCategory.data.length !== 0
+        data?.getBoardByCategory.ok &&
+        data.getBoardByCategory.data?.length !== 0
       ) {
-        setBoard(data.getBoardByCategory.data);
-        if (board && board[0] && board[0].files) setFile(board[0].files);
-        if (board && board[0] && board[0].images) setImage(board[0].images);
+        if (
+          data.getBoardByCategory.data &&
+          data.getBoardByCategory.data.length !== 0
+        ) {
+          if (data.getBoardByCategory.data[0].files)
+            setFile(data.getBoardByCategory.data[0].files);
+          if (data.getBoardByCategory.data[0].images)
+            setImage(data.getBoardByCategory.data[0].images);
+        }
+      } else {
+        setFile([]);
+        setImage([]);
       }
-    }
-  }, [data, board, refetch]);
+    };
+    initData();
+    return () => initData();
+  }, [data]);
 
   useEffect(() => {
     const excuteRefetch = () => {
@@ -115,10 +119,6 @@ const ImageBoardPage: React.VFC = () => {
         layout="horizontal"
       >
         <Descriptions.Item label="링크" span={4} labelStyle={{ width: 100 }}>
-          {/* {board && board[0]?.link ? (
-            <a href={`${board[0].link}`} target="_blank" rel="noreferrer">
-              {board[0].link}
-            </a> */}
           {data?.getBoardByCategory.data?.length !== 0 &&
           data?.getBoardByCategory.ok ? (
             <a
@@ -141,12 +141,8 @@ const ImageBoardPage: React.VFC = () => {
           span={4}
           labelStyle={{ width: 100 }}
         >
-          {/* {file && file.length ? (
-        file.map((elem, idx) => { */}
-          {data?.getBoardByCategory.data &&
-          data.getBoardByCategory.data[0].files ? (
-            data.getBoardByCategory.data[0].files.length !== 0 &&
-            data.getBoardByCategory.data[0].files.map((elem, idx) => {
+          {file && file.length ? (
+            file.map((elem, idx) => {
               return (
                 <div key={idx} className={"attach-group"}>
                   <a
