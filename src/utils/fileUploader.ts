@@ -35,6 +35,7 @@ export const fileUploader = (
             });
           }
           toast.success("파일 / 이미지가 업로드 되었습니다");
+          setProgress(0);
         });
     }
   );

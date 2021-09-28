@@ -78,7 +78,6 @@ const UploadImageBoardPage = () => {
 
   const handleImageUpload = useCallback(
     (file: any) => {
-      setProgress(progress + 1);
       const filename = file.name;
       setImgName(file.name);
       fileUploader(
@@ -121,6 +120,7 @@ const UploadImageBoardPage = () => {
   const handleImageRemover = useCallback(() => {
     if (imgName && imgName.trim()) {
       fileRemover("images", category as string, imgName, setImgUrl);
+      setProgress(0);
     }
   }, [category, imgName]);
 
@@ -139,6 +139,8 @@ const UploadImageBoardPage = () => {
     },
     [category, file]
   );
+
+  console.log(progress);
 
   return (
     <Container>
