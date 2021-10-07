@@ -40,7 +40,7 @@ const AdminRouteHandler: React.VFC = () => {
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
         else return <ImageBoardPage />;
-      case "edu":
+      case "education":
         if (subparam === `create-image-${param}`)
           return <UploadImageBoardPage />;
         else if (subparam === `edit-image-${param}`)
@@ -50,7 +50,27 @@ const AdminRouteHandler: React.VFC = () => {
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
         else return <ImageBoardPage />;
-      case "cooperation":
+      case "basic":
+        if (subparam === `create-image-${param}`)
+          return <UploadImageBoardPage />;
+        else if (subparam === `edit-image-${param}`)
+          return <EditImageBoardPage />;
+        else if (subparam === `create-${param}`) return <UploadBoardPage />;
+        else if (subparam === `detail-${param}`) return <BoardDetail />;
+        else if (subparam === `edit-${param}`) return <EditBoardPage />;
+        else if (subparam.includes("storage")) return <StoragePage />;
+        else return <ImageBoardPage />;
+      case "major":
+        if (subparam === `create-image-${param}`)
+          return <UploadImageBoardPage />;
+        else if (subparam === `edit-image-${param}`)
+          return <EditImageBoardPage />;
+        else if (subparam === `create-${param}`) return <UploadBoardPage />;
+        else if (subparam === `detail-${param}`) return <BoardDetail />;
+        else if (subparam === `edit-${param}`) return <EditBoardPage />;
+        else if (subparam.includes("storage")) return <StoragePage />;
+        else return <ImageBoardPage />;
+      case "press":
         if (subparam === `create-image-${param}`)
           return <UploadImageBoardPage />;
         else if (subparam === `edit-image-${param}`)
