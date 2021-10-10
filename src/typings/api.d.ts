@@ -279,6 +279,78 @@ export interface createImageVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: createLink
+// ====================================================
+
+export interface createLink_createLink {
+  __typename: "createLinkResponse";
+  ok: boolean;
+  err: string | null;
+}
+
+export interface createLink {
+  createLink: createLink_createLink;
+}
+
+export interface createLinkVariables {
+  title: string;
+  url: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: deleteLink
+// ====================================================
+
+export interface deleteLink_deleteLink {
+  __typename: "deleteLinkResponse";
+  ok: boolean;
+  err: string | null;
+}
+
+export interface deleteLink {
+  deleteLink: deleteLink_deleteLink;
+}
+
+export interface deleteLinkVariables {
+  id: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: editLink
+// ====================================================
+
+export interface editLink_editLink {
+  __typename: "editLinkResponse";
+  ok: boolean;
+  err: string | null;
+}
+
+export interface editLink {
+  editLink: editLink_editLink;
+}
+
+export interface editLinkVariables {
+  id: number;
+  title?: string | null;
+  url?: string | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: getBoardById
 // ====================================================
 
@@ -323,6 +395,34 @@ export interface getBoardById {
 
 export interface getBoardByIdVariables {
   id: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getLinks
+// ====================================================
+
+export interface getLinks_getLinks_data {
+  __typename: "Link";
+  id: number;
+  url: string;
+  title: string;
+  createdAt: string | null;
+}
+
+export interface getLinks_getLinks {
+  __typename: "getLinksResponse";
+  ok: boolean;
+  err: string | null;
+  data: (getLinks_getLinks_data | null)[] | null;
+}
+
+export interface getLinks {
+  getLinks: getLinks_getLinks;
 }
 
 /* tslint:disable */

@@ -8,6 +8,7 @@ import UploadBoardPage from "../pages/Admin/UploadBoardPage";
 import ImageBoardPage from "../pages/Admin/ImageBoardPage";
 import UploadImageBoardPage from "../pages/Admin/UploadImageBoardPage";
 import EditImageBoardPage from "../pages/Admin/EditImageBoardPage";
+import LinkManager from "../pages/Admin/LinkManager";
 
 interface IProps {
   param: string;
@@ -95,6 +96,8 @@ const AdminRouteHandler: React.VFC = () => {
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
         else return <ImageBoardPage />;
+      case "sitelink":
+        return <LinkManager />;
       default:
         return;
     }

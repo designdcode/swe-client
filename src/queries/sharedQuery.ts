@@ -28,3 +28,18 @@ export const GET_BOARD = gql`
     }
   }
 `;
+
+export const GET_LINK = gql`
+  query getLinks {
+    getLinks {
+      ok
+      err
+      data {
+        id
+        url
+        title
+        createdAt
+      }
+    }
+  }
+`;

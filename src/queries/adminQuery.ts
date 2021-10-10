@@ -128,3 +128,30 @@ export const CREATE_IMAGE = gql`
     }
   }
 `;
+
+export const CREATE_LINK = gql`
+  mutation createLink($title: String!, $url: String!) {
+    createLink(title: $title, url: $url) {
+      ok
+      err
+    }
+  }
+`;
+
+export const DELETE_LINK = gql`
+  mutation deleteLink($id: Int!) {
+    deleteLink(id: $id) {
+      ok
+      err
+    }
+  }
+`;
+
+export const EDIT_LINK = gql`
+  mutation editLink($id: Int!, $title: String, $url: String) {
+    editLink(id: $id, title: $title, url: $url) {
+      ok
+      err
+    }
+  }
+`;

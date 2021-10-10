@@ -267,4 +267,15 @@ export const AdminNavData: NavProps[] = [
       },
     ],
   },
+  {
+    title: "sitelink",
+    ko_title: "사이트링크",
+    subMenu: [
+      {
+        key: "site-link",
+        title: "link",
+        ko_title: "링크관리",
+      },
+    ],
+  },
 ];
