@@ -233,7 +233,7 @@ const EditImageBoardPage: React.VFC = () => {
             editBoard({
               variables: {
                 id: parseInt(id as string, 10),
-                link,
+                link: link.includes("http") ? link : `http://${link}`,
               },
             })
           }

@@ -68,7 +68,11 @@ const UploadImageBoardPage = () => {
   const onFinish = useCallback(async () => {
     await createBoard({
       variables: {
-        link: link.trim() ? link : null,
+        link: link.trim()
+          ? link.includes("http")
+            ? link
+            : `http://${link}`
+          : null,
         category,
         files: file.length !== 0 ? file : null,
         images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,

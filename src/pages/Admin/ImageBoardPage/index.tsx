@@ -144,7 +144,7 @@ const ImageBoardPage: React.VFC = () => {
           {file && file.length ? (
             file.map((elem, idx) => {
               return (
-                <div key={idx} className={"attach-group"}>
+                <span key={idx} className={"attach-group"}>
                   <a
                     href={`${elem?.url}`}
                     download
@@ -153,7 +153,7 @@ const ImageBoardPage: React.VFC = () => {
                   >
                     {elem?.fileName}
                   </a>
-                </div>
+                </span>
               );
             })
           ) : (

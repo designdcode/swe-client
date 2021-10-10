@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 import client, { adminLoginVar } from "./apollo";
 
 export const adminQuery = gql`
-  extend type Query {
-    adminLogin: Boolean!
+  query adminLogin {
+    adminLogin @client
   }
 `;
 

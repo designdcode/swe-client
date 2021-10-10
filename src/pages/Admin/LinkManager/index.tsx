@@ -174,7 +174,12 @@ const LinkManager: React.VFC = () => {
             <PlusOutlined style={{ fontSize: 14 }} /> Add Link
           </Button>
         ) : (
-          <Button type="primary" onClick={handleAdd}>
+          <Button
+            type="primary"
+            onClick={() =>
+              url.trim() || title.trim() ? handleAdd() : setOnAdd(false)
+            }
+          >
             생성
           </Button>
         )}

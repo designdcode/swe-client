@@ -84,7 +84,8 @@ const AdminRouteHandler: React.VFC = () => {
       case "community":
         if (
           subparam === "community-notice" ||
-          subparam === "community-admission"
+          subparam === "community-admission" ||
+          subparam === "community-sitemap"
         )
           return <StoragePage />;
         if (subparam === `create-image-${param}`)
