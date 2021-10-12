@@ -42,11 +42,29 @@ export const HeaderContainer = styled.div`
       vertical-align: middle;
       line-height: 30px;
     }
+  }
+`;
 
-    & .menu-link {
-      display: block;
-      width: 150px;
-      font-weight: 12px;
-    }
+export const DropDown = styled.li`
+  position: relative;
+  /* display: block; */
+  width: 150px;
+  font-weight: 12px;
+  float: left;
+  list-style: none;
+  vertical-align: middle;
+  line-height: 30px;
+  &:hover .dropDownMenu {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 100px;
+    width: 100%;
+    text-align: left;
+    background-color: gray;
+  }
+
+  & .dropDownMenu {
+    display: none;
   }
 `;

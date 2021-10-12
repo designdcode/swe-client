@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
-import { NavigationData } from "../../assets/NavigationData";
-import { HeaderContainer } from "./styles";
+import { NavigationData, NavProps } from "../../assets/NavigationData";
+import { DropDown, HeaderContainer } from "./styles";
 
 const Header: React.VFC = () => {
   return (
@@ -9,13 +9,16 @@ const Header: React.VFC = () => {
       <nav className="main-mobile">main</nav>
       <nav className="main-desktop">
         <ul className="main-header">
-          {NavigationData.map((elem, idx) => {
+          {NavigationData.map((elem: NavProps, idx) => {
             return (
-              <li key={idx}>
-                <a href="/#" className="menu-link">
-                  {elem.ko_title}
-                </a>
-              </li>
+              <DropDown key={idx}>
+                <div>{elem.ko_title}</div>
+                <div className="dropDownMenu">
+                  {elem.subMenu.map((item, idx) => {
+                    return <li key={idx}>{item.ko_title}</li>;
+                  })}
+                </div>
+              </DropDown>
             );
           })}
         </ul>
