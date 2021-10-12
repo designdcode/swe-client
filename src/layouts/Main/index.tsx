@@ -1,14 +1,16 @@
 import React from "react";
+import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import { Content } from "./styles";
 
 const Main: React.VFC = () => {
   return (
     <div className="wrapper">
       <Header />
-      <div className="c1">1</div>
-      <div className="c2">2</div>
-      <div className="c3">3</div>
-      <div className="c4">4</div>
+      <Content>
+        <div>test</div>
+      </Content>
+      <Footer />
     </div>
   );
 };

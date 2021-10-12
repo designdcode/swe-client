@@ -1,46 +1,149 @@
-import styled from "@emotion/styled";
+import styled from "@emotion/styled/macro";
 import {
+  breakpoints,
+  BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PC,
   BREAKPOINT_PHONE_MEDIUM,
   BREAKPOINT_TABLET,
   mediaQueries,
 } from "../../utils/mediaQuery";
 
+interface LineProps {
+  onHover: boolean;
+}
+
 export const HeaderContainer = styled.div`
   width: 100%;
-  & .top {
-    height: 25px;
-    border: 1px solid black;
-    ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-      display: none;
-    }
-    ${mediaQueries(BREAKPOINT_PC)} {
-      display: flex;
-    }
+  height: 150px;
+`;
+
+export const HeaderTop = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: none;
+  }
+  height: 30px;
+  background-color: #0c1b58;
+  color: white;
+  & .top-content {
+    height: 100%;
+    width: ${breakpoints.pc}px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    font-size: 12px;
+    letter-spacing: 0.13px;
+  }
+`;
+
+export const HeaderMain = styled.div``;
+
+export const Cover = styled.div`
+  transform: scaleY(0);
+  visibility: hidden;
+  opacity: 0.9;
+  height: 0;
+  border-top: 4px solid #0c1b58;
+  background-color: #1d2b64;
+  border-right: 1px solid #303952;
+  &:hover {
+    opacity: 0.9;
+    background-color: #0c1b58;
+    transition: 0.2s linear;
+  }
+`;
+
+export const MainDesktop = styled.div`
+  ${mediaQueries(BREAKPOINT_PC)} {
+    display: none;
+  }
+  ${mediaQueries(BREAKPOINT_TABLET)} {
+    display: none;
   }
 
-  & .main-mobile {
-    ${mediaQueries(BREAKPOINT_PC)} {
-      display: none;
-    }
+  & .main-content-desktop {
+    width: ${breakpoints.pc}px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    height: 80px;
   }
 
-  & .main-desktop {
-    ${mediaQueries(BREAKPOINT_TABLET)} {
-      display: none;
+  & .main-menu {
+    height: 55px;
+    width: ${breakpoints.pc}px;
+    margin: 0 auto;
+    display: flex;
+    border-top: 1px solid black;
+    padding-top: 8px;
+    &:hover ${Cover} {
+      visibility: visible;
+      transform: scaleY(1);
+      height: 250px;
+      opacity: 0.9;
+      transition: height 0.1s ease-in;
     }
-    ${mediaQueries(BREAKPOINT_PC)} {
-      width: 100%;
-      display: flex;
-      height: 150px;
-      border: 1px solid blue;
+    &:hover li {
+      height: 25px;
+      transition: height 0.1s ease-in;
+    }
+    .header-title {
+      width: 160px;
+      height: 70%;
+      & span {
+        display: flex;
+        flex-direction: inherit;
+        justify-content: center;
+        align-items: center;
+        height: 70%;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      &:not(::first-of-type) {
+        border-left: 1px solid gray;
+      }
+      &:not(:last-child) {
+        border-right: 1px solid gray;
+      }
+      &:hover {
+        color: #f03fa8;
+        transition: 0.2s linear;
+      }
     }
 
-    & .main-header li {
-      float: left;
+    ul {
+      padding: 0;
+      width: 160px;
       list-style: none;
-      vertical-align: middle;
-      line-height: 30px;
+      cursor: pointer;
     }
+    li {
+      width: 160px;
+      font-size: 10px;
+      line-height: 25px;
+      text-align: center;
+      color: white;
+      height: 0;
+      cursor: pointer;
+      &:hover {
+        color: #f03fa8;
+        transition: 0.2s linear;
+      }
+    }
+  }
+`;
+export const HeaderLine = styled.div`
+  width: 100%;
+  &:hover {
+    transition: 0.1s linear;
+    border-top: 2px solid #f03fa8;
+  }
+`;
+
+export const MainMobile = styled.div`
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    display: none;
   }
 `;

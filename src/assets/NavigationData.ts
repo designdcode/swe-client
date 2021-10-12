@@ -4,6 +4,7 @@ export interface ObjProps {
   ko_title: string;
 }
 export interface NavProps {
+  key: number;
   title: string;
   ko_title: string;
   subMenu: Array<ObjProps>;
@@ -11,6 +12,7 @@ export interface NavProps {
 
 export const NavigationData: NavProps[] = [
   {
+    key: 0,
     title: "intro",
     ko_title: "사업단 소개",
     subMenu: [
@@ -47,6 +49,7 @@ export const NavigationData: NavProps[] = [
     ],
   },
   {
+    key: 1,
     title: "basic",
     ko_title: "SW교육지원",
     subMenu: [
@@ -88,6 +91,7 @@ export const NavigationData: NavProps[] = [
     ],
   },
   {
+    key: 2,
     title: "major",
     ko_title: "SW전공교육",
     subMenu: [
@@ -144,6 +148,7 @@ export const NavigationData: NavProps[] = [
     ],
   },
   {
+    key: 3,
     title: "education",
     ko_title: "SW융합교육",
     subMenu: [
@@ -165,6 +170,7 @@ export const NavigationData: NavProps[] = [
     ],
   },
   {
+    key: 4,
     title: "value",
     ko_title: "SW가치확산",
     subMenu: [
@@ -201,6 +207,7 @@ export const NavigationData: NavProps[] = [
     ],
   },
   {
+    key: 5,
     title: "press",
     ko_title: "사업성과",
     subMenu: [
@@ -242,6 +249,7 @@ export const NavigationData: NavProps[] = [
     ],
   },
   {
+    key: 6,
     title: "community",
     ko_title: "알림마당",
     subMenu: [
@@ -268,6 +276,7 @@ export const NavigationData: NavProps[] = [
     ],
   },
   {
+    key: 7,
     title: "sitelink",
     ko_title: "사이트링크",
     subMenu: [

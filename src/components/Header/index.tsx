@@ -1,34 +1,50 @@
 import React, { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
 import { NavigationData, NavProps } from "../../assets/NavigationData";
-import { DropDown, HeaderContainer } from "./styles";
+import {
+  HeaderContainer,
+  HeaderMain,
+  HeaderTop,
+  MainDesktop,
+  MainMobile,
+  Cover,
+  HeaderLine,
+} from "./styles";
 
 const Header: React.VFC = () => {
   return (
     <HeaderContainer>
-      <div className="top">top</div>
-      <nav className="main-mobile">main</nav>
-
-      <nav className="main-desktop">
-        <ul className="main-header">
-          {NavigationData.map((elem: NavProps, idx) => {
-            return (
-              <DropDown key={idx}>
-                <div>{elem.ko_title}</div>
-                <div className="dropDownMenu">
-                  {elem.subMenu.map((item, idx) => {
-                    return (
-                      <Link to="#" key={idx}>
-                        <li>{item.ko_title}</li>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </DropDown>
-            );
-          })}
-        </ul>
-      </nav>
+      <HeaderTop>
+        <div className="top-content">
+          <span>SUNMOON UNIVERSITY</span>
+          <span>HOME | LOGIN</span>
+        </div>
+      </HeaderTop>
+      <HeaderMain>
+        <MainDesktop>
+          <div className="main-content-desktop">
+            <div>logo</div>
+            <div>options</div>
+          </div>
+          <div className="main-menu">
+            {NavigationData.map((elem: NavProps, idx) => {
+              return (
+                <ul key={idx}>
+                  <div className="header-title">
+                    <HeaderLine />
+                    <span>{elem.ko_title}</span>
+                  </div>
+                  <Cover>
+                    {elem.subMenu.map((item, i) => {
+                      return <li key={i}>{item.ko_title}</li>;
+                    })}
+                  </Cover>
+                </ul>
+              );
+            })}
+          </div>
+        </MainDesktop>
+        <MainMobile>mobile</MainMobile>
+      </HeaderMain>
     </HeaderContainer>
   );
 };

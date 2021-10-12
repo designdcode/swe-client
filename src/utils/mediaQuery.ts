@@ -2,16 +2,23 @@ export const BREAKPOINT_PC = "pc";
 export const BREAKPOINT_TABLET = "tablet";
 export const BREAKPOINT_PHONE_MEDIUM = "phoneMedium";
 export const BREAKPOINT_PHONE_SMALL = "phoneSmall";
+export const BREAKPOINT_BIGGER_THAN_PC = "lpc";
 
 export const breakpoints = {
-  pc: 1280,
-  tablet: 768,
-  phoneMedium: 376,
-  phoneSmall: 350,
+  lpc: 1279,
+  pc: 1279,
+  tablet: 767,
+  phoneMedium: 375,
+  phoneSmall: 349,
 };
 
 export const mediaQueries = (key: keyof typeof breakpoints) => {
-  return `@media (min-width: ${breakpoints[key]}px)`;
+  switch (key) {
+    case "lpc":
+      return `@media only screen and (min-width: ${breakpoints[key]}px)`;
+    default:
+      return `@media only screen and (max-width: ${breakpoints[key]}px)`;
+  }
 };
 
 /**
