@@ -9,7 +9,7 @@ import {
 } from "../../utils/mediaQuery";
 
 interface LineProps {
-  onHover: boolean;
+  hoverProps: boolean;
 }
 
 export const HeaderContainer = styled.div`
@@ -66,6 +66,7 @@ export const MainDesktop = styled.div`
     align-items: center;
     display: flex;
     justify-content: space-between;
+    border-bottom: 1px solid black;
     margin: 0 auto;
     height: 80px;
   }
@@ -75,8 +76,6 @@ export const MainDesktop = styled.div`
     width: ${breakpoints.pc}px;
     margin: 0 auto;
     display: flex;
-    border-top: 1px solid black;
-    padding-top: 8px;
     &:hover ${Cover} {
       visibility: visible;
       transform: scaleY(1);
@@ -90,7 +89,11 @@ export const MainDesktop = styled.div`
     }
     .header-title {
       width: 160px;
-      height: 70%;
+      height: 50%;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       & span {
         display: flex;
         flex-direction: inherit;
@@ -100,13 +103,11 @@ export const MainDesktop = styled.div`
         font-weight: 600;
         cursor: pointer;
       }
+      border-right: 1px solid gray;
+      &:last-child {
+        border: none;
+      }
 
-      &:not(::first-of-type) {
-        border-left: 1px solid gray;
-      }
-      &:not(:last-child) {
-        border-right: 1px solid gray;
-      }
       &:hover {
         color: #f03fa8;
         transition: 0.2s linear;
@@ -118,6 +119,7 @@ export const MainDesktop = styled.div`
       width: 160px;
       list-style: none;
       cursor: pointer;
+      position: relative;
     }
     li {
       width: 160px;
@@ -134,12 +136,12 @@ export const MainDesktop = styled.div`
     }
   }
 `;
-export const HeaderLine = styled.div`
+export const HeaderLine = styled.div<LineProps>`
   width: 100%;
-  &:hover {
-    transition: 0.1s linear;
-    border-top: 2px solid #f03fa8;
-  }
+  height: 3px;
+  margin-bottom: 3px;
+  background-color: ${(props) => (props.hoverProps ? "#f03fa8" : "none")};
+  transition: 0.2s linear;
 `;
 
 export const MainMobile = styled.div`

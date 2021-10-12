@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { NavigationData, NavProps } from "../../assets/NavigationData";
 import {
   HeaderContainer,
@@ -11,6 +11,8 @@ import {
 } from "./styles";
 
 const Header: React.VFC = () => {
+  const [hover, setHover] = useState<number | null>(null);
+
   return (
     <HeaderContainer>
       <HeaderTop>
@@ -28,9 +30,13 @@ const Header: React.VFC = () => {
           <div className="main-menu">
             {NavigationData.map((elem: NavProps, idx) => {
               return (
-                <ul key={idx}>
+                <ul
+                  key={idx}
+                  onMouseOver={() => setHover(elem.key)}
+                  onMouseLeave={() => setHover(null)}
+                >
+                  <HeaderLine hoverProps={hover === idx ? true : false} />
                   <div className="header-title">
-                    <HeaderLine />
                     <span>{elem.ko_title}</span>
                   </div>
                   <Cover>
