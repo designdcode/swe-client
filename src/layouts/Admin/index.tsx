@@ -7,13 +7,13 @@ import {
   ObjProps,
 } from "../../assets/AdminNav/AdminNavData";
 import AdminRouteHandler from "../../utils/AdminRouteHandler";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useReactiveVar } from "@apollo/client";
 import { adminLoginVar } from "../../utils/apollo";
 import useInput from "../../hooks/useInput";
 import { adminLogin, adminLogOut } from "../../utils/loginResolver";
 import { toast } from "react-toastify";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined, LogoutOutlined } from "@ant-design/icons";
 import { LoginContainer } from "./styles";
 
 interface ParamProps {
@@ -23,6 +23,7 @@ interface ParamProps {
 
 const Admin: React.FC = () => {
   const loginStatus = useReactiveVar(adminLoginVar);
+  const history = useHistory();
   const [adminId, adminIdOnChange, setAdminId] = useInput("");
   const [adminPW, adminPWOnChange, setAdminPW] = useInput("");
   const [pickMenu, setPickMenu] = useState<string>("대시보드");
@@ -89,8 +90,17 @@ const Admin: React.FC = () => {
               mode="horizontal"
               style={{ display: "flex", justifyContent: "flex-end" }}
             >
+              <Menu.Item
+                key={1}
+                onClick={() => {
+                  adminLogOut();
+                  history.push("/main");
+                }}
+              >
+                메인으로 가기
+              </Menu.Item>
               <Menu.Item key={1} onClick={() => adminLogOut()}>
-                Logout
+                <LogoutOutlined /> Logout
               </Menu.Item>
             </Menu>
           </Header>

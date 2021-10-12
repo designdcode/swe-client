@@ -1,5 +1,5 @@
 import { Container, List, Row } from "./styles";
-import { Input, Button } from "antd";
+import { Input, Button, Divider } from "antd";
 import useInput from "../../../hooks/useInput";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_LINK } from "../../../queries/sharedQuery";
@@ -95,59 +95,63 @@ const LinkManager: React.VFC = () => {
 
   return (
     <Container>
-      <List>
+      <List style={{ backgroundColor: "white" }}>
         {data?.getLinks.data?.map((elem, idx) => {
           return (
-            <div key={idx} className="list-description">
-              {onEdit === elem?.id ? (
-                <Input
-                  placeholder={"사이트 명"}
-                  className="edit-input"
-                  value={title}
-                  onChange={onChangeTitle}
-                />
-              ) : (
-                <span className="list-title">{elem?.title}</span>
-              )}
-              {onEdit === elem?.id ? (
-                <Input
-                  placeholder={"링크 URL"}
-                  className="edit-input"
-                  value={url}
-                  onChange={onChangeUrl}
-                />
-              ) : (
-                <a
-                  href={elem?.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="list-href"
-                >
-                  {elem?.url}
-                </a>
-              )}
-              <div className="button-group">
-                <button
-                  className="button edit-button"
-                  onClick={() => {
-                    if (onEdit === 0) {
-                      setUrl(elem!.url);
-                      setTitle(elem!.title);
-                      setOnEdit(elem!.id);
-                    } else {
-                      handleEdit(elem!.id);
-                    }
-                  }}
-                >
-                  {onEdit === 0 ? <EditOutlined /> : <CheckOutlined />}
-                </button>
-                <button
-                  className="button delete-button"
-                  onClick={() => handleDelete(elem!.id)}
-                >
-                  <DeleteOutlined />
-                </button>
+            <div key={idx}>
+              <Divider style={{ marginTop: 5 }} />
+              <div className="list-description">
+                {onEdit === elem?.id ? (
+                  <Input
+                    placeholder={"사이트 명"}
+                    className="edit-input"
+                    value={title}
+                    onChange={onChangeTitle}
+                  />
+                ) : (
+                  <span className="list-title">{elem?.title}</span>
+                )}
+                {onEdit === elem?.id ? (
+                  <Input
+                    placeholder={"링크 URL"}
+                    className="edit-input"
+                    value={url}
+                    onChange={onChangeUrl}
+                  />
+                ) : (
+                  <a
+                    href={elem?.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="list-href"
+                  >
+                    {elem?.url}
+                  </a>
+                )}
+                <div className="button-group">
+                  <button
+                    className="button edit-button"
+                    onClick={() => {
+                      if (onEdit === 0) {
+                        setUrl(elem!.url);
+                        setTitle(elem!.title);
+                        setOnEdit(elem!.id);
+                      } else {
+                        handleEdit(elem!.id);
+                      }
+                    }}
+                  >
+                    {onEdit === 0 ? <EditOutlined /> : <CheckOutlined />}
+                  </button>
+                  <button
+                    className="button delete-button"
+                    onClick={() => handleDelete(elem!.id)}
+                  >
+                    <DeleteOutlined />
+                  </button>
+                </div>
               </div>
+              <Divider style={{ marginBottom: 5 }} />
             </div>
           );
         })}
