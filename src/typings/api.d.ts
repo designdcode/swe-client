@@ -383,7 +383,7 @@ export interface getBoardById_getBoardById_data {
 }
 
 export interface getBoardById_getBoardById {
-  __typename: "getBoardResponse";
+  __typename: "getBoardbyIdResponse";
   ok: boolean;
   err: string | null;
   data: getBoardById_getBoardById_data | null;
@@ -423,6 +423,38 @@ export interface getLinks_getLinks {
 
 export interface getLinks {
   getLinks: getLinks_getLinks;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getBoard
+// ====================================================
+
+export interface getBoard_getBoard_data {
+  __typename: "Board";
+  id: number;
+  title: string | null;
+  content: string | null;
+  category: string;
+  link: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+  deleteAt: string | null;
+}
+
+export interface getBoard_getBoard {
+  __typename: "getBoardResponse";
+  ok: boolean;
+  err: string | null;
+  data: getBoard_getBoard_data[] | null;
+}
+
+export interface getBoard {
+  getBoard: getBoard_getBoard;
 }
 
 /* tslint:disable */

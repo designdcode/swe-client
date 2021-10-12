@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import queryString from "query-string";
 import { useHistory, useLocation, useParams } from "react-router";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { GET_BOARD } from "../../../queries/sharedQuery";
+import { GET_BOARD_BY_ID } from "../../../queries/sharedQuery";
 import {
   getBoardById,
   getBoardById_getBoardById_data,
@@ -33,7 +33,7 @@ const BoardDetail: React.VFC = () => {
   const [files, setFiles] =
     useState<(getBoardById_getBoardById_data_files | undefined | null)[]>();
   const [getBoardById, { loading, data }] =
-    useLazyQuery<getBoardById>(GET_BOARD);
+    useLazyQuery<getBoardById>(GET_BOARD_BY_ID);
 
   const [deleteBoard] = useMutation(DELETE_BOARD, {
     onCompleted: ({ deleteBoard }) => {
@@ -90,8 +90,9 @@ const BoardDetail: React.VFC = () => {
       </Button>
       <Descriptions
         bordered
-        column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
+        // column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
         layout="horizontal"
+        style={{ display: "flex", flexDirection: "column" }}
       >
         <Descriptions.Item label="제목" span={4} labelStyle={{ width: 100 }}>
           <Typography.Title level={3}>{board?.title}</Typography.Title>
@@ -108,7 +109,7 @@ const BoardDetail: React.VFC = () => {
             <>
               {files.map((elem, idx) => {
                 return (
-                  <div key={idx}>
+                  <span key={idx} style={{ display: "inline-block" }}>
                     <a
                       href={elem?.url}
                       download
@@ -117,7 +118,7 @@ const BoardDetail: React.VFC = () => {
                     >
                       {elem?.fileName}
                     </a>
-                  </div>
+                  </span>
                 );
               })}
             </>
@@ -126,7 +127,7 @@ const BoardDetail: React.VFC = () => {
           )}
         </Descriptions.Item>
         <Descriptions.Item label="내용" span={4}>
-          {board?.content}
+          <span>{board?.content}</span>
         </Descriptions.Item>
       </Descriptions>
       <div className="button-group">

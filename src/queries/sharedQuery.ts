@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const GET_BOARD = gql`
+export const GET_BOARD_BY_ID = gql`
   query getBoardById($id: Int!) {
     getBoardById(id: $id) {
       ok
@@ -39,6 +39,25 @@ export const GET_LINK = gql`
         url
         title
         createdAt
+      }
+    }
+  }
+`;
+
+export const GET_BOARD = gql`
+  query getBoard {
+    getBoard {
+      ok
+      err
+      data {
+        id
+        title
+        content
+        category
+        link
+        createdAt
+        updatedAt
+        deleteAt
       }
     }
   }

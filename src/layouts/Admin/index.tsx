@@ -104,7 +104,10 @@ const Admin: React.FC = () => {
               >
                 <Menu.Item key={"dashboard"} title="대시보드">
                   <Link
-                    to={`/admin/dashboard/dashboard`}
+                    to={{
+                      pathname: `/admin/dashboard/dashboard`,
+                      state: { refresh: true },
+                    }}
                     onClick={handleClickDashboard}
                   >
                     <span>대시보드</span>
