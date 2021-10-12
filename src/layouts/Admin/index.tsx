@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Layout, Menu, Breadcrumb, Form, Input, Button } from "antd";
 import "./admin.css";
-import {
-  AdminNavData,
-  NavProps,
-  ObjProps,
-} from "../../assets/AdminNav/AdminNavData";
+import { AdminNavData, NavProps, ObjProps } from "../../assets/AdminNavData";
 import AdminRouteHandler from "../../utils/AdminRouteHandler";
 import { Link, useHistory } from "react-router-dom";
 import { useReactiveVar } from "@apollo/client";
