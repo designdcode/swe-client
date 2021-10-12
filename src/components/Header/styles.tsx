@@ -83,10 +83,12 @@ export const MainDesktop = styled.div`
       opacity: 0.9;
       transition: height 0.1s ease-in;
     }
+
     &:hover li {
       height: 25px;
       transition: height 0.1s ease-in;
     }
+
     .header-title {
       width: 160px;
       height: 50%;
@@ -104,9 +106,6 @@ export const MainDesktop = styled.div`
         cursor: pointer;
       }
       border-right: 1px solid gray;
-      &:last-child {
-        border: none;
-      }
 
       &:hover {
         color: #f03fa8;
