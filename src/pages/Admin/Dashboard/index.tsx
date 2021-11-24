@@ -44,12 +44,12 @@ const Dashboard: React.VFC = () => {
     if (data?.getBoard.data) {
       setNotice(
         data.getBoard.data
-          .filter((item) => item.category.includes("notice"))
+          .filter((item) => item.category.includes("community-notice"))
           .slice(0, 5)
       );
       setAdmission(
         data.getBoard.data
-          .filter((item) => item.category.includes("admission"))
+          .filter((item) => item.category.includes("community-administration"))
           .slice(0, 5)
       );
     }

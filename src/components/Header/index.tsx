@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { NavigationData, NavProps } from "../../assets/NavigationData";
 import {
   HeaderContainer,
@@ -18,7 +19,25 @@ const Header: React.VFC = () => {
       <HeaderTop>
         <div className="top-content">
           <span>SUNMOON UNIVERSITY</span>
-          <span>HOME | LOGIN</span>
+          <div className="options">
+            <div>
+              <Link
+                to={"/main"}
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                HOME
+              </Link>
+            </div>
+            <div>|</div>
+            <div>
+              <Link
+                to={"/main/login"}
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                LOGIN
+              </Link>
+            </div>
+          </div>
         </div>
       </HeaderTop>
       <HeaderMain>

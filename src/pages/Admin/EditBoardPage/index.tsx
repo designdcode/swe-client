@@ -116,7 +116,7 @@ const EditBoardPage: React.VFC = () => {
       variables: {
         id: parseInt(id as string, 10),
         title,
-        content,
+        content: content,
         link,
       },
     });
@@ -283,8 +283,9 @@ const EditBoardPage: React.VFC = () => {
           />
         </Descriptions.Item>
         <Descriptions.Item label="내용" span={4}>
-          <Input
+          <Input.TextArea
             placeholder={board?.content || undefined}
+            rows={10}
             value={content}
             onChange={onChangeContent}
           />

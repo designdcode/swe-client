@@ -17,15 +17,9 @@ export const imageSwitcher = (subparam?: string | null) => {
 };
 
 export const fileSwitcher = (subparam?: string | null) => {
+  // return true
+
   if (subparam?.includes("storage")) return true;
-  else if (subparam?.includes("value-") && subparam !== "value-introduce")
-    return true;
-  else if (
-    subparam?.includes("edu-") &&
-    subparam !== "edu-introduce" &&
-    subparam !== "edu-platform"
-  )
-    return true;
   else return false;
 };
 

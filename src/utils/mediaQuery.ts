@@ -15,16 +15,8 @@ export const breakpoints = {
 export const mediaQueries = (key: keyof typeof breakpoints) => {
   switch (key) {
     case "lpc":
-      return `@media only screen and (min-width: ${breakpoints[key]}px)`;
+      return `@media only screen and (min-width: 767px)`;
     default:
       return `@media only screen and (max-width: ${breakpoints[key]}px)`;
   }
 };
-
-/**
-
- ${mediaQueries(BREAKPOINT_TABLET)} {
-    ${(props) => (props.theme.width )};
-  }
-
- * */

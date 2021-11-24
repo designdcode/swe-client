@@ -1,5 +1,7 @@
 import React from "react";
 import lodable from "@loadable/component";
+import "./styles.css";
+
 import { Redirect, Route, Switch } from "react-router";
 
 const Main = lodable(() => import("../Main"));

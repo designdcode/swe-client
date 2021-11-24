@@ -127,7 +127,7 @@ const BoardDetail: React.VFC = () => {
           )}
         </Descriptions.Item>
         <Descriptions.Item label="내용" span={4}>
-          <span>{board?.content}</span>
+          <span style={{ whiteSpace: "pre-wrap" }}>{board?.content}</span>
         </Descriptions.Item>
       </Descriptions>
       <div className="button-group">

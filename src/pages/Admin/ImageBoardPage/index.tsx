@@ -2,9 +2,10 @@ import { Descriptions, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import { Container, Button } from "./styles";
-import { useLazyQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   getBoardByCategory,
+  getBoardByCategoryVariables,
   getBoardByCategory_getBoardByCategory_data_files,
   getBoardByCategory_getBoardByCategory_data_images,
 } from "../../../typings/api";
@@ -32,12 +33,15 @@ const ImageBoardPage: React.VFC = () => {
     useState<
       (getBoardByCategory_getBoardByCategory_data_images | null | undefined)[]
     >();
-  const [getBoard, { loading, data, refetch }] =
-    useLazyQuery<getBoardByCategory>(GET_BOARD_BY_CATEGORY);
 
-  useEffect(() => {
-    getBoard({ variables: { category: sub } });
-  }, [sub, getBoard]);
+  const { data, loading, refetch } = useQuery<
+    getBoardByCategory,
+    getBoardByCategoryVariables
+  >(GET_BOARD_BY_CATEGORY, {
+    variables: {
+      category: sub,
+    },
+  });
 
   useEffect(() => {
     const initData = () => {
@@ -83,14 +87,12 @@ const ImageBoardPage: React.VFC = () => {
         <Button type="ghost" onClick={() => history.goBack()}>
           뒤로
         </Button>
-        {/* {board && board[0] ? ( */}
         {data?.getBoardByCategory.data?.length !== 0 &&
         data?.getBoardByCategory.ok ? (
           <Button
             type="primary"
             onClick={() =>
               history.push(
-                // `/admin/${param}/edit-image-${param}?category=${subparam}&id=${board && board[0]?.id
                 `/admin/${param}/edit-image-${param}?category=${subparam}&id=${
                   data.getBoardByCategory.data &&
                   data.getBoardByCategory.data[0].id
@@ -144,7 +146,7 @@ const ImageBoardPage: React.VFC = () => {
           {file && file.length ? (
             file.map((elem, idx) => {
               return (
-                <span key={idx} className={"attach-group"}>
+                <span key={elem?.fileName} className={"attach-group"}>
                   <a
                     href={`${elem?.url}`}
                     download

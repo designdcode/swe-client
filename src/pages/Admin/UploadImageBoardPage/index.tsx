@@ -144,8 +144,6 @@ const UploadImageBoardPage = () => {
     [category, file]
   );
 
-  console.log(progress);
-
   return (
     <Container>
       <Form {...layout} name="upload-board" onFinish={onFinish}>

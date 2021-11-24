@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Layout, Menu, Breadcrumb, Form, Input, Button } from "antd";
-import "./admin.css";
 import { AdminNavData, NavProps, ObjProps } from "../../assets/AdminNavData";
 import AdminRouteHandler from "../../utils/AdminRouteHandler";
 import { Link, useHistory } from "react-router-dom";
@@ -95,7 +94,7 @@ const Admin: React.FC = () => {
               >
                 메인으로 가기
               </Menu.Item>
-              <Menu.Item key={1} onClick={() => adminLogOut()}>
+              <Menu.Item key={2} onClick={() => adminLogOut()}>
                 <LogoutOutlined /> Logout
               </Menu.Item>
             </Menu>
