@@ -50,7 +50,7 @@ export const Cover = styled.div`
   visibility: hidden;
   opacity: 0.9;
   height: 0;
-  border-top: 4px solid #0c1b58;
+  border-top: 1px solid #0c1b58;
   background-color: #1d2b64;
   border-right: 1px solid #303952;
   &:hover {
@@ -70,16 +70,19 @@ export const MainDesktop = styled.div`
       align-items: center;
       display: flex;
       justify-content: space-between;
-      border-bottom: 1px solid black;
+      /* border-bottom: 1px solid black; */
       margin: 0 auto;
       height: 80px;
     }
 
     & .main-menu {
       height: 55px;
-      width: ${breakpoints.pc}px;
-      margin: 0 auto;
+      width: 100%;
+      color: white;
       display: flex;
+      justify-content: center;
+      background-color: #0c1b58;
+
       &:hover ${Cover} {
         visibility: visible;
         transform: scaleY(1);
