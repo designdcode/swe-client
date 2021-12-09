@@ -10,6 +10,7 @@ import {
   Cover,
   HeaderLine,
 } from "./styles";
+import { BsPersonCircle } from "react-icons/bs";
 
 const Header: React.VFC = () => {
   const [hover, setHover] = useState<number | null>(null);
@@ -69,7 +70,15 @@ const Header: React.VFC = () => {
             })}
           </div>
         </MainDesktop>
-        <MainMobile>mobile</MainMobile>
+        <MainMobile>
+          <div className="wrapper">
+            <div className="menu">|||</div>
+            <div className="logo">logo</div>
+            <div className="login">
+              <BsPersonCircle size={25} />
+            </div>
+          </div>
+        </MainMobile>
       </HeaderMain>
     </HeaderContainer>
   );

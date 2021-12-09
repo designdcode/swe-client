@@ -8,8 +8,11 @@ import {
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io";
+import { useWindowSize } from "../../../../hooks/useWindowSize";
 
 const HomeBanner: React.VFC = () => {
+  const size = useWindowSize();
+
   return (
     <Wrapper>
       <Carousel
@@ -18,33 +21,46 @@ const HomeBanner: React.VFC = () => {
         showArrows={false}
         showThumbs={false}
         showStatus={false}
-        renderIndicator={(onClickHandler, isSelected, index, label) => {
-          const defStyle = {
-            marginLeft: 20,
-            color: "white",
-            cursor: "pointer",
-          };
-          const style = isSelected
-            ? { ...defStyle, color: "red" }
-            : { ...defStyle };
-          return (
-            <span
-              style={style}
-              onClick={onClickHandler}
-              onKeyDown={onClickHandler}
-              key={index}
-              role="button"
-              tabIndex={0}
-              aria-label={`${label} ${index + 1}`}
-            >
-              {index === 0 && <IoIosArrowDropleft size={45} color={"white"} />}
-              {index === 1 && <IoIosArrowDropright size={45} color={"white"} />}
-            </span>
-          );
-        }}
+        renderIndicator={
+          size.width > 767
+            ? (onClickHandler, isSelected, index, label) => {
+                const defStyle = {
+                  marginLeft: 20,
+                  color: "white",
+                  cursor: "pointer",
+                };
+                const style = isSelected
+                  ? { ...defStyle, color: "red" }
+                  : { ...defStyle };
+                return (
+                  <span
+                    style={style}
+                    onClick={onClickHandler}
+                    onKeyDown={onClickHandler}
+                    key={index}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${label} ${index + 1}`}
+                  >
+                    {index === 0 && (
+                      <IoIosArrowDropleft size={45} color={"white"} />
+                    )}
+                    {index === 1 && (
+                      <IoIosArrowDropright size={45} color={"white"} />
+                    )}
+                  </span>
+                );
+              }
+            : undefined
+        }
       >
         <ImageBox>
-          <Image src={"img/banner1.jpeg"} alt="banner" />
+          <Image
+            src={
+              size.width > 767 ? "img/banner1.jpeg" : "img/mobileBanner.jpeg"
+            }
+            alt="banner"
+          />
         </ImageBox>
         <ImageBox>
           <CoverContentBox>
@@ -57,7 +73,12 @@ const HomeBanner: React.VFC = () => {
             </CoverContent>
           </CoverContentBox>
           <Cover />
-          <Image src={"img/banner2.jpeg"} alt="banner2" />
+          <Image
+            src={
+              size.width > 767 ? "img/banner2.jpeg" : "img/mobileBanner2.jpeg"
+            }
+            alt="banner2"
+          />
         </ImageBox>
       </Carousel>
     </Wrapper>
@@ -104,6 +125,7 @@ const Cover = styled.div`
 `;
 
 export const CoverContent = styled.span`
+  display: none;
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     display: block;
     color: white;

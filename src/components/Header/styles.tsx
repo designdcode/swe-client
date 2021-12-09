@@ -13,7 +13,13 @@ interface LineProps {
 
 export const HeaderContainer = styled.div`
   width: 100%;
-  height: 150px;
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    height: 48px;
+  }
+
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    height: 150px;
+  }
 `;
 
 export const HeaderTop = styled.div`
@@ -154,5 +160,20 @@ export const HeaderLine = styled.div<LineProps>`
 export const MainMobile = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     display: none;
+  }
+  & .wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    background-color: #0c1b58;
+    color: white;
+    padding: 0 15px;
+
+    & .menu {
+      font-size: 24px;
+      transform: rotate(90deg);
+    }
   }
 `;
