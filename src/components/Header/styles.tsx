@@ -2,7 +2,6 @@ import styled from "@emotion/styled/macro";
 import {
   breakpoints,
   BREAKPOINT_BIGGER_THAN_PC,
-  BREAKPOINT_PC,
   BREAKPOINT_PHONE_MEDIUM,
   BREAKPOINT_TABLET,
   mediaQueries,
@@ -89,6 +88,8 @@ export const MainDesktop = styled.div`
         height: 250px;
         opacity: 0.9;
         transition: height 0.1s ease-in;
+        position: absolute;
+        z-index: 1000;
       }
 
       &:hover li {

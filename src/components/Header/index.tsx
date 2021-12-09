@@ -50,6 +50,7 @@ const Header: React.VFC = () => {
             {NavigationData.map((elem: NavProps, idx) => {
               return (
                 <ul
+                  style={{ margin: 0 }}
                   key={idx}
                   onMouseOver={() => setHover(elem.key)}
                   onMouseLeave={() => setHover(null)}
