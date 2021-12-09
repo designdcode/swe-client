@@ -13,13 +13,15 @@ const Login: React.VFC = () => {
   };
 
   const handleSubmit = useCallback(async () => {
-    await axios.get("http://localhost:3000/login", {
-      params: {
-        id,
-        pwd,
-      },
-    });
-    // await axios.get(`https://lily.sunmoon.ac.kr/CheckIDPW_XML.aspx?id=${id}&pw=${pwd}`)
+    // await axios.get("http://localhost:3000/login", {
+    //   params: {
+    //     id,
+    //     pwd,
+    //   },
+    // });
+    await axios.get(
+      `https://lily.sunmoon.ac.kr/CheckIDPW_XML.aspx?id=${id}&pw=${pwd}`
+    );
   }, [id, pwd]);
 
   return (

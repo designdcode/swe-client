@@ -12,8 +12,8 @@ const Main: React.VFC = () => {
       <Header />
       <Content>
         <Switch>
-          <Route path="/" component={Home} />
           <Route path="/main/login" component={Login} />
+          <Route path="/main" component={Home} />
         </Switch>
       </Content>
       <Footer />

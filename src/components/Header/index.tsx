@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { NavigationData, NavProps } from "../../assets/NavigationData";
 import {
@@ -11,9 +11,29 @@ import {
   HeaderLine,
 } from "./styles";
 import { BsPersonCircle } from "react-icons/bs";
+import { Drawer } from "antd";
 
 const Header: React.VFC = () => {
   const [hover, setHover] = useState<number | null>(null);
+
+  const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
+  const [childrenDrawer, setChildrenDrawer] = useState<boolean>(false);
+
+  const showDrawer = useCallback(() => {
+    setDrawerVisible(!drawerVisible);
+  }, [drawerVisible]);
+
+  const onClose = useCallback(() => {
+    setDrawerVisible(false);
+  }, []);
+
+  const showChildrenDrawer = useCallback(() => {
+    setChildrenDrawer(!childrenDrawer);
+  }, [childrenDrawer]);
+
+  const onChildrenDrawerClose = useCallback(() => {
+    setChildrenDrawer(false);
+  }, []);
 
   return (
     <HeaderContainer>
@@ -72,11 +92,40 @@ const Header: React.VFC = () => {
         </MainDesktop>
         <MainMobile>
           <div className="wrapper">
-            <div className="menu">|||</div>
-            <div className="logo">logo</div>
-            <div className="login">
-              <BsPersonCircle size={25} />
+            <div className="menu" onClick={showDrawer}>
+              |||
             </div>
+            <div className="logo">
+              <Link to={"/main"}>logo</Link>
+            </div>
+            <div className="login">
+              <Link
+                to={"/main/login"}
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                <BsPersonCircle size={25} />
+              </Link>
+            </div>
+            <Drawer
+              title="drawer"
+              width={185}
+              closable={false}
+              onClose={onClose}
+              visible={drawerVisible}
+              placement={"left"}
+            >
+              <button onClick={showChildrenDrawer}>child</button>
+              <Drawer
+                title="child drawer"
+                width={185}
+                closable={false}
+                onClose={onChildrenDrawerClose}
+                visible={childrenDrawer}
+                placement={"left"}
+              >
+                this is child
+              </Drawer>
+            </Drawer>
           </div>
         </MainMobile>
       </HeaderMain>
