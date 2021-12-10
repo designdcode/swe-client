@@ -96,7 +96,9 @@ const Header: React.VFC = () => {
               |||
             </div>
             <div className="logo">
-              <Link to={"/main"}>logo</Link>
+              <Link to={"/main"}>
+                <img src={"img/mobileLogo.png"} alt="mobile logo" />
+              </Link>
             </div>
             <div className="login">
               <Link
@@ -116,7 +118,6 @@ const Header: React.VFC = () => {
             >
               <button onClick={showChildrenDrawer}>child</button>
               <Drawer
-                title="child drawer"
                 width={185}
                 closable={false}
                 onClose={onChildrenDrawerClose}
