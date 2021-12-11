@@ -3,7 +3,6 @@ import {
   breakpoints,
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
-  BREAKPOINT_TABLET,
   mediaQueries,
 } from "../../utils/mediaQuery";
 
@@ -71,7 +70,7 @@ export const Cover = styled.div`
 `;
 
 export const MainDesktop = styled.div`
-  ${mediaQueries(BREAKPOINT_TABLET)} {
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     display: none;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {

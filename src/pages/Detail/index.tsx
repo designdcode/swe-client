@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { NavigationData } from "../../assets/NavigationData";
 import {
   BREAKPOINT_BIGGER_THAN_PC,
+  BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../utils/mediaQuery";
 
@@ -14,78 +15,116 @@ interface ParamProps {
 
 const Detail = () => {
   const { param, subparam } = useParams<ParamProps>();
-  // console.log(param, subparam)
-
   return (
-    <Wrapper>
-      <TopCover />
-      <Content>
-        {NavigationData.map((item) => {
-          if (item.title === param) {
-            return (
-              <TitleWrapper key={item.key}>
-                <MainTitle> {item.ko_title}</MainTitle>
-                <MainDesc>description</MainDesc>
-              </TitleWrapper>
-            );
-          }
-        })}
-      </Content>
-      <BottomCover></BottomCover>
-    </Wrapper>
+    <Page>
+      <Wrapper>
+        <TopCover />
+        <Content>
+          {NavigationData.map((item) => {
+            if (item.title === param) {
+              return (
+                <TitleWrapper key={item.key}>
+                  <MainTitle> {item.ko_title}</MainTitle>
+                  <MainDesc>description</MainDesc>
+                </TitleWrapper>
+              );
+            }
+          })}
+        </Content>
+        <BottomCover>bottom</BottomCover>
+      </Wrapper>
+    </Page>
   );
 };
 
 export default Detail;
 
-export const Wrapper = styled.div`
+const Page = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    max-width: 1920px;
-    min-width: 1280px;
-    margin-top: 15px;
-    width: 100%;
-    /* display: flex; */
-    /* flex-direction: column; */
-    position: relative;
-    min-height: 100vh;
+    width: 100vw;
   }
 `;
-export const TopCover = styled.div`
+
+const Wrapper = styled.div`
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 1920px;
+    min-height: 100vh;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    margin-top: 15px;
+  }
+`;
+
+const TopCover = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: none;
+  }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     max-width: 1920px;
-    min-width: 1280px;
-    width: 100%;
-    background-color: yellow;
     height: 360px;
-    display: flex;
-    /* margin: 0 auto; */
+    z-index: 1;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    background-image: url("/img/homebnews.jpeg");
+  }
+`;
+
+const BottomCover = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: none;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     position: absolute;
     z-index: 1;
-    /* background-image: url("img/homebnews.jpeg"); */
+    width: 3000px;
+    max-width: 1920px;
+    margin-left: auto;
+    margin-right: auto;
+    top: 526px;
+    left: 0;
+    right: 0;
+    height: 83%;
   }
 `;
 
-export const BottomCover = styled.div``;
-
-export const Content = styled.div`
-  width: 1280px;
-  height: 360px;
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  z-index: 2;
+const Content = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: none;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 1280px;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    z-index: 2;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+  }
 `;
 
-export const TitleWrapper = styled.div`
+const TitleWrapper = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: none;
+  }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    padding-top: 95px;
+    width: 100%;
     display: flex;
-    justify-content: center;
     flex-direction: column;
     margin-bottom: 20px;
   }
 `;
 
-export const MainTitle = styled.div`
+const MainTitle = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: none;
+  }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     letter-spacing: 0.43px;
     font-size: 43px;
@@ -95,7 +134,10 @@ export const MainTitle = styled.div`
   }
 `;
 
-export const MainDesc = styled.div`
+const MainDesc = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: none;
+  }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     letter-spacing: 0.19px;
     font-size: 19px;

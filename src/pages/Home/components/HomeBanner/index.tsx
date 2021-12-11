@@ -22,7 +22,7 @@ const HomeBanner: React.VFC = () => {
         showThumbs={false}
         showStatus={false}
         renderIndicator={
-          size.width > 767
+          size.width > 375
             ? (onClickHandler, isSelected, index, label) => {
                 const defStyle = {
                   marginLeft: 20,
@@ -57,7 +57,7 @@ const HomeBanner: React.VFC = () => {
         <ImageBox>
           <Image
             src={
-              size.width > 767 ? "img/banner1.jpeg" : "img/mobileBanner.jpeg"
+              size.width > 375 ? "img/banner1.jpeg" : "img/mobileBanner.jpeg"
             }
             alt="banner"
           />
@@ -75,7 +75,7 @@ const HomeBanner: React.VFC = () => {
           <Cover />
           <Image
             src={
-              size.width > 767 ? "img/banner2.jpeg" : "img/mobileBanner2.jpeg"
+              size.width > 375 ? "img/banner2.jpeg" : "img/mobileBanner2.jpeg"
             }
             alt="banner2"
           />

@@ -88,7 +88,7 @@ const HomeBoard: React.VFC = () => {
   return (
     <Wrapper>
       <Content>
-        {size.width > 767 ? (
+        {size.width > 375 ? (
           <>
             <Col>
               {data?.getBoardByCategory.data === null ? (
