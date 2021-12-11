@@ -132,19 +132,21 @@ const Header: React.VFC = () => {
               </Link>
             </div>
             <div className="login">
-              <Link
-                to={"/main/login"}
-                style={{ textDecoration: "none", color: "white" }}
-              >
-                {loggedIn ? (
+              {loggedIn ? (
+                <div onClick={() => userLogOut()}>
                   <IoIosLogOut size={25} />
-                ) : (
+                </div>
+              ) : (
+                <Link
+                  to={"/main/login"}
+                  style={{ textDecoration: "none", color: "white" }}
+                >
                   <BsPersonCircle size={25} />
-                )}
-              </Link>
+                </Link>
+              )}
             </div>
             <Drawer
-              width={186}
+              width={180}
               closable={false}
               onClose={onClose}
               visible={drawerVisible}
@@ -153,7 +155,10 @@ const Header: React.VFC = () => {
             >
               {NavigationData.map((elem: NavProps, idx) => {
                 return (
-                  <MobileDrawerBlock key={idx} on={onMenu === idx}>
+                  <MobileDrawerBlock
+                    key={idx}
+                    menuOpen={onMenu === idx ? true : false}
+                  >
                     <button onClick={() => handleMenuClick(idx)}>
                       {elem.ko_title}
                     </button>
@@ -161,7 +166,7 @@ const Header: React.VFC = () => {
                 );
               })}
               <Drawer
-                width={185}
+                width={180}
                 closable={false}
                 onClose={onChildrenDrawerClose}
                 visible={childrenDrawer}

@@ -4,12 +4,12 @@ import Column from "antd/lib/table/Column";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getDate } from "../../../hooks/getDate";
 import {
   DELETE_BOARD,
   GET_BOARD_BY_CATEGORY,
 } from "../../../queries/adminQuery";
 import { getBoardByCategory } from "../../../typings/api";
+import { getDate } from "../../../utils/convertDate";
 import { Container } from "../StoragePage/styles";
 
 interface ParamProps {

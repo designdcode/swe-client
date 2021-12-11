@@ -36,7 +36,7 @@ export const userLogin = (stno: string) => {
 };
 
 export const userLogOut = () => {
-  localStorage.clear();
+  localStorage.removeItem("stno");
   toast.success("로그아웃 되었습니다");
   forceHistory.push("/main");
 };

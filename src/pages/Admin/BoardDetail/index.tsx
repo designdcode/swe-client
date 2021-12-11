@@ -10,10 +10,10 @@ import {
 } from "../../../typings/api";
 import { Descriptions, Typography } from "antd";
 import { Button, Container } from "./styles";
-import { getDate } from "../../../hooks/getDate";
 import { DELETE_BOARD } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { getDate } from "../../../utils/convertDate";
 
 interface locationProps {
   search: string;

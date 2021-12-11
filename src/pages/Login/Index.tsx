@@ -1,5 +1,4 @@
 import { Button, Form, Input } from "antd";
-import axios from "axios";
 import React, { useCallback } from "react";
 import useInput from "../../hooks/useInput";
 import styled from "@emotion/styled";
@@ -54,8 +53,6 @@ const Login: React.VFC = () => {
     setpwd("");
   }, [id, pwd, setId, setpwd, UserLoginMutation]);
 
-  console.log(data);
-
   return (
     <Container>
       <Form
@@ -74,7 +71,6 @@ const Login: React.VFC = () => {
         >
           <Input value={id} onChange={onChangeId} />
         </Form.Item>
-
         <Form.Item
           label="Password"
           name="password"
@@ -96,6 +92,11 @@ export default Login;
 
 const Container = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    margin-top: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: ${breakpoints.pc}px;

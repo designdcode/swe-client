@@ -10,10 +10,10 @@ import {
   getLinks_getLinks_data,
 } from "../../../typings/api";
 import Column from "antd/lib/table/Column";
-import { getDate } from "../../../hooks/getDate";
 import { Link, useLocation } from "react-router-dom";
 import { DELETE_LINK } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
+import { getDate } from "../../../utils/convertDate";
 
 interface LocationProps {
   refresh?: boolean;

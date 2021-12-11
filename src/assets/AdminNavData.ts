@@ -134,12 +134,7 @@ export const AdminNavData: NavProps[] = [
       {
         key: "major-taprogram",
         title: "major-taprogram",
-        ko_title: "프로그래밍 교과목 멘토(TA) 프로그램",
-      },
-      {
-        key: "major-enhance",
-        title: "major-enhance",
-        ko_title: "SW 역량강화 플랫폼",
+        ko_title: "프로그래밍교과목 멘토(TA) 프로그램",
       },
     ],
   },
