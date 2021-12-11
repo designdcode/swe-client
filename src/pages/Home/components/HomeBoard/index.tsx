@@ -26,7 +26,7 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
     ?.filter(
       (item) => parseInt(getDate(item.createdAt || "").split("-")[1]) === now
     )
-    .splice(0, 4);
+    .splice(0, 6);
   const renderListItem = useCallback((item) => {
     const itemDate = getDate(item.createdAt);
     return (
@@ -147,7 +147,7 @@ const Content = styled.div`
 
 const Col = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    height: 300px;
+    min-height: 300px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     height: 90%;
@@ -160,7 +160,7 @@ const VideoContainer = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     display: flex;
     width: 100%;
-    height: 100%;
+    height: 400px;
     box-shadow: 5px 5px 14px #0000005a;
     padding: 0 35px;
   }

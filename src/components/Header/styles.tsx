@@ -23,6 +23,7 @@ export const HeaderContainer = styled.div`
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     height: 150px;
+    min-width: 1280px;
   }
 `;
 
