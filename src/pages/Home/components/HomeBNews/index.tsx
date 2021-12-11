@@ -8,7 +8,7 @@ import {
 const HomeBNews: React.VFC = () => {
   return (
     <Wrapper>
-      <Content>Hello</Content>
+      <Content>bnews</Content>
     </Wrapper>
   );
 };

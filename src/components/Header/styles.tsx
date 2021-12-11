@@ -12,7 +12,7 @@ interface LineProps {
 }
 
 interface onMenuProps {
-  on: boolean;
+  menuOpen: boolean;
 }
 
 export const HeaderContainer = styled.div`
@@ -95,7 +95,7 @@ export const MainDesktop = styled.div`
       &:hover ${Cover} {
         visibility: visible;
         transform: scaleY(1);
-        height: 250px;
+        height: 320px;
         opacity: 0.9;
         transition: height 0.1s ease-in;
         position: absolute;
@@ -192,14 +192,14 @@ export const MobileDrawerBlock = styled.div<onMenuProps>`
     color: white;
     width: 100%;
     height: 100%;
-    background-color: ${(props) => (props.on ? "#384270" : "#0c1b58")};
+    background-color: ${(props) => (props.menuOpen ? "#384270" : "#0c1b58")};
     border: none;
   }
 `;
 export const MobileDrawerSubBlock = styled.div`
   width: 100%;
   margin: 5px 0;
-  font-size: 13px;
+  font-size: 14px;
   height: 50px;
   & button {
     color: white;
