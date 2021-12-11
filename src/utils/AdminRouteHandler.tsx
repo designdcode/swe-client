@@ -21,6 +21,7 @@ const AdminRouteHandler: React.VFC = () => {
     switch (param) {
       case "dashboard":
         return <Dashboard />;
+
       case "intro":
         if (subparam === `create-image-${param}`)
           return <UploadImageBoardPage />;
@@ -31,6 +32,7 @@ const AdminRouteHandler: React.VFC = () => {
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
         else return <ImageBoardPage />;
+
       case "basic":
         if (subparam === `create-image-${param}`)
           return <UploadImageBoardPage />;
@@ -95,7 +97,7 @@ const AdminRouteHandler: React.VFC = () => {
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
-        else return <ImageBoardPage />;
+        else return <StoragePage />;
 
       case "community":
         if (subparam === `create-image-${param}`)
