@@ -11,6 +11,10 @@ interface LineProps {
   hoverProps: boolean;
 }
 
+interface onMenuProps {
+  on: boolean;
+}
+
 export const HeaderContainer = styled.div`
   width: 100%;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
@@ -175,5 +179,34 @@ export const MainMobile = styled.div`
       font-size: 24px;
       transform: rotate(90deg);
     }
+  }
+`;
+
+export const MobileDrawerBlock = styled.div<onMenuProps>`
+  width: 100%;
+  margin: 5px 0;
+  height: 75px;
+  font-size: 17px;
+
+  & button {
+    color: white;
+    width: 100%;
+    height: 100%;
+    background-color: ${(props) => (props.on ? "#384270" : "#0c1b58")};
+    border: none;
+  }
+`;
+export const MobileDrawerSubBlock = styled.div`
+  width: 100%;
+  margin: 5px 0;
+  font-size: 13px;
+  height: 50px;
+  & button {
+    color: white;
+    width: 100%;
+    height: 100%;
+    background-color: #384270;
+    border: none;
+    text-align: left;
   }
 `;

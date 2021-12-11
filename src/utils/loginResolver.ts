@@ -1,5 +1,7 @@
 import { gql } from "@apollo/client";
+import { toast } from "react-toastify";
 import client, { adminLoginVar } from "./apollo";
+import { forceHistory } from "./forceHistory";
 
 export const adminQuery = gql`
   query adminLogin {
@@ -27,4 +29,14 @@ export const adminLogOut = () => {
   });
   localStorage.removeItem("admin");
   adminLoginVar(false);
+};
+
+export const userLogin = (stno: string) => {
+  localStorage.setItem(`stno`, `${stno}`);
+};
+
+export const userLogOut = () => {
+  localStorage.clear();
+  toast.success("로그아웃 되었습니다");
+  forceHistory.push("/main");
 };

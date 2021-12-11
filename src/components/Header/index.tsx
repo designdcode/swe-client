@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { NavigationData, NavProps } from "../../assets/NavigationData";
 import {
@@ -9,30 +9,44 @@ import {
   MainMobile,
   Cover,
   HeaderLine,
+  MobileDrawerBlock,
+  MobileDrawerSubBlock,
 } from "./styles";
 import { BsPersonCircle } from "react-icons/bs";
+import { IoIosLogOut } from "react-icons/io";
 import { Drawer } from "antd";
+import { userLogOut } from "../../utils/loginResolver";
 
 const Header: React.VFC = () => {
   const [hover, setHover] = useState<number | null>(null);
-
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [childrenDrawer, setChildrenDrawer] = useState<boolean>(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [onMenu, setOnMenu] = useState<number>(-1);
 
-  const showDrawer = useCallback(() => {
-    setDrawerVisible(!drawerVisible);
-  }, [drawerVisible]);
+  useEffect(() => {
+    if (localStorage.getItem("stno")) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }, []);
+
+  const handleMenuClick = useCallback(
+    (index: number) => {
+      setOnMenu(index);
+      setChildrenDrawer(!childrenDrawer);
+    },
+    [childrenDrawer]
+  );
 
   const onClose = useCallback(() => {
     setDrawerVisible(false);
   }, []);
 
-  const showChildrenDrawer = useCallback(() => {
-    setChildrenDrawer(!childrenDrawer);
-  }, [childrenDrawer]);
-
   const onChildrenDrawerClose = useCallback(() => {
     setChildrenDrawer(false);
+    setOnMenu(-1);
   }, []);
 
   return (
@@ -51,12 +65,16 @@ const Header: React.VFC = () => {
             </div>
             <div>|</div>
             <div>
-              <Link
-                to={"/main/login"}
-                style={{ textDecoration: "none", color: "white" }}
-              >
-                LOGIN
-              </Link>
+              {loggedIn ? (
+                <div onClick={() => userLogOut()}>LOG OUT</div>
+              ) : (
+                <Link
+                  to={"/main/login"}
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  LOGIN
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -92,7 +110,10 @@ const Header: React.VFC = () => {
         </MainDesktop>
         <MainMobile>
           <div className="wrapper">
-            <div className="menu" onClick={showDrawer}>
+            <div
+              className="menu"
+              onClick={() => setDrawerVisible(!drawerVisible)}
+            >
               |||
             </div>
             <div className="logo">
@@ -109,26 +130,45 @@ const Header: React.VFC = () => {
                 to={"/main/login"}
                 style={{ textDecoration: "none", color: "white" }}
               >
-                <BsPersonCircle size={25} />
+                {loggedIn ? (
+                  <IoIosLogOut size={25} />
+                ) : (
+                  <BsPersonCircle size={25} />
+                )}
               </Link>
             </div>
             <Drawer
-              title="drawer"
-              width={185}
+              width={186}
               closable={false}
               onClose={onClose}
               visible={drawerVisible}
               placement={"left"}
+              bodyStyle={drawerStyle}
             >
-              <button onClick={showChildrenDrawer}>child</button>
+              {NavigationData.map((elem: NavProps, idx) => {
+                return (
+                  <MobileDrawerBlock key={idx} on={onMenu === idx}>
+                    <button onClick={() => handleMenuClick(idx)}>
+                      {elem.ko_title}
+                    </button>
+                  </MobileDrawerBlock>
+                );
+              })}
               <Drawer
                 width={185}
                 closable={false}
                 onClose={onChildrenDrawerClose}
                 visible={childrenDrawer}
                 placement={"left"}
+                bodyStyle={subDrawerStyle}
               >
-                this is child
+                {NavigationData[onMenu]?.subMenu.map((item, i) => {
+                  return (
+                    <MobileDrawerSubBlock>
+                      <button>{item.ko_title}</button>
+                    </MobileDrawerSubBlock>
+                  );
+                })}
               </Drawer>
             </Drawer>
           </div>
@@ -139,3 +179,17 @@ const Header: React.VFC = () => {
 };
 
 export default Header;
+
+const drawerStyle = {
+  backgroundColor: " #0c1b58",
+  paddingTop: "50px",
+  paddingRight: 0,
+  paddingLeft: 0,
+};
+
+const subDrawerStyle = {
+  backgroundColor: "#384270",
+  paddingTop: "60px",
+  paddingRight: 0,
+  paddingLeft: "20px",
+};

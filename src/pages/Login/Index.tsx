@@ -12,15 +12,32 @@ import {
 import { useMutation } from "@apollo/client";
 import { UserLogin, UserLoginVariables } from "../../typings/api";
 import { USER_LOGIN } from "../../queries/sharedQuery";
+import { userLogin } from "../../utils/loginResolver";
+import { toast } from "react-toastify";
+import { forceHistory } from "../../utils/forceHistory";
 
 const Login: React.VFC = () => {
   const [id, onChangeId, setId] = useInput("");
   const [pwd, onChangePwd, setpwd] = useInput("");
 
-  const [UserLoginMutation, { data }] = useMutation<
+  const [UserLoginMutation, { data, loading }] = useMutation<
     UserLogin,
     UserLoginVariables
-  >(USER_LOGIN);
+  >(USER_LOGIN, {
+    onCompleted: ({ UserLogin }) => {
+      const { success, error, data } = UserLogin;
+      if (success && data) {
+        userLogin(data.stno);
+        toast.success("로그인 성공");
+        setTimeout(() => {
+          forceHistory.push("/main");
+        }, 1000);
+      } else {
+        console.log(error);
+        toast.error("아이디와 비밀번호를 확인 해 주세요");
+      }
+    },
+  });
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -33,8 +50,8 @@ const Login: React.VFC = () => {
         pwd,
       },
     });
-    // setId('')
-    // setpwd('')
+    setId("");
+    setpwd("");
   }, [id, pwd, setId, setpwd, UserLoginMutation]);
 
   console.log(data);
@@ -66,7 +83,7 @@ const Login: React.VFC = () => {
           <Input.Password value={pwd} onChange={onChangePwd} />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={loading}>
             Submit
           </Button>
         </Form.Item>
