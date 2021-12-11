@@ -43,6 +43,7 @@ export const Content = styled.div`
 
 export const Row = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    margin: 75px 0;
   }
 `;
 
@@ -51,6 +52,6 @@ export const Col = styled.div`
     height: 150px;
     width: 445px;
     border: 1px solid black;
-    margin: 75px 0;
+    margin-bottom: 50px;
   }
 `;
