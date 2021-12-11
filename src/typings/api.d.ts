@@ -462,6 +462,37 @@ export interface getBoard {
 // @generated
 // This file was automatically generated and should not be edited.
 
+// ====================================================
+// GraphQL mutation operation: UserLogin
+// ====================================================
+
+export interface UserLogin_UserLogin_data {
+  __typename: "Auth";
+  id: string;
+  stno: string;
+}
+
+export interface UserLogin_UserLogin {
+  __typename: "UserLoginReturn";
+  success: boolean;
+  error: string | null;
+  data: UserLogin_UserLogin_data | null;
+}
+
+export interface UserLogin {
+  UserLogin: UserLogin_UserLogin;
+}
+
+export interface UserLoginVariables {
+  id: string;
+  pwd: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
 //==============================================================
 // START Enums and Input Objects
 //==============================================================

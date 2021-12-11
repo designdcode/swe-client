@@ -62,3 +62,16 @@ export const GET_BOARD = gql`
     }
   }
 `;
+
+export const USER_LOGIN = gql`
+  mutation UserLogin($id: String!, $pwd: String!) {
+    UserLogin(id: $id, pwd: $pwd) {
+      success
+      error
+      data {
+        id
+        stno
+      }
+    }
+  }
+`;

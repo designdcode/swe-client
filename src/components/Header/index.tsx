@@ -97,7 +97,11 @@ const Header: React.VFC = () => {
             </div>
             <div className="logo">
               <Link to={"/main"}>
-                <img src={"img/mobileLogo.png"} alt="mobile logo" />
+                <img
+                  src={"/img/mobileLogo.png"}
+                  alt="mobile logo"
+                  typeof="png"
+                />
               </Link>
             </div>
             <div className="login">

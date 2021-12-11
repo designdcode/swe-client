@@ -1,28 +1,43 @@
-import { Button, Checkbox, Form, Input, Radio } from "antd";
+import { Button, Form, Input } from "antd";
 import axios from "axios";
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import useInput from "../../hooks/useInput";
-import { Container } from "./styles";
+import styled from "@emotion/styled";
+import {
+  breakpoints,
+  BREAKPOINT_BIGGER_THAN_PC,
+  BREAKPOINT_PHONE_MEDIUM,
+  mediaQueries,
+} from "../../utils/mediaQuery";
+import { useMutation } from "@apollo/client";
+import { UserLogin, UserLoginVariables } from "../../typings/api";
+import { USER_LOGIN } from "../../queries/sharedQuery";
 
 const Login: React.VFC = () => {
   const [id, onChangeId, setId] = useInput("");
   const [pwd, onChangePwd, setpwd] = useInput("");
+
+  const [UserLoginMutation, { data }] = useMutation<
+    UserLogin,
+    UserLoginVariables
+  >(USER_LOGIN);
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
   const handleSubmit = useCallback(async () => {
-    // await axios.get("http://localhost:3000/login", {
-    //   params: {
-    //     id,
-    //     pwd,
-    //   },
-    // });
-    await axios.get(
-      `https://lily.sunmoon.ac.kr/CheckIDPW_XML.aspx?id=${id}&pw=${pwd}`
-    );
-  }, [id, pwd]);
+    await UserLoginMutation({
+      variables: {
+        id,
+        pwd,
+      },
+    });
+    // setId('')
+    // setpwd('')
+  }, [id, pwd, setId, setpwd, UserLoginMutation]);
+
+  console.log(data);
 
   return (
     <Container>
@@ -61,3 +76,12 @@ const Login: React.VFC = () => {
 };
 
 export default Login;
+
+const Container = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: ${breakpoints.pc}px;
+    margin-top: 30px;
+  }
+`;
