@@ -75,7 +75,7 @@ export const Wrapper = styled.div`
 
 export const Content = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 1000px;
+    width: 900px;
     height: 100%;
     margin: 0 auto;
     display: flex;

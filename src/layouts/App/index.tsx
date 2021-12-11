@@ -12,6 +12,7 @@ const App: React.FC = () => {
     <Switch>
       <Redirect exact path="/" to="/main" />
       <Redirect exact path="/admin" to="/admin/dashboard/dashboard" />
+
       <Route path="/main" component={Main} />
       <Route path="/admin/:param/:subparam" component={Admin} />
     </Switch>
