@@ -82,7 +82,13 @@ const Header: React.VFC = () => {
                   </div>
                   <Cover>
                     {elem.subMenu.map((item, i) => {
-                      return <li key={i}>{item.ko_title}</li>;
+                      return (
+                        <li key={i}>
+                          <Link to={`/main/detail/${elem.title}/${item.key}`}>
+                            {item.ko_title}
+                          </Link>
+                        </li>
+                      );
                     })}
                   </Cover>
                 </ul>
