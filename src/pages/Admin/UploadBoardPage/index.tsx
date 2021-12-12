@@ -32,8 +32,6 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-//upload progressing needed
-
 const UploadBoardPage: React.VFC = () => {
   const history = useHistory();
   const { search } = useLocation<locationProps>();
@@ -54,15 +52,7 @@ const UploadBoardPage: React.VFC = () => {
   const [progress, setProgress] = useState<number>(0);
 
   useEffect(() => {
-    const sub = subparam!.toString().split("-")[0];
-    console.log(sub, "achievement", typeof sub, typeof "schievement");
-    if (sub === "achievement") {
-      console.log("wjy?");
-    }
-    if (sub === "storage" || sub === "achievement") {
-      console.log("come?2");
-      setIsImageNeeded(true);
-    }
+    setIsImageNeeded(imageSwitcher(subparam as string));
     setIsLinkNeeded(linkSwitcher(subparam as string));
     setIsFileNeeded(fileSwitcher(subparam as string));
     setIsContentNeeded(contentSwitcher(subparam as string));

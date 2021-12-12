@@ -236,28 +236,28 @@ export const AdminNavData: NavProps[] = [
     ko_title: "사업성과",
     subMenu: [
       {
-        key: "acheivement-news",
-        title: "acheivement-news",
+        key: "achievement-news",
+        title: "achievement-news",
         ko_title: "사업단 소식",
       },
       {
-        key: "acheivement-aidnew",
-        title: "acheivement-aidnew",
+        key: "achievement-aidnew",
+        title: "achievement-aidnew",
         ko_title: "SW교육지원 소식",
       },
       {
-        key: "acheivement-valuenews",
-        title: "acheivement-valuenews",
+        key: "achievement-valuenews",
+        title: "achievement-valuenews",
         ko_title: "SW가치확산 소식",
       },
       {
-        key: "acheivement-coopnews",
-        title: "acheivement-coopnews",
+        key: "achievement-coopnews",
+        title: "achievement-coopnews",
         ko_title: "SW산학협력소식",
       },
       {
-        key: "acheivement-startup",
-        title: "acheivement-startup",
+        key: "achievement-startup",
+        title: "achievement-startup",
         ko_title: "창업지원 소식",
       },
     ],

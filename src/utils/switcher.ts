@@ -7,19 +7,15 @@ export const linkSwitcher = (subparam?: string | null) => {
   }
 };
 
-export const imageSwitcher = (
-  subparam: string,
-  setValue: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-  switch (subparam?.toString().split("-")[0]) {
+export const imageSwitcher = (subparam: string) => {
+  const sub = subparam?.toString().split("-")[0];
+  switch (sub) {
     case "storage":
-      setValue(true);
-      break;
+      return true;
     case "achievement":
-      setValue(true);
-      break;
+      return true;
     default:
-      break;
+      return false;
   }
 };
 

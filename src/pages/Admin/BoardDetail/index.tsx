@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
 import queryString from "query-string";
 import { useHistory, useLocation, useParams } from "react-router";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_BOARD_BY_ID } from "../../../queries/sharedQuery";
 import {
   getBoardById,
+  getBoardByIdVariables,
   getBoardById_getBoardById_data,
   getBoardById_getBoardById_data_files,
+  getBoardById_getBoardById_data_images,
 } from "../../../typings/api";
-import { Descriptions, Typography } from "antd";
-import { Button, Container } from "./styles";
+import { Descriptions, Typography, Carousel, Radio } from "antd";
+import { Button, CarouselDiv, Container } from "./styles";
 import { DELETE_BOARD } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -32,8 +34,17 @@ const BoardDetail: React.VFC = () => {
   const [board, setBoard] = useState<getBoardById_getBoardById_data>();
   const [files, setFiles] =
     useState<(getBoardById_getBoardById_data_files | undefined | null)[]>();
-  const [getBoardById, { loading, data }] =
-    useLazyQuery<getBoardById>(GET_BOARD_BY_ID);
+  const [images, setImages] =
+    useState<(getBoardById_getBoardById_data_images | undefined | null)[]>();
+
+  const { data, loading } = useQuery<getBoardById, getBoardByIdVariables>(
+    GET_BOARD_BY_ID,
+    {
+      variables: {
+        id: parseInt(id as string, 10),
+      },
+    }
+  );
 
   const [deleteBoard] = useMutation(DELETE_BOARD, {
     onCompleted: ({ deleteBoard }) => {
@@ -60,12 +71,6 @@ const BoardDetail: React.VFC = () => {
   }, [id, deleteBoard]);
 
   useEffect(() => {
-    if (id) {
-      getBoardById({ variables: { id: parseInt(id as string, 10) } });
-    }
-  }, [id, getBoardById]);
-
-  useEffect(() => {
     if (data && data.getBoardById && data.getBoardById.data) {
       setBoard(data.getBoardById.data);
     }
@@ -76,6 +81,14 @@ const BoardDetail: React.VFC = () => {
       data.getBoardById.data.files
     ) {
       setFiles(data.getBoardById.data.files);
+    }
+    if (
+      data &&
+      data.getBoardById &&
+      data.getBoardById.data &&
+      data.getBoardById.data.images
+    ) {
+      setImages(data.getBoardById.data.images);
     }
   }, [data]);
 
@@ -130,6 +143,13 @@ const BoardDetail: React.VFC = () => {
           <span style={{ whiteSpace: "pre-wrap" }}>{board?.content}</span>
         </Descriptions.Item>
       </Descriptions>
+      {param === "achievement" && (
+        <Carousel dotPosition="bottom" style={{ minHeight: 400 }}>
+          {images?.map((item, idx) => {
+            return <CarouselDiv url={item!.url} key={idx} />;
+          })}
+        </Carousel>
+      )}
       <div className="button-group">
         <Link
           to={`/admin/${param}/edit-${param}?category=${category}&id=${id}`}
