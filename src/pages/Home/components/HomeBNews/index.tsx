@@ -54,15 +54,14 @@ const HomeBNews: React.VFC = () => {
 export default HomeBNews;
 
 const Wrapper = styled.div`
+  background-image: url("img/homebnews.jpeg");
+  background-position: center;
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     min-height: 400px;
     max-width: 1980px;
-    background-image: url("img/homebnews.jpeg");
   }
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     min-height: 400px;
-    background-image: url("img/homebnews.jpeg");
-    background-size: contain;
   }
 `;
 const Content = styled.div`

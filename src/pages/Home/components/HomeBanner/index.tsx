@@ -61,6 +61,9 @@ const HomeBanner: React.VFC = () => {
             }
             alt="banner"
           />
+          {size.width > 375 && (
+            <ImageCover src={"img/banner2_cover.jpeg"} alt="banner cover" />
+          )}
         </ImageBox>
         <ImageBox>
           <Image
@@ -69,6 +72,9 @@ const HomeBanner: React.VFC = () => {
             }
             alt="banner2"
           />
+          {size.width > 375 && (
+            <ImageCover src={"img/banner1_cover.jpeg"} alt="banner2 cover" />
+          )}
         </ImageBox>
       </Carousel>
     </Wrapper>
@@ -100,6 +106,12 @@ const Image = styled.img`
   object-fit: contain;
 `;
 
+const ImageCover = styled.img`
+  height: 400px;
+  object-fit: cover;
+  position: absolute;
+`;
+
 export const CoverContent = styled.span`
   display: none;
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
@@ -112,7 +124,6 @@ export const CoverContent = styled.span`
 export const CoverContentBox = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     max-width: 1280px;
-    /* margin:0 auto; */
     text-align: start;
     position: absolute;
     top: 30%;

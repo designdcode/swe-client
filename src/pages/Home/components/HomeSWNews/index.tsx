@@ -29,6 +29,7 @@ export const Wrapper = styled.div`
     height: 500px;
     max-width: 1980px;
     background-image: url("img/homeswnews.jpeg");
+    background-position: center;
   }
 `;
 export const Content = styled.div`
