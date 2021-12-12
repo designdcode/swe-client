@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React from "react";
 import {
   BREAKPOINT_BIGGER_THAN_PC,
+  BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../../../utils/mediaQuery";
 
@@ -25,10 +26,14 @@ const HomeSWNews: React.VFC = () => {
 export default HomeSWNews;
 
 export const Wrapper = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    height: 400px;
+    max-width: 400px;
+  }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    background-image: url("img/homeswnews.jpeg");
     height: 500px;
     max-width: 1980px;
-    background-image: url("img/homeswnews.jpeg");
     background-position: center;
   }
 `;

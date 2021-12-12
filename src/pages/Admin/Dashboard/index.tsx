@@ -101,7 +101,7 @@ const Dashboard: React.VFC = () => {
               )}
               dataSource={notice}
               showHeader={false}
-              rowKey={"id"}
+              rowKey={"noticeid"}
               pagination={false}
               size="middle"
             >
@@ -109,9 +109,10 @@ const Dashboard: React.VFC = () => {
                 dataIndex="title"
                 align="left"
                 ellipsis={true}
-                render={(value, record: getBoard_getBoard_data) => {
+                key={"noticesubid"}
+                render={(value, record: getBoard_getBoard_data, i) => {
                   return (
-                    <TableRowSpan>
+                    <TableRowSpan key={i}>
                       <Link
                         to={`/admin/community/detail-community?category=${record.category}&id=${record.id}`}
                       >
@@ -124,9 +125,10 @@ const Dashboard: React.VFC = () => {
               <Column
                 dataIndex="createdAt"
                 align="right"
-                render={(value, record: getBoard_getBoard_data) => {
+                key={"noticetime"}
+                render={(value, record: getBoard_getBoard_data, i) => {
                   return (
-                    <span>
+                    <span key={i}>
                       <Link
                         to={`/admin/community/detail-community?category=${record.category}&id=${record.id}`}
                       >
@@ -145,7 +147,7 @@ const Dashboard: React.VFC = () => {
               )}
               dataSource={admission}
               showHeader={false}
-              rowKey={"id"}
+              rowKey={"admissionkey"}
               pagination={false}
               size="middle"
             >
@@ -153,9 +155,10 @@ const Dashboard: React.VFC = () => {
                 dataIndex="title"
                 align="left"
                 ellipsis={true}
-                render={(value, record: getBoard_getBoard_data) => {
+                key={"subadmissionkey"}
+                render={(value, record: getBoard_getBoard_data, id) => {
                   return (
-                    <TableRowSpan>
+                    <TableRowSpan key={id}>
                       <Link
                         to={`/admin/community/detail-community?category=${record.category}&id=${record.id}`}
                       >
@@ -168,9 +171,10 @@ const Dashboard: React.VFC = () => {
               <Column
                 dataIndex="createdAt"
                 align="right"
-                render={(value, record: getBoard_getBoard_data) => {
+                key={"subadmissionkeydate"}
+                render={(value, record: getBoard_getBoard_data, idx) => {
                   return (
-                    <span>
+                    <span key={idx}>
                       <Link
                         to={`/admin/community/detail-community?category=${record.category}&id=${record.id}`}
                       >
@@ -190,27 +194,35 @@ const Dashboard: React.VFC = () => {
         {linkLoading ? (
           <>loading...</>
         ) : (
-          <Table showHeader={false} dataSource={links} pagination={false}>
+          <Table
+            showHeader={false}
+            dataSource={links}
+            pagination={false}
+            rowKey="linkKey"
+          >
             <Column
               dataIndex="title"
               align="left"
+              key="linkKey0"
               render={(value) => {
-                return <span>{value}</span>;
+                return <span key="first">{value}</span>;
               }}
             />
             <Column
               dataIndex="url"
               align="center"
+              key="linkKey1"
               render={(value) => {
-                return <span>{value}</span>;
+                return <span key="second">{value}</span>;
               }}
             />
             <Column
               dataIndex="url"
               align="right"
+              key="linkKey2"
               render={(value, record: getLinks_getLinks_data) => {
                 return (
-                  <div>
+                  <div key="third">
                     <a href={`${value}`}>
                       <Button>바로가기</Button>
                     </a>

@@ -1,19 +1,31 @@
 import React from "react";
 import { useParams } from "react-router";
-import BoardDetail from "../pages/Admin/BoardDetail";
-import StoragePage from "../pages/Admin/StoragePage";
-import Dashboard from "../pages/Admin/Dashboard";
-import EditBoardPage from "../pages/Admin/EditBoardPage";
-import UploadBoardPage from "../pages/Admin/UploadBoardPage";
-import ImageBoardPage from "../pages/Admin/ImageBoardPage";
-import UploadImageBoardPage from "../pages/Admin/UploadImageBoardPage";
-import EditImageBoardPage from "../pages/Admin/EditImageBoardPage";
-import LinkManager from "../pages/Admin/LinkManager";
+import loadable from "@loadable/component";
 
 interface IProps {
   param: string;
   subparam: string;
 }
+
+const BoardDetail = loadable(() => import("../pages/Admin/BoardDetail/index"));
+const StoragePage = loadable(() => import("../pages/Admin/StoragePage/index"));
+const Dashboard = loadable(() => import("../pages/Admin/Dashboard/index"));
+const EditBoardPage = loadable(
+  () => import("../pages/Admin/EditBoardPage/index")
+);
+const UploadBoardPage = loadable(
+  () => import("../pages/Admin/UploadBoardPage/index")
+);
+const ImageBoardPage = loadable(
+  () => import("../pages/Admin/ImageBoardPage/index")
+);
+const UploadImageBoardPage = loadable(
+  () => import("../pages/Admin/UploadImageBoardPage")
+);
+const EditImageBoardPage = loadable(
+  () => import("../pages/Admin/EditImageBoardPage/index")
+);
+const LinkManager = loadable(() => import("../pages/Admin/LinkManager/index"));
 
 const AdminRouteHandler: React.VFC = () => {
   const { param, subparam } = useParams<IProps>();

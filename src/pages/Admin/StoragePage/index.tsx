@@ -102,6 +102,7 @@ const StoragePage = () => {
           title="제목"
           dataIndex="title"
           key="title"
+          ellipsis={true}
           render={(text, record: TableBoardProps) => {
             return (
               <Space>

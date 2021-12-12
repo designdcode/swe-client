@@ -97,6 +97,17 @@ const UploadBoardPage: React.VFC = () => {
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
         },
       });
+    } else if (imgUrl) {
+      await createBoard({
+        variables: {
+          title: title.trim() ? title : null,
+          content: content.trim() ? content : null,
+          link: link.trim() ? link : null,
+          category,
+          files: null,
+          images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
+        },
+      });
     } else {
       await createBoard({
         variables: {
@@ -199,24 +210,26 @@ const UploadBoardPage: React.VFC = () => {
           </>
         )}
         {isImageNeeded && (
-          <Upload
-            style={{ marginBottom: 20 }}
-            listType="picture"
-            customRequest={({ file }) => handleImageUpload(file)}
-            progress={{ showInfo: true }}
-            onChange={({ file }) => {
-              if (imgUrl !== "") {
-                file.status = "done";
-              } else {
-                file.status = "removed";
-              }
-            }}
-            className="upload-list-inline"
-            maxCount={1}
-            onRemove={() => handleImageRemover()}
-          >
-            <Button icon={<UploadOutlined />}>Upload</Button>
-          </Upload>
+          <Form.Item name={["image"]} label={"이미지"}>
+            <Upload
+              style={{ marginBottom: 20 }}
+              listType="picture"
+              customRequest={({ file }) => handleImageUpload(file)}
+              progress={{ showInfo: true }}
+              onChange={({ file }) => {
+                if (imgUrl !== "") {
+                  file.status = "done";
+                } else {
+                  file.status = "removed";
+                }
+              }}
+              className="upload-list-inline"
+              maxCount={1}
+              onRemove={() => handleImageRemover()}
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
+          </Form.Item>
         )}
         {isFileNeeded && (
           <Upload

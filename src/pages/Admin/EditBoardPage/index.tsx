@@ -2,14 +2,27 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import queryString from "query-string";
 import {
+  createFile,
+  createFileVariables,
+  createImage,
+  createImageVariables,
+  deleteBoard,
+  deleteBoardVariables,
+  deleteFile,
+  deleteFileVariables,
+  editBoard,
+  editBoardVariables,
   getBoardByCategory_getBoardByCategory_data_files,
   getBoardById,
+  getBoardByIdVariables,
   getBoardById_getBoardById_data,
+  getBoardById_getBoardById_data_images,
 } from "../../../typings/api";
-import { useLazyQuery, useMutation } from "@apollo/client";
-import { GET_BOARD } from "../../../queries/sharedQuery";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_BOARD_BY_ID } from "../../../queries/sharedQuery";
 import {
   CREATE_FILE,
+  CREATE_IMAGE,
   DELETE_BOARD,
   DELETE_FILE,
   EDIT_BOARD,
@@ -24,6 +37,8 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import { storage } from "../../../utils/firebase";
+import { fileRemover } from "../../../utils/fileRemover";
+import { fileUploader } from "../../../utils/fileUploader";
 
 interface locationProps {
   search: string;
@@ -47,47 +62,70 @@ const EditBoardPage: React.VFC = () => {
   const [tmpFiles, setTmpFiles] = useState<{ url: string; fileName: string }[]>(
     []
   );
+  const [images, setImages] =
+    useState<(getBoardById_getBoardById_data_images | undefined | null)[]>();
+
   const [title, onChangeTitle, setTitle] = useInput("");
   const [content, onChangeContent, setContent] = useInput("");
   const [link, onChangeLink, setLink] = useInput("");
   const [progress, setProgress] = useState<number>(0);
+  const [imgUrl, setImgUrl] = useState<string | undefined>();
+  const [imgName, setImgName] = useState<string>();
+  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
 
-  const [getBoardById, { loading, data, refetch }] =
-    useLazyQuery<getBoardById>(GET_BOARD);
-
-  const [deleteBoard] = useMutation(DELETE_BOARD, {
-    onCompleted: ({ deleteBoard }) => {
-      const { ok, err } = deleteBoard;
-      if (ok) {
-        toast.success("게시물이 삭제 되었습니다");
-        history.push({
-          pathname: `/admin/${param}/${category}`,
-          state: { refresh: true },
-        });
-      } else {
-        console.log(err);
-        toast.error("게시물을 삭제 할 수 없습니다");
-      }
+  const { data, loading, refetch } = useQuery<
+    getBoardById,
+    getBoardByIdVariables
+  >(GET_BOARD_BY_ID, {
+    variables: {
+      id: parseInt(id as string, 10),
     },
   });
 
-  const [deleteFile] = useMutation(DELETE_FILE, {
-    onCompleted: ({ deleteFile }) => {
-      const { ok, err } = deleteFile;
-      if (ok) {
-        toast.success("파일이 삭제 되었습니다");
-        if (refetch) refetch();
-        else {
+  const [deleteBoard] = useMutation<deleteBoard, deleteBoardVariables>(
+    DELETE_BOARD,
+    {
+      onCompleted: ({ deleteBoard }) => {
+        const { ok, err } = deleteBoard;
+        if (ok) {
+          toast.success("게시물이 삭제 되었습니다");
+          history.push({
+            pathname: `/admin/${param}/${category}`,
+            state: { refresh: true },
+          });
+        } else {
           console.log(err);
-          toast.error(err);
+          toast.error("게시물을 삭제 할 수 없습니다");
         }
-      }
-    },
-  });
+      },
+    }
+  );
 
-  const [createFile] = useMutation(CREATE_FILE);
+  const [deleteFile] = useMutation<deleteFile, deleteFileVariables>(
+    DELETE_FILE,
+    {
+      onCompleted: ({ deleteFile }) => {
+        const { ok, err } = deleteFile;
+        if (ok) {
+          toast.success("파일이 삭제 되었습니다");
+          if (refetch) refetch();
+          else {
+            console.log(err);
+            toast.error(err);
+          }
+        }
+      },
+    }
+  );
 
-  const [editBoard] = useMutation(EDIT_BOARD, {
+  const [createFile] = useMutation<createFile, createFileVariables>(
+    CREATE_FILE
+  );
+  const [createImage] = useMutation<createImage, createImageVariables>(
+    CREATE_IMAGE
+  );
+
+  const [editBoard] = useMutation<editBoard, editBoardVariables>(EDIT_BOARD, {
     onCompleted: ({ editBoard }) => {
       const { ok, err } = editBoard;
       if (ok) {
@@ -111,8 +149,8 @@ const EditBoardPage: React.VFC = () => {
     });
   }, [id, deleteBoard]);
 
-  const handleEditBoard = useCallback(() => {
-    editBoard({
+  const handleEditBoard = useCallback(async () => {
+    await editBoard({
       variables: {
         id: parseInt(id as string, 10),
         title,
@@ -123,7 +161,7 @@ const EditBoardPage: React.VFC = () => {
   }, [id, title, content, link, editBoard]);
 
   const handleDeleteFile = useCallback(
-    async (id?: number, name?: string) => {
+    async (id: number, name?: string) => {
       storage.ref(`/files/${category}/${name}`).delete();
       await deleteFile({
         variables: {
@@ -132,6 +170,28 @@ const EditBoardPage: React.VFC = () => {
       });
     },
     [deleteFile, category]
+  );
+
+  const handleImageUpload = useCallback(
+    (file: any) => {
+      setProgress(progress + 1);
+      setImgName(file.name);
+      setUploadLoading(true);
+      fileUploader(
+        "images",
+        file,
+        category as string,
+        file.name,
+        setImgUrl,
+        progress,
+        setProgress,
+        createImage,
+        parseInt(id as string, 10)
+      );
+      setUploadLoading(false);
+      setProgress(0);
+    },
+    [category, progress, createImage, id]
   );
 
   const handleFileUpload = useCallback(
@@ -176,11 +236,11 @@ const EditBoardPage: React.VFC = () => {
     [createFile, id, category, progress, refetch]
   );
 
-  useEffect(() => {
-    if (id) {
-      getBoardById({ variables: { id: parseInt(id as string, 10) } });
+  const handleImageRemover = useCallback(() => {
+    if (imgName && imgName.trim()) {
+      fileRemover("images", category as string, imgName, setImgUrl);
     }
-  }, [id, getBoardById]);
+  }, [category, imgName]);
 
   useEffect(() => {
     if (data && data.getBoardById && data.getBoardById.data) {
@@ -196,6 +256,14 @@ const EditBoardPage: React.VFC = () => {
       data.getBoardById.data.files
     ) {
       setFiles(data.getBoardById.data.files);
+    }
+    if (
+      data &&
+      data.getBoardById &&
+      data.getBoardById.data &&
+      data.getBoardById.data.images
+    ) {
+      setImages(data.getBoardById.data.images);
     }
   }, [data, setTitle, setContent, setLink]);
 
@@ -226,11 +294,7 @@ const EditBoardPage: React.VFC = () => {
             onChange={onChangeTitle}
           />
         </Descriptions.Item>
-        <Descriptions.Item
-          label="첨부파일"
-          span={4}
-          labelStyle={{ width: 100 }}
-        >
+        <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>
           {files && files.length !== 0 ? (
             <>
               {files.map((elem, idx) => {
@@ -246,7 +310,7 @@ const EditBoardPage: React.VFC = () => {
                     </a>
                     <button
                       className="attach-button"
-                      onClick={() => handleDeleteFile(elem?.id, elem?.fileName)}
+                      onClick={() => handleDeleteFile(elem!.id, elem!.fileName)}
                     >
                       <DeleteOutlined />
                     </button>
@@ -282,6 +346,43 @@ const EditBoardPage: React.VFC = () => {
             onChange={onChangeLink}
           />
         </Descriptions.Item>
+        {param === "achievement" && (
+          <Descriptions.Item
+            label="이미지"
+            span={4}
+            labelStyle={{ width: 100 }}
+          >
+            {images && images.length !== 0 ? (
+              <div>
+                {imgUrl ? (
+                  <img src={imgUrl} width={300} alt="upimage" />
+                ) : (
+                  <img src={images[0]!.url} alt="ima" width={300} />
+                )}
+              </div>
+            ) : (
+              <div>이미지 없음</div>
+            )}
+            <Upload
+              multiple={true}
+              maxCount={1}
+              listType="picture"
+              className="upload-list-inline"
+              progress={{ showInfo: true }}
+              onRemove={() => handleImageRemover()}
+              customRequest={({ file }) => handleImageUpload(file)}
+              onChange={({ file: callbackFile }) => {
+                if (tmpFiles.length !== 0) {
+                  callbackFile.status = "done";
+                } else {
+                  callbackFile.status = "removed";
+                }
+              }}
+            >
+              <Button icon={<UploadOutlined />}>이미지 업로드</Button>
+            </Upload>
+          </Descriptions.Item>
+        )}
         <Descriptions.Item label="내용" span={4}>
           <Input.TextArea
             placeholder={board?.content || undefined}
@@ -295,7 +396,7 @@ const EditBoardPage: React.VFC = () => {
         <Button
           type="primary"
           onClick={() => handleEditBoard()}
-          disabled={progress !== 0 ? true : false}
+          disabled={uploadLoading}
         >
           {!loading ? (
             progress <= 0 ? (

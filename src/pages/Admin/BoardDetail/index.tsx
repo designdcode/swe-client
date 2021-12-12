@@ -10,8 +10,8 @@ import {
   getBoardById_getBoardById_data_files,
   getBoardById_getBoardById_data_images,
 } from "../../../typings/api";
-import { Descriptions, Typography, Carousel } from "antd";
-import { Button, CarouselDiv, Container } from "./styles";
+import { Descriptions, Typography } from "antd";
+import { Button, Container } from "./styles";
 import { DELETE_BOARD } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -107,17 +107,13 @@ const BoardDetail: React.VFC = () => {
         layout="horizontal"
         style={{ display: "flex", flexDirection: "column" }}
       >
-        <Descriptions.Item label="제목" span={4} labelStyle={{ width: 100 }}>
+        <Descriptions.Item label="제목" span={3} labelStyle={{ width: 100 }}>
           <Typography.Title level={3}>{board?.title}</Typography.Title>
         </Descriptions.Item>
-        <Descriptions.Item label="작성일" span={4} labelStyle={{ width: 100 }}>
+        <Descriptions.Item label="작성일" span={3} labelStyle={{ width: 100 }}>
           {getDate(board?.createdAt || "")}
         </Descriptions.Item>
-        <Descriptions.Item
-          label="첨부파일"
-          span={4}
-          labelStyle={{ width: 100 }}
-        >
+        <Descriptions.Item label="파일" span={3} labelStyle={{ width: 100 }}>
           {files && files.length !== 0 ? (
             <>
               {files.map((elem, idx) => {
@@ -139,17 +135,27 @@ const BoardDetail: React.VFC = () => {
             <>첨부파일 없음</>
           )}
         </Descriptions.Item>
+        {param === "achievement" && (
+          <Descriptions.Item
+            label="이미지"
+            span={4}
+            labelStyle={{ width: 100 }}
+          >
+            {images && images.length !== 0 ? (
+              <img
+                src={images[images.length - 1]!.url}
+                alt="newsimage"
+                width={300}
+              />
+            ) : (
+              <>이미지 없음</>
+            )}
+          </Descriptions.Item>
+        )}
         <Descriptions.Item label="내용" span={4}>
           <span style={{ whiteSpace: "pre-wrap" }}>{board?.content}</span>
         </Descriptions.Item>
       </Descriptions>
-      {param === "achievement" && (
-        <Carousel dotPosition="bottom" style={{ minHeight: 400 }}>
-          {images?.map((item, idx) => {
-            return <CarouselDiv url={item!.url} key={idx} />;
-          })}
-        </Carousel>
-      )}
       <div className="button-group">
         <Link
           to={`/admin/${param}/edit-${param}?category=${category}&id=${id}`}
