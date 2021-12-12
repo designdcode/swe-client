@@ -24,7 +24,7 @@ const HomeBNews: React.VFC = () => {
     onCompleted: ({ getBoardByCategory }) => {
       const { ok, data, err } = getBoardByCategory;
       if (ok && data) {
-        if (data[0].images && data[0].images[0]) {
+        if (data[0] && data[0].images && data[0].images[0]) {
           setUrl(data[0].images[0].url);
         }
       } else {
