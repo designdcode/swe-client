@@ -38,12 +38,13 @@ const UploadImageBoardPage = () => {
   const [imgName, setImgName] = useState<string>();
   const [isLinkNeeded, setIsLinkNeeded] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setIsLinkNeeded(linkSwitcher(subparam as string));
   }, [subparam]);
 
-  const [createBoard, { loading }] = useMutation(CREATE_BOARD, {
+  const [createBoard] = useMutation(CREATE_BOARD, {
     onCompleted: ({ createBoard }) => {
       const { ok, err } = createBoard;
       if (ok) {
@@ -78,12 +79,14 @@ const UploadImageBoardPage = () => {
         images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
       },
     });
+    setLoading(false);
   }, [createBoard, category, file, imgName, imgUrl, link]);
 
   const handleImageUpload = useCallback(
     (file: any) => {
       const filename = file.name;
       setImgName(file.name);
+      setLoading(true);
       fileUploader(
         "images",
         file,
@@ -101,6 +104,7 @@ const UploadImageBoardPage = () => {
   const handleFileUpload = useCallback(
     (file: any) => {
       setProgress(progress + 1);
+      setLoading(true);
       const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
       upload.on(
         "state_changed",

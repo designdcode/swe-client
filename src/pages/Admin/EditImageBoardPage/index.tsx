@@ -5,12 +5,13 @@ import { useHistory, useLocation, useParams } from "react-router";
 import { Container } from "./styles";
 import {
   getBoardById,
+  getBoardByIdVariables,
   getBoardById_getBoardById_data,
   getBoardById_getBoardById_data_files,
   getBoardById_getBoardById_data_images,
 } from "../../../typings/api";
-import { useLazyQuery, useMutation } from "@apollo/client";
-import { GET_BOARD } from "../../../queries/sharedQuery";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { GET_BOARD, GET_BOARD_BY_ID } from "../../../queries/sharedQuery";
 import useInput from "../../../hooks/useInput";
 import { Button } from "../EditBoardPage/styles";
 import {
@@ -57,8 +58,15 @@ const EditImageBoardPage: React.VFC = () => {
   const [link, onChangeLink, setLink] = useInput("");
   const [progress, setProgress] = useState<number>(0);
 
-  const [getBoardById, { loading, data, refetch }] =
-    useLazyQuery<getBoardById>(GET_BOARD);
+  const { loading, data, refetch } = useQuery<
+    getBoardById,
+    getBoardByIdVariables
+  >(GET_BOARD_BY_ID, {
+    variables: {
+      id: parseInt(id as string, 10),
+    },
+  });
+
   const [createImage] = useMutation(CREATE_IMAGE, {
     onCompleted: ({ createImage }) => {
       const { ok } = createImage;
@@ -200,18 +208,24 @@ const EditImageBoardPage: React.VFC = () => {
   );
 
   useEffect(() => {
-    if (id) {
-      getBoardById({ variables: { id: parseInt(id as string, 10) } });
-    }
-  }, [id, getBoardById]);
-
-  useEffect(() => {
     if (data && data.getBoardById && data.getBoardById.data) {
       setBoard(data.getBoardById.data);
       setLink(data.getBoardById.data.link || "");
     }
-    if (data?.getBoardById.data?.files) setFile(data.getBoardById.data.files);
-    if (data?.getBoardById.data?.images) {
+    if (
+      data &&
+      data.getBoardById &&
+      data.getBoardById.data &&
+      data.getBoardById.data.files
+    ) {
+      setFile(data.getBoardById.data.files);
+    }
+    if (
+      data &&
+      data.getBoardById &&
+      data.getBoardById.data &&
+      data.getBoardById.data.images
+    ) {
       setImage(data.getBoardById.data.images[0]);
       setImgName(data.getBoardById.data.images[0]?.fileName);
     }
