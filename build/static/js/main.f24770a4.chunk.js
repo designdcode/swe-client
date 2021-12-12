@@ -4,7 +4,7 @@
     54: function (t, e, n) {
       "use strict";
       n.d(e, "a", function () {
-        return l;
+        return p;
       });
       var a = n(28),
         r = n(84),
@@ -14,9 +14,11 @@
         s = n(29),
         u = n(62),
         b = n(26),
-        l = Object(a.c)(!!localStorage.getItem("admin")),
+        p = Object(a.c)(!!localStorage.getItem("admin")),
         j = new r.a(),
-        p = new o.a({ uri: "http://localhost:4000/graphql" }),
+        m = new o.a({
+          uri: "http://ec2-15-165-19-80.ap-northeast-2.compute.amazonaws.com/graphql",
+        }),
         h = Object(u.a)(function (t) {
           var e = t.graphQLErrors;
           t.networkError;
@@ -26,11 +28,11 @@
               return console.log("network graphql error :", e);
             });
         }),
-        m = Object(c.a)(function (t) {
+        l = Object(c.a)(function (t) {
           var e = t.query;
           return "OperationDefinition" === Object(b.e)(e).kind;
-        }, p),
-        d = new i.a({ cache: j, link: s.a.from([h, m]) });
+        }, m),
+        d = new i.a({ cache: j, link: s.a.from([h, l]) });
       e.b = d;
     },
     73: function (t, e, n) {},
@@ -47,7 +49,7 @@
         b = Object(i.a)(function () {
           return Promise.all([n.e(0), n.e(5), n.e(7)]).then(n.bind(null, 395));
         }),
-        l = Object(i.a)(function () {
+        p = Object(i.a)(function () {
           return Promise.all([n.e(0), n.e(4), n.e(6)]).then(n.bind(null, 394));
         }),
         j = function () {
@@ -62,12 +64,12 @@
               Object(u.jsx)(s.b, { path: "/main", component: b }),
               Object(u.jsx)(s.b, {
                 path: "/admin/:param/:subparam",
-                component: l,
+                component: p,
               }),
             ],
           });
         },
-        p = function (t) {
+        m = function (t) {
           t &&
             t instanceof Function &&
             n
@@ -83,23 +85,23 @@
               });
         },
         h = n(54),
-        m = n(52);
+        l = n(52);
       n(78);
       c.a.render(
         Object(u.jsx)(a.a, {
           client: h.b,
           children: Object(u.jsxs)(r.a, {
             children: [
-              Object(u.jsx)(m.a, { position: "bottom-right", autoClose: 3e3 }),
+              Object(u.jsx)(l.a, { position: "bottom-right", autoClose: 3e3 }),
               Object(u.jsx)(j, {}),
             ],
           }),
         }),
         document.getElementById("root")
       ),
-        p();
+        m();
     },
   },
   [[79, 2, 3]],
 ]);
-//# sourceMappingURL=main.f74c7c9c.chunk.js.map
+//# sourceMappingURL=main.f24770a4.chunk.js.map
