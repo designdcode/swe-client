@@ -10,8 +10,8 @@ import {
   getBoardById_getBoardById_data_files,
   getBoardById_getBoardById_data_images,
 } from "../../../typings/api";
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { GET_BOARD, GET_BOARD_BY_ID } from "../../../queries/sharedQuery";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_BOARD_BY_ID } from "../../../queries/sharedQuery";
 import useInput from "../../../hooks/useInput";
 import { Button } from "../EditBoardPage/styles";
 import {

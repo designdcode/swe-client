@@ -138,11 +138,7 @@ const ImageBoardPage: React.VFC = () => {
             <Typography.Text>링크가 없습니다</Typography.Text>
           )}
         </Descriptions.Item>
-        <Descriptions.Item
-          label="첨부파일"
-          span={4}
-          labelStyle={{ width: 100 }}
-        >
+        <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>
           {file && file.length ? (
             file.map((elem, idx) => {
               return (

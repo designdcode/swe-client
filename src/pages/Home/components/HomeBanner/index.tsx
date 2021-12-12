@@ -63,16 +63,6 @@ const HomeBanner: React.VFC = () => {
           />
         </ImageBox>
         <ImageBox>
-          <CoverContentBox>
-            <CoverContent className="first-content">Sunmoon Univ.</CoverContent>
-            <CoverContent className="second-content">
-              SW 중심대학사업단
-            </CoverContent>
-            <CoverContent className="third-content">
-              글로벌 SW역량 강화 글로벌 IT 한류문화 조성
-            </CoverContent>
-          </CoverContentBox>
-          <Cover />
           <Image
             src={
               size.width > 375 ? "img/banner2.jpeg" : "img/mobileBanner2.jpeg"
@@ -106,22 +96,8 @@ const ImageBox = styled.div`
 `;
 
 const Image = styled.img`
-  height: 100%;
+  height: 400px;
   object-fit: contain;
-`;
-
-const Cover = styled.div`
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 100%;
-    max-width: 1920px;
-    height: 250px;
-    background-color: darkgray;
-    opacity: 0.5;
-    position: absolute;
-    top: 30%;
-    display: flex;
-    z-index: 2;
-  }
 `;
 
 export const CoverContent = styled.span`

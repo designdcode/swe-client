@@ -10,7 +10,7 @@ import {
   getBoardById_getBoardById_data_files,
   getBoardById_getBoardById_data_images,
 } from "../../../typings/api";
-import { Descriptions, Typography, Carousel, Radio } from "antd";
+import { Descriptions, Typography, Carousel } from "antd";
 import { Button, CarouselDiv, Container } from "./styles";
 import { DELETE_BOARD } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
