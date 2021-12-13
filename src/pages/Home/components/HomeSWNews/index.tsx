@@ -122,7 +122,7 @@ const HomeSWNews: React.VFC = () => {
 
   return (
     <Wrapper>
-      <Content>
+      {/* <Content>
         <Row>
           <Section to="/">
             {aloading ? (
@@ -279,7 +279,7 @@ const HomeSWNews: React.VFC = () => {
             )}
           </Section>
         </Row>
-      </Content>
+      </Content> */}
     </Wrapper>
   );
 };
