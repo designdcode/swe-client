@@ -9,10 +9,19 @@ import {
 } from "../../utils/mediaQuery";
 import { BsHouseFill } from "react-icons/bs";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import { Link } from "react-router-dom";
 
 interface ParamProps {
   param: string;
   subparam: string;
+}
+
+interface middleMenuProps {
+  isBigger: boolean;
+}
+
+interface MenuCellProps {
+  first: boolean;
 }
 
 const Detail = () => {
@@ -35,17 +44,40 @@ const Detail = () => {
             }
           })}
         </CoverTitle>
-        <SubMenu>
-          <div className="submenu-content">submenu content ------</div>
+        <SubMenu isBigger={true}>
+          <div className="submenu-content">
+            {NavigationData.map((item, idx) => {
+              if (item.title === param) {
+                return item.subMenu.map((elem, i) => {
+                  const colored = elem.key === subparam;
+                  return (
+                    <ContentCell className="submenu-col" first={colored}>
+                      <FakeLine first={colored} />
+                      <StyleLink
+                        to={`/main/detail/${param}/${elem.key}`}
+                        first={colored}
+                      >
+                        {elem.ko_title}
+                      </StyleLink>
+                    </ContentCell>
+                  );
+                });
+              } else {
+                return null;
+              }
+            })}
+          </div>
         </SubMenu>
         <img src="/img/detailBG.jpeg" alt="cover" />
       </Cover>
 
       <Content>
+        <ContentImage>hello</ContentImage>
         <ContentBackCover>
           <div className="cover-back">
             <img src="/img/detailBackLeft.jpeg" alt="left" />
           </div>
+
           <div className="cover-back">
             <img src="/img/detailBackRight.jpeg" alt="left" />
           </div>
@@ -118,20 +150,81 @@ const CoverTitle = styled.div<CoverTitleMarginProps>`
   }
 `;
 
-const SubMenu = styled.div`
+const SubMenu = styled.div<middleMenuProps>`
+	${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+	}
+	${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+		width: 100%;
+		background-color: #e5e2e2b8;
+		position: absolute;
+		bottom: 0;
+  
+    font-size: 15px;
+
+		& .submenu-content {
+			width: 1280px;
+			min-height: 50px;
+      height: ${(props) => (props.isBigger ? "120px" : "60px")}
+			border: 1px solid green;
+			margin: 0 auto;
+      display: flex;
+      align-items:center;
+      flex-wrap:wrap;
+        padding-left: 160px;
+
+      }
+      & .submenu-col {
+        width:170px;
+        height:50px;
+        display: flex;
+        display: flex;
+      align-items:center;
+      justify-content: center;
+      }
+		}
+	}
+`;
+
+const StyleLink = styled(Link)<MenuCellProps>`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: ${(props) => (props.first ? "white" : "black")};
+  &:hover {
+    color: white;
+  }
+`;
+
+const ContentCell = styled.div<MenuCellProps>`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
   }
+
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 100%;
-    background-color: #e5e2e2b8;
-    position: absolute;
-    bottom: 0;
-    & .submenu-content {
-      width: 1280px;
-      min-height: 60px;
-      border: 1px solid green;
-      margin: 0 auto;
+    background-color: ${(props) => (props.first ? "#0c1b58" : "")};
+    color: ${(props) => (props.first ? "white" : "black")};
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2px;
+    &:hover {
+      background-color: #0c1b58;
+      transition: 0.2s linear;
+      color: white;
     }
+  }
+`;
+
+const FakeLine = styled.div<MenuCellProps>`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 50%;
+    height: 2px;
+    border-top: ${(props) => (props.first ? "2px solid white" : "")};
   }
 `;
 
@@ -140,10 +233,11 @@ const Content = styled.div`
   }
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    max-width: 1280px;
+    width: 1280px;
     min-height: 100vh;
     margin: 0 auto;
     border: 1px solid blue;
+    position: relative;
   }
 `;
 const ContentBackCover = styled.div`
@@ -156,6 +250,9 @@ const ContentBackCover = styled.div`
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    position: absolute;
+    top: 0;
+    z-index: 1;
     & .cover-back {
       width: 100%;
       &:last-child {
@@ -166,5 +263,16 @@ const ContentBackCover = styled.div`
     & img {
       width: 200px;
     }
+  }
+`;
+const ContentImage = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 100%;
+    min-height: 100%;
+    position: absolute;
+    z-index: 5;
   }
 `;
