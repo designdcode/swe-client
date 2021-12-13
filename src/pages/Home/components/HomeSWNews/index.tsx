@@ -151,18 +151,10 @@ const HomeSWNews: React.VFC = () => {
                   </SectionImage>
                   <SectionDesc>
                     <div className="section-title">
-                      {
-                        adata!.getBoardByCategory.data![
-                          adata!.getBoardByCategory.data!.length - 1
-                        ].title
-                      }
+                      {adata && adata[adata.length - 1].title}
                     </div>
                     <div className="section-desc">
-                      {
-                        adata!.getBoardByCategory.data![
-                          adata!.getBoardByCategory.data!.length - 1
-                        ].content
-                      }
+                      {adata && adata[adata.length - 1].content}
                     </div>
                   </SectionDesc>
                 </SectionContent>
@@ -196,18 +188,10 @@ const HomeSWNews: React.VFC = () => {
                   </SectionImage>
                   <SectionDesc>
                     <div className="section-title">
-                      {
-                        cdata!.getBoardByCategory.data![
-                          cdata!.getBoardByCategory.data!.length - 1
-                        ].title
-                      }
+                      {cdata && cdata[cdata.length - 1].title}
                     </div>
                     <div className="section-desc">
-                      {
-                        cdata!.getBoardByCategory.data![
-                          cdata!.getBoardByCategory.data!.length - 1
-                        ].content
-                      }
+                      {cdata && cdata[cdata.length - 1].content}
                     </div>
                   </SectionDesc>
                 </SectionContent>
@@ -243,18 +227,10 @@ const HomeSWNews: React.VFC = () => {
                   </SectionImage>
                   <SectionDesc>
                     <div className="section-title">
-                      {
-                        vdata!.getBoardByCategory.data![
-                          vdata!.getBoardByCategory.data!.length - 1
-                        ].title
-                      }
+                      {vdata && vdata[vdata.length - 1].title}
                     </div>
                     <div className="section-desc">
-                      {
-                        vdata!.getBoardByCategory.data![
-                          vdata!.getBoardByCategory.data!.length - 1
-                        ].content
-                      }
+                      {vdata && vdata[vdata.length - 1].content}
                     </div>
                   </SectionDesc>
                 </SectionContent>
@@ -263,9 +239,7 @@ const HomeSWNews: React.VFC = () => {
           </Section>
           <Section
             to={`/main/detail/achievement/achievement-startup/${
-              sdata?.getBoardByCategory.data[
-                sdata.getBoardByCategory.data?.length - 1
-              ].id
+              sdata && sdata[sdata.length - 1].id
             }`}
           >
             {sloading ? (
@@ -294,18 +268,10 @@ const HomeSWNews: React.VFC = () => {
                   </SectionImage>
                   <SectionDesc>
                     <div className="section-title">
-                      {
-                        sdata!.getBoardByCategory.data![
-                          sdata!.getBoardByCategory.data!.length - 1
-                        ].title
-                      }
+                      {sdata && sdata[sdata.length - 1].title}
                     </div>
                     <div className="section-desc">
-                      {
-                        sdata!.getBoardByCategory.data![
-                          sdata!.getBoardByCategory.data!.length - 1
-                        ].content
-                      }
+                      {sdata && sdata[sdata.length - 1].content}
                     </div>
                   </SectionDesc>
                 </SectionContent>
