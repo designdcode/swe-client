@@ -35,8 +35,22 @@ const Detail = () => {
             }
           })}
         </CoverTitle>
+        <SubMenu>
+          <div className="submenu-content">submenu content ------</div>
+        </SubMenu>
         <img src="/img/detailBG.jpeg" alt="cover" />
       </Cover>
+
+      <Content>
+        <ContentBackCover>
+          <div className="cover-back">
+            <img src="/img/detailBackLeft.jpeg" alt="left" />
+          </div>
+          <div className="cover-back">
+            <img src="/img/detailBackRight.jpeg" alt="left" />
+          </div>
+        </ContentBackCover>
+      </Content>
     </Wrapper>
   );
 };
@@ -100,6 +114,57 @@ const CoverTitle = styled.div<CoverTitleMarginProps>`
       letter-spacing: 0.43px;
       color: #ffffff;
       text-shadow: 3px 3px 3px #000000e3;
+    }
+  }
+`;
+
+const SubMenu = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 100%;
+    background-color: #e5e2e2b8;
+    position: absolute;
+    bottom: 0;
+    & .submenu-content {
+      width: 1280px;
+      min-height: 60px;
+      border: 1px solid green;
+      margin: 0 auto;
+    }
+  }
+`;
+
+const Content = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    max-width: 1280px;
+    min-height: 100vh;
+    margin: 0 auto;
+    border: 1px solid blue;
+  }
+`;
+const ContentBackCover = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    & .cover-back {
+      width: 100%;
+      &:last-child {
+        display: flex;
+        justify-content: flex-end;
+      }
+    }
+    & img {
+      width: 200px;
     }
   }
 `;

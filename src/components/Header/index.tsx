@@ -82,7 +82,10 @@ const Header: React.VFC = () => {
       <HeaderMain>
         <MainDesktop>
           <div className="main-content-desktop">
-            <div>logo</div>
+            <div></div>
+            <Link to="/main">
+              <img src={"/img/logo.png"} alt="logo" />
+            </Link>
             <div>options</div>
           </div>
           <div className="main-menu">
