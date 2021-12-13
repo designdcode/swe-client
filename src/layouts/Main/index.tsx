@@ -13,6 +13,7 @@ const Main: React.VFC = () => {
       <Header />
       <Content>
         <Switch>
+          <Route path="/main/detail/:param/:subparam/:id" />
           <Route path="/main/detail/:param/:subparam" component={Detail} />
           <Route path="/main/login" component={Login} />
           <Route path="/main" component={Home} />

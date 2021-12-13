@@ -6,6 +6,7 @@ import { GET_BOARD_BY_CATEGORY } from "../../../../queries/adminQuery";
 import {
   getBoardByCategory,
   getBoardByCategoryVariables,
+  getBoardByCategory_getBoardByCategory_data,
   getBoardByCategory_getBoardByCategory_data_images,
 } from "../../../../typings/api";
 import {
@@ -28,7 +29,16 @@ const HomeSWNews: React.VFC = () => {
     (getBoardByCategory_getBoardByCategory_data_images | null)[] | null
   >();
 
-  const { data: adata, loading: aloading } = useQuery<
+  const [adata, setAdata] =
+    useState<getBoardByCategory_getBoardByCategory_data[]>();
+  const [cdata, setCdata] =
+    useState<getBoardByCategory_getBoardByCategory_data[]>();
+  const [vdata, setVdata] =
+    useState<getBoardByCategory_getBoardByCategory_data[]>();
+  const [sdata, setSdata] =
+    useState<getBoardByCategory_getBoardByCategory_data[]>();
+
+  const { loading: aloading } = useQuery<
     getBoardByCategory,
     getBoardByCategoryVariables
   >(GET_BOARD_BY_CATEGORY, {
@@ -39,12 +49,13 @@ const HomeSWNews: React.VFC = () => {
       const { ok, err, data } = getBoardByCategory;
       if (ok && data && data.length > 0) {
         setAurl(data[data.length - 1].images);
+        setAdata(data);
       } else {
         console.log(err);
       }
     },
   });
-  const { data: vdata, loading: vloading } = useQuery<
+  const { loading: vloading } = useQuery<
     getBoardByCategory,
     getBoardByCategoryVariables
   >(GET_BOARD_BY_CATEGORY, {
@@ -55,12 +66,13 @@ const HomeSWNews: React.VFC = () => {
       const { ok, err, data } = getBoardByCategory;
       if (ok && data) {
         setVurl(data[data.length - 1].images);
+        setSdata(data);
       } else {
         console.log(err);
       }
     },
   });
-  const { data: cdata, loading: cloading } = useQuery<
+  const { loading: cloading } = useQuery<
     getBoardByCategory,
     getBoardByCategoryVariables
   >(GET_BOARD_BY_CATEGORY, {
@@ -71,12 +83,13 @@ const HomeSWNews: React.VFC = () => {
       const { ok, err, data } = getBoardByCategory;
       if (ok && data) {
         setCurl(data[data.length - 1].images);
+        setCdata(data);
       } else {
         console.log(err);
       }
     },
   });
-  const { data: sdata, loading: sloading } = useQuery<
+  const { loading: sloading } = useQuery<
     getBoardByCategory,
     getBoardByCategoryVariables
   >(GET_BOARD_BY_CATEGORY, {
@@ -87,6 +100,7 @@ const HomeSWNews: React.VFC = () => {
       const { ok, err, data } = getBoardByCategory;
       if (ok && data) {
         setSurl(data[data.length - 1].images);
+        setSdata(data);
       } else {
         console.log(err);
       }
@@ -110,7 +124,7 @@ const HomeSWNews: React.VFC = () => {
     <Wrapper>
       <Content>
         <Row>
-          <Section>
+          <Section to="/">
             {aloading ? (
               <>loading</>
             ) : (
@@ -155,7 +169,7 @@ const HomeSWNews: React.VFC = () => {
               </>
             )}
           </Section>
-          <Section>
+          <Section to="/">
             {cloading ? (
               <>loading</>
             ) : (
@@ -202,7 +216,7 @@ const HomeSWNews: React.VFC = () => {
           </Section>
         </Row>
         <Row>
-          <Section>
+          <Section to="/">
             {vloading ? (
               <>loading</>
             ) : (
@@ -247,7 +261,13 @@ const HomeSWNews: React.VFC = () => {
               </>
             )}
           </Section>
-          <Section>
+          <Section
+            to={`/main/detail/achievement/achievement-startup/${
+              sdata?.getBoardByCategory.data[
+                sdata.getBoardByCategory.data?.length - 1
+              ].id
+            }`}
+          >
             {sloading ? (
               <>loading</>
             ) : (
@@ -307,7 +327,7 @@ const Wrapper = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     background-image: url("img/homeswnews.jpeg");
-    height: 500px;
+    min-height: 500px;
     max-width: 1980px;
     background-position: center;
   }
@@ -334,21 +354,25 @@ const Row = styled.div`
     flex-direction: column;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    margin: 75px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
   }
 `;
 
-const Section = styled.div`
+const Section = styled(Link)`
+  color: black;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     height: 250px;
     border-bottom: 3px dashed #eee;
     padding-top: 30px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    height: 150px;
-    width: 445px;
-    border: 1px solid black;
+    height: 200px;
+    width: 400px;
     margin-bottom: 50px;
+    margin: 50px 0;
   }
 `;
 
@@ -381,7 +405,31 @@ const SectionTitle = styled.div`
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    display: none;
+    height: 25px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 600;
+    color: #0c1b58;
+    margin-bottom: 15px;
+    & .title-burger {
+      transform: rotate(90deg);
+      color: black;
+    }
+    & .title-title {
+      width: 75%;
+    }
+
+    & .title-more {
+      font-size: 10px;
+      color: black;
+      & .title-link {
+        text-decoration: none;
+        color: black;
+      }
+    }
   }
 `;
 
@@ -392,7 +440,15 @@ const SectionContent = styled.div`
     height: 75%;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    display: none;
+    display: flex;
+    width: 100%;
+    height: 95%;
+    padding: 5px;
+    cursor: pointer;
+    &:hover {
+      transition: 0.2s linear;
+      background-color: #eee;
+    }
   }
 `;
 
@@ -403,7 +459,9 @@ const SectionImage = styled.div`
     margin-right: 10px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    display: none;
+    width: 50%;
+    height: 100%;
+    margin-right: 10px;
   }
 `;
 
@@ -435,6 +493,29 @@ const SectionDesc = styled.div`
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    display: none;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    & .section-title {
+      height: 40%;
+      width: 80%;
+      word-break: break-all;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    & .section-desc {
+      height: 60%;
+      width: 80%;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      line-height: 1.2;
+      font-size: 9px;
+    }
   }
 `;
