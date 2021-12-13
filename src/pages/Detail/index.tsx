@@ -95,7 +95,11 @@ const TopCover = styled.div`
     margin-right: auto;
     left: 0;
     right: 0;
-    background-image: url("/img/homebnews.jpeg");
+    background-image: url("/img/detailBG.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    /* background-size: 1920px 360px; */
+    /* background-size: cover; */
   }
 `;
 const TopCoverContent = styled.div`

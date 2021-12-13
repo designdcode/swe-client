@@ -28,70 +28,70 @@ const HomeSWNews: React.VFC = () => {
     (getBoardByCategory_getBoardByCategory_data_images | null)[] | null
   >();
 
-  const { data: adata, loading: aloading } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: "achievement-aidnew",
-    },
-    onCompleted: ({ getBoardByCategory }) => {
-      const { ok, err, data } = getBoardByCategory;
-      if (ok && data && data.length > 0) {
-        setAurl(data[data.length - 1].images);
-      } else {
-        console.log(err);
-      }
-    },
-  });
-  const { data: vdata, loading: vloading } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: "achievement-valuenews",
-    },
-    onCompleted: ({ getBoardByCategory }) => {
-      const { ok, err, data } = getBoardByCategory;
-      if (ok && data) {
-        setVurl(data[data.length - 1].images);
-      } else {
-        console.log(err);
-      }
-    },
-  });
-  const { data: cdata, loading: cloading } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: "achievement-coopnews",
-    },
-    onCompleted: ({ getBoardByCategory }) => {
-      const { ok, err, data } = getBoardByCategory;
-      if (ok && data) {
-        setCurl(data[data.length - 1].images);
-      } else {
-        console.log(err);
-      }
-    },
-  });
-  const { data: sdata, loading: sloading } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: "achievement-startup",
-    },
-    onCompleted: ({ getBoardByCategory }) => {
-      const { ok, err, data } = getBoardByCategory;
-      if (ok && data) {
-        setSurl(data[data.length - 1].images);
-      } else {
-        console.log(err);
-      }
-    },
-  });
+  // const { data: adata, loading: aloading } = useQuery<
+  //   getBoardByCategory,
+  //   getBoardByCategoryVariables
+  // >(GET_BOARD_BY_CATEGORY, {
+  //   variables: {
+  //     category: "achievement-aidnew",
+  //   },
+  //   onCompleted: ({ getBoardByCategory }) => {
+  //     const { ok, err, data } = getBoardByCategory;
+  //     if (ok && data && data.length > 0) {
+  //       setAurl(data[data.length - 1].images);
+  //     } else {
+  //       console.log(err);
+  //     }
+  //   },
+  // });
+  // const { data: vdata, loading: vloading } = useQuery<
+  //   getBoardByCategory,
+  //   getBoardByCategoryVariables
+  // >(GET_BOARD_BY_CATEGORY, {
+  //   variables: {
+  //     category: "achievement-valuenews",
+  //   },
+  //   onCompleted: ({ getBoardByCategory }) => {
+  //     const { ok, err, data } = getBoardByCategory;
+  //     if (ok && data) {
+  //       setVurl(data[data.length - 1].images);
+  //     } else {
+  //       console.log(err);
+  //     }
+  //   },
+  // });
+  // const { data: cdata, loading: cloading } = useQuery<
+  //   getBoardByCategory,
+  //   getBoardByCategoryVariables
+  // >(GET_BOARD_BY_CATEGORY, {
+  //   variables: {
+  //     category: "achievement-coopnews",
+  //   },
+  //   onCompleted: ({ getBoardByCategory }) => {
+  //     const { ok, err, data } = getBoardByCategory;
+  //     if (ok && data) {
+  //       setCurl(data[data.length - 1].images);
+  //     } else {
+  //       console.log(err);
+  //     }
+  //   },
+  // });
+  // const { data: sdata, loading: sloading } = useQuery<
+  //   getBoardByCategory,
+  //   getBoardByCategoryVariables
+  // >(GET_BOARD_BY_CATEGORY, {
+  //   variables: {
+  //     category: "achievement-startup",
+  //   },
+  //   onCompleted: ({ getBoardByCategory }) => {
+  //     const { ok, err, data } = getBoardByCategory;
+  //     if (ok && data) {
+  //       setSurl(data[data.length - 1].images);
+  //     } else {
+  //       console.log(err);
+  //     }
+  //   },
+  // });
 
   const renderSectionImage = useCallback(
     (image: getBoardByCategory_getBoardByCategory_data_images | null) => {
@@ -108,7 +108,7 @@ const HomeSWNews: React.VFC = () => {
 
   return (
     <Wrapper>
-      <Content>
+      {/* <Content>
         <Row>
           <Section>
             {aloading ? (
@@ -293,7 +293,7 @@ const HomeSWNews: React.VFC = () => {
             )}
           </Section>
         </Row>
-      </Content>
+      </Content> */}
     </Wrapper>
   );
 };
