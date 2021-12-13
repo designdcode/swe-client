@@ -241,14 +241,14 @@ export const AdminNavData: NavProps[] = [
         ko_title: "사업단 소식",
       },
       {
-        key: "achievement-aidnew",
-        title: "achievement-aidnew",
-        ko_title: "SW교육지원 소식",
+        key: "achievement-aidnews",
+        title: "achievement-aidnews",
+        ko_title: "SW교육지원센터 소식",
       },
       {
         key: "achievement-valuenews",
         title: "achievement-valuenews",
-        ko_title: "SW가치확산 소식",
+        ko_title: "SW가치확산센터 소식",
       },
       {
         key: "achievement-coopnews",
