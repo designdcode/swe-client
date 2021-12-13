@@ -88,6 +88,7 @@ const TopCover = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     min-width: 1280px;
     max-width: 1920px;
+    width: 1920px;
     height: 360px;
     z-index: 1;
     position: absolute;
