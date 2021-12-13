@@ -121,8 +121,8 @@ export const NavigationData: NavProps[] = [
         ko_title: "오픈소스 SW 교육",
       },
       {
-        key: "major-certification",
-        title: "major-certification",
+        key: "major-verify",
+        title: "major-verify",
         ko_title: "소프트웨어 전문역량 인증제",
       },
       {
@@ -134,21 +134,6 @@ export const NavigationData: NavProps[] = [
         key: "major-training",
         title: "major-training",
         ko_title: "해외현장실습",
-      },
-      {
-        key: "major-contest",
-        title: "major-contest",
-        ko_title: "SW경진대회",
-      },
-      {
-        key: "major-training",
-        title: "major-training",
-        ko_title: "현장실습 해외교육",
-      },
-      {
-        key: "major-certification",
-        title: "major-certification",
-        ko_title: "SW전문 역량인증 제도",
       },
       {
         key: "major-taprogram",

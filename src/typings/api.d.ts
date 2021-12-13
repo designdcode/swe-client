@@ -493,6 +493,42 @@ export interface UserLoginVariables {
 // @generated
 // This file was automatically generated and should not be edited.
 
+// ====================================================
+// GraphQL query operation: getBoardByMonth
+// ====================================================
+
+export interface getBoardByMonth_getBoardByMonth_data {
+  __typename: "Board";
+  id: number;
+  title: string | null;
+  content: string | null;
+  category: string;
+  link: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+  deleteAt: string | null;
+}
+
+export interface getBoardByMonth_getBoardByMonth {
+  __typename: "getBoardByMonthResponse";
+  ok: boolean;
+  err: string | null;
+  data: getBoardByMonth_getBoardByMonth_data[] | null;
+}
+
+export interface getBoardByMonth {
+  getBoardByMonth: getBoardByMonth_getBoardByMonth;
+}
+
+export interface getBoardByMonthVariables {
+  category: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
 //==============================================================
 // START Enums and Input Objects
 //==============================================================

@@ -66,7 +66,7 @@ const HomeSWNews: React.VFC = () => {
       const { ok, err, data } = getBoardByCategory;
       if (ok && data && data.length > 0) {
         setVurl(data[data.length - 1].images);
-        setSdata(data);
+        setVdata(data);
       } else {
         console.log(err);
       }

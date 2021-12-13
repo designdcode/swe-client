@@ -75,3 +75,22 @@ export const USER_LOGIN = gql`
     }
   }
 `;
+
+export const GET_BOARD_BY_MONTH = gql`
+  query getBoardByMonth($category: String!) {
+    getBoardByMonth(category: $category) {
+      ok
+      err
+      data {
+        id
+        title
+        content
+        category
+        link
+        createdAt
+        updatedAt
+        deleteAt
+      }
+    }
+  }
+`;

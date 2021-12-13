@@ -7,17 +7,17 @@ import {
 } from "../../../../utils/mediaQuery";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
 import { useQuery } from "@apollo/client";
-import { GET_BOARD_BY_CATEGORY } from "../../../../queries/adminQuery";
 import {
-  getBoardByCategory,
-  getBoardByCategoryVariables,
-  getBoardByCategory_getBoardByCategory_data,
+  getBoardByMonth,
+  getBoardByMonthVariables,
+  getBoardByMonth_getBoardByMonth_data,
 } from "../../../../typings/api";
 import { List } from "antd";
 import { getDate } from "../../../../utils/convertDate";
+import { GET_BOARD_BY_MONTH } from "../../../../queries/sharedQuery";
 
 interface NoticeProps {
-  data: getBoardByCategory_getBoardByCategory_data[] | undefined;
+  data: getBoardByMonth_getBoardByMonth_data[] | undefined;
 }
 
 const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
@@ -73,14 +73,14 @@ const VideoBoard = () => {
 
 const HomeBoard: React.VFC = () => {
   const size = useWindowSize();
-  const { loading, data } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: "community-notice",
-    },
-  });
+  const { loading, data } = useQuery<getBoardByMonth, getBoardByMonthVariables>(
+    GET_BOARD_BY_MONTH,
+    {
+      variables: {
+        category: "community-notice",
+      },
+    }
+  );
 
   console.log(data);
 
@@ -94,10 +94,10 @@ const HomeBoard: React.VFC = () => {
         {size.width > 375 ? (
           <>
             <Col>
-              {data?.getBoardByCategory.data === null ? (
+              {data?.getBoardByMonth.data === null ? (
                 <>no data</>
               ) : (
-                <NoticeBoard data={data?.getBoardByCategory.data} />
+                <NoticeBoard data={data?.getBoardByMonth.data} />
               )}
             </Col>
             <Col>
@@ -110,10 +110,10 @@ const HomeBoard: React.VFC = () => {
               <VideoBoard />
             </Col>
             <Col>
-              {data?.getBoardByCategory.data === null ? (
+              {data?.getBoardByMonth.data === null ? (
                 <>no data</>
               ) : (
-                <NoticeBoard data={data?.getBoardByCategory.data} />
+                <NoticeBoard data={data?.getBoardByMonth.data} />
               )}
             </Col>
           </>
@@ -140,7 +140,7 @@ const Content = styled.div`
     width: 100%;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 900px;
+    width: 1280px;
     height: 100%;
     margin: 0 auto;
     display: flex;
@@ -154,7 +154,7 @@ const Col = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     height: 90%;
-    width: 445px;
+    width: 600px;
   }
 `;
 
