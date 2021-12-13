@@ -107,34 +107,34 @@ interface DotProps {
 
 const Wrapper = styled.div`
   background-image: url("img/homebnews.jpeg");
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    min-height: 400px;
-    max-width: 1980px;
-    background-position: center;
-  }
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     min-height: 400px;
     background-position: center;
     background-size: cover;
   }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    min-height: 400px;
+    max-width: 1980px;
+    background-position: center;
+  }
 `;
 const Container = styled.div`
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 900px;
-    min-height: 400px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-  }
+  display: flex;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     min-height: 400px;
     padding: 25px;
   }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 900px;
+    min-height: 400px;
+    margin: 0 auto;
+    border: 1px solid white;
+  }
 `;
 
 const TitleWithLine = styled.div`
+  display: flex;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    display: flex;
     justify-content: space-between;
     margin-bottom: 25px;
     & .line {
@@ -153,7 +153,15 @@ const TitleWithLine = styled.div`
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    display: none;
+    & .line {
+      width: 25px;
+      border-bottom: 3px solid #c53082;
+    }
+    & .title {
+      font-size: 17px;
+      font-weight: 600;
+      color: white;
+    }
   }
 `;
 
