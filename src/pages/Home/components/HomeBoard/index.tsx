@@ -22,6 +22,7 @@ interface NoticeProps {
 
 const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   const now = new Date().getMonth() + 1;
+  const yearMonth = `${new Date().getFullYear()}.${new Date().getMonth() + 1}`;
   const filtered = data
     ?.filter(
       (item) => parseInt(getDate(item.createdAt || "").split("-")[1]) === now
@@ -30,11 +31,11 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   const renderListItem = useCallback((item) => {
     const itemDate = getDate(item.createdAt);
     return (
-      <List.Item style={{ display: "flex" }}>
+      <NoticeList>
         <NoticeTitleBox>공지</NoticeTitleBox>
         <NoticeListSpan>[안내] {item.title}</NoticeListSpan>
         <NoticeDate>{itemDate}</NoticeDate>
-      </List.Item>
+      </NoticeList>
     );
   }, []);
   return (
@@ -50,7 +51,7 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
         <div className="board-bottom-title">
           <div className="date">
             <span className="date-title">{now}</span>
-            <span className="date-subtitle">small</span>
+            <span className="date-subtitle">{yearMonth}</span>
           </div>
           <div className="title">SW 중심대학 {now}월 공지사항</div>
         </div>
@@ -80,6 +81,8 @@ const HomeBoard: React.VFC = () => {
       category: "community-notice",
     },
   });
+
+  console.log(data);
 
   if (loading) {
     return <div>loading...</div>;
@@ -152,7 +155,6 @@ const Col = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     height: 90%;
     width: 445px;
-    border: 1px solid black;
   }
 `;
 
@@ -167,12 +169,12 @@ const VideoContainer = styled.div`
 `;
 
 const BoardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  width: 100%;
+  padding: 0 35px;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    display: flex;
-    flex-direction: column;
-    height: 500px;
-    width: 100%;
-    padding: 0 35px;
     padding-top: 30px;
     & .board-title {
       display: flex;
@@ -221,6 +223,55 @@ const BoardContainer = styled.div`
       }
     }
   }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    padding-top: 15px;
+    & .board-title {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+      & .board-top-title {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+      & .board-bottom-title {
+        display: flex;
+        align-items: center;
+        & .date {
+          height: 50px;
+          width: 50px;
+          background-color: #f0f2fa;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          margin-right: 20px;
+          & .date-title {
+            display: block;
+            font-size: 26px;
+            color: #003875;
+            font-weight: 600;
+            line-height: 1;
+          }
+
+          & .date-subtitle {
+            display: block;
+            font-size: 8px;
+          }
+        }
+
+        & .title {
+          font-size: 18px;
+          font-weight: 600;
+          letter-spacing: -0.9px;
+        }
+      }
+    }
+  }
 `;
 
 const TitleWithLine = styled.div`
@@ -236,7 +287,19 @@ const TitleWithLine = styled.div`
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    display: none;
+    & .title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+`;
+
+const NoticeList = styled(List.Item)`
+  display: flex;
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    padding: 5px;
   }
 `;
 
@@ -252,13 +315,30 @@ const NoticeTitleBox = styled.div`
     align-items: center;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    display: none;
+    width: 45px;
+    height: 25px;
+    color: #334ebc;
+    border: 1px solid #334ebc;
+    font-size: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
 const NoticeListSpan = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     font-size: 11px;
+    font-weight: 600;
+    width: 55%;
+    max-width: 200px;
+    color: #0c1b58;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    font-size: 17px;
     font-weight: 600;
     width: 55%;
     color: #0c1b58;
@@ -271,6 +351,11 @@ const NoticeListSpan = styled.div`
 const NoticeDate = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     font-size: 11px;
+    font-weight: 600;
+    float: rigth;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    font-size: 16px;
     font-weight: 600;
     float: rigth;
   }

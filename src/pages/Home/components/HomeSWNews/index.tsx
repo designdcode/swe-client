@@ -64,7 +64,7 @@ const HomeSWNews: React.VFC = () => {
     },
     onCompleted: ({ getBoardByCategory }) => {
       const { ok, err, data } = getBoardByCategory;
-      if (ok && data) {
+      if (ok && data && data.length > 0) {
         setVurl(data[data.length - 1].images);
         setSdata(data);
       } else {
@@ -81,7 +81,7 @@ const HomeSWNews: React.VFC = () => {
     },
     onCompleted: ({ getBoardByCategory }) => {
       const { ok, err, data } = getBoardByCategory;
-      if (ok && data) {
+      if (ok && data && data.length > 0) {
         setCurl(data[data.length - 1].images);
         setCdata(data);
       } else {
@@ -98,7 +98,7 @@ const HomeSWNews: React.VFC = () => {
     },
     onCompleted: ({ getBoardByCategory }) => {
       const { ok, err, data } = getBoardByCategory;
-      if (ok && data) {
+      if (ok && data && data.length > 0) {
         setSurl(data[data.length - 1].images);
         setSdata(data);
       } else {
@@ -122,9 +122,9 @@ const HomeSWNews: React.VFC = () => {
 
   return (
     <Wrapper>
-      {/* <Content>
+      <Content>
         <Row>
-          <Section to="/">
+          <Section>
             {aloading ? (
               <>loading</>
             ) : (
@@ -141,7 +141,11 @@ const HomeSWNews: React.VFC = () => {
                     </Link>
                   </div>
                 </SectionTitle>
-                <SectionContent>
+                <SectionContent
+                  to={`/main/detail/achievement/achievement-aidnews/${
+                    adata && adata[adata.length - 1].id
+                  }`}
+                >
                   <SectionImage>
                     {aurl ? (
                       renderSectionImage(aurl[aurl.length - 1])
@@ -161,7 +165,7 @@ const HomeSWNews: React.VFC = () => {
               </>
             )}
           </Section>
-          <Section to="/">
+          <Section>
             {cloading ? (
               <>loading</>
             ) : (
@@ -178,7 +182,11 @@ const HomeSWNews: React.VFC = () => {
                     </Link>
                   </div>
                 </SectionTitle>
-                <SectionContent>
+                <SectionContent
+                  to={`/main/detail/achievement/achievement-coopnews/${
+                    cdata && cdata[cdata.length - 1].id
+                  }`}
+                >
                   <SectionImage>
                     {curl ? (
                       renderSectionImage(curl[curl.length - 1])
@@ -200,7 +208,7 @@ const HomeSWNews: React.VFC = () => {
           </Section>
         </Row>
         <Row>
-          <Section to="/">
+          <Section>
             {vloading ? (
               <>loading</>
             ) : (
@@ -217,7 +225,11 @@ const HomeSWNews: React.VFC = () => {
                     </Link>
                   </div>
                 </SectionTitle>
-                <SectionContent>
+                <SectionContent
+                  to={`/main/detail/achievement/achievement-valuenews/${
+                    vdata && vdata[vdata.length - 1].id
+                  }`}
+                >
                   <SectionImage>
                     {vurl ? (
                       renderSectionImage(vurl[vurl.length - 1])
@@ -237,11 +249,7 @@ const HomeSWNews: React.VFC = () => {
               </>
             )}
           </Section>
-          <Section
-            to={`/main/detail/achievement/achievement-startup/${
-              sdata && sdata[sdata.length - 1].id
-            }`}
-          >
+          <Section>
             {sloading ? (
               <>loading</>
             ) : (
@@ -258,7 +266,11 @@ const HomeSWNews: React.VFC = () => {
                     </Link>
                   </div>
                 </SectionTitle>
-                <SectionContent>
+                <SectionContent
+                  to={`/main/detail/achievement/achievement-startup/${
+                    sdata && sdata[sdata.length - 1].id
+                  }`}
+                >
                   <SectionImage>
                     {surl ? (
                       renderSectionImage(surl[surl.length - 1])
@@ -279,7 +291,7 @@ const HomeSWNews: React.VFC = () => {
             )}
           </Section>
         </Row>
-      </Content> */}
+      </Content>
     </Wrapper>
   );
 };
@@ -327,7 +339,7 @@ const Row = styled.div`
   }
 `;
 
-const Section = styled(Link)`
+const Section = styled.div`
   color: black;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     height: 250px;
@@ -399,7 +411,7 @@ const SectionTitle = styled.div`
   }
 `;
 
-const SectionContent = styled.div`
+const SectionContent = styled(Link)`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     display: flex;
     width: 100%;
@@ -432,6 +444,8 @@ const SectionImage = styled.div`
 `;
 
 const SectionDesc = styled.div`
+  color: black;
+
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     width: 50%;
     height: 100%;
