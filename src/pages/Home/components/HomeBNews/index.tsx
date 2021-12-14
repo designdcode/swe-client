@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client";
 import styled from "@emotion/styled";
 import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
+import { useWindowSize } from "../../../../hooks/useWindowSize";
 import { GET_BOARD_BY_CATEGORY } from "../../../../queries/adminQuery";
 import {
   getBoardByCategory,
@@ -15,6 +16,7 @@ import {
 } from "../../../../utils/mediaQuery";
 
 const HomeBNews: React.VFC = () => {
+  const screen = useWindowSize();
   const [data, setData] = useState<
     getBoardByCategory_getBoardByCategory_data[] | undefined | null
   >();
@@ -44,7 +46,7 @@ const HomeBNews: React.VFC = () => {
     <Wrapper>
       <Container>
         <TitleWithLine>
-          <div>
+          <div className="main-sub-title">
             <div className="line"></div>
             <span className="title">사업단소식</span>
           </div>
@@ -70,28 +72,42 @@ const HomeBNews: React.VFC = () => {
           {!data ? (
             <>업로드 된 소식이 없습니다</>
           ) : (
-            <Carousel
-              showIndicators={false}
-              showStatus={false}
-              showThumbs={false}
-              showArrows={false}
-              selectedItem={currentDot}
-              infiniteLoop={true}
-              width={285}
-            >
-              {data.map((item, idx) => {
-                let url: string | undefined = "";
-                if (item.images && item.images.length > 0) {
-                  url = item.images[item.images.length - 1]?.url;
-                }
-                return (
-                  <CarouselContent key={idx}>
-                    <Image src={url !== "" ? url : url} alt="news image" />
-                    <div className="carousel-text">{item.title}</div>
-                  </CarouselContent>
-                );
-              })}
-            </Carousel>
+            <>
+              {screen.width < 376 ? (
+                <Carousel
+                  showIndicators={false}
+                  showStatus={false}
+                  showThumbs={false}
+                  showArrows={false}
+                  selectedItem={currentDot}
+                  infiniteLoop={true}
+                  width={285}
+                >
+                  {data.map((item, idx) => {
+                    let url: string | undefined = "";
+                    if (item.images && item.images.length > 0) {
+                      url = item.images[item.images.length - 1]?.url;
+                    }
+                    return (
+                      <CarouselContent key={idx}>
+                        <Image src={url !== "" ? url : url} alt="news image" />
+                        <div className="carousel-text">{item.title}</div>
+                      </CarouselContent>
+                    );
+                  })}
+                </Carousel>
+              ) : (
+                <div className="card-container">
+                  {data.map((item, idx) => {
+                    let url: string | undefined = "";
+                    if (item.images && item.images.length > 0) {
+                      url = item.images[item.images.length - 1]?.url;
+                    }
+                    return <Card key={idx}>card</Card>;
+                  })}
+                </div>
+              )}
+            </>
           )}
         </Content>
       </Container>
@@ -113,7 +129,7 @@ const Wrapper = styled.div`
     background-size: cover;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    min-height: 400px;
+    min-height: 450px;
     max-width: 1980px;
     background-position: center;
   }
@@ -126,9 +142,10 @@ const Container = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 900px;
-    min-height: 400px;
+    min-height: 450px;
     margin: 0 auto;
     border: 1px solid white;
+    flex-direction: column;
   }
 `;
 
@@ -153,14 +170,27 @@ const TitleWithLine = styled.div`
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    & .line {
-      width: 25px;
-      border-bottom: 3px solid #c53082;
+    & .main-sub-title {
+      width: 100%;
+      display: flex;
+      position: relative;
+      height: 60px;
     }
+
+    & .line {
+      width: 1px;
+      height: 60px;
+      border-left: 10px solid #c53082;
+      margin-right: 10px;
+    }
+
     & .title {
       font-size: 17px;
       font-weight: 600;
       color: white;
+      display: block;
+      text-align: end;
+      padding-top: 30px;
     }
   }
 `;
@@ -172,6 +202,10 @@ const Image = styled.img`
     height: 260px;
     object-fit: cover;
   }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 100%;
+    height: 250px;
+  }
 `;
 
 const Content = styled.div`
@@ -180,6 +214,19 @@ const Content = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 100%;
+    margin-top: 15px;
+    height: 360px;
+    border: 1px solid tomato;
+    padding-bottom: 20px;
+    & .card-container {
+      display: flex;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
   }
 `;
 
@@ -193,8 +240,8 @@ const Dot = styled.div<DotProps>`
   }
 `;
 const CarouselContent = styled.div`
+  width: 100%;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    width: 100%;
     max-width: 375px;
     margin: 0 auto;
     & .carousel-text {
@@ -207,5 +254,14 @@ const CarouselContent = styled.div`
       overflow: hidden;
       text-overflow: ellipsis;
     }
+  }
+`;
+
+const Card = styled.div`
+  width: 280px;
+  height: 100%;
+  border: 1px solid cyan;
+  &:not(:last-child) {
+    margin-right: 40px;
   }
 `;
