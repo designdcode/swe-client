@@ -10,6 +10,9 @@ import {
 import { BsHouseFill } from "react-icons/bs";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { getBoardByCategory } from "../../typings/api";
+import { GET_BOARD_BY_CATEGORY } from "../../queries/adminQuery";
 
 interface ParamProps {
   param: string;
@@ -21,12 +24,24 @@ interface middleMenuProps {
 }
 
 interface MenuCellProps {
-  first: boolean;
+  first: number;
 }
 
 const Detail = () => {
   const screen = useWindowSize();
   const { param, subparam } = useParams<ParamProps>();
+  const { loading, data } = useQuery<getBoardByCategory>(
+    GET_BOARD_BY_CATEGORY,
+    {
+      variables: {
+        category: subparam,
+      },
+    }
+  );
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
   return (
     <Wrapper>
       <Cover>
@@ -49,7 +64,7 @@ const Detail = () => {
             {NavigationData.map((item, idx) => {
               if (item.title === param) {
                 return item.subMenu.map((elem, i) => {
-                  const colored = elem.key === subparam;
+                  const colored = elem.key === subparam ? 0 : 1;
                   return (
                     <ContentCell className="submenu-col" first={colored}>
                       <FakeLine first={colored} />
@@ -72,16 +87,13 @@ const Detail = () => {
       </Cover>
 
       <Content>
-        <ContentImage>hello</ContentImage>
-        <ContentBackCover>
-          <div className="cover-back">
-            <img src="/img/detailBackLeft.jpeg" alt="left" />
-          </div>
-
-          <div className="cover-back">
-            <img src="/img/detailBackRight.jpeg" alt="left" />
-          </div>
-        </ContentBackCover>
+        <ContentImage>
+          {data?.getBoardByCategory.data?.map((elem) => {
+            return elem?.images?.map((file) => {
+              return <img src={file?.url} alt="file" />;
+            });
+          })}
+        </ContentImage>
       </Content>
     </Wrapper>
   );
@@ -98,10 +110,10 @@ const Wrapper = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     margin-top: 15px;
-    border: 1px solid black;
     width: 100%;
     min-width: 1280px;
     max-width: 1920px;
+    min-height: 100%;
   }
 `;
 
@@ -112,7 +124,6 @@ const Cover = styled.div`
     width: 100%;
     height: 350px;
     margin: 0 auto;
-    border: 1px solid red;
     position: relative;
     & img {
       height: 100%;
@@ -165,7 +176,6 @@ const SubMenu = styled.div<middleMenuProps>`
 			width: 1280px;
 			min-height: 50px;
       height: ${(props) => (props.isBigger ? "120px" : "60px")}
-			border: 1px solid green;
 			margin: 0 auto;
       display: flex;
       align-items:center;
@@ -186,15 +196,21 @@ const SubMenu = styled.div<middleMenuProps>`
 `;
 
 const StyleLink = styled(Link)<MenuCellProps>`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
 
-  color: ${(props) => (props.first ? "white" : "black")};
-  &:hover {
-    color: white;
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 5px;
+
+    color: ${(props) => (props.first === 0 ? "white" : "black")};
+    &:hover {
+      color: white;
+    }
   }
 `;
 
@@ -203,12 +219,11 @@ const ContentCell = styled.div<MenuCellProps>`
   }
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    background-color: ${(props) => (props.first ? "#0c1b58" : "")};
-    color: ${(props) => (props.first ? "white" : "black")};
+    background-color: ${(props) => (props.first === 0 ? "#0c1b58" : "")};
+    color: ${(props) => (props.first === 0 ? "white" : "black")};
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 2px;
     &:hover {
       background-color: #0c1b58;
       transition: 0.2s linear;
@@ -224,7 +239,7 @@ const FakeLine = styled.div<MenuCellProps>`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 50%;
     height: 2px;
-    border-top: ${(props) => (props.first ? "2px solid white" : "")};
+    border-top: ${(props) => (props.first === 0 ? "2px solid white" : "")};
   }
 `;
 
@@ -236,43 +251,15 @@ const Content = styled.div`
     width: 1280px;
     min-height: 100vh;
     margin: 0 auto;
-    border: 1px solid blue;
-    position: relative;
   }
 `;
-const ContentBackCover = styled.div`
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-  }
 
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    position: absolute;
-    top: 0;
-    z-index: 1;
-    & .cover-back {
-      width: 100%;
-      &:last-child {
-        display: flex;
-        justify-content: flex-end;
-      }
-    }
-    & img {
-      width: 200px;
-    }
-  }
-`;
 const ContentImage = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
   }
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 100%;
-    min-height: 100%;
-    position: absolute;
-    z-index: 5;
+    height: 100%;
   }
 `;
