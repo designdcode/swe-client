@@ -14,5 +14,6 @@ export const Wrapper = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     max-width: 1920px;
     margin-top: 15px;
+    margin: 0 auto;
   }
 `;

@@ -10,5 +10,6 @@ export const Content = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    margin: 0 auto;
   }
 `;
