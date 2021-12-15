@@ -88,7 +88,7 @@ export const AdminNavData: NavProps[] = [
       {
         key: "basic-online",
         title: "basic-online",
-        ko_title: "개방형 온라인 플랫폼(K-MOOC)",
+        ko_title: "개방형 온라인 플랫폼",
       },
     ],
   },
@@ -119,7 +119,7 @@ export const AdminNavData: NavProps[] = [
       {
         key: "major-verify",
         title: "major-verify",
-        ko_title: "소프트웨어 전문역량 인증제",
+        ko_title: "소프트웨어 전문역량인증제",
       },
       {
         key: "major-contest",
@@ -217,17 +217,17 @@ export const AdminNavData: NavProps[] = [
       {
         key: "cooperation-network",
         title: "cooperation-network",
-        ko_title: "국내 · 외 기관과의 네트워크",
+        ko_title: "국내·외 기관과의네트워크",
       },
       {
         key: "cooperation-project",
         title: "cooperation-project",
-        ko_title: "국내 · 외 기관과의 프로젝트",
+        ko_title: "국내·외 기관과의프로젝트",
       },
       {
         key: "cooperation-internship",
         title: "cooperation-internship",
-        ko_title: "국내 · 외 기관과의 연계 인턴쉽",
+        ko_title: "국내·외 기관과연계인턴쉽",
       },
     ],
   },

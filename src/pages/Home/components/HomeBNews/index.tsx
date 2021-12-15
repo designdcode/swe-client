@@ -258,10 +258,17 @@ const CarouselContent = styled.div`
 `;
 
 const Card = styled.div`
-  width: 280px;
-  height: 100%;
-  border: 1px solid cyan;
-  &:not(:last-child) {
-    margin-right: 40px;
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 200px;
+    height: 100%;
+    border: 1px solid cyan;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 280px;
+    height: 100%;
+    border: 1px solid cyan;
+    &:not(:last-child) {
+      margin-right: 40px;
+    }
   }
 `;
