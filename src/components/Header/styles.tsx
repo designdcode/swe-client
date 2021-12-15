@@ -60,7 +60,7 @@ export const Cover = styled.div`
   height: 0;
   border-top: 1px solid #0c1b58;
   background-color: black;
-  border-right: 1px solid #303952;
+
   & .link {
     color: white;
     &:hover {
