@@ -8,6 +8,7 @@ import {
 export const Wrapper = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     width: 100%;
+    /* max-width:375px; */
     min-height: 100vh;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {

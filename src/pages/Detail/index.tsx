@@ -7,7 +7,6 @@ import {
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../utils/mediaQuery";
-import { BsHouseFill } from "react-icons/bs";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
@@ -30,6 +29,7 @@ interface MenuCellProps {
 const Detail = () => {
   const screen = useWindowSize();
   const { param, subparam } = useParams<ParamProps>();
+  console.log(param);
   const { loading, data } = useQuery<getBoardByCategory>(
     GET_BOARD_BY_CATEGORY,
     {
@@ -59,7 +59,9 @@ const Detail = () => {
             }
           })}
         </CoverTitle>
-        <SubMenu isBigger={true}>
+        <SubMenu
+          isBigger={param === "major" || param === "basic" ? true : false}
+        >
           <div className="submenu-content">
             {NavigationData.map((item, idx) => {
               if (item.title === param) {
@@ -162,37 +164,33 @@ const CoverTitle = styled.div<CoverTitleMarginProps>`
 `;
 
 const SubMenu = styled.div<middleMenuProps>`
-	${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-	}
-	${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-		width: 100%;
-		background-color: #e5e2e2b8;
-		position: absolute;
-		bottom: 0;
-  
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 100%;
+    background-color: #e5e2e2b8;
+    position: absolute;
+    bottom: 0;
     font-size: 15px;
-
-		& .submenu-content {
-			width: 1280px;
-			min-height: 50px;
-      height: ${(props) => (props.isBigger ? "120px" : "60px")}
-			margin: 0 auto;
+    & .submenu-content {
+      width: 1280px;
+      min-height: 50px;
+      height: ${(props) => (props.isBigger ? "100px" : "50px")};
+      margin: 0 auto;
       display: flex;
-      align-items:center;
-      flex-wrap:wrap;
-        padding-left: 160px;
-
-      }
-      & .submenu-col {
-        width:170px;
-        height:50px;
-        display: flex;
-        display: flex;
-      align-items:center;
+      align-items: center;
+      flex-wrap: wrap;
+      padding-left: 160px;
+    }
+    & .submenu-col {
+      width: 170px;
+      height: 50px;
+      display: flex;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      }
-		}
-	}
+    }
+  }
 `;
 
 const StyleLink = styled(Link)<MenuCellProps>`
@@ -259,7 +257,13 @@ const ContentImage = styled.div`
   }
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    padding: 60px 0;
     width: 100%;
-    height: 100%;
+    display: flex;
+    justify-content: center;
+    & img {
+      width: 80%;
+      margin: 0 auto;
+    }
   }
 `;

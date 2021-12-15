@@ -126,6 +126,7 @@ export default HomeBoard;
 const Wrapper = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     min-height: 400px;
+    width: 100%;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     height: 400px;

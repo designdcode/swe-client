@@ -86,30 +86,42 @@ export default HomeBanner;
 const Wrapper = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     height: 400px;
+    width: 100%;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    height: 650px;
     width: 100%;
     max-width: 1920px;
   }
 `;
 
 const ImageBox = styled.div`
+  width: 100%;
+  height: 100%;
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    margin: 0;
+  }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 100%;
-    height: 100%;
   }
 `;
 
 const Image = styled.img`
-  height: 400px;
   object-fit: contain;
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    height: 400px;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    height: 640px;
+    width: 1280px;
+  }
 `;
 
 const ImageCover = styled.img`
   height: 400px;
   object-fit: cover;
   position: absolute;
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    height: 640px;
+  }
 `;
 
 export const CoverContent = styled.span`

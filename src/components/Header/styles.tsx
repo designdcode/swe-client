@@ -57,13 +57,21 @@ export const HeaderMain = styled.div``;
 export const Cover = styled.div`
   transform: scaleY(0);
   visibility: hidden;
-  opacity: 0.9;
   height: 0;
   border-top: 1px solid #0c1b58;
-  background-color: #1d2b64;
+  background-color: black;
   border-right: 1px solid #303952;
+  & li {
+    min-height: 25px;
+    margin: 5px 0;
+  }
+  & li > .link {
+    color: white;
+    &:hover {
+      color: #808080;
+    }
+  }
   &:hover {
-    opacity: 0.9;
     background-color: #0c1b58;
     transition: 0.2s linear;
   }
@@ -79,7 +87,6 @@ export const MainDesktop = styled.div`
       align-items: center;
       display: flex;
       justify-content: space-between;
-      /* border-bottom: 1px solid black; */
       margin: 0 auto;
       height: 80px;
     }
@@ -91,12 +98,12 @@ export const MainDesktop = styled.div`
       display: flex;
       justify-content: center;
       background-color: #0c1b58;
-
       &:hover ${Cover} {
         visibility: visible;
         transform: scaleY(1);
         height: 320px;
-        opacity: 0.9;
+        opacity: 0.8;
+        padding-top: 7px;
         transition: height 0.1s ease-in;
         position: absolute;
         z-index: 1000;
@@ -108,7 +115,7 @@ export const MainDesktop = styled.div`
       }
 
       .header-title {
-        width: 142px;
+        width: 141px;
         height: 50%;
         margin: 10px 0;
         display: flex;
@@ -132,19 +139,20 @@ export const MainDesktop = styled.div`
 
       ul {
         padding: 0;
-        width: 142px;
+        width: 141px;
         list-style: none;
         cursor: pointer;
         position: relative;
       }
       li {
-        width: 142px;
-        font-size: 10px;
+        width: 141px;
+        font-size: 11.5px;
         line-height: 25px;
         text-align: center;
         color: white;
         height: 0;
         cursor: pointer;
+        padding: 2px 4px;
         &:hover {
           color: #f03fa8;
           transition: 0.2s linear;
@@ -155,10 +163,12 @@ export const MainDesktop = styled.div`
 `;
 export const HeaderLine = styled.div<LineProps>`
   width: 100%;
-  height: 3px;
+  height: 4px;
   margin-bottom: 3px;
   background-color: ${(props) => (props.hoverProps ? "#f03fa8" : "none")};
-  transition: 0.2s linear;
+  /* transition: 0.2s linear; */
+  transition-property: opacity, left;
+  transition-duration: 3s, 5s, 2s, 1s;
 `;
 
 export const MainMobile = styled.div`

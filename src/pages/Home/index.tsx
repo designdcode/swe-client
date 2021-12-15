@@ -1,4 +1,5 @@
 import React from "react";
+import { useWindowSize } from "../../hooks/useWindowSize";
 import { Wrapper } from "../styles";
 import HomeBanner from "./components/HomeBanner";
 import HomeBNews from "./components/HomeBNews";
