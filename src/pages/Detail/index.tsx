@@ -29,7 +29,6 @@ interface MenuCellProps {
 const Detail = () => {
   const screen = useWindowSize();
   const { param, subparam } = useParams<ParamProps>();
-  console.log(param);
   const { loading, data } = useQuery<getBoardByCategory>(
     GET_BOARD_BY_CATEGORY,
     {
@@ -146,7 +145,7 @@ const CoverTitle = styled.div<CoverTitleMarginProps>`
     margin-top: 50px;
     & .cover-main-title {
       font-size: 40px;
-      font-weight: 600;
+      font-weight: 500;
       letter-spacing: 0.43px;
       color: #ffffff;
       text-shadow: 3px 3px 3px #000000e3;

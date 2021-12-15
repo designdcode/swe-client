@@ -61,16 +61,25 @@ export const Cover = styled.div`
   border-top: 1px solid #0c1b58;
   background-color: black;
   border-right: 1px solid #303952;
-  & li {
-    min-height: 25px;
-    margin: 5px 0;
-  }
-  & li > .link {
+  & .link {
     color: white;
     &:hover {
-      color: #808080;
+      color: #0c1b58;
     }
   }
+
+  & li {
+    width: 100%;
+    height: 100%;
+    min-height: 25px;
+    margin: 5px 0;
+    width: 141px;
+    &:hover {
+      background-color: white;
+      color: #0c1b58;
+    }
+  }
+
   &:hover {
     background-color: #0c1b58;
     transition: 0.2s linear;
@@ -137,14 +146,14 @@ export const MainDesktop = styled.div`
         }
       }
 
-      ul {
+      & ul {
         padding: 0;
         width: 141px;
         list-style: none;
         cursor: pointer;
         position: relative;
       }
-      li {
+      & li {
         width: 141px;
         font-size: 11.5px;
         line-height: 25px;
@@ -154,7 +163,7 @@ export const MainDesktop = styled.div`
         cursor: pointer;
         padding: 2px 4px;
         &:hover {
-          color: #f03fa8;
+          color: #0c1b58;
           transition: 0.2s linear;
         }
       }

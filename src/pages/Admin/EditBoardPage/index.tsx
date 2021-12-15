@@ -399,13 +399,9 @@ const EditBoardPage: React.VFC = () => {
           disabled={uploadLoading}
         >
           {!loading ? (
-            progress <= 0 ? (
-              "올리기"
-            ) : (
-              <>
-                <LoadingOutlined /> 이미지 / 파일 업로드 중입니다...
-              </>
-            )
+            <>
+              <LoadingOutlined /> 이미지 / 파일 업로드 중입니다...
+            </>
           ) : (
             "Uploading..."
           )}

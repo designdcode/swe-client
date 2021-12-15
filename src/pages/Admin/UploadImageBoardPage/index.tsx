@@ -39,6 +39,7 @@ const UploadImageBoardPage = () => {
   const [isLinkNeeded, setIsLinkNeeded] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [loading, setLoading] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setIsLinkNeeded(linkSwitcher(subparam as string));
@@ -87,6 +88,7 @@ const UploadImageBoardPage = () => {
       const filename = file.name;
       setImgName(file.name);
       setLoading(true);
+      setUploadLoading(true);
       fileUploader(
         "images",
         file,
@@ -96,6 +98,7 @@ const UploadImageBoardPage = () => {
         progress,
         setProgress
       );
+      setUploadLoading(false);
       setProgress(0);
     },
     [category, progress]
@@ -203,19 +206,11 @@ const UploadImageBoardPage = () => {
           </Upload>
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button
-            type={"primary"}
-            htmlType="submit"
-            disabled={progress !== 0 ? true : false}
-          >
+          <Button type={"primary"} htmlType="submit" disabled={uploadLoading}>
             {!loading ? (
-              progress <= 0 ? (
-                "올리기"
-              ) : (
-                <>
-                  <LoadingOutlined /> 이미지 / 파일 업로드 중입니다...
-                </>
-              )
+              <>
+                <LoadingOutlined /> 이미지 / 파일 업로드 중입니다...
+              </>
             ) : (
               "Uploading..."
             )}

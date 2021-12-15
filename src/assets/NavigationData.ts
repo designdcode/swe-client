@@ -123,7 +123,7 @@ export const NavigationData: NavProps[] = [
       {
         key: "major-verify",
         title: "major-verify",
-        ko_title: "소프트웨어 전문역량인증제",
+        ko_title: "소프트웨어전문역량인증제",
       },
       {
         key: "major-contest",
