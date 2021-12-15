@@ -1,6 +1,10 @@
 import { useQuery } from "@apollo/client";
 import styled from "@emotion/styled";
+import { Card as StyledCard } from "antd";
+import Meta from "antd/lib/card/Meta";
+import Text from "antd/lib/typography/Text";
 import React, { useState } from "react";
+import { useEffect } from "react-dom/node_modules/@types/react";
 import { Carousel } from "react-responsive-carousel";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
 import { GET_BOARD_BY_CATEGORY } from "../../../../queries/adminQuery";
@@ -17,7 +21,7 @@ import {
 
 const HomeBNews: React.VFC = () => {
   const screen = useWindowSize();
-  const [data, setData] = useState<
+  const [newsData, setNewsData] = useState<
     getBoardByCategory_getBoardByCategory_data[] | undefined | null
   >();
   const [currentDot, setCurrentDot] = useState<number>(0);
@@ -29,8 +33,8 @@ const HomeBNews: React.VFC = () => {
       },
       onCompleted: ({ getBoardByCategory }) => {
         const { ok, data, err } = getBoardByCategory;
-        if (ok && data) {
-          setData(data);
+        if (ok && data && data !== null) {
+          setNewsData(data);
         } else {
           console.log(err);
         }
@@ -50,9 +54,9 @@ const HomeBNews: React.VFC = () => {
             <div className="line"></div>
             <span className="title">사업단소식</span>
           </div>
-          {data && data !== null && (
+          {newsData && newsData !== null && (
             <div className="dots">
-              {data.map((item, idx) => {
+              {newsData.map((item, idx) => {
                 if (idx < 5) {
                   return (
                     <Dot
@@ -69,7 +73,7 @@ const HomeBNews: React.VFC = () => {
           )}
         </TitleWithLine>
         <Content>
-          {!data ? (
+          {!newsData ? (
             <>업로드 된 소식이 없습니다</>
           ) : (
             <>
@@ -83,7 +87,7 @@ const HomeBNews: React.VFC = () => {
                   infiniteLoop={true}
                   width={285}
                 >
-                  {data.map((item, idx) => {
+                  {newsData.map((item, idx) => {
                     let url: string | undefined = "";
                     if (item.images && item.images.length > 0) {
                       url = item.images[item.images.length - 1]?.url;
@@ -98,12 +102,31 @@ const HomeBNews: React.VFC = () => {
                 </Carousel>
               ) : (
                 <div className="card-container">
-                  {data.map((item, idx) => {
+                  {newsData.map((item, idx) => {
                     let url: string | undefined = "";
                     if (item.images && item.images.length > 0) {
                       url = item.images[item.images.length - 1]?.url;
                     }
-                    return <Card key={idx}>card</Card>;
+                    if (idx > 2) {
+                      return null;
+                    }
+                    return (
+                      <Card
+                        key={idx}
+                        hoverable
+                        bordered={false}
+                        cover={
+                          <img
+                            src={url}
+                            alt="example"
+                            height={270}
+                            width={240}
+                          />
+                        }
+                      >
+                        <Text style={{ color: "white" }}>title</Text>
+                      </Card>
+                    );
                   })}
                 </div>
               )}
@@ -144,7 +167,6 @@ const Container = styled.div`
     width: 900px;
     min-height: 450px;
     margin: 0 auto;
-    border: 1px solid white;
     flex-direction: column;
   }
 `;
@@ -219,13 +241,12 @@ const Content = styled.div`
     width: 100%;
     margin-top: 15px;
     height: 360px;
-    border: 1px solid tomato;
     padding-bottom: 20px;
     & .card-container {
       display: flex;
       height: 100%;
       width: 100%;
-      overflow: hidden;
+      justify-content: space-between;
     }
   }
 `;
@@ -257,7 +278,7 @@ const CarouselContent = styled.div`
   }
 `;
 
-const Card = styled.div`
+const Card = styled(StyledCard)`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     width: 200px;
     height: 100%;
@@ -266,9 +287,6 @@ const Card = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 280px;
     height: 100%;
-    border: 1px solid cyan;
-    &:not(:last-child) {
-      margin-right: 40px;
-    }
+    background: transparent;
   }
 `;

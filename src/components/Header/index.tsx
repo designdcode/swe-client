@@ -103,12 +103,14 @@ const Header: React.VFC = () => {
                   </div>
                   <Cover>
                     {elem.subMenu.map((item, i) => {
+                      let to;
+                      if (item.title.split("-")[0] === "achievement") {
+                        to = `/main/board/${elem.title}/${item.key}`;
+                      } else {
+                        to = `/main/detail/${elem.title}/${item.key}`;
+                      }
                       return (
-                        <Link
-                          key={i}
-                          to={`/main/detail/${elem.title}/${item.key}`}
-                          className="link"
-                        >
+                        <Link key={i} to={to} className="link">
                           <li key={i}>{item.ko_title}</li>
                         </Link>
                       );

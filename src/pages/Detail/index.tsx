@@ -48,9 +48,9 @@ const Detail = () => {
           {NavigationData.map((item, idx) => {
             if (item.title === param) {
               return (
-                <div key={idx}>
+                <div key={item.key}>
                   <span className="cover-main-title">{item.ko_title}</span>
-                  <span className="cover-description">description</span>
+                  <span className="cover-description">{item.description}</span>
                 </div>
               );
             } else {
@@ -67,7 +67,11 @@ const Detail = () => {
                 return item.subMenu.map((elem, i) => {
                   const colored = elem.key === subparam ? 0 : 1;
                   return (
-                    <ContentCell className="submenu-col" first={colored}>
+                    <ContentCell
+                      className="submenu-col"
+                      first={colored}
+                      key={`${i}key`}
+                    >
                       <FakeLine first={colored} />
                       <StyleLink
                         to={`/main/detail/${param}/${elem.key}`}
@@ -89,11 +93,14 @@ const Detail = () => {
 
       <Content>
         <ContentImage>
-          {data?.getBoardByCategory.data?.map((elem) => {
-            return elem?.images?.map((file) => {
-              return <img src={file?.url} alt="file" />;
-            });
-          })}
+          {data?.getBoardByCategory.data &&
+            data.getBoardByCategory.data[0] &&
+            data.getBoardByCategory.data[0].images && (
+              <img
+                src={data.getBoardByCategory.data[0].images[0]?.url}
+                alt="uploadedImage"
+              />
+            )}
         </ContentImage>
       </Content>
     </Wrapper>
