@@ -65,6 +65,13 @@ const Admin: React.FC = () => {
     });
   }, []);
 
+  // useEffect(() => {
+  //   if (!showBreadCrumb) {
+  //     history.push('/admin')
+  //   }
+  // }, [showBreadCrumb, history])
+  console.log(params);
+
   useEffect(() => {
     const time = localStorage.getItem("admin");
     if (time) {

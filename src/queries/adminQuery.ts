@@ -8,6 +8,7 @@ export const CREATE_BOARD = gql`
     $files: [AttachModel]
     $images: [AttachModel]
     $link: String
+    $type: String
   ) {
     createBoard(
       title: $title
@@ -16,6 +17,7 @@ export const CREATE_BOARD = gql`
       files: $files
       images: $images
       link: $link
+      type: $type
     ) {
       ok
       err
@@ -69,6 +71,7 @@ export const EDIT_BOARD = gql`
     $content: String
     $link: String
     $private: Boolean
+    $type: String
   ) {
     editBoard(
       id: $id
@@ -76,6 +79,7 @@ export const EDIT_BOARD = gql`
       content: $content
       link: $link
       private: $private
+      type: $type
     ) {
       ok
       err

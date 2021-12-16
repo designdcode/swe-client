@@ -1,8 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import queryString from "query-string";
 import useInput from "../../../hooks/useInput";
 import { Container } from "./styles";
-import { Form, Input, Button, Checkbox, Upload, Switch } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Checkbox,
+  Upload,
+  Switch,
+  Menu,
+  Dropdown,
+} from "antd";
 import { useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_BOARD } from "../../../queries/adminQuery";
@@ -13,6 +22,7 @@ import {
   fileSwitcher,
   imageSwitcher,
   linkSwitcher,
+  typeSwitcher,
 } from "../../../utils/switcher";
 import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import { fileUploader } from "../../../utils/fileUploader";
@@ -49,14 +59,17 @@ const UploadBoardPage: React.VFC = () => {
   const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
   const [isImageNeeded, setIsImageNeeded] = useState<boolean>(false);
   const [isContentNeeded, setIsContentNeeded] = useState<boolean>(true);
+  const [isTypeNeeded, setIsTypeNeeded] = useState<boolean>(false);
   const [checkPublic, setCheckPublic] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
+  const [type, setType] = useState<{ type: string; title: string }>();
 
   useEffect(() => {
     setIsImageNeeded(imageSwitcher(subparam as string));
     setIsLinkNeeded(linkSwitcher(subparam as string));
     setIsFileNeeded(fileSwitcher(subparam as string));
     setIsContentNeeded(contentSwitcher(subparam as string));
+    setIsTypeNeeded(typeSwitcher(subparam as string));
   }, [subparam]);
 
   const [createBoard, { loading }] = useMutation(CREATE_BOARD, {
@@ -97,6 +110,7 @@ const UploadBoardPage: React.VFC = () => {
           files: file.length !== 0 ? file : null,
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
           private: checkPublic,
+          type: type?.type,
         },
       });
     } else if (imgUrl) {
@@ -109,6 +123,7 @@ const UploadBoardPage: React.VFC = () => {
           files: null,
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
           private: checkPublic,
+          type: type?.type,
         },
       });
     } else {
@@ -119,6 +134,7 @@ const UploadBoardPage: React.VFC = () => {
           link: link.trim() ? link : null,
           private: checkPublic,
           category,
+          type: type?.type,
         },
       });
     }
@@ -132,6 +148,7 @@ const UploadBoardPage: React.VFC = () => {
     imgName,
     imgUrl,
     checkPublic,
+    type,
   ]);
 
   const handleImageUpload = useCallback(
@@ -197,6 +214,106 @@ const UploadBoardPage: React.VFC = () => {
     [category, file]
   );
 
+  const valueMenu = useMemo(() => {
+    return (
+      <Menu style={{ width: 150 }}>
+        <Menu.Item key="0">
+          <div
+            onClick={() =>
+              setType({
+                type: "edu",
+                title: "수요중심",
+              })
+            }
+          >
+            수요중심
+          </div>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <div
+            onClick={() =>
+              setType({
+                type: "training",
+                title: "선도자양성",
+              })
+            }
+          >
+            선도자양성
+          </div>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <div
+            onClick={() =>
+              setType({
+                type: "share",
+                title: "가치공유",
+              })
+            }
+          >
+            가치공유
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+  }, []);
+
+  const coopMenu = useMemo(() => {
+    return (
+      <Menu style={{ width: 150 }}>
+        <Menu.Item key="0">
+          <div
+            onClick={() =>
+              setType({
+                type: "network",
+                title: "기관 네트워크",
+              })
+            }
+          >
+            기관 네트워크
+          </div>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <div
+            onClick={() =>
+              setType({
+                type: "project",
+                title: "기관 프로젝트",
+              })
+            }
+          >
+            기관 프로젝트
+          </div>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <div
+            onClick={() =>
+              setType({
+                type: "internship",
+                title: "기관 인턴쉽",
+              })
+            }
+          >
+            기관 인턴쉽
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+  }, []);
+
+  const handleMenu = useCallback(
+    (prop?: string) => {
+      switch (prop) {
+        case "coopnews":
+          return coopMenu;
+        case "valuenews":
+          return valueMenu;
+        default:
+          return valueMenu;
+      }
+    },
+    [coopMenu, valueMenu]
+  );
+
   useEffect(() => {
     if (progress < 0) {
       setProgress(0);
@@ -218,6 +335,16 @@ const UploadBoardPage: React.VFC = () => {
             {checkPublic ? "공개" : "비공개"}
           </span>
         </Form.Item>
+        {isTypeNeeded && (
+          <Form.Item name={["type"]} label="대분류">
+            <Dropdown
+              overlay={() => handleMenu(subparam?.toString().split("-")[1])}
+              trigger={["click"]}
+            >
+              <Button>{!type ? "선택하기" : type.title}&ensp;&ensp;&or;</Button>
+            </Dropdown>
+          </Form.Item>
+        )}
         {isLinkNeeded && (
           <>
             <div className="link-checkbox">

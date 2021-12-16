@@ -24,6 +24,20 @@ export const imageSwitcher = (subparam: string) => {
   }
 };
 
+export const typeSwitcher = (subparam: string) => {
+  const sub = subparam?.toString().split("-")[1];
+  switch (sub) {
+    case "aidnews":
+      return true;
+    case "valuenews":
+      return true;
+    case "coopnews":
+      return true;
+    default:
+      return false;
+  }
+};
+
 export const fileSwitcher = (subparam?: string | null) => {
   const sub = subparam?.toString().split("-")[0];
   switch (sub) {
