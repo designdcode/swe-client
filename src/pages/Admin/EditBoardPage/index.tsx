@@ -196,6 +196,7 @@ const EditBoardPage: React.VFC = () => {
 
   const handleFileUpload = useCallback(
     (file: any) => {
+      setUploadLoading(true);
       setProgress(progress + 1);
       const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
       upload.on(
@@ -228,6 +229,7 @@ const EditBoardPage: React.VFC = () => {
                   }
                 },
               });
+              setUploadLoading(false);
               setProgress(progress - 1);
             });
         }

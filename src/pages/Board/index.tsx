@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import {
   BREAKPOINT_BIGGER_THAN_PC,
@@ -14,9 +14,11 @@ import {
 } from "../../typings/api";
 import { getDate } from "../../utils/convertDate";
 import { Space, Table } from "antd";
-import * as StyledColumn from "antd/lib/table/Column";
 import Column from "antd/lib/table/Column";
 import { Link } from "react-router-dom";
+import { ConvertTitle } from "../../utils/convertTitle";
+import { NavigationData } from "../../assets/NavigationData";
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 interface ParamProps {
   param: string;
@@ -32,8 +34,11 @@ interface TableBoardProps {
 }
 
 const Board: React.VFC = () => {
+  const screen = useWindowSize();
   const { param, subparam } = useParams<ParamProps>();
   const [boards, setBoards] = useState<Array<TableBoardProps>>();
+  const [title, setTitle] = useState<string>();
+  const [writeAble, setWriteAble] = useState<boolean>(false);
   const { loading } = useQuery<getBoardByCategory, getBoardByCategoryVariables>(
     GET_BOARD_BY_CATEGORY,
     {
@@ -61,19 +66,45 @@ const Board: React.VFC = () => {
       },
     }
   );
-  console.log(param, subparam);
+  useEffect(() => {
+    setTitle(ConvertTitle(subparam));
+    if (subparam.split("-")[1] === "request") {
+      setWriteAble(true);
+    }
+  }, [subparam]);
 
   if (loading && !boards) {
     return <div>loading...</div>;
   }
   return (
     <Wrapper>
+      <Cover>
+        <CoverTitle>
+          {NavigationData.map((item, idx) => {
+            if (item.title === param.split("-")[0]) {
+              return (
+                <div key={item.key}>
+                  <span className="cover-main-title">{item.ko_title}</span>
+                  <span className="cover-description">{item.description}</span>
+                </div>
+              );
+            } else {
+              return null;
+            }
+          })}
+        </CoverTitle>
+        <img src="/img/detailBG.jpeg" alt="cover" />
+      </Cover>
+      <BoardTitle>
+        {title}
+        {writeAble && <Link to="/">글쓰기</Link>}
+      </BoardTitle>
       <StyledTable dataSource={boards} rowKey={"id"}>
         <Column
           title={() => {
             return (
               <Space>
-                <TableTitle>번호</TableTitle>
+                <TableTitle>{screen.width > 375 ? "번호" : "#"}</TableTitle>
               </Space>
             );
           }}
@@ -82,7 +113,7 @@ const Board: React.VFC = () => {
           render={(text) => {
             return <TableDesc>{text}</TableDesc>;
           }}
-          width={80}
+          width={screen.width > 375 ? 80 : 30}
         />
         <Column
           title={() => {
@@ -98,7 +129,7 @@ const Board: React.VFC = () => {
           render={(text, record: TableBoardProps) => {
             return (
               <Space>
-                <Link to="/main">
+                <Link to={`/main/detail/${param}/${subparam}/${record.id}`}>
                   <TableDesc>{text}</TableDesc>
                 </Link>
               </Space>
@@ -122,7 +153,7 @@ const Board: React.VFC = () => {
               </Space>
             );
           }}
-          width={150}
+          width={screen.width > 375 ? 150 : 65}
         />
         <Column
           title={() => {
@@ -137,7 +168,7 @@ const Board: React.VFC = () => {
           render={(text) => {
             return <TableDesc>{text}</TableDesc>;
           }}
-          width={150}
+          width={screen.width > 375 ? 150 : 90}
         />
       </StyledTable>
     </Wrapper>
@@ -149,7 +180,6 @@ export default Board;
 const Wrapper = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
   }
-
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     margin-top: 30px;
     max-width: 1280px;
@@ -159,8 +189,87 @@ const Wrapper = styled.div`
   }
 `;
 
+const Cover = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 100%;
+    height: 120px;
+    & img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    display: none;
+  }
+`;
+
+const CoverTitle = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    & .cover-main-title {
+      font-size: 20px;
+      font-weight: 500px;
+      color: white;
+      display: block;
+    }
+    & .cover-description {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.43px;
+      color: #ffffff;
+    }
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    display: none;
+  }
+`;
+
+const BoardTitle = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 100%;
+    height: 80px;
+    font-size: 20px;
+    color: #0c1b58;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    min-width: 350px;
+    margin: 0 auto;
+    font-size: 50px;
+    color: #0c1b58;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 30px;
+    & a {
+      background-color: #0c1b58;
+      font-size: 18px;
+      padding: 8px 12px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      &:hover {
+        color: #f03fa8;
+        transition: 0.2s linear;
+      }
+    }
+  }
+`;
+
 const StyledTable = styled(Table)`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    border-top: 4px solid #04083e;
+    margin: 0 20px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     border-top: 4px solid #04083e;
@@ -168,21 +277,24 @@ const StyledTable = styled(Table)`
 `;
 
 const TableTitle = styled.div`
+  color: #04083e;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    font-size: 8px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 600;
-    color: #04083e;
+    text-align: center;
   }
 `;
 
 const TableDesc = styled.div`
+  color: #04083e;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    font-size: 8px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    font-size: 19px;
+    font-size: 16px;
     font-weight: 500;
-    color: #04083e;
   }
 `;

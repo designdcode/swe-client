@@ -308,6 +308,7 @@ const Wrapper = styled.div`
     min-height: 500px;
     max-width: 1980px;
     background-position: center;
+    box-shadow: 0px 6px 11px 0px rgba(0, 0, 0, 0.89);
   }
 `;
 

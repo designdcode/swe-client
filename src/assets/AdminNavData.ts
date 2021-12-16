@@ -18,27 +18,27 @@ export const AdminNavData: NavProps[] = [
     subMenu: [
       {
         key: "intro-introduce",
-        title: "introduce",
+        title: "intro-introduce",
         ko_title: "인사말",
       },
       {
         key: "intro-overview",
-        title: "overview",
+        title: "intro-overview",
         ko_title: "사업개요",
       },
       {
         key: "intro-history",
-        title: "history",
+        title: "intro-history",
         ko_title: "연혁",
       },
       {
         key: "intro-task",
-        title: "task",
+        title: "intro-task",
         ko_title: "조직도 및 업무",
       },
       {
         key: "intro-route",
-        title: "route",
+        title: "intro-route",
         ko_title: "오시는길",
       },
     ],

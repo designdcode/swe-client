@@ -1,4 +1,10 @@
-import { FooterContaier } from "./styles";
+import styled from "@emotion/styled";
+import {
+  breakpoints,
+  BREAKPOINT_BIGGER_THAN_PC,
+  BREAKPOINT_PHONE_MEDIUM,
+  mediaQueries,
+} from "../../utils/mediaQuery";
 
 const Footer = () => {
   return (
@@ -11,8 +17,40 @@ const Footer = () => {
         Sunmoon-ro 221 beon-gil, Tangjeong-myeon, Asan-si, Chungcheongnam-do,
         korea , 31460
       </span>
+      <img src={"/img/mobileLogo.png"} alt="logoimg" />
     </FooterContaier>
   );
 };
 
 export default Footer;
+export const FooterContaier = styled.div`
+  width: 100%;
+  height: 230px;
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ededed;
+    font-size: 8px;
+    span {
+      display: block;
+      max-width: ${breakpoints.phoneMedium}px;
+      color: #747474;
+      text-align: center;
+      line-height: 10px;
+    }
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ededed;
+    span {
+      font-size: 14px;
+      display: block;
+      color: #aaaaaa;
+      text-align: center;
+      line-height: 20px;
+    }
+  }
+`;

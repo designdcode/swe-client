@@ -1,10 +1,8 @@
 import { useQuery } from "@apollo/client";
 import styled from "@emotion/styled";
 import { Card as StyledCard } from "antd";
-import Meta from "antd/lib/card/Meta";
 import Text from "antd/lib/typography/Text";
 import React, { useState } from "react";
-import { useEffect } from "react-dom/node_modules/@types/react";
 import { Carousel } from "react-responsive-carousel";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
 import { GET_BOARD_BY_CATEGORY } from "../../../../queries/adminQuery";
@@ -124,7 +122,11 @@ const HomeBNews: React.VFC = () => {
                           />
                         }
                       >
-                        <Text style={{ color: "white" }}>title</Text>
+                        <div className="card-desc">
+                          {/* <Text style={{ color: "white" }}> */}
+                          {item.title}
+                          {/* </Text> */}
+                        </div>
                       </Card>
                     );
                   })}
@@ -161,6 +163,7 @@ const Container = styled.div`
   display: flex;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     min-height: 400px;
+    flex-direction: column;
     padding: 25px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
@@ -174,6 +177,7 @@ const Container = styled.div`
 const TitleWithLine = styled.div`
   display: flex;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 100%;
     justify-content: space-between;
     margin-bottom: 25px;
     & .line {
@@ -288,5 +292,11 @@ const Card = styled(StyledCard)`
     width: 280px;
     height: 100%;
     background: transparent;
+    & .card-desc {
+      max-height: 65px;
+      color: white;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 `;

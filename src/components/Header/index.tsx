@@ -86,7 +86,24 @@ const Header: React.VFC = () => {
             <Link to="/main">
               <img src={"/img/logo.png"} alt="logo" />
             </Link>
-            <div>options</div>
+            <div>
+              <Link to="/main">
+                <img
+                  src={"/img/homeIcon.jpeg"}
+                  alt="home"
+                  width={40}
+                  height={40}
+                />
+              </Link>
+              <Link to="/main" style={{ marginLeft: 15 }}>
+                <img
+                  src={"/img/homeLogin.jpeg"}
+                  alt="login"
+                  width={40}
+                  height={40}
+                />
+              </Link>
+            </div>
           </div>
           <div className="main-menu">
             {NavigationData.map((elem: NavProps, idx) => {
@@ -104,7 +121,10 @@ const Header: React.VFC = () => {
                   <Cover>
                     {elem.subMenu.map((item, i) => {
                       let to;
-                      if (item.title.split("-")[0] === "achievement") {
+                      if (
+                        item.title.split("-")[0] === "achievement" ||
+                        item.title.split("-")[0] === "community"
+                      ) {
                         to = `/main/board/${elem.title}/${item.key}`;
                       } else {
                         to = `/main/detail/${elem.title}/${item.key}`;
@@ -181,9 +201,27 @@ const Header: React.VFC = () => {
                 bodyStyle={subDrawerStyle}
               >
                 {NavigationData[onMenu]?.subMenu.map((item, i) => {
+                  let to;
+                  if (
+                    item.title.split("-")[0] === "achievement" ||
+                    item.title.split("-")[0] === "community"
+                  ) {
+                    to = `/main/board/${item.title}/${item.key}`;
+                  } else {
+                    to = `/main/detail/${item.title}/${item.key}`;
+                  }
                   return (
-                    <MobileDrawerSubBlock>
-                      <button>{item.ko_title}</button>
+                    <MobileDrawerSubBlock
+                      key={i}
+                      onClick={() => {
+                        setDrawerVisible(false);
+                        setChildrenDrawer(false);
+                        setOnMenu(-1);
+                      }}
+                    >
+                      <Link to={to} style={{ color: "white" }}>
+                        {item.ko_title}
+                      </Link>
                     </MobileDrawerSubBlock>
                   );
                 })}
