@@ -33,6 +33,7 @@ export const GET_BOARD_BY_CATEGORY = gql`
         title
         content
         category
+        private
         files {
           id
           url
@@ -67,8 +68,15 @@ export const EDIT_BOARD = gql`
     $title: String
     $content: String
     $link: String
+    $private: Boolean
   ) {
-    editBoard(id: $id, title: $title, content: $content, link: $link) {
+    editBoard(
+      id: $id
+      title: $title
+      content: $content
+      link: $link
+      private: $private
+    ) {
       ok
       err
     }

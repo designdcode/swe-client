@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import queryString from "query-string";
 import useInput from "../../../hooks/useInput";
 import { Container } from "./styles";
-import { Form, Input, Button, Checkbox, Upload } from "antd";
+import { Form, Input, Button, Checkbox, Upload, Switch } from "antd";
 import { useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import { CREATE_BOARD } from "../../../queries/adminQuery";
@@ -49,6 +49,7 @@ const UploadBoardPage: React.VFC = () => {
   const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
   const [isImageNeeded, setIsImageNeeded] = useState<boolean>(false);
   const [isContentNeeded, setIsContentNeeded] = useState<boolean>(true);
+  const [checkPublic, setCheckPublic] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
 
   useEffect(() => {
@@ -95,6 +96,7 @@ const UploadBoardPage: React.VFC = () => {
           category,
           files: file.length !== 0 ? file : null,
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
+          private: checkPublic,
         },
       });
     } else if (imgUrl) {
@@ -106,6 +108,7 @@ const UploadBoardPage: React.VFC = () => {
           category,
           files: null,
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
+          private: checkPublic,
         },
       });
     } else {
@@ -114,11 +117,22 @@ const UploadBoardPage: React.VFC = () => {
           title: title.trim() ? title : null,
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
+          private: checkPublic,
           category,
         },
       });
     }
-  }, [title, content, link, createBoard, category, file, imgName, imgUrl]);
+  }, [
+    title,
+    content,
+    link,
+    createBoard,
+    category,
+    file,
+    imgName,
+    imgUrl,
+    checkPublic,
+  ]);
 
   const handleImageUpload = useCallback(
     (file: any) => {
@@ -194,6 +208,15 @@ const UploadBoardPage: React.VFC = () => {
       <Form {...layout} name="upload-board" onFinish={onFinish}>
         <Form.Item name={["title"]} label="제목">
           <Input type="text" onChange={onChangeTitle} value={title} />
+        </Form.Item>
+        <Form.Item name={["checked"]} label={"공개 / 비공개"}>
+          <Switch
+            defaultChecked
+            onChange={() => setCheckPublic(!checkPublic)}
+          />
+          <span style={{ marginLeft: 15 }}>
+            {checkPublic ? "공개" : "비공개"}
+          </span>
         </Form.Item>
         {isLinkNeeded && (
           <>

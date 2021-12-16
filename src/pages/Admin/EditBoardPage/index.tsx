@@ -29,7 +29,7 @@ import {
 } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Container, Button } from "./styles";
-import { Descriptions, Input, Upload } from "antd";
+import { Descriptions, Input, Switch, Upload } from "antd";
 import useInput from "../../../hooks/useInput";
 import {
   DeleteOutlined,
@@ -39,6 +39,7 @@ import {
 import { storage } from "../../../utils/firebase";
 import { fileRemover } from "../../../utils/fileRemover";
 import { fileUploader } from "../../../utils/fileUploader";
+import { linkSwitcher } from "../../../utils/switcher";
 
 interface locationProps {
   search: string;
@@ -46,13 +47,14 @@ interface locationProps {
 
 interface paramProps {
   param: string;
+  subparam: string;
 }
 
 const EditBoardPage: React.VFC = () => {
   const { search } = useLocation<locationProps>();
   const queryObj = queryString.parse(search);
   const history = useHistory();
-  const { param } = useParams<paramProps>();
+  const { param, subparam } = useParams<paramProps>();
   const { id, category } = queryObj;
   const [board, setBoard] = useState<getBoardById_getBoardById_data>();
   const [files, setFiles] =
@@ -71,6 +73,9 @@ const EditBoardPage: React.VFC = () => {
   const [progress, setProgress] = useState<number>(0);
   const [imgUrl, setImgUrl] = useState<string | undefined>();
   const [imgName, setImgName] = useState<string>();
+  const [checkPrivate, setCheckPrivate] = useState<boolean>();
+
+  const [linkNeeded, setLinkNeeded] = useState<boolean>(false);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
 
   const { data, loading, refetch } = useQuery<
@@ -81,6 +86,10 @@ const EditBoardPage: React.VFC = () => {
       id: parseInt(id as string, 10),
     },
   });
+
+  useEffect(() => {
+    setLinkNeeded(linkSwitcher(subparam as string));
+  }, [subparam]);
 
   const [deleteBoard] = useMutation<deleteBoard, deleteBoardVariables>(
     DELETE_BOARD,
@@ -156,9 +165,10 @@ const EditBoardPage: React.VFC = () => {
         title,
         content: content,
         link,
+        private: checkPrivate,
       },
     });
-  }, [id, title, content, link, editBoard]);
+  }, [id, title, content, link, editBoard, checkPrivate]);
 
   const handleDeleteFile = useCallback(
     async (id: number, name?: string) => {
@@ -171,6 +181,8 @@ const EditBoardPage: React.VFC = () => {
     },
     [deleteFile, category]
   );
+
+  console.log(checkPrivate);
 
   const handleImageUpload = useCallback(
     (file: any) => {
@@ -246,6 +258,7 @@ const EditBoardPage: React.VFC = () => {
 
   useEffect(() => {
     if (data && data.getBoardById && data.getBoardById.data) {
+      setCheckPrivate(data.getBoardById.data.private ? true : false);
       setBoard(data.getBoardById.data);
       setTitle(data.getBoardById.data.title || "");
       setContent(data.getBoardById.data.content || "");
@@ -341,13 +354,23 @@ const EditBoardPage: React.VFC = () => {
             <Button icon={<UploadOutlined />}>파일 업로드</Button>
           </Upload>
         </Descriptions.Item>
-        <Descriptions.Item label="링크" span={4}>
-          <Input
-            placeholder={board?.link || undefined}
-            value={link}
-            onChange={onChangeLink}
-          />
-        </Descriptions.Item>
+        {param === "achievement" && (
+          <Descriptions.Item label="공개" span={4}>
+            <Switch
+              defaultChecked={data?.getBoardById.data?.private ? true : false}
+              onChange={() => setCheckPrivate(!checkPrivate)}
+            />
+          </Descriptions.Item>
+        )}
+        {linkNeeded && (
+          <Descriptions.Item label="링크" span={4}>
+            <Input
+              placeholder={board?.link || undefined}
+              value={link}
+              onChange={onChangeLink}
+            />
+          </Descriptions.Item>
+        )}
         {param === "achievement" && (
           <Descriptions.Item
             label="이미지"

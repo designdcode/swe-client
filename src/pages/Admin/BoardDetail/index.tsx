@@ -16,6 +16,7 @@ import { DELETE_BOARD } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { getDate } from "../../../utils/convertDate";
+import Text from "antd/lib/typography/Text";
 
 interface locationProps {
   search: string;
@@ -107,13 +108,38 @@ const BoardDetail: React.VFC = () => {
         layout="horizontal"
         style={{ display: "flex", flexDirection: "column" }}
       >
-        <Descriptions.Item label="제목" span={3} labelStyle={{ width: 100 }}>
+        <Descriptions.Item
+          key="title"
+          label="제목"
+          span={3}
+          labelStyle={{ width: 100 }}
+        >
           <Typography.Title level={3}>{board?.title}</Typography.Title>
         </Descriptions.Item>
-        <Descriptions.Item label="작성일" span={3} labelStyle={{ width: 100 }}>
+        <Descriptions.Item
+          key="status"
+          label="상태"
+          span={3}
+          labelStyle={{ width: 100 }}
+        >
+          <Typography.Text type={board?.private ? "success" : "danger"}>
+            {board?.private ? "공개" : "비공개"}
+          </Typography.Text>
+        </Descriptions.Item>
+        <Descriptions.Item
+          key="date"
+          label="작성일"
+          span={3}
+          labelStyle={{ width: 100 }}
+        >
           {getDate(board?.createdAt || "")}
         </Descriptions.Item>
-        <Descriptions.Item label="파일" span={3} labelStyle={{ width: 100 }}>
+        <Descriptions.Item
+          key="file"
+          label="파일"
+          span={3}
+          labelStyle={{ width: 100 }}
+        >
           {files && files.length !== 0 ? (
             <>
               {files.map((elem, idx) => {
@@ -140,6 +166,7 @@ const BoardDetail: React.VFC = () => {
             label="이미지"
             span={4}
             labelStyle={{ width: 100 }}
+            key="image"
           >
             {images && images.length !== 0 ? (
               <img
@@ -152,7 +179,7 @@ const BoardDetail: React.VFC = () => {
             )}
           </Descriptions.Item>
         )}
-        <Descriptions.Item label="내용" span={4}>
+        <Descriptions.Item label="내용" span={4} key="content">
           <span style={{ whiteSpace: "pre-wrap" }}>{board?.content}</span>
         </Descriptions.Item>
       </Descriptions>

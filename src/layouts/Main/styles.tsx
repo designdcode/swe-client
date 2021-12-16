@@ -6,10 +6,11 @@ import {
 } from "../../utils/mediaQuery";
 
 export const Content = styled.div`
-  min-height: 100vh;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    min-height: 90vh;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    min-height: 100vh;
     margin: 0 auto;
   }
 `;

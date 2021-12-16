@@ -22,7 +22,7 @@
     "@types/react-toastify": "^4.1.0",
     "@types/react-youtube": "^7.10.0",
     "antd": "^4.17.3",
-    "apollo": "^2.33.6",
+    "apollo": "^2.33.9",
     "axios": "^0.24.0",
     "firebase": "^8.6.3",
     "graphql": "^15.5.3",
