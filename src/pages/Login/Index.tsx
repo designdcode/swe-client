@@ -69,7 +69,10 @@ const Login: React.VFC = () => {
           <img src="/img/logo.png" alt="main-logo" />
         </LoginHead>
         <LoginBody>
-          <LoginDesc>desc</LoginDesc>
+          <LoginDesc>
+            <LoginDescTitle>로그인</LoginDescTitle>
+            <LoginDescSub>본교 학번으로 로그인 해주시기 바랍니다.</LoginDescSub>
+          </LoginDesc>
           <LoginInputBox>
             <Form.Item
               className="form-item"
@@ -95,9 +98,9 @@ const Login: React.VFC = () => {
             </Form.Item>
           </LoginInputBox>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit" disabled={loading}>
-              Submit
-            </Button>
+            <StyledButton type="primary" htmlType="submit" disabled={loading}>
+              로그인
+            </StyledButton>
           </Form.Item>
         </LoginBody>
       </Form>
@@ -175,6 +178,27 @@ const LoginDesc = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    border: 1px solid red;
+  }
+`;
+
+const LoginDescTitle = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    color: #04083e;
+    font-size: 27px;
+    letter-spacing: 0.27px;
+  }
+`;
+
+const LoginDescSub = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    color: #444444;
+    font-size: 14px;
+    letter-spacing: 0.14px;
   }
 `;
 
@@ -182,5 +206,20 @@ const LoginInputBox = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+  }
+`;
+
+const StyledButton = styled(Button)`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 300px;
+    height: 45px;
+    font-size: 16px;
+    letter-spacing: 0.23px;
+    background-color: #0c1b58;
+    &:hover {
+      background-color: #0c1b58;
+    }
   }
 `;
