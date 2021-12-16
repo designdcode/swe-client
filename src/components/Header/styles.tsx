@@ -130,6 +130,7 @@ export const MainDesktop = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
+        color: white;
         & span {
           display: flex;
           flex-direction: inherit;

@@ -15,7 +15,7 @@ import {
 import { List } from "antd";
 import { getDate } from "../../../../utils/convertDate";
 import { GET_BOARD_BY_MONTH } from "../../../../queries/sharedQuery";
-import YouTube from "react-youtube";
+import YouTube, { Options } from "react-youtube";
 import { Link } from "react-router-dom";
 
 interface NoticeProps {
@@ -75,11 +75,11 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
 };
 
 const VideoBoard = () => {
-  const opts = {
+  const opts: Options = {
     height: "300px",
     width: "100%",
-    playVars: {
-      autoPlay: 1,
+    playerVars: {
+      autoplay: 1,
     },
   };
   const onReady = (e: any) => {

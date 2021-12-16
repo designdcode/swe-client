@@ -10,6 +10,7 @@ import {
   getBoardByCategory_getBoardByCategory_data_images,
 } from "../../../typings/api";
 import { GET_BOARD_BY_CATEGORY } from "../../../queries/adminQuery";
+import { fileSwitcher, linkSwitcher } from "../../../utils/switcher";
 
 interface ParamProps {
   param: string;
@@ -33,6 +34,13 @@ const ImageBoardPage: React.VFC = () => {
     useState<
       (getBoardByCategory_getBoardByCategory_data_images | null | undefined)[]
     >();
+  const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
+  const [isLinkNeeded, setIsLinkNeeded] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsFileNeeded(fileSwitcher(subparam as string));
+    setIsLinkNeeded(linkSwitcher(subparam as string));
+  }, [subparam]);
 
   const { data, loading, refetch } = useQuery<
     getBoardByCategory,
@@ -120,44 +128,48 @@ const ImageBoardPage: React.VFC = () => {
         column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
         layout="horizontal"
       >
-        <Descriptions.Item label="링크" span={4} labelStyle={{ width: 100 }}>
-          {data?.getBoardByCategory.data?.length !== 0 &&
-          data?.getBoardByCategory.ok ? (
-            <a
-              href={`${
-                data.getBoardByCategory.data &&
-                data.getBoardByCategory.data[0].link
-              }`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {data.getBoardByCategory.data &&
-                data.getBoardByCategory.data[0].link}
-            </a>
-          ) : (
-            <Typography.Text>링크가 없습니다</Typography.Text>
-          )}
-        </Descriptions.Item>
-        <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>
-          {file && file.length ? (
-            file.map((elem, idx) => {
-              return (
-                <span key={elem?.fileName} className={"attach-group"}>
-                  <a
-                    href={`${elem?.url}`}
-                    download
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {elem?.fileName}
-                  </a>
-                </span>
-              );
-            })
-          ) : (
-            <Typography.Text>첨부파일이 없습니다</Typography.Text>
-          )}
-        </Descriptions.Item>
+        {isLinkNeeded && (
+          <Descriptions.Item label="링크" span={4} labelStyle={{ width: 100 }}>
+            {data?.getBoardByCategory.data?.length !== 0 &&
+            data?.getBoardByCategory.ok ? (
+              <a
+                href={`${
+                  data.getBoardByCategory.data &&
+                  data.getBoardByCategory.data[0].link
+                }`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {data.getBoardByCategory.data &&
+                  data.getBoardByCategory.data[0].link}
+              </a>
+            ) : (
+              <Typography.Text>링크가 없습니다</Typography.Text>
+            )}
+          </Descriptions.Item>
+        )}
+        {isFileNeeded && (
+          <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>
+            {file && file.length ? (
+              file.map((elem, idx) => {
+                return (
+                  <span key={elem?.fileName} className={"attach-group"}>
+                    <a
+                      href={`${elem?.url}`}
+                      download
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {elem?.fileName}
+                    </a>
+                  </span>
+                );
+              })
+            ) : (
+              <Typography.Text>첨부파일이 없습니다</Typography.Text>
+            )}
+          </Descriptions.Item>
+        )}
         <Descriptions.Item label="이미지" span={4} labelStyle={{ width: 100 }}>
           {image && image[0] ? (
             <img src={image[0].url} alt={image[0].fileName} />

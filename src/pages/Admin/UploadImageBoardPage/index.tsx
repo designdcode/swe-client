@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import queryString from "query-string";
 import { useHistory, useLocation } from "react-router";
-import { Container } from "./styles";
-import { linkSwitcher } from "../../../utils/switcher";
+import { fileSwitcher, linkSwitcher } from "../../../utils/switcher";
 import { useMutation } from "@apollo/client";
 import { CREATE_BOARD } from "../../../queries/adminQuery";
 import useInput from "../../../hooks/useInput";
@@ -12,6 +11,7 @@ import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import { fileUploader } from "../../../utils/fileUploader";
 import { storage } from "../../../utils/firebase";
 import { fileRemover } from "../../../utils/fileRemover";
+import styled from "@emotion/styled";
 
 interface locationProps {
   search: string;
@@ -37,12 +37,14 @@ const UploadImageBoardPage = () => {
   const [imgUrl, setImgUrl] = useState<string | undefined>();
   const [imgName, setImgName] = useState<string>();
   const [isLinkNeeded, setIsLinkNeeded] = useState<boolean>(false);
+  const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setIsLinkNeeded(linkSwitcher(subparam as string));
+    setIsFileNeeded(fileSwitcher(subparam as string));
   }, [subparam]);
 
   const [createBoard] = useMutation(CREATE_BOARD, {
@@ -168,24 +170,26 @@ const UploadImageBoardPage = () => {
             )}
           </>
         )}
-        <Form.Item name={["file"]} label="파일">
-          <Upload
-            style={{ marginBottom: 20 }}
-            multiple={true}
-            customRequest={({ file }) => handleFileUpload(file)}
-            maxCount={4}
-            onChange={({ file: callbackFile }) => {
-              if (file.length !== 0) {
-                callbackFile.status = "done";
-              } else {
-                callbackFile.status = "removed";
-              }
-            }}
-            onRemove={(file) => handleFileRemover(file)}
-          >
-            <Button icon={<UploadOutlined />}>Upload</Button>
-          </Upload>
-        </Form.Item>
+        {isFileNeeded && (
+          <Form.Item name={["file"]} label="파일">
+            <Upload
+              style={{ marginBottom: 20 }}
+              multiple={true}
+              customRequest={({ file }) => handleFileUpload(file)}
+              maxCount={4}
+              onChange={({ file: callbackFile }) => {
+                if (file.length !== 0) {
+                  callbackFile.status = "done";
+                } else {
+                  callbackFile.status = "removed";
+                }
+              }}
+              onRemove={(file) => handleFileRemover(file)}
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
+          </Form.Item>
+        )}
         <Form.Item name={["image"]} label="이미지">
           <Upload
             style={{ marginBottom: 20 }}
@@ -207,12 +211,12 @@ const UploadImageBoardPage = () => {
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           <Button type={"primary"} htmlType="submit" disabled={uploadLoading}>
-            {!loading ? (
-              <>
-                <LoadingOutlined /> 이미지 / 파일 업로드 중입니다...
-              </>
+            {!uploadLoading ? (
+              "업로드"
             ) : (
-              "Uploading..."
+              <>
+                <LoadingOutlined /> &ensp; Uploading...
+              </>
             )}
           </Button>
         </Form.Item>
@@ -222,3 +226,9 @@ const UploadImageBoardPage = () => {
 };
 
 export default UploadImageBoardPage;
+
+const Container = styled.div`
+  .link-checkbox {
+    margin: 20px 0;
+  }
+`;

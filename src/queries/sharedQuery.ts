@@ -10,6 +10,8 @@ export const GET_BOARD_BY_ID = gql`
         title
         content
         category
+        private
+        type
         files {
           id
           url

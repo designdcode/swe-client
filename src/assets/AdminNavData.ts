@@ -69,21 +69,6 @@ export const AdminNavData: NavProps[] = [
         ko_title: "SW창의역량인증",
       },
       {
-        key: "basic-lecture",
-        title: "basic-lecture",
-        ko_title: "ST@R EDX 공개강좌",
-      },
-      {
-        key: "basic-clinic",
-        title: "basic-clinic",
-        ko_title: "SW클리닉",
-      },
-      {
-        key: "basic-tutoring",
-        title: "basic-tutoring",
-        ko_title: "SW튜터링",
-      },
-      {
         key: "basic-AI",
         title: "basic-AI",
         ko_title: "AI SW 서포터즈 맨토링",
@@ -126,19 +111,14 @@ export const AdminNavData: NavProps[] = [
         ko_title: "소프트웨어전문역량인증제",
       },
       {
-        key: "major-contest",
-        title: "major-contest",
-        ko_title: "SW 경진대회",
-      },
-      {
         key: "major-training",
         title: "major-training",
         ko_title: "해외현장실습",
       },
       {
-        key: "major-taprogram",
-        title: "major-taprogram",
-        ko_title: "프로그래밍교과목 멘토(TA) 프로그램",
+        key: "major-platform",
+        title: "major-platform",
+        ko_title: "SW역량강화플랫폼",
       },
     ],
   },
@@ -153,29 +133,9 @@ export const AdminNavData: NavProps[] = [
         ko_title: "개요",
       },
       {
-        key: "integration-software",
-        title: "integration-software",
-        ko_title: "소프트웨어 융합경영전공",
-      },
-      {
-        key: "integration-product",
-        title: "integration-product",
-        ko_title: "스마트제조 IOT융합전공",
-      },
-      {
-        key: "integration-content",
-        title: "integration-content",
-        ko_title: "스마트콘텐츠 융합전공",
-      },
-      {
-        key: "integration-automobile",
-        title: "integration-automobile",
-        ko_title: "미래자동차 융합전공",
-      },
-      {
-        key: "integration-inteligence",
-        title: "integration-inteligence",
-        ko_title: "지능형 전장 제어 전공",
+        key: "integration-major",
+        title: "integration-major",
+        ko_title: "SW연계/복수전공",
       },
     ],
   },
@@ -203,11 +163,6 @@ export const AdminNavData: NavProps[] = [
         key: "value-share",
         title: "value-share",
         ko_title: "AI · SW 가치공유",
-      },
-      {
-        key: "value-platform",
-        title: "value-platform",
-        ko_title: "SW 가치확산 플랫폼",
       },
     ],
   },
@@ -313,9 +268,34 @@ export const AdminNavData: NavProps[] = [
     description: "Site-Link",
     subMenu: [
       {
-        key: "site-link",
-        title: "link",
-        ko_title: "링크관리",
+        key: "site-cs",
+        title: "site-cs",
+        ko_title: "컴퓨터공학부",
+      },
+      {
+        key: "site-ai",
+        title: "site-ai",
+        ko_title: "AI소프트웨어학과",
+      },
+      {
+        key: "site-convergence",
+        title: "site-convergence",
+        ko_title: "SW융합학부",
+      },
+      {
+        key: "site-it",
+        title: "site-it",
+        ko_title: "IT교육학부",
+      },
+      {
+        key: "site-smartcar",
+        title: "site-smartcar",
+        ko_title: "스마트자동차공학부",
+      },
+      {
+        key: "site-sw",
+        title: "site-sw",
+        ko_title: "SW융합교육원",
       },
     ],
   },

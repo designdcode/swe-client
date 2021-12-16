@@ -1,9 +1,14 @@
 export const linkSwitcher = (subparam?: string | null) => {
-  switch (subparam) {
-    case subparam?.includes("storage"):
+  const sub = subparam?.toString().split("-")[0];
+  switch (sub) {
+    case "storage":
+      return true;
+    case "link":
+      return true;
+    case "community":
       return false;
     default:
-      return true;
+      return false;
   }
 };
 
@@ -19,11 +24,26 @@ export const imageSwitcher = (subparam: string) => {
   }
 };
 
-export const fileSwitcher = (subparam?: string | null) => {
-  switch (subparam) {
-    case subparam?.includes("storage"):
+export const typeSwitcher = (subparam: string) => {
+  const sub = subparam?.toString().split("-")[1];
+  switch (sub) {
+    case "aidnews":
       return true;
-    case subparam?.includes("achievement"):
+    case "valuenews":
+      return true;
+    case "coopnews":
+      return true;
+    default:
+      return false;
+  }
+};
+
+export const fileSwitcher = (subparam?: string | null) => {
+  const sub = subparam?.toString().split("-")[0];
+  switch (sub) {
+    case "storage":
+      return true;
+    case "achievement":
       return true;
     default:
       return false;
@@ -31,6 +51,7 @@ export const fileSwitcher = (subparam?: string | null) => {
 };
 
 export const contentSwitcher = (subparam?: string | null) => {
-  if (subparam?.includes("introduce")) return false;
+  const sub = subparam?.toString().split("-")[0];
+  if (sub === "introduce") return false;
   else return true;
 };
