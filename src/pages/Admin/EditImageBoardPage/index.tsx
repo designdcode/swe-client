@@ -30,6 +30,7 @@ import {
 import { toast } from "react-toastify";
 import { fileUploader } from "../../../utils/fileUploader";
 import { fileRemover } from "../../../utils/fileRemover";
+import { fileSwitcher } from "../../../utils/switcher";
 
 interface locationProps {
   search: string;
@@ -37,11 +38,12 @@ interface locationProps {
 
 interface paramProps {
   param: string;
+  subparam: string;
 }
 
 const EditImageBoardPage: React.VFC = () => {
   const history = useHistory();
-  const { param } = useParams<paramProps>();
+  const { param, subparam } = useParams<paramProps>();
   const { search } = useLocation<locationProps>();
   const queryObj = queryString.parse(search);
   const { category, id } = queryObj;
@@ -57,6 +59,12 @@ const EditImageBoardPage: React.VFC = () => {
     useState<getBoardById_getBoardById_data_images | null>();
   const [link, onChangeLink, setLink] = useInput("");
   const [progress, setProgress] = useState<number>(0);
+
+  const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsFileNeeded(fileSwitcher(subparam as string));
+  }, [subparam]);
 
   const { loading, data, refetch } = useQuery<
     getBoardById,
@@ -273,55 +281,55 @@ const EditImageBoardPage: React.VFC = () => {
             onChange={onChangeLink}
           />
         </Descriptions.Item>
-        <Descriptions.Item
-          label="첨부파일"
-          span={4}
-          labelStyle={{ width: 100 }}
-        >
-          {file && file.length !== 0 ? (
-            <>
-              {file.map((elem, idx) => {
-                return (
-                  <div key={idx} className="attach-group">
-                    <a
-                      href={elem?.url}
-                      download
-                      target={"_blank"}
-                      rel="noreferrer"
-                    >
-                      {elem?.fileName}
-                    </a>
-                    <button
-                      className="attach-button"
-                      onClick={() => handleDeleteFile(elem?.id, elem?.fileName)}
-                    >
-                      <DeleteOutlined />
-                    </button>
-                  </div>
-                );
-              })}
-            </>
-          ) : tmpFiles.length === 0 ? (
-            <div>첨부파일 없음</div>
-          ) : (
-            <></>
-          )}
-          <Upload
-            multiple={true}
-            maxCount={4}
-            className="upload-list-inline"
-            customRequest={({ file }) => handleFileUpload(file)}
-            onChange={({ file: callbackFile }) => {
-              if (tmpFiles.length !== 0) {
-                callbackFile.status = "done";
-              } else {
-                callbackFile.status = "removed";
-              }
-            }}
-          >
-            <Button icon={<UploadOutlined />}>파일 업로드</Button>
-          </Upload>
-        </Descriptions.Item>
+        {isFileNeeded && (
+          <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>
+            {file && file.length !== 0 ? (
+              <>
+                {file.map((elem, idx) => {
+                  return (
+                    <div key={idx} className="attach-group">
+                      <a
+                        href={elem?.url}
+                        download
+                        target={"_blank"}
+                        rel="noreferrer"
+                      >
+                        {elem?.fileName}
+                      </a>
+                      <button
+                        className="attach-button"
+                        onClick={() =>
+                          handleDeleteFile(elem?.id, elem?.fileName)
+                        }
+                      >
+                        <DeleteOutlined />
+                      </button>
+                    </div>
+                  );
+                })}
+              </>
+            ) : tmpFiles.length === 0 ? (
+              <div>첨부파일 없음</div>
+            ) : (
+              <></>
+            )}
+            <Upload
+              multiple={true}
+              maxCount={4}
+              className="upload-list-inline"
+              customRequest={({ file }) => handleFileUpload(file)}
+              onChange={({ file: callbackFile }) => {
+                if (tmpFiles.length !== 0) {
+                  callbackFile.status = "done";
+                } else {
+                  callbackFile.status = "removed";
+                }
+              }}
+            >
+              <Button icon={<UploadOutlined />}>파일 업로드</Button>
+            </Upload>
+          </Descriptions.Item>
+        )}
         <Descriptions.Item label="이미지" span={4} labelStyle={{ width: 100 }}>
           {image && (
             <Button

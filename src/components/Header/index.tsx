@@ -107,6 +107,15 @@ const Header: React.VFC = () => {
           </div>
           <div className="main-menu">
             {NavigationData.map((elem: NavProps, idx) => {
+              let to;
+              if (
+                elem.title.split("-")[0] === "achievement" ||
+                elem.title.split("-")[0] === "community"
+              ) {
+                to = `/main/board/${elem.title}/${elem.subMenu[0].key}`;
+              } else {
+                to = `/main/detail/${elem.title}/${elem.subMenu[0].key}`;
+              }
               return (
                 <ul
                   style={{ margin: 0 }}
@@ -115,9 +124,9 @@ const Header: React.VFC = () => {
                   onMouseLeave={() => setHover(null)}
                 >
                   <HeaderLine hoverProps={hover === idx ? true : false} />
-                  <div className="header-title">
+                  <Link to={to} className="header-title">
                     <span>{elem.ko_title}</span>
-                  </div>
+                  </Link>
                   <Cover>
                     {elem.subMenu.map((item, i) => {
                       let to;

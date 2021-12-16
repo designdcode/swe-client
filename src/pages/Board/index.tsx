@@ -13,7 +13,7 @@ import {
   getBoardByCategoryVariables,
 } from "../../typings/api";
 import { getDate } from "../../utils/convertDate";
-import { Space, Table } from "antd";
+import { Button, Dropdown, Menu, Space, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import { Link } from "react-router-dom";
 import { ConvertTitle } from "../../utils/convertTitle";
@@ -39,6 +39,7 @@ const Board: React.VFC = () => {
   const [boards, setBoards] = useState<Array<TableBoardProps>>();
   const [title, setTitle] = useState<string>();
   const [writeAble, setWriteAble] = useState<boolean>(false);
+  const [searchCategory, setSearchCategory] = useState<string>("제목 + 내용");
   const { loading } = useQuery<getBoardByCategory, getBoardByCategoryVariables>(
     GET_BOARD_BY_CATEGORY,
     {
@@ -70,8 +71,24 @@ const Board: React.VFC = () => {
     setTitle(ConvertTitle(subparam));
     if (subparam.split("-")[1] === "request") {
       setWriteAble(true);
+    } else {
+      setWriteAble(false);
     }
   }, [subparam]);
+
+  const menu = (
+    <Menu>
+      <Menu.Item key={"제목 + 내용"}>
+        <div onClick={() => setSearchCategory("제목 + 내용")}>제목 + 내용</div>
+      </Menu.Item>
+      <Menu.Item key={"title"}>
+        <div onClick={() => setSearchCategory("제목")}>제목</div>
+      </Menu.Item>
+      <Menu.Item key="content">
+        <div onClick={() => setSearchCategory("제목")}>내용</div>
+      </Menu.Item>
+    </Menu>
+  );
 
   if (loading && !boards) {
     return <div>loading...</div>;
@@ -95,6 +112,7 @@ const Board: React.VFC = () => {
         </CoverTitle>
         <SubMenu
           isBigger={param === "major" || param === "basic" ? true : false}
+          margin={param === "achievement" ? "15%" : "5%"}
         >
           <div className="submenu-content">
             {NavigationData.map((item, idx) => {
@@ -127,11 +145,21 @@ const Board: React.VFC = () => {
       </Cover>
       <Container>
         <BoardTitle>
-          {title}
-          {writeAble && <Link to="/">글쓰기</Link>}
+          <div className={"board-page"}>
+            <span className={"board-page-title"}>{title}</span>
+            {writeAble && <Link to="/">글쓰기</Link>}
+          </div>
+          <div className={"board-search"}>
+            <Dropdown overlay={menu} className="dropdown">
+              <Button>{searchCategory}&ensp;&ensp;&or;</Button>
+            </Dropdown>
+            <input placeholder="test" />
+            <button>검색</button>
+          </div>
         </BoardTitle>
         <StyledTable dataSource={boards} rowKey={"id"}>
           <Column
+            align={"center"}
             title={() => {
               return (
                 <Space>
@@ -168,6 +196,7 @@ const Board: React.VFC = () => {
             }}
           />
           <Column
+            align={"center"}
             title={() => {
               return (
                 <Space>
@@ -187,6 +216,7 @@ const Board: React.VFC = () => {
             width={screen.width > 375 ? 150 : 65}
           />
           <Column
+            align={"center"}
             title={() => {
               return (
                 <Space>
@@ -215,6 +245,7 @@ interface CoverTitleMarginProps {
 
 interface middleMenuProps {
   isBigger: boolean;
+  margin?: string;
 }
 
 interface MenuCellProps {
@@ -310,8 +341,9 @@ const SubMenu = styled.div<middleMenuProps>`
     position: absolute;
     bottom: 0;
     font-size: 15px;
+
     & .submenu-content {
-      max-width: 1200px;
+      max-width: 1280px;
       min-width: 800px;
       min-height: 50px;
       height: ${(props) => (props.isBigger ? "100px" : "50px")};
@@ -319,10 +351,10 @@ const SubMenu = styled.div<middleMenuProps>`
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      padding-left: 15%;
+      padding-left: ${(props) => props.margin};
     }
     & .submenu-col {
-      width: 20%;
+      width: 16%;
       height: 50px;
       display: flex;
       display: flex;
@@ -382,6 +414,7 @@ const FakeLine = styled.div<MenuCellProps>`
 
 const Container = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 100%;
   }
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
@@ -401,18 +434,65 @@ const BoardTitle = styled.div`
     display: flex;
     align-items: center;
     padding: 0 20px;
+    & .board-search {
+      display: none;
+    }
   }
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    min-width: 350px;
-    margin: 0 auto;
-    font-size: 50px;
-    color: #0c1b58;
     margin-bottom: 30px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding-left: 30px;
+    height: 250px;
+    & .board-page {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80%;
+      & .board-page-title {
+        min-width: 350px;
+        margin: 0 auto;
+        font-size: 50px;
+        color: #0c1b58;
+        display: block;
+      }
+    }
+
+    & .board-search {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+
+      & button {
+        width: 80px;
+        height: 50px;
+        padding: 8px;
+        border: none;
+        background-color: #04083e;
+        color: white;
+        font-size: 14px;
+        color: white;
+        margin-left: 15px;
+      }
+      & input {
+        width: 300px;
+        height: 50px;
+        background-color: #f8f8f8;
+        border: none;
+        margin-left: 15px;
+      }
+
+      & .dropdown {
+        background-color: #f8f8f8;
+        border: none;
+        color: black;
+        width: 150px;
+        height: 50px;
+      }
+    }
+
     & a {
       background-color: #0c1b58;
       font-size: 18px;

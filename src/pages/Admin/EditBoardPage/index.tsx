@@ -401,11 +401,12 @@ const EditBoardPage: React.VFC = () => {
           disabled={uploadLoading}
         >
           {!loading ? (
-            <>
-              <LoadingOutlined /> 이미지 / 파일 업로드 중입니다...
-            </>
+            "업로드"
           ) : (
-            "Uploading..."
+            <>
+              <LoadingOutlined />
+              Uploading...
+            </>
           )}
         </Button>
         <Button type="primary" danger onClick={handleDeleteBoard}>

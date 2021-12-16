@@ -2,9 +2,13 @@ export const linkSwitcher = (subparam?: string | null) => {
   const sub = subparam?.toString().split("-")[0];
   switch (sub) {
     case "storage":
+      return true;
+    case "link":
+      return true;
+    case "community":
       return false;
     default:
-      return true;
+      return false;
   }
 };
 
