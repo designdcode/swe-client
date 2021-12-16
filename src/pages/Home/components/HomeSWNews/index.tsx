@@ -43,12 +43,12 @@ const HomeSWNews: React.VFC = () => {
     getBoardByCategoryVariables
   >(GET_BOARD_BY_CATEGORY, {
     variables: {
-      category: "achievement-aidnew",
+      category: "achievement-aidnews",
     },
     onCompleted: ({ getBoardByCategory }) => {
       const { ok, err, data } = getBoardByCategory;
       if (ok && data && data.length > 0) {
-        setAurl(data[data.length - 1].images);
+        setAurl(data[0].images);
         setAdata(data);
       } else {
         console.log(err);
@@ -65,7 +65,7 @@ const HomeSWNews: React.VFC = () => {
     onCompleted: ({ getBoardByCategory }) => {
       const { ok, err, data } = getBoardByCategory;
       if (ok && data && data.length > 0) {
-        setVurl(data[data.length - 1].images);
+        setVurl(data[0].images);
         setVdata(data);
       } else {
         console.log(err);
@@ -82,7 +82,7 @@ const HomeSWNews: React.VFC = () => {
     onCompleted: ({ getBoardByCategory }) => {
       const { ok, err, data } = getBoardByCategory;
       if (ok && data && data.length > 0) {
-        setCurl(data[data.length - 1].images);
+        setCurl(data[0].images);
         setCdata(data);
       } else {
         console.log(err);
@@ -99,7 +99,7 @@ const HomeSWNews: React.VFC = () => {
     onCompleted: ({ getBoardByCategory }) => {
       const { ok, err, data } = getBoardByCategory;
       if (ok && data && data.length > 0) {
-        setSurl(data[data.length - 1].images);
+        setSurl(data[0].images);
         setSdata(data);
       } else {
         console.log(err);
@@ -155,10 +155,10 @@ const HomeSWNews: React.VFC = () => {
                   </SectionImage>
                   <SectionDesc>
                     <div className="section-title">
-                      {adata && adata[adata.length - 1].title}
+                      {adata && adata[0].title}
                     </div>
                     <div className="section-desc">
-                      {adata && adata[adata.length - 1].content}
+                      {adata && adata[0].content}
                     </div>
                   </SectionDesc>
                 </SectionContent>
@@ -196,10 +196,10 @@ const HomeSWNews: React.VFC = () => {
                   </SectionImage>
                   <SectionDesc>
                     <div className="section-title">
-                      {cdata && cdata[cdata.length - 1].title}
+                      {cdata && cdata[0].title}
                     </div>
                     <div className="section-desc">
-                      {cdata && cdata[cdata.length - 1].content}
+                      {cdata && cdata[0].content}
                     </div>
                   </SectionDesc>
                 </SectionContent>
@@ -239,10 +239,10 @@ const HomeSWNews: React.VFC = () => {
                   </SectionImage>
                   <SectionDesc>
                     <div className="section-title">
-                      {vdata && vdata[vdata.length - 1].title}
+                      {vdata && vdata[0].title}
                     </div>
                     <div className="section-desc">
-                      {vdata && vdata[vdata.length - 1].content}
+                      {vdata && vdata[0].content}
                     </div>
                   </SectionDesc>
                 </SectionContent>
@@ -280,10 +280,10 @@ const HomeSWNews: React.VFC = () => {
                   </SectionImage>
                   <SectionDesc>
                     <div className="section-title">
-                      {sdata && sdata[sdata.length - 1].title}
+                      {sdata && sdata[0].title}
                     </div>
                     <div className="section-desc">
-                      {sdata && sdata[sdata.length - 1].content}
+                      {sdata && sdata[0].content}
                     </div>
                   </SectionDesc>
                 </SectionContent>
@@ -481,7 +481,7 @@ const SectionDesc = styled.div`
     justify-content: space-between;
 
     & .section-title {
-      height: 40%;
+      height: 38%;
       width: 80%;
       word-break: break-all;
       overflow: hidden;
@@ -491,8 +491,11 @@ const SectionDesc = styled.div`
     }
 
     & .section-desc {
-      height: 60%;
+      margin-top: 10px;
+      height: 54%;
       width: 80%;
+      display: block;
+      overflow: hidden;
       word-break: break-all;
       text-overflow: ellipsis;
       line-height: 1.2;
