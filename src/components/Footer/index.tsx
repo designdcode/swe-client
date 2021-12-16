@@ -45,6 +45,7 @@ export const FooterContaier = styled.div`
     justify-content: center;
     align-items: center;
     background-color: #ededed;
+    min-width: 1280px;
     span {
       font-size: 14px;
       display: block;

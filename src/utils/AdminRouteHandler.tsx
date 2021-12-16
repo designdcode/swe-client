@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router";
 import loadable from "@loadable/component";
+import VideoLink from "../pages/Admin/VideoLink";
 
 interface IProps {
   param: string;
@@ -33,7 +34,6 @@ const AdminRouteHandler: React.VFC = () => {
     switch (param) {
       case "dashboard":
         return <Dashboard />;
-
       case "intro":
         if (subparam === `create-image-${param}`)
           return <UploadImageBoardPage />;
@@ -123,6 +123,8 @@ const AdminRouteHandler: React.VFC = () => {
         else return <StoragePage />;
       case "sitelink":
         return <LinkManager />;
+      case "link":
+        return <VideoLink />;
       default:
         return;
     }

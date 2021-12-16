@@ -95,7 +95,7 @@ const Header: React.VFC = () => {
                   height={40}
                 />
               </Link>
-              <Link to="/main" style={{ marginLeft: 15 }}>
+              <Link to="/main/login" style={{ marginLeft: 15 }}>
                 <img
                   src={"/img/homeLogin.jpeg"}
                   alt="login"
