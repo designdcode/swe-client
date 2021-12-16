@@ -232,23 +232,25 @@ const UploadBoardPage: React.VFC = () => {
           </Form.Item>
         )}
         {isFileNeeded && (
-          <Upload
-            multiple={true}
-            customRequest={({ file }) => handleFileUpload(file)}
-            maxCount={4}
-            onChange={({ file: callbackFile }) => {
-              if (file.length !== 0) {
-                callbackFile.status = "done";
-              } else {
-                callbackFile.status = "removed";
-              }
-            }}
-            onRemove={(file) => handleFileRemover(file)}
-          >
-            <Button style={{ marginBottom: 20 }} icon={<UploadOutlined />}>
-              Upload
-            </Button>
-          </Upload>
+          <Form.Item name={["file"]} label={"파일"}>
+            <Upload
+              multiple={true}
+              customRequest={({ file }) => handleFileUpload(file)}
+              maxCount={4}
+              onChange={({ file: callbackFile }) => {
+                if (file.length !== 0) {
+                  callbackFile.status = "done";
+                } else {
+                  callbackFile.status = "removed";
+                }
+              }}
+              onRemove={(file) => handleFileRemover(file)}
+            >
+              <Button style={{ marginBottom: 20 }} icon={<UploadOutlined />}>
+                Upload
+              </Button>
+            </Upload>
+          </Form.Item>
         )}
         {isContentNeeded && (
           <Form.Item name={["content"]} label="내용" style={{ marginTop: 20 }}>

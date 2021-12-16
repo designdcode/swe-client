@@ -121,9 +121,9 @@ const Admin: React.FC = () => {
                 {AdminNavData.map((data: NavProps) => {
                   return (
                     <SubMenu key={data.ko_title} title={data.ko_title}>
-                      {data.subMenu.map((elem: ObjProps) => {
+                      {data.subMenu.map((elem: ObjProps, i) => {
                         return (
-                          <Menu.Item key={elem.key}>
+                          <Menu.Item key={elem.title}>
                             <Link
                               to={`/admin/${data.title}/${elem.key}`}
                               onClick={() =>
@@ -143,6 +143,18 @@ const Admin: React.FC = () => {
                     </SubMenu>
                   );
                 })}
+                <SubMenu title="홍보영상">
+                  <Menu.Item
+                    onClick={() => {
+                      setParentMenu("홍보영상");
+                      setPickMenu("홍보영상링크");
+                    }}
+                  >
+                    <Link to={`/admin/link/link`}>
+                      <span>홍보영상링크</span>
+                    </Link>
+                  </Menu.Item>
+                </SubMenu>
               </Menu>
             </Sider>
             <Layout style={{ padding: "0 24px 24px" }}>
