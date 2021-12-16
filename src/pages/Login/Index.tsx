@@ -56,6 +56,7 @@ const Login: React.VFC = () => {
   return (
     <Container>
       <Form
+        className="login-form"
         name="basic"
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
@@ -64,25 +65,41 @@ const Login: React.VFC = () => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <Form.Item
-          label="Username"
-          name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
-        >
-          <Input value={id} onChange={onChangeId} />
-        </Form.Item>
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input.Password value={pwd} onChange={onChangePwd} />
-        </Form.Item>
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit" disabled={loading}>
-            Submit
-          </Button>
-        </Form.Item>
+        <LoginHead>
+          <img src="/img/logo.png" alt="main-logo" />
+        </LoginHead>
+        <LoginBody>
+          <LoginDesc>desc</LoginDesc>
+          <LoginInputBox>
+            <Form.Item
+              className="form-item"
+              name="username"
+              rules={[
+                { required: true, message: "Please input your username!" },
+              ]}
+            >
+              <Input value={id} onChange={onChangeId} className="form-input" />
+            </Form.Item>
+            <Form.Item
+              className={"form-item"}
+              name="password"
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
+            >
+              <Input.Password
+                value={pwd}
+                onChange={onChangePwd}
+                className="form-input"
+              />
+            </Form.Item>
+          </LoginInputBox>
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Button type="primary" htmlType="submit" disabled={loading}>
+              Submit
+            </Button>
+          </Form.Item>
+        </LoginBody>
       </Form>
     </Container>
   );
@@ -91,6 +108,9 @@ const Login: React.VFC = () => {
 export default Login;
 
 const Container = styled.div`
+  background-image: url("/img/loginBG.jpeg");
+  height: 100%;
+  width: 100%;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     margin-top: 50px;
     width: 100%;
@@ -99,7 +119,68 @@ const Container = styled.div`
     align-items: center;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: ${breakpoints.pc}px;
-    margin-top: 30px;
+    max-width: 1920px;
+    min-width: 1280px;
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    & .login-form {
+      height: 720px;
+      width: 650px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      margin: 65px 0;
+    }
+  }
+`;
+
+const LoginHead = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    margin: 20px 0;
+    height: 50px;
+  }
+`;
+
+const LoginBody = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 100%;
+    height: 550px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-image: url("/img/webLoginBG.jpeg");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    & .form-item {
+    }
+
+    & .form-input {
+      width: 300px;
+      height: 40px;
+    }
+  }
+`;
+
+const LoginDesc = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+  }
+`;
+
+const LoginInputBox = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
   }
 `;
