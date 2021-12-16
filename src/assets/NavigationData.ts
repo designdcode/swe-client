@@ -8,6 +8,7 @@ export interface NavProps {
   title: string;
   ko_title: string;
   subMenu: Array<ObjProps>;
+  description: string;
 }
 
 export const NavigationData: NavProps[] = [
@@ -15,30 +16,31 @@ export const NavigationData: NavProps[] = [
     key: 0,
     title: "intro",
     ko_title: "사업단 소개",
+    description: "Introduction",
     subMenu: [
       {
         key: "intro-introduce",
-        title: "introduce",
+        title: "intro-introduce",
         ko_title: "인사말",
       },
       {
         key: "intro-overview",
-        title: "overview",
+        title: "intro-overview",
         ko_title: "사업개요",
       },
       {
         key: "intro-history",
-        title: "history",
+        title: "intro-history",
         ko_title: "연혁",
       },
       {
         key: "intro-task",
-        title: "task",
+        title: "intro-task",
         ko_title: "조직도 및 업무",
       },
       {
         key: "intro-route",
-        title: "route",
+        title: "intro-route",
         ko_title: "오시는길",
       },
     ],
@@ -47,6 +49,7 @@ export const NavigationData: NavProps[] = [
     key: 1,
     title: "basic",
     ko_title: "SW기초교육",
+    description: "SW Basic Education",
     subMenu: [
       {
         key: "basic-overview",
@@ -99,6 +102,7 @@ export const NavigationData: NavProps[] = [
     key: 2,
     title: "major",
     ko_title: "SW전공교육",
+    description: "SW Major Education",
     subMenu: [
       {
         key: "major-overview",
@@ -146,6 +150,7 @@ export const NavigationData: NavProps[] = [
     key: 3,
     title: "integration",
     ko_title: "SW융합교육",
+    description: "SW Convergence Education",
     subMenu: [
       {
         key: "integration-overview",
@@ -183,6 +188,7 @@ export const NavigationData: NavProps[] = [
     key: 4,
     title: "value",
     ko_title: "SW가치확산",
+    description: "SW Value Diffusion",
     subMenu: [
       {
         key: "value-overview",
@@ -215,6 +221,7 @@ export const NavigationData: NavProps[] = [
     key: 5,
     title: "cooperation",
     ko_title: "SW산학협력",
+    description: "SW Industry University Cooperation",
     subMenu: [
       {
         key: "cooperation-overview",
@@ -242,6 +249,7 @@ export const NavigationData: NavProps[] = [
     key: 6,
     title: "achievement",
     ko_title: "사업성과",
+    description: "Business Performance",
     subMenu: [
       {
         key: "achievement-news",
@@ -274,6 +282,7 @@ export const NavigationData: NavProps[] = [
     key: 7,
     title: "community",
     ko_title: "알림마당",
+    description: "Community",
     subMenu: [
       {
         key: "community-notice",
@@ -312,6 +321,7 @@ export const NavigationData: NavProps[] = [
     key: 8,
     title: "site-link",
     ko_title: "사이트링크",
+    description: "Site-Link",
     subMenu: [
       {
         key: "site-link",

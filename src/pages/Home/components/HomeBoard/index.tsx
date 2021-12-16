@@ -15,6 +15,8 @@ import {
 import { List } from "antd";
 import { getDate } from "../../../../utils/convertDate";
 import { GET_BOARD_BY_MONTH } from "../../../../queries/sharedQuery";
+import YouTube from "react-youtube";
+import { Link } from "react-router-dom";
 
 interface NoticeProps {
   data: getBoardByMonth_getBoardByMonth_data[] | undefined;
@@ -46,7 +48,12 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
             <div className="line"></div>
             <span className="title">공지사항</span>
           </TitleWithLine>
-          <div>더보기 +</div>
+          <Link
+            to="/main/board/community/community-notice"
+            style={{ color: "black" }}
+          >
+            더보기 +
+          </Link>
         </div>
         <div className="board-bottom-title">
           <div className="date">
@@ -68,7 +75,32 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
 };
 
 const VideoBoard = () => {
-  return <VideoContainer>videio</VideoContainer>;
+  const opts = {
+    height: "300px",
+    width: "100%",
+    playVars: {
+      autoPlay: 1,
+    },
+  };
+  const onReady = (e: any) => {
+    e.target.pauseVideo();
+  };
+
+  return (
+    <VideoContainer>
+      <div className="board-title">
+        <div className="board-top-title">
+          <TitleWithLine>
+            <div className="line"></div>
+            <span className="title">홍보영상</span>
+          </TitleWithLine>
+        </div>
+        <div className="video-container">
+          <YouTube videoId={"0ftF6DYPhUk"} opts={opts} onReady={onReady} />
+        </div>
+      </div>
+    </VideoContainer>
+  );
 };
 
 const HomeBoard: React.VFC = () => {
@@ -154,16 +186,6 @@ const Col = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     height: 90%;
     width: 600px;
-  }
-`;
-
-const VideoContainer = styled.div`
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    display: flex;
-    width: 100%;
-    height: 400px;
-    box-shadow: 5px 5px 14px #0000005a;
-    padding: 0 35px;
   }
 `;
 
@@ -299,6 +321,11 @@ const NoticeList = styled(List.Item)`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     padding: 5px;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.7;
+      transition: 0.2s linear;
+    }
   }
 `;
 
@@ -357,5 +384,28 @@ const NoticeDate = styled.div`
     font-size: 16px;
     font-weight: 600;
     float: rigth;
+  }
+`;
+
+const VideoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 35px;
+  padding-top: 15px;
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    height: 400px;
+    display: flex;
+    width: 100%;
+    box-shadow: 5px 5px 14px #0000005a;
+    padding: 15px 35px;
+  }
+
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    height: 500px;
+
+    .video-container {
+      margin-top: 20px;
+    }
   }
 `;

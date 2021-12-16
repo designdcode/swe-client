@@ -90,6 +90,7 @@ const Wrapper = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 100%;
+    margin-top: 15px;
     max-width: 1920px;
   }
 `;

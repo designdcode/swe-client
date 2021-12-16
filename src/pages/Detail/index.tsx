@@ -46,11 +46,11 @@ const Detail = () => {
       <Cover>
         <CoverTitle margin={screen.width > 1500 ? "25%" : "15%"}>
           {NavigationData.map((item, idx) => {
-            if (item.title === param) {
+            if (item.title === param.split("-")[0]) {
               return (
-                <div key={idx}>
+                <div key={item.key}>
                   <span className="cover-main-title">{item.ko_title}</span>
-                  <span className="cover-description">description</span>
+                  <span className="cover-description">{item.description}</span>
                 </div>
               );
             } else {
@@ -67,7 +67,11 @@ const Detail = () => {
                 return item.subMenu.map((elem, i) => {
                   const colored = elem.key === subparam ? 0 : 1;
                   return (
-                    <ContentCell className="submenu-col" first={colored}>
+                    <ContentCell
+                      className="submenu-col"
+                      first={colored}
+                      key={`${i}key`}
+                    >
                       <FakeLine first={colored} />
                       <StyleLink
                         to={`/main/detail/${param}/${elem.key}`}
@@ -89,11 +93,14 @@ const Detail = () => {
 
       <Content>
         <ContentImage>
-          {data?.getBoardByCategory.data?.map((elem) => {
-            return elem?.images?.map((file) => {
-              return <img src={file?.url} alt="file" />;
-            });
-          })}
+          {data?.getBoardByCategory.data &&
+            data.getBoardByCategory.data[0] &&
+            data.getBoardByCategory.data[0].images && (
+              <img
+                src={data.getBoardByCategory.data[0].images[0]?.url}
+                alt="uploadedImage"
+              />
+            )}
         </ContentImage>
       </Content>
     </Wrapper>
@@ -108,6 +115,7 @@ interface CoverTitleMarginProps {
 
 const Wrapper = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    min-height: 50vh;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     margin-top: 15px;
@@ -120,6 +128,14 @@ const Wrapper = styled.div`
 
 const Cover = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 100%;
+    height: 120px;
+    & img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 100%;
@@ -137,6 +153,21 @@ const Cover = styled.div`
 
 const CoverTitle = styled.div<CoverTitleMarginProps>`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    & .cover-main-title {
+      font-size: 20px;
+      font-weight: 500px;
+      color: white;
+      display: block;
+    }
+    & .cover-description {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.43px;
+      color: #ffffff;
+    }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     position: absolute;
@@ -164,6 +195,7 @@ const CoverTitle = styled.div<CoverTitleMarginProps>`
 
 const SubMenu = styled.div<middleMenuProps>`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: none;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 100%;
@@ -242,8 +274,8 @@ const FakeLine = styled.div<MenuCellProps>`
 
 const Content = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    height: 100%;
   }
-
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 1280px;
     min-height: 100vh;
@@ -253,8 +285,12 @@ const Content = styled.div`
 
 const ContentImage = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 100%;
+    & img {
+      width: 100%;
+      object-fit: contain;
+    }
   }
-
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     padding: 60px 0;
     width: 100%;
