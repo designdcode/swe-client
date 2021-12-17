@@ -58,7 +58,10 @@ const Board: React.VFC = () => {
               createdAt: getDate(elem.createdAt || ""),
               category: elem.category,
             };
-            return dataSource.push(obj);
+            if (!elem.private) {
+              return dataSource.push(obj);
+            }
+            return null;
           });
           setBoards(dataSource);
         } else {

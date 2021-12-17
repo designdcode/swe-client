@@ -96,3 +96,16 @@ export const GET_BOARD_BY_MONTH = gql`
     }
   }
 `;
+
+export const GET_POPUP_STATUS = gql`
+  query getPopupStatus {
+    getPopupStatus {
+      ok
+      err
+      data {
+        url
+        up
+      }
+    }
+  }
+`;

@@ -71,12 +71,12 @@ export const AdminNavData: NavProps[] = [
       {
         key: "basic-AI",
         title: "basic-AI",
-        ko_title: "AI SW 서포터즈 맨토링",
+        ko_title: "AI SW서포터즈멘토링",
       },
       {
         key: "basic-online",
         title: "basic-online",
-        ko_title: "개방형 온라인 플랫폼",
+        ko_title: "개방형온라인플랫폼",
       },
     ],
   },
@@ -133,8 +133,8 @@ export const AdminNavData: NavProps[] = [
         ko_title: "개요",
       },
       {
-        key: "integration-major",
-        title: "integration-major",
+        key: "integration-swmajor",
+        title: "integration-swmajor",
         ko_title: "SW연계/복수전공",
       },
     ],

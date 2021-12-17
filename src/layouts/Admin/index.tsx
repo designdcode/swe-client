@@ -171,6 +171,18 @@ const Admin: React.FC = () => {
                     </Link>
                   </Menu.Item>
                 </SubMenu>
+                <SubMenu title="팝업">
+                  <Menu.Item
+                    onClick={() => {
+                      setParentMenu("팝업");
+                      setPickMenu("팝업관리");
+                    }}
+                  >
+                    <Link to={`/admin/popup/popup`}>
+                      <span>팝업관리</span>
+                    </Link>
+                  </Menu.Item>
+                </SubMenu>
               </Menu>
             </Sider>
             <Layout style={{ padding: "0 24px 24px" }}>

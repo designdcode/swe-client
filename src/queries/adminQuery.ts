@@ -167,3 +167,12 @@ export const EDIT_LINK = gql`
     }
   }
 `;
+
+export const EDIT_POPUP = gql`
+  mutation editPopup($up: String!, $url: String) {
+    editPopup(up: $up, url: $url) {
+      ok
+      err
+    }
+  }
+`;
