@@ -79,7 +79,7 @@ const BoardDetail: React.VFC = () => {
                         to={`/main/board/${param}/${elem.key}`}
                         first={colored}
                       >
-                        {elem.ko_title}
+                        <span style={{ fontWeight: 600 }}>{elem.ko_title}</span>
                       </StyleLink>
                     </ContentCell>
                   );
@@ -292,7 +292,7 @@ const StyleLink = styled(Link)<MenuCellProps>`
     align-items: center;
     justify-content: center;
     padding: 2px 5px;
-
+    font-size: 13px;
     color: ${(props) => (props.first === 0 ? "white" : "black")};
     &:hover {
       color: white;
@@ -329,18 +329,6 @@ const FakeLine = styled.div<MenuCellProps>`
   }
 `;
 
-const Container = styled.div`
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-  }
-
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    min-width: 800px;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 30px;
-  }
-`;
-
 const Body = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     & .head {
@@ -369,7 +357,7 @@ const Body = styled.div`
     }
 
     & .head-title {
-      font-size: 50px;
+      font-size: 35px;
       font-weight: 500;
       color: #0c1b58;
     }
@@ -426,17 +414,18 @@ const Content = styled.div`
       flex-direction: column;
       justify-content: space-between;
       & .content-head-title {
-        font-size: 27px;
+        font-size: 20px;
         font-weight: 600;
         min-height: 35px;
         display: flex;
         align-items: center;
+        color: #0c1b58;
       }
       & .content-head-desc {
         display: flex;
         font-size: 20px;
         color: #868686;
-
+        margin-top: 15px;
         & .content-head-desc-date {
           margin-right: 50px;
         }

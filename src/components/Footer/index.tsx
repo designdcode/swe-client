@@ -9,7 +9,7 @@ import {
 const Footer = () => {
   return (
     <FooterContaier>
-      <img src={"/img/mobileLogo.png"} alt="logoimg" className="mobile" />
+      <img src={"/img/footerLogo.jpg"} alt="logoimg" className="mobile" />
       <span>
         TEL . 041-530-8311 FAX. 041-530-8315 <br />
         우) 31460 충남 아산시 탕정면 선문로 221번길 70 선문대학교
@@ -18,7 +18,7 @@ const Footer = () => {
         Sunmoon-ro 221 beon-gil, Tangjeong-myeon, Asan-si, Chungcheongnam-do,
         korea , 31460
       </span>
-      <img src={"/img/mobileLogo.png"} alt="logoimg" className="web" />
+      <img src={"/img/footerLogo.jpg"} alt="logoimg" className="web" />
     </FooterContaier>
   );
 };

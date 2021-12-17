@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Layout, Menu, Breadcrumb, Form, Input, Button } from "antd";
 import { AdminNavData, NavProps, ObjProps } from "../../assets/AdminNavData";
 import AdminRouteHandler from "../../utils/AdminRouteHandler";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { useReactiveVar } from "@apollo/client";
 import { adminLoginVar } from "../../utils/apollo";
 import useInput from "../../hooks/useInput";
@@ -10,6 +10,7 @@ import { adminLogin, adminLogOut } from "../../utils/loginResolver";
 import { toast } from "react-toastify";
 import { UserOutlined, LockOutlined, LogoutOutlined } from "@ant-design/icons";
 import { LoginContainer } from "./styles";
+import { getSubTitle, getTitle } from "../../utils/getTitle";
 
 interface ParamProps {
   param: string;
@@ -19,6 +20,7 @@ interface ParamProps {
 const Admin: React.FC = () => {
   const loginStatus = useReactiveVar(adminLoginVar);
   const history = useHistory();
+  const { param, subparam } = useParams<ParamProps>();
   const [adminId, adminIdOnChange, setAdminId] = useInput("");
   const [adminPW, adminPWOnChange, setAdminPW] = useInput("");
   const [pickMenu, setPickMenu] = useState<string>("대시보드");
@@ -30,6 +32,8 @@ const Admin: React.FC = () => {
   const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(false);
   const { SubMenu } = Menu;
   const { Header, Content, Sider } = Layout;
+
+  console.log(param, subparam);
 
   const onFinish = useCallback(() => {
     if (adminId === "adminswe" && adminPW === "adminswe") {
@@ -65,12 +69,17 @@ const Admin: React.FC = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   if (!showBreadCrumb) {
-  //     history.push('/admin')
-  //   }
-  // }, [showBreadCrumb, history])
-  console.log(params);
+  useEffect(() => {
+    if (param !== "dashboard") {
+      setShowBreadCrumb(true);
+      setParentMenu(getTitle(param));
+      setPickMenu(getSubTitle(param, subparam));
+      setParams({
+        param: param,
+        subparam: subparam,
+      });
+    }
+  }, [param, subparam, history]);
 
   useEffect(() => {
     const time = localStorage.getItem("admin");

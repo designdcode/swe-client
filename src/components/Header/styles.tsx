@@ -112,14 +112,14 @@ export const MainDesktop = styled.div`
         transform: scaleY(1);
         height: 320px;
         opacity: 0.8;
-        padding-top: 7px;
+        /* padding-top: 7px; */
         transition: height 0.1s ease-in;
         position: absolute;
         z-index: 1000;
       }
 
       &:hover li {
-        height: 25px;
+        height: 30px;
         transition: height 0.1s ease-in;
       }
 

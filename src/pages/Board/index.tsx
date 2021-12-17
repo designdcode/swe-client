@@ -112,7 +112,7 @@ const Board: React.VFC = () => {
         </CoverTitle>
         <SubMenu
           isBigger={param === "major" || param === "basic" ? true : false}
-          margin={param === "achievement" ? "15%" : "5%"}
+          margin="5%"
         >
           <div className="submenu-content">
             {NavigationData.map((item, idx) => {
@@ -130,7 +130,7 @@ const Board: React.VFC = () => {
                         to={`/main/board/${param}/${elem.key}`}
                         first={colored}
                       >
-                        {elem.ko_title}
+                        <span style={{ fontWeight: 600 }}>{elem.ko_title}</span>
                       </StyleLink>
                     </ContentCell>
                   );
@@ -147,14 +147,18 @@ const Board: React.VFC = () => {
         <BoardTitle>
           <div className={"board-page"}>
             <span className={"board-page-title"}>{title}</span>
-            {writeAble && <Link to="/">글쓰기</Link>}
           </div>
           <div className={"board-search"}>
             <Dropdown overlay={menu} className="dropdown">
               <Button>{searchCategory}&ensp;&ensp;&or;</Button>
             </Dropdown>
             <input placeholder="test" />
-            <button>검색</button>
+            <button className="board-search-button">검색</button>
+            {writeAble && (
+              <Link className="board-button" to="/">
+                글쓰기
+              </Link>
+            )}
           </div>
         </BoardTitle>
         <StyledTable dataSource={boards} rowKey={"id"}>
@@ -375,7 +379,7 @@ const StyleLink = styled(Link)<MenuCellProps>`
     align-items: center;
     justify-content: center;
     padding: 2px 5px;
-
+    font-size: 13px;
     color: ${(props) => (props.first === 0 ? "white" : "black")};
     &:hover {
       color: white;
@@ -454,7 +458,7 @@ const BoardTitle = styled.div`
       & .board-page-title {
         min-width: 350px;
         margin: 0 auto;
-        font-size: 50px;
+        font-size: 40px;
         color: #0c1b58;
         display: block;
       }
@@ -465,7 +469,8 @@ const BoardTitle = styled.div`
       display: flex;
       justify-content: flex-end;
 
-      & button {
+      & .board-button {
+        cursor: pointer;
         width: 80px;
         height: 50px;
         padding: 8px;
@@ -473,9 +478,21 @@ const BoardTitle = styled.div`
         background-color: #04083e;
         color: white;
         font-size: 14px;
-        color: white;
         margin-left: 15px;
       }
+
+      & .board-search-button {
+        cursor: pointer;
+        width: 80px;
+        height: 50px;
+        padding: 8px;
+        border: none;
+        background-color: #e5e2e2b8;
+        color: black;
+        font-size: 14px;
+        margin-left: 15px;
+      }
+
       & input {
         width: 300px;
         height: 50px;

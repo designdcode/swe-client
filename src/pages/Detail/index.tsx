@@ -77,7 +77,7 @@ const Detail = () => {
                         to={`/main/detail/${param}/${elem.key}`}
                         first={colored}
                       >
-                        {elem.ko_title}
+                        <span style={{ fontWeight: 600 }}>{elem.ko_title}</span>
                       </StyleLink>
                     </ContentCell>
                   );
@@ -90,8 +90,8 @@ const Detail = () => {
         </SubMenu>
         <img src="/img/detailBG.jpeg" alt="cover" />
       </Cover>
-
       <Content>
+        {param.toString() === "sitelink" && <>여기 버튼</>}
         <ContentImage>
           {data?.getBoardByCategory.data &&
             data.getBoardByCategory.data[0] &&
@@ -235,7 +235,7 @@ const StyleLink = styled(Link)<MenuCellProps>`
     align-items: center;
     justify-content: center;
     padding: 2px 5px;
-
+    font-size: 13px;
     color: ${(props) => (props.first === 0 ? "white" : "black")};
     &:hover {
       color: white;
