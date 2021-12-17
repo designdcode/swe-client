@@ -22,6 +22,5 @@ export const getSubTitle = (param: string, subparam: string): string => {
       break;
     }
   }
-  console.log(res);
   return res;
 };

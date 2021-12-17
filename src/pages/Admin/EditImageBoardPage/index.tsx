@@ -30,7 +30,7 @@ import {
 import { toast } from "react-toastify";
 import { fileUploader } from "../../../utils/fileUploader";
 import { fileRemover } from "../../../utils/fileRemover";
-import { fileSwitcher } from "../../../utils/switcher";
+import { fileSwitcher, linkSwitcher } from "../../../utils/switcher";
 
 interface locationProps {
   search: string;
@@ -61,9 +61,11 @@ const EditImageBoardPage: React.VFC = () => {
   const [progress, setProgress] = useState<number>(0);
 
   const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
+  const [isLinkNeeded, setIsLinkNeeded] = useState<boolean>(false);
 
   useEffect(() => {
     setIsFileNeeded(fileSwitcher(subparam as string));
+    setIsLinkNeeded(linkSwitcher(subparam as string));
   }, [subparam]);
 
   const { loading, data, refetch } = useQuery<
@@ -274,13 +276,15 @@ const EditImageBoardPage: React.VFC = () => {
         column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
         layout="horizontal"
       >
-        <Descriptions.Item label="링크" span={4} labelStyle={{ width: 100 }}>
-          <Input
-            placeholder={board?.link || undefined}
-            value={link}
-            onChange={onChangeLink}
-          />
-        </Descriptions.Item>
+        {isLinkNeeded && (
+          <Descriptions.Item label="링크" span={4} labelStyle={{ width: 100 }}>
+            <Input
+              placeholder={board?.link || undefined}
+              value={link}
+              onChange={onChangeLink}
+            />
+          </Descriptions.Item>
+        )}
         {isFileNeeded && (
           <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>
             {file && file.length !== 0 ? (

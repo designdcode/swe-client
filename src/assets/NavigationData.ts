@@ -316,17 +316,41 @@ export const NavigationData: NavProps[] = [
       },
     ],
   },
-
   {
     key: 8,
-    title: "site-link",
+    title: "sitelink",
     ko_title: "사이트링크",
     description: "Site-Link",
     subMenu: [
       {
-        key: "site-link",
-        title: "link",
-        ko_title: "링크관리",
+        key: "site-cs",
+        title: "site-cs",
+        ko_title: "컴퓨터공학부",
+      },
+      {
+        key: "site-ai",
+        title: "site-ai",
+        ko_title: "AI소프트웨어학과",
+      },
+      {
+        key: "site-convergence",
+        title: "site-convergence",
+        ko_title: "SW융합학부",
+      },
+      {
+        key: "site-it",
+        title: "site-it",
+        ko_title: "IT교육학부",
+      },
+      {
+        key: "site-smartcar",
+        title: "site-smartcar",
+        ko_title: "스마트자동차공학부",
+      },
+      {
+        key: "site-sw",
+        title: "site-sw",
+        ko_title: "SW융합교육원",
       },
     ],
   },

@@ -369,6 +369,7 @@ const SectionTitle = styled.div`
     & .title-burger {
       transform: rotate(90deg);
       color: black;
+      opacity: 0.2;
     }
     & .title-title {
       width: 75%;
@@ -396,6 +397,7 @@ const SectionTitle = styled.div`
     & .title-burger {
       transform: rotate(90deg);
       color: black;
+      opacity: 0.2;
     }
     & .title-title {
       width: 75%;

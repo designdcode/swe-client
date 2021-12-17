@@ -43,10 +43,18 @@ const HomeBanner: React.VFC = () => {
                     aria-label={`${label} ${index + 1}`}
                   >
                     {index === 0 && (
-                      <IoIosArrowDropleft size={45} color={"white"} />
+                      <IoIosArrowDropleft
+                        size={45}
+                        color={"white"}
+                        style={{ opacity: 0.5 }}
+                      />
                     )}
                     {index === 1 && (
-                      <IoIosArrowDropright size={45} color={"white"} />
+                      <IoIosArrowDropright
+                        size={45}
+                        color={"white"}
+                        style={{ opacity: 0.5 }}
+                      />
                     )}
                   </span>
                 );

@@ -3,8 +3,6 @@ export const linkSwitcher = (subparam?: string | null) => {
   switch (sub) {
     case "storage":
       return true;
-    case "link":
-      return true;
     case "community":
       return false;
     default:
