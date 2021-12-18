@@ -25,6 +25,7 @@ export interface createBoardVariables {
   images?: (AttachModel | null)[] | null;
   link?: string | null;
   type?: string | null;
+  private?: boolean | null;
 }
 
 /* tslint:disable */
@@ -57,6 +58,7 @@ export interface getBoardByCategory_getBoardByCategory_data {
   content: string | null;
   category: string;
   private: boolean | null;
+  type: string | null;
   files: (getBoardByCategory_getBoardByCategory_data_files | null)[] | null;
   images: (getBoardByCategory_getBoardByCategory_data_images | null)[] | null;
   link: string | null;

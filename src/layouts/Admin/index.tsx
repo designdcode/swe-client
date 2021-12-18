@@ -33,8 +33,6 @@ const Admin: React.FC = () => {
   const { SubMenu } = Menu;
   const { Header, Content, Sider } = Layout;
 
-  console.log(param, subparam);
-
   const onFinish = useCallback(() => {
     if (adminId === "adminswe" && adminPW === "adminswe") {
       setAdminId("");

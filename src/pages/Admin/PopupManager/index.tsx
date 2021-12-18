@@ -16,7 +16,6 @@ import { UploadOutlined } from "@ant-design/icons";
 const PopupManager: React.FC = () => {
   const [status, setStatus] = useState<string>("");
   const [imgUrl, setImgUrl] = useState<string>();
-
   const { data, loading, refetch } = useQuery<getPopupStatus>(GET_POPUP_STATUS);
   const [editPopup] = useMutation<editPopup, editPopupVariables>(EDIT_POPUP, {
     onCompleted: ({ editPopup }) => {
@@ -42,24 +41,23 @@ const PopupManager: React.FC = () => {
 
   const uploadImage = useCallback((file: any) => {
     setUploading(true);
-    const upload = storage.ref(`/popup/`).put(file);
+    const upload = storage.ref(`/popup/${file.filename}`).put(file);
     upload.on(
       "state_changed",
       (snapshot) => {},
       (err) => console.log(err),
       () => {
         storage
-          .ref(`popup`)
+          .ref(`/popup/${file.filename}`)
           .getDownloadURL()
           .then(async (url) => {
             setImgUrl(url);
             toast.success("파일 / 이미지가 업로드 되었습니다");
+            setUploading(false);
           });
       }
     );
-    setUploading(false);
   }, []);
-  console.log(imgUrl);
 
   const handleSubmit = useCallback(async () => {
     await editPopup({
@@ -120,7 +118,10 @@ const PopupManager: React.FC = () => {
           <Upload
             style={{ marginBottom: 20, display: "block" }}
             listType={"picture"}
-            customRequest={({ file }) => uploadImage(file)}
+            customRequest={({ file }) => {
+              setUploading(true);
+              uploadImage(file);
+            }}
             progress={{ showInfo: true }}
             maxCount={0}
             onChange={({ file: callbackFile }) => {

@@ -357,7 +357,7 @@ const EditBoardPage: React.VFC = () => {
         {param === "achievement" && (
           <Descriptions.Item label="공개" span={4}>
             <Switch
-              defaultChecked={data?.getBoardById.data?.private ? true : false}
+              defaultChecked={data?.getBoardById.data?.private ? false : true}
               onChange={() => setCheckPrivate(!checkPrivate)}
             />
           </Descriptions.Item>

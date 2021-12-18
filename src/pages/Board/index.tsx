@@ -31,6 +31,7 @@ interface TableBoardProps {
   title: string | null;
   createdAt: string | null;
   category: string;
+  private: boolean;
 }
 
 const Board: React.VFC = () => {
@@ -57,8 +58,9 @@ const Board: React.VFC = () => {
               title: elem.title,
               createdAt: getDate(elem.createdAt || ""),
               category: elem.category,
+              private: elem.private || false,
             };
-            if (!elem.private) {
+            if (elem.private === false) {
               return dataSource.push(obj);
             }
             return null;

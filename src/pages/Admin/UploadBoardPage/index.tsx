@@ -87,7 +87,9 @@ const UploadBoardPage: React.VFC = () => {
     setIsTypeNeeded(typeSwitcher(subparam as string));
   }, [subparam]);
 
-  const handleChange = (value: any) => setContent(value);
+  const handleChange = (value: any) => {
+    setContent(value);
+  };
 
   const [createBoard, { loading }] = useMutation(CREATE_BOARD, {
     onCompleted: ({ createBoard }) => {
@@ -440,16 +442,17 @@ const UploadBoardPage: React.VFC = () => {
         )}
         {isContentNeeded && (
           <Form.Item
-            name={["content"]}
+            name={"content"}
             label="내용"
             style={{ marginTop: 20 }}
-            rules={[{ required: true, message: "게시물을 입력해 주세요" }]}
+            initialValue=""
+            rules={[{ required: true }]}
           >
             <Editor
+              modules={modules}
+              formats={formats}
               value={content || ""}
-              onChange={(content, _, __, editor) =>
-                handleChange(editor.getHTML())
-              }
+              onChange={handleChange}
               theme={"snow"}
             />
           </Form.Item>
