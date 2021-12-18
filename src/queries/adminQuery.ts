@@ -9,6 +9,7 @@ export const CREATE_BOARD = gql`
     $images: [AttachModel]
     $link: String
     $type: String
+    $private: Boolean
   ) {
     createBoard(
       title: $title
@@ -18,6 +19,7 @@ export const CREATE_BOARD = gql`
       images: $images
       link: $link
       type: $type
+      private: $private
     ) {
       ok
       err
@@ -36,6 +38,7 @@ export const GET_BOARD_BY_CATEGORY = gql`
         content
         category
         private
+        type
         files {
           id
           url
@@ -162,6 +165,15 @@ export const DELETE_LINK = gql`
 export const EDIT_LINK = gql`
   mutation editLink($id: Int!, $title: String, $url: String) {
     editLink(id: $id, title: $title, url: $url) {
+      ok
+      err
+    }
+  }
+`;
+
+export const EDIT_POPUP = gql`
+  mutation editPopup($up: String!, $url: String) {
+    editPopup(up: $up, url: $url) {
       ok
       err
     }

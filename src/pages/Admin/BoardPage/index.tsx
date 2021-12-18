@@ -10,7 +10,7 @@ import {
 } from "../../../queries/adminQuery";
 import { getBoardByCategory } from "../../../typings/api";
 import { getDate } from "../../../utils/convertDate";
-import { Container } from "../StoragePage/styles";
+import styled from "@emotion/styled";
 
 interface ParamProps {
   param: string;
@@ -22,6 +22,8 @@ interface TableBoardProps {
   title: string | null;
   createdAt: string | null;
   category: string;
+  private: boolean;
+  type: string;
 }
 
 interface LocationProps {
@@ -76,6 +78,8 @@ const BoardPage = () => {
           title: elem.title,
           createdAt: getDate(elem.createdAt || ""),
           category: elem.category,
+          private: elem.private || false,
+          type: elem.type || "",
         };
         return dataSource.push(obj);
       });
@@ -118,12 +122,20 @@ const BoardPage = () => {
           title="작성일"
           dataIndex="createdAt"
           key="createdAt"
-          width={150}
+          width={100}
         />
         <Column
-          title="Action"
+          title="공개여부"
+          key="public"
+          width={100}
+          render={(text, record: TableBoardProps) => (
+            <Space size="middle">{record.private ? "비공개" : "공개"}</Space>
+          )}
+        />
+        <Column
+          title="옵션"
           key="action"
-          width={150}
+          width={100}
           render={(text, record: TableBoardProps) => (
             <Space size="middle">
               <Button
@@ -142,3 +154,5 @@ const BoardPage = () => {
 };
 
 export default BoardPage;
+
+const Container = styled.div``;

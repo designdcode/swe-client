@@ -1,7 +1,6 @@
 import React from "react";
 import { useParams } from "react-router";
 import loadable from "@loadable/component";
-import VideoLink from "../pages/Admin/VideoLink";
 
 interface IProps {
   param: string;
@@ -25,6 +24,10 @@ const UploadImageBoardPage = loadable(
 );
 const EditImageBoardPage = loadable(
   () => import("../pages/Admin/EditImageBoardPage/index")
+);
+const VideoLink = loadable(() => import("../pages/Admin/VideoLink/index"));
+const PopupManager = loadable(
+  () => import("../pages/Admin/PopupManager/index")
 );
 
 const AdminRouteHandler: React.VFC = () => {
@@ -128,6 +131,8 @@ const AdminRouteHandler: React.VFC = () => {
         else return <ImageBoardPage />;
       case "link":
         return <VideoLink />;
+      case "popup":
+        return <PopupManager />;
       default:
         return;
     }

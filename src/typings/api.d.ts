@@ -25,6 +25,7 @@ export interface createBoardVariables {
   images?: (AttachModel | null)[] | null;
   link?: string | null;
   type?: string | null;
+  private?: boolean | null;
 }
 
 /* tslint:disable */
@@ -57,6 +58,7 @@ export interface getBoardByCategory_getBoardByCategory_data {
   content: string | null;
   category: string;
   private: boolean | null;
+  type: string | null;
   files: (getBoardByCategory_getBoardByCategory_data_files | null)[] | null;
   images: (getBoardByCategory_getBoardByCategory_data_images | null)[] | null;
   link: string | null;
@@ -355,6 +357,30 @@ export interface editLinkVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: editPopup
+// ====================================================
+
+export interface editPopup_editPopup {
+  __typename: "editPopupResponse";
+  ok: boolean;
+  err: string | null;
+}
+
+export interface editPopup {
+  editPopup: editPopup_editPopup;
+}
+
+export interface editPopupVariables {
+  up: string;
+  url?: string | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: getBoardById
 // ====================================================
 
@@ -528,6 +554,32 @@ export interface getBoardByMonth {
 
 export interface getBoardByMonthVariables {
   category: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getPopupStatus
+// ====================================================
+
+export interface getPopupStatus_getPopupStatus_data {
+  __typename: "Popup";
+  url: string | null;
+  up: boolean;
+}
+
+export interface getPopupStatus_getPopupStatus {
+  __typename: "getPopupStatusResponse";
+  ok: boolean;
+  err: string | null;
+  data: getPopupStatus_getPopupStatus_data | null;
+}
+
+export interface getPopupStatus {
+  getPopupStatus: getPopupStatus_getPopupStatus;
 }
 
 /* tslint:disable */

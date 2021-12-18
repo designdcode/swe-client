@@ -28,6 +28,9 @@ import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import { fileUploader } from "../../../utils/fileUploader";
 import { fileRemover } from "../../../utils/fileRemover";
 import { storage } from "../../../utils/firebase";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import styled from "@emotion/styled";
 
 interface locationProps {
   search: string;
@@ -42,13 +45,25 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+    ["bold", "italic"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["clean"],
+  ],
+};
+
+const formats = ["header", "bold", "italic", "underline", "list"];
+
 const UploadBoardPage: React.VFC = () => {
   const history = useHistory();
   const { search } = useLocation<locationProps>();
   const queryObj = queryString.parse(search);
   const { category, param, subparam } = queryObj;
   const [title, onChangeTitle, setTitle] = useInput("");
-  const [content, onChangeContent, setContent] = useInput("");
+  // const [content, onChangeContent, setContent] = useInput("");
+  const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
   const [showLink, setShowLink] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<string | undefined>();
@@ -71,6 +86,10 @@ const UploadBoardPage: React.VFC = () => {
     setIsContentNeeded(contentSwitcher(subparam as string));
     setIsTypeNeeded(typeSwitcher(subparam as string));
   }, [subparam]);
+
+  const handleChange = (value: any) => {
+    setContent(value);
+  };
 
   const [createBoard, { loading }] = useMutation(CREATE_BOARD, {
     onCompleted: ({ createBoard }) => {
@@ -214,6 +233,25 @@ const UploadBoardPage: React.VFC = () => {
     [category, file]
   );
 
+  const testMenu = useMemo(() => {
+    return (
+      <Menu style={{ width: 150 }}>
+        <Menu.Item key="0">
+          <div
+            onClick={() =>
+              setType({
+                type: "test",
+                title: "테스트",
+              })
+            }
+          >
+            테스트
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+  }, []);
+
   const valueMenu = useMemo(() => {
     return (
       <Menu style={{ width: 150 }}>
@@ -308,10 +346,10 @@ const UploadBoardPage: React.VFC = () => {
         case "valuenews":
           return valueMenu;
         default:
-          return valueMenu;
+          return testMenu;
       }
     },
-    [coopMenu, valueMenu]
+    [coopMenu, valueMenu, testMenu]
   );
 
   useEffect(() => {
@@ -403,11 +441,19 @@ const UploadBoardPage: React.VFC = () => {
           </Form.Item>
         )}
         {isContentNeeded && (
-          <Form.Item name={["content"]} label="내용" style={{ marginTop: 20 }}>
-            <Input.TextArea
-              onChange={onChangeContent}
-              rows={10}
-              value={content}
+          <Form.Item
+            name={"content"}
+            label="내용"
+            style={{ marginTop: 20 }}
+            initialValue=""
+            rules={[{ required: true }]}
+          >
+            <Editor
+              modules={modules}
+              formats={formats}
+              value={content || ""}
+              onChange={handleChange}
+              theme={"snow"}
             />
           </Form.Item>
         )}
@@ -436,3 +482,10 @@ const UploadBoardPage: React.VFC = () => {
 };
 
 export default UploadBoardPage;
+
+const Editor = styled(ReactQuill)`
+  background-color: white;
+  .ql-container {
+    min-height: 300px;
+  }
+`;

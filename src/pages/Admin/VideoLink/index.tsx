@@ -32,7 +32,7 @@ const VideoLink: React.VFC = () => {
       const { ok, err, data } = getBoardByCategory;
       if (ok && data && data.length > 0) {
         if (data[0].link) {
-          setVideoId(data[0].link.split("=v")[1]);
+          setVideoId(data[0].link.split("v=")[1]);
         }
       } else {
         console.log(err);

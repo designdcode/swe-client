@@ -123,9 +123,12 @@ const BoardDetail: React.VFC = () => {
             ) : (
               ""
             )}
-            <div className="content-body-desc">
-              {data?.getBoardById.data?.content}
-            </div>
+            <div
+              className="content-body-desc"
+              dangerouslySetInnerHTML={{
+                __html: data?.getBoardById.data?.content || "",
+              }}
+            ></div>
             {data?.getBoardById.data?.files &&
               data.getBoardById.data.files.length > 0 && (
                 <div className="content-body-attachment">

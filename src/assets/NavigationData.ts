@@ -62,6 +62,11 @@ export const NavigationData: NavProps[] = [
         ko_title: "입학전 SW교육",
       },
       {
+        key: "basic-pre",
+        title: "basic-pre-education",
+        ko_title: "입학전 SW교육",
+      },
+      {
         key: "basic-basicedu",
         title: "basic-education",
         ko_title: "SW기초교육",
@@ -71,25 +76,15 @@ export const NavigationData: NavProps[] = [
         title: "basic-creativity",
         ko_title: "SW창의역량인증",
       },
-      {
-        key: "basic-lecture",
-        title: "basic-lecture",
-        ko_title: "ST@R EDX 공개강좌",
-      },
-      {
-        key: "basic-clinic",
-        title: "basic-clinic",
-        ko_title: "SW클리닉",
-      },
-      {
-        key: "basic-tutoring",
-        title: "basic-tutoring",
-        ko_title: "SW튜터링",
-      },
+      // {
+      //   key: "basic-lecture",
+      //   title: "basic-lecture",
+      //   ko_title: "ST@R EDX 공개강좌",
+      // },
       {
         key: "basic-AI",
         title: "basic-AI",
-        ko_title: "AI SW 서포터즈 맨토링",
+        ko_title: "AI SW서포터즈멘토링",
       },
       {
         key: "basic-online",
@@ -130,11 +125,6 @@ export const NavigationData: NavProps[] = [
         ko_title: "소프트웨어전문역량인증제",
       },
       {
-        key: "major-contest",
-        title: "major-contest",
-        ko_title: "SW 경진대회",
-      },
-      {
         key: "major-training",
         title: "major-training",
         ko_title: "해외현장실습",
@@ -142,7 +132,7 @@ export const NavigationData: NavProps[] = [
       {
         key: "major-taprogram",
         title: "major-taprogram",
-        ko_title: "프로그래밍교과목 멘토(TA) 프로그램",
+        ko_title: "SW역량강화플랫폼",
       },
     ],
   },
@@ -158,30 +148,35 @@ export const NavigationData: NavProps[] = [
         ko_title: "개요",
       },
       {
-        key: "integration-software",
-        title: "integration-software",
-        ko_title: "소프트웨어 융합경영전공",
+        key: "integration-swmajor",
+        title: "integration-swmajor",
+        ko_title: "SW연계/복수전공",
       },
-      {
-        key: "integration-product",
-        title: "integration-product",
-        ko_title: "스마트제조 IOT융합전공",
-      },
-      {
-        key: "integration-content",
-        title: "integration-content",
-        ko_title: "스마트콘텐츠 융합전공",
-      },
-      {
-        key: "integration-automobile",
-        title: "integration-automobile",
-        ko_title: "미래자동차 융합전공",
-      },
-      {
-        key: "integration-inteligence",
-        title: "integration-inteligence",
-        ko_title: "지능형 전장 제어 전공",
-      },
+      // {
+      //   key: "integration-software",
+      //   title: "integration-software",
+      //   ko_title: "소프트웨어 융합경영전공",
+      // },
+      // {
+      //   key: "integration-product",
+      //   title: "integration-product",
+      //   ko_title: "스마트제조 IOT융합전공",
+      // },
+      // {
+      //   key: "integration-content",
+      //   title: "integration-content",
+      //   ko_title: "스마트콘텐츠 융합전공",
+      // },
+      // {
+      //   key: "integration-automobile",
+      //   title: "integration-automobile",
+      //   ko_title: "미래자동차 융합전공",
+      // },
+      // {
+      //   key: "integration-inteligence",
+      //   title: "integration-inteligence",
+      //   ko_title: "지능형 전장 제어 전공",
+      // },
     ],
   },
   {
@@ -209,11 +204,6 @@ export const NavigationData: NavProps[] = [
         key: "value-share",
         title: "value-share",
         ko_title: "AI · SW 가치공유",
-      },
-      {
-        key: "value-platform",
-        title: "value-platform",
-        ko_title: "SW 가치확산 플랫폼",
       },
     ],
   },
