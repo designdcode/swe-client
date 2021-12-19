@@ -25,7 +25,7 @@ const HomeBanner: React.VFC = () => {
           size.width > 375
             ? (onClickHandler, isSelected, index, label) => {
                 const defStyle = {
-                  marginLeft: 20,
+                  marginLeft: 10,
                   color: "white",
                   cursor: "pointer",
                 };
@@ -44,14 +44,14 @@ const HomeBanner: React.VFC = () => {
                   >
                     {index === 0 && (
                       <IoIosArrowDropleft
-                        size={45}
+                        size={40}
                         color={"white"}
                         style={{ opacity: 0.5 }}
                       />
                     )}
                     {index === 1 && (
                       <IoIosArrowDropright
-                        size={45}
+                        size={40}
                         color={"white"}
                         style={{ opacity: 0.5 }}
                       />
@@ -119,7 +119,7 @@ const Image = styled.img`
     height: 400px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    height: 640px;
+    height: 550px;
     width: 1280px;
   }
 `;

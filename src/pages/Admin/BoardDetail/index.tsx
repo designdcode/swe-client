@@ -4,6 +4,10 @@ import { useHistory, useLocation, useParams } from "react-router";
 import { useMutation, useQuery } from "@apollo/client";
 import { GET_BOARD_BY_ID } from "../../../queries/sharedQuery";
 import {
+  createReply,
+  createReplyVariables,
+  deleteReply,
+  deleteReplyVariables,
   getBoardById,
   getBoardByIdVariables,
   getBoardById_getBoardById_data,
@@ -12,10 +16,17 @@ import {
 } from "../../../typings/api";
 import { Descriptions, Typography } from "antd";
 import { Button, Container } from "./styles";
-import { DELETE_BOARD } from "../../../queries/adminQuery";
+import {
+  CREATE_REPLY,
+  DELETE_BOARD,
+  DELETE_REPLY,
+} from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { getDate } from "../../../utils/convertDate";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import styled from "@emotion/styled";
 
 interface locationProps {
   search: string;
@@ -24,6 +35,17 @@ interface locationProps {
 interface paramProps {
   param: string;
 }
+
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+    ["bold", "italic"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["clean"],
+  ],
+};
+
+const formats = ["header", "bold", "italic", "underline", "list"];
 
 const BoardDetail: React.VFC = () => {
   const { search } = useLocation<locationProps>();
@@ -36,15 +58,21 @@ const BoardDetail: React.VFC = () => {
     useState<(getBoardById_getBoardById_data_files | undefined | null)[]>();
   const [images, setImages] =
     useState<(getBoardById_getBoardById_data_images | undefined | null)[]>();
+  const [showReply, setShowReply] = useState<boolean>(false);
+  const [reply, setReply] = useState<string>("");
 
-  const { data, loading } = useQuery<getBoardById, getBoardByIdVariables>(
-    GET_BOARD_BY_ID,
-    {
-      variables: {
-        id: parseInt(id as string, 10),
-      },
-    }
-  );
+  const { data, loading, refetch } = useQuery<
+    getBoardById,
+    getBoardByIdVariables
+  >(GET_BOARD_BY_ID, {
+    variables: {
+      id: parseInt(id as string, 10),
+    },
+  });
+
+  const handleChange = (value: any) => {
+    setReply(value);
+  };
 
   const [deleteBoard] = useMutation(DELETE_BOARD, {
     onCompleted: ({ deleteBoard }) => {
@@ -61,6 +89,36 @@ const BoardDetail: React.VFC = () => {
       }
     },
   });
+
+  const [createReplyMutation] = useMutation<createReply, createReplyVariables>(
+    CREATE_REPLY,
+    {
+      onCompleted: ({ createReply }) => {
+        const { ok, err } = createReply;
+        if (ok) {
+          refetch();
+          setShowReply(false);
+        } else {
+          console.log(err);
+        }
+      },
+    }
+  );
+
+  const [deleteReplyMutation] = useMutation<deleteReply, deleteReplyVariables>(
+    DELETE_REPLY,
+    {
+      onCompleted: ({ deleteReply }) => {
+        const { ok, err } = deleteReply;
+        if (ok) {
+          refetch();
+          toast.info("답글이 삭제 되었습니다.");
+        } else {
+          console.log(err);
+        }
+      },
+    }
+  );
 
   const handleDeleteBoard = useCallback(() => {
     deleteBoard({
@@ -91,6 +149,33 @@ const BoardDetail: React.VFC = () => {
       setImages(data.getBoardById.data.images);
     }
   }, [data]);
+
+  const handleReplySubmit = useCallback(
+    async (id?: number) => {
+      if (id) {
+        await createReplyMutation({
+          variables: {
+            boardId: id,
+            content: reply,
+          },
+        });
+      }
+    },
+    [createReplyMutation, reply]
+  );
+
+  const handleDeleteReply = useCallback(
+    async (id?: number) => {
+      if (id) {
+        await deleteReplyMutation({
+          variables: {
+            replyId: id,
+          },
+        });
+      }
+    },
+    [deleteReplyMutation]
+  );
 
   if (loading) {
     return <>loading</>;
@@ -152,6 +237,15 @@ const BoardDetail: React.VFC = () => {
                     >
                       {elem?.fileName}
                     </a>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        marginLeft: 15,
+                        color: `${board?.showAttach ? "#0081fa" : "red"}`,
+                      }}
+                    >
+                      {board?.showAttach ? "공개" : "비공개"}
+                    </span>
                   </span>
                 );
               })}
@@ -184,6 +278,65 @@ const BoardDetail: React.VFC = () => {
             dangerouslySetInnerHTML={{ __html: board?.content || "" }}
           ></span>
         </Descriptions.Item>
+        {(category?.toString().split("-")[1] === "request" ||
+          category?.toString().split("-")[1] === "help") && (
+          <Descriptions.Item label="답글" span={4} key="content">
+            {board?.replies && board.replies.length > 0 ? (
+              board.replies.map((item, idx) => {
+                return (
+                  <div key={idx} style={{ display: "flex" }}>
+                    <span
+                      style={{
+                        display: "block",
+                        minWidth: 200,
+                        minHeight: 100,
+                      }}
+                      dangerouslySetInnerHTML={{ __html: item?.content || "" }}
+                    ></span>
+                    <Button
+                      type="primary"
+                      danger
+                      style={{ marginLeft: 15 }}
+                      onClick={() => handleDeleteReply(item?.id)}
+                    >
+                      답글 삭제
+                    </Button>
+                  </div>
+                );
+              })
+            ) : (
+              <div>
+                {showReply ? (
+                  <Editor
+                    modules={modules}
+                    formats={formats}
+                    value={reply || ""}
+                    onChange={handleChange}
+                    theme="snow"
+                  />
+                ) : (
+                  <span style={{ display: "block", marginBottom: 15 }}>
+                    답글이 없습니다
+                  </span>
+                )}
+              </div>
+            )}
+            {showReply ? (
+              <Button
+                type="primary"
+                onClick={() => {
+                  handleReplySubmit(board?.id);
+                }}
+              >
+                게시
+              </Button>
+            ) : (
+              <Button type="default" onClick={() => setShowReply(!showReply)}>
+                댓글 달기
+              </Button>
+            )}
+          </Descriptions.Item>
+        )}
       </Descriptions>
       <div className="button-group">
         <Link
@@ -200,3 +353,11 @@ const BoardDetail: React.VFC = () => {
 };
 
 export default BoardDetail;
+
+const Editor = styled(ReactQuill)`
+  background-color: white;
+  min-height: 150px;
+  .ql-container {
+    min-height: 150px;
+  }
+`;

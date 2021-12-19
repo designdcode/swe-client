@@ -142,31 +142,6 @@ export const NavigationData: NavProps[] = [
         title: "integration-swmajor",
         ko_title: "SW연계/복수전공",
       },
-      // {
-      //   key: "integration-software",
-      //   title: "integration-software",
-      //   ko_title: "소프트웨어 융합경영전공",
-      // },
-      // {
-      //   key: "integration-product",
-      //   title: "integration-product",
-      //   ko_title: "스마트제조 IOT융합전공",
-      // },
-      // {
-      //   key: "integration-content",
-      //   title: "integration-content",
-      //   ko_title: "스마트콘텐츠 융합전공",
-      // },
-      // {
-      //   key: "integration-automobile",
-      //   title: "integration-automobile",
-      //   ko_title: "미래자동차 융합전공",
-      // },
-      // {
-      //   key: "integration-inteligence",
-      //   title: "integration-inteligence",
-      //   ko_title: "지능형 전장 제어 전공",
-      // },
     ],
   },
   {
@@ -275,7 +250,7 @@ export const NavigationData: NavProps[] = [
         ko_title: "학사공지",
       },
       {
-        key: "community-storaoge",
+        key: "community-storage",
         title: "community-storage",
         ko_title: "서식자료실",
       },
@@ -304,32 +279,32 @@ export const NavigationData: NavProps[] = [
     subMenu: [
       {
         key: "site-cs",
-        title: "site-cs",
+        title: "sitelink",
         ko_title: "컴퓨터공학부",
       },
       {
         key: "site-ai",
-        title: "site-ai",
+        title: "sitelink",
         ko_title: "AI소프트웨어학과",
       },
       {
         key: "site-convergence",
-        title: "site-convergence",
+        title: "sitelink",
         ko_title: "SW융합학부",
       },
       {
         key: "site-it",
-        title: "site-it",
+        title: "sitelink",
         ko_title: "IT교육학부",
       },
       {
         key: "site-smartcar",
-        title: "site-smartcar",
+        title: "sitelink",
         ko_title: "스마트자동차공학부",
       },
       {
         key: "site-sw",
-        title: "site-sw",
+        title: "sitelink",
         ko_title: "SW융합교육원",
       },
     ],

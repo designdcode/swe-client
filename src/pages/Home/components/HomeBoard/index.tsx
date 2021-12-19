@@ -298,7 +298,8 @@ const BoardContainer = styled.div`
         }
 
         & .title {
-          font-size: 18px;
+          font-size: 20px;
+          margin-left: 20px;
           font-weight: 600;
           letter-spacing: -0.9px;
         }
@@ -321,7 +322,7 @@ const TitleWithLine = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     & .title {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 600;
     }
   }
@@ -338,7 +339,7 @@ const NoticeList = styled(List.Item)`
     & a {
       font-size: 17px;
       font-weight: 600;
-      width: 55%;
+      width: 60%;
       color: #0c1b58;
       white-space: nowrap;
       overflow: hidden;
@@ -386,13 +387,11 @@ const NoticeListSpan = styled.div`
     text-overflow: ellipsis;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    /* font-size: 17px;
-    font-weight: 600;
-    width: 55%;
-    color: #0c1b58;
+    font-size: 14px;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; */
+    text-overflow: ellipsis;
   }
 `;
 
@@ -403,9 +402,10 @@ const NoticeDate = styled.div`
     float: rigth;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 500;
     float: rigth;
+    color: #636363;
   }
 `;
 

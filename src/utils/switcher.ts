@@ -54,6 +54,8 @@ export const fileSwitcher = (subparam?: string | null) => {
         return true;
       } else if (subp === "administration") {
         return true;
+      } else if (subp === "storage") {
+        return true;
       } else {
         return false;
       }
