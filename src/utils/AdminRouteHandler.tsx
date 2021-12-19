@@ -122,6 +122,7 @@ const AdminRouteHandler: React.VFC = () => {
         else if (subparam === `detail-${param}`) return <BoardDetail />;
         else if (subparam === `edit-${param}`) return <EditBoardPage />;
         else if (subparam.includes("storage")) return <StoragePage />;
+        else if (subparam.includes("sitemap")) return <ImageBoardPage />;
         else return <StoragePage />;
       case "sitelink":
         if (subparam === `create-image-${param}`)

@@ -103,6 +103,9 @@ const PopupManager: React.FC = () => {
           key={"게시"}
           labelStyle={{ width: 120 }}
         >
+          <span style={{ marginBottom: 20, display: "block" }}>
+            &#8251;팝업 이미지는 가로 500 세로 700의 이미지를 사용 해 주세요.
+          </span>
           {data &&
           data.getPopupStatus.data &&
           data.getPopupStatus.data.url !== "" ? (

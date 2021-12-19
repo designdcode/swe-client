@@ -34,7 +34,7 @@ const Home: React.VFC = () => {
 
   return (
     <Wrapper>
-      {screen.width > 375 &&
+      {screen.width > 376 &&
         data?.getPopupStatus.data &&
         data.getPopupStatus.data.up && (
           <PopUp

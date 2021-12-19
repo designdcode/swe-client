@@ -1,7 +1,6 @@
 import { useQuery } from "@apollo/client";
 import styled from "@emotion/styled";
 import { Card as StyledCard } from "antd";
-import Text from "antd/lib/typography/Text";
 import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
@@ -83,7 +82,7 @@ const HomeBNews: React.VFC = () => {
                   showArrows={false}
                   selectedItem={currentDot}
                   infiniteLoop={true}
-                  width={285}
+                  width={300}
                 >
                   {newsData.map((item, idx) => {
                     let url: string | undefined = "";
@@ -122,11 +121,7 @@ const HomeBNews: React.VFC = () => {
                           />
                         }
                       >
-                        <div className="card-desc">
-                          {/* <Text style={{ color: "white" }}> */}
-                          {item.title}
-                          {/* </Text> */}
-                        </div>
+                        <div className="card-desc">{item.title}</div>
                       </Card>
                     );
                   })}
@@ -167,7 +162,7 @@ const Container = styled.div`
     padding: 25px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 900px;
+    width: 1280px;
     min-height: 450px;
     margin: 0 auto;
     flex-direction: column;
@@ -211,12 +206,12 @@ const TitleWithLine = styled.div`
     }
 
     & .title {
-      font-size: 17px;
+      font-size: 24px;
       font-weight: 600;
       color: white;
       display: block;
       text-align: end;
-      padding-top: 30px;
+      padding-top: 25px;
     }
   }
 `;
@@ -267,11 +262,12 @@ const Dot = styled.div<DotProps>`
 const CarouselContent = styled.div`
   width: 100%;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 350px;
     max-width: 375px;
     margin: 0 auto;
     & .carousel-text {
       margin-top: 25px;
-      max-width: 270px;
+      max-width: 300px;
       color: white;
       max-height: 40px;
       text-align: left;
@@ -286,10 +282,15 @@ const Card = styled(StyledCard)`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     width: 200px;
     height: 100%;
-    border: 1px solid cyan;
+    & .card-desc {
+      max-height: 65px;
+      color: white;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 280px;
+    width: 400px;
     height: 100%;
     background: transparent;
     & .card-desc {
@@ -297,6 +298,9 @@ const Card = styled(StyledCard)`
       color: white;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    & img {
+      object-fit: cover;
     }
   }
 `;

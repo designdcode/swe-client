@@ -13,6 +13,11 @@ export const GET_BOARD_BY_ID = gql`
         private
         type
         writer
+        showAttach
+        replies {
+          id
+          content
+        }
         files {
           id
           url

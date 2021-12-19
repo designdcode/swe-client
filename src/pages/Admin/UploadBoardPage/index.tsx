@@ -77,6 +77,7 @@ const UploadBoardPage: React.VFC = () => {
   const [checkPublic, setCheckPublic] = useState<boolean>(true);
   const [progress, setProgress] = useState<number>(0);
   const [type, setType] = useState<{ type: string; title: string }>();
+  const [showAttach, setShowAttach] = useState<boolean>(true);
 
   useEffect(() => {
     setIsImageNeeded(imageSwitcher(subparam as string));
@@ -129,6 +130,7 @@ const UploadBoardPage: React.VFC = () => {
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
           private: checkPublic ? false : true,
           type: type?.type,
+          showAttach: showAttach ? true : false,
         },
       });
     } else if (imgUrl) {
@@ -142,6 +144,7 @@ const UploadBoardPage: React.VFC = () => {
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
           private: checkPublic ? false : true,
           type: type?.type,
+          showAttach: showAttach ? true : false,
         },
       });
     } else {
@@ -153,6 +156,7 @@ const UploadBoardPage: React.VFC = () => {
           private: checkPublic ? false : true,
           category,
           type: type?.type,
+          showAttach: showAttach ? true : false,
         },
       });
     }
@@ -167,6 +171,7 @@ const UploadBoardPage: React.VFC = () => {
     imgUrl,
     checkPublic,
     type,
+    showAttach,
   ]);
 
   const handleImageUpload = useCallback(
@@ -485,6 +490,19 @@ const UploadBoardPage: React.VFC = () => {
             />
           </Form.Item>
         )}
+        {isFileNeeded && (
+          <Form.Item
+            name={"showAttach"}
+            label="첨부파일 공개여부"
+            style={{ marginTop: 20 }}
+            initialValue=""
+          >
+            <Switch
+              defaultChecked
+              onChange={() => setShowAttach(!showAttach)}
+            />
+          </Form.Item>
+        )}
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
           <Button
             type="primary"
@@ -513,6 +531,7 @@ export default UploadBoardPage;
 
 const Editor = styled(ReactQuill)`
   background-color: white;
+  min-height: 300px;
   .ql-container {
     min-height: 300px;
   }

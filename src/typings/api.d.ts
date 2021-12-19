@@ -383,8 +383,85 @@ export interface editPopupVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: createReply
+// ====================================================
+
+export interface createReply_createReply {
+  __typename: "createReplyResponse";
+  ok: boolean;
+  err: string | null;
+}
+
+export interface createReply {
+  createReply: createReply_createReply;
+}
+
+export interface createReplyVariables {
+  boardId: number;
+  content: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: editReply
+// ====================================================
+
+export interface editReply_editReply {
+  __typename: "editReplyResponse";
+  ok: boolean;
+  err: string | null;
+}
+
+export interface editReply {
+  editReply: editReply_editReply;
+}
+
+export interface editReplyVariables {
+  replyId: number;
+  content?: string | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: deleteReply
+// ====================================================
+
+export interface deleteReply_deleteReply {
+  __typename: "deleteReplyResponse";
+  ok: boolean;
+  err: string | null;
+}
+
+export interface deleteReply {
+  deleteReply: deleteReply_deleteReply;
+}
+
+export interface deleteReplyVariables {
+  replyId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: getBoardById
 // ====================================================
+
+export interface getBoardById_getBoardById_data_replies {
+  __typename: "Reply";
+  id: number;
+  content: string | null;
+}
 
 export interface getBoardById_getBoardById_data_files {
   __typename: "File";
@@ -409,6 +486,8 @@ export interface getBoardById_getBoardById_data {
   private: boolean | null;
   type: string | null;
   writer: string | null;
+  showAttach: boolean | null;
+  replies: (getBoardById_getBoardById_data_replies | null)[] | null;
   files: (getBoardById_getBoardById_data_files | null)[] | null;
   images: (getBoardById_getBoardById_data_images | null)[] | null;
   link: string | null;

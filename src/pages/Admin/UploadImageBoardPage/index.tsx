@@ -39,7 +39,6 @@ const UploadImageBoardPage = () => {
   const [isLinkNeeded, setIsLinkNeeded] = useState<boolean>(false);
   const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
-  const [loading, setLoading] = useState(false);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -82,14 +81,12 @@ const UploadImageBoardPage = () => {
         images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
       },
     });
-    setLoading(false);
   }, [createBoard, category, file, imgName, imgUrl, link]);
 
   const handleImageUpload = useCallback(
     (file: any) => {
       const filename = file.name;
       setImgName(file.name);
-      setLoading(true);
       setUploadLoading(true);
       fileUploader(
         "images",
@@ -109,7 +106,6 @@ const UploadImageBoardPage = () => {
   const handleFileUpload = useCallback(
     (file: any) => {
       setProgress(progress + 1);
-      setLoading(true);
       const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
       upload.on(
         "state_changed",
@@ -155,6 +151,10 @@ const UploadImageBoardPage = () => {
 
   return (
     <Container>
+      <span style={{ marginBottom: 20, display: "block" }}>
+        &#8251;상세 페이지 이미지는 최소 가로 1024픽셀 이상의 이미지를 사용 해
+        주세요.
+      </span>
       <Form {...layout} name="upload-board" onFinish={onFinish}>
         {isLinkNeeded && (
           <>
@@ -194,7 +194,10 @@ const UploadImageBoardPage = () => {
           <Upload
             style={{ marginBottom: 20 }}
             listType="picture"
-            customRequest={({ file }) => handleImageUpload(file)}
+            customRequest={({ file }) => {
+              setUploadLoading(true);
+              handleImageUpload(file);
+            }}
             progress={{ showInfo: true }}
             onChange={({ file: callbackFile }) => {
               if (file.length !== 0) {
@@ -210,7 +213,11 @@ const UploadImageBoardPage = () => {
           </Upload>
         </Form.Item>
         <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-          <Button type={"primary"} htmlType="submit" disabled={uploadLoading}>
+          <Button
+            type={"primary"}
+            htmlType="submit"
+            disabled={uploadLoading ? true : false}
+          >
             {!uploadLoading ? (
               "업로드"
             ) : (
