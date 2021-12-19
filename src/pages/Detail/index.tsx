@@ -361,7 +361,7 @@ const Content = styled.div`
       width: 100%;
       min-height: 50px;
       margin: 20px auto;
-      margin-top: 150px;
+      margin-top: 100px;
       & img {
         width: 300px;
       }
