@@ -134,7 +134,7 @@ const HomeSWNews: React.VFC = () => {
                   <div className="title-title">SW 교육지원센터 소식</div>
                   <div className="title-more">
                     <Link
-                      to="/main/detail/achievement/achievement-aidnews"
+                      to="/main/board/achievement/achievement-aidnews"
                       className="title-link"
                     >
                       더보기+
@@ -175,7 +175,7 @@ const HomeSWNews: React.VFC = () => {
                   <div className="title-title">SW 산학협력 소식</div>
                   <div className="title-more">
                     <Link
-                      to="/main/detail/achievement/achievement-coopnews"
+                      to="/main/board/achievement/achievement-coopnews"
                       className="title-link"
                     >
                       더보기+
@@ -218,7 +218,7 @@ const HomeSWNews: React.VFC = () => {
                   <div className="title-title">SW 가치확산센터 소식</div>
                   <div className="title-more">
                     <Link
-                      to="/main/detail/achievement/achievement-valuenews"
+                      to="/main/board/achievement/achievement-valuenews"
                       className="title-link"
                     >
                       더보기+
@@ -259,7 +259,7 @@ const HomeSWNews: React.VFC = () => {
                   <div className="title-title">창업센터 소식</div>
                   <div className="title-more">
                     <Link
-                      to="/main/detail/achievement/achievement-startup"
+                      to="/main/board/achievement/achievement-startup"
                       className="title-link"
                     >
                       더보기+
@@ -499,9 +499,10 @@ const SectionDesc = styled.div`
       display: block;
       overflow: hidden;
       word-break: break-all;
-      text-overflow: ellipsis;
-      line-height: 1.2;
-      font-size: 9px;
+      /* text-overflow: ellipsis; */
+      /* white-space: nowrap; */
+      line-height: 1.6;
+      font-size: 12px;
     }
   }
 `;

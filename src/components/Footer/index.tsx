@@ -59,6 +59,8 @@ export const FooterContaier = styled.div`
     align-items: center;
     background-color: #ededed;
     min-width: 1280px;
+    -webkit-box-shadow: inset 0px 12px 30px 0px rgba(0, 0, 0, 0.28);
+    box-shadow: inset 0px 12px 30px 0px rgba(0, 0, 0, 0.28);
     span {
       font-size: 14px;
       display: block;

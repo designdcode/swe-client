@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "@emotion/styled";
 import { useParams } from "react-router";
 import { NavigationData } from "../../assets/NavigationData";
@@ -37,6 +37,79 @@ const Detail = () => {
       },
     }
   );
+
+  const renderButton = useCallback(() => {
+    switch (subparam.split("-")[1]) {
+      case "cs":
+        return (
+          <a
+            className="link-button"
+            href="https://cs.sunmoon.ac.kr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src={"/img/cs_button.jpeg"} alt="buttonimg" />
+          </a>
+        );
+      case "ai":
+        return (
+          <a
+            className="link-button"
+            href="https://ais.sunmoon.ac.kr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src={"/img/ai_button.jpg"} alt="buttonimg" />
+          </a>
+        );
+      case "convergence":
+        return (
+          <a
+            className="link-button"
+            href="https://swc.sunmoon.ac.kr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src={"/img/swc_button.jpeg"} alt="buttonimg" />
+          </a>
+        );
+      case "it":
+        return (
+          <a
+            className="link-button"
+            href="https://itedu.sunmoon.ac.kr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src={"/img/itedu_button.jpg"} alt="buttonimg" />
+          </a>
+        );
+      case "smartcar":
+        return (
+          <a
+            className="link-button"
+            href="https://smartcar.sunmoon.ac.kr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src={"/img/smartcar_button.jpeg"} alt="buttonimg" />
+          </a>
+        );
+      case "sw":
+        return (
+          <a
+            className="link-button"
+            href="https://sw.sunmoon.ac.kr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img src={"/img/sw_button.jpeg"} alt="buttonimg" />
+          </a>
+        );
+      default:
+        return null;
+    }
+  }, [subparam]);
 
   if (loading) {
     return <div>loading...</div>;
@@ -91,7 +164,9 @@ const Detail = () => {
         <img src="/img/detailBG.jpeg" alt="cover" />
       </Cover>
       <Content>
-        {param.toString() === "sitelink" && <>여기 버튼</>}
+        {/* <div> */}
+        {param.toString() === "sitelink" && renderButton()}
+        {/* </div> */}
         <ContentImage>
           {data?.getBoardByCategory.data &&
             data.getBoardByCategory.data[0] &&
@@ -280,6 +355,17 @@ const Content = styled.div`
     width: 1280px;
     min-height: 100vh;
     margin: 0 auto;
+    & .link-button {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      min-height: 50px;
+      margin: 20px auto;
+      margin-top: 150px;
+      & img {
+        width: 300px;
+      }
+    }
   }
 `;
 

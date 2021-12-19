@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { UserOutlined, LockOutlined, LogoutOutlined } from "@ant-design/icons";
 import { LoginContainer } from "./styles";
 import { getSubTitle, getTitle } from "../../utils/getTitle";
+import styled from "@emotion/styled";
 
 interface ParamProps {
   param: string;
@@ -93,7 +94,9 @@ const Admin: React.FC = () => {
       {loginStatus ? (
         <>
           <Header className="header">
-            <div className="logo" />
+            <div className="logo">
+              <img src="/img/logo.png" alt="logoimg" width={200} />
+            </div>
             <Menu
               theme="dark"
               mode="horizontal"
@@ -185,10 +188,14 @@ const Admin: React.FC = () => {
             </Sider>
             <Layout style={{ padding: "0 24px 24px" }}>
               {showBreadCrumb && (
-                <Breadcrumb style={{ margin: "16px 0" }}>
-                  <Breadcrumb.Item>{parentMenu}</Breadcrumb.Item>
-                  <Breadcrumb.Item>{pickMenu}</Breadcrumb.Item>
-                </Breadcrumb>
+                <StyledBread style={{ margin: "16px 0" }}>
+                  <Breadcrumb.Item className="bread-item">
+                    {parentMenu}
+                  </Breadcrumb.Item>
+                  <Breadcrumb.Item className="bread-item">
+                    {pickMenu}
+                  </Breadcrumb.Item>
+                </StyledBread>
               )}
               <Content
                 className="site-layout-background"
@@ -258,3 +265,10 @@ const Admin: React.FC = () => {
 };
 
 export default Admin;
+
+const StyledBread = styled(Breadcrumb)`
+  & .bread-item {
+    font-size: 16px;
+    font-weight: 600;
+  }
+`;

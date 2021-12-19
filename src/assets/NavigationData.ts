@@ -62,11 +62,6 @@ export const NavigationData: NavProps[] = [
         ko_title: "입학전 SW교육",
       },
       {
-        key: "basic-pre",
-        title: "basic-pre-education",
-        ko_title: "입학전 SW교육",
-      },
-      {
         key: "basic-basicedu",
         title: "basic-education",
         ko_title: "SW기초교육",
@@ -76,11 +71,6 @@ export const NavigationData: NavProps[] = [
         title: "basic-creativity",
         ko_title: "SW창의역량인증",
       },
-      // {
-      //   key: "basic-lecture",
-      //   title: "basic-lecture",
-      //   ko_title: "ST@R EDX 공개강좌",
-      // },
       {
         key: "basic-AI",
         title: "basic-AI",

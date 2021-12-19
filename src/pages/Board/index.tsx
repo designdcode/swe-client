@@ -32,6 +32,7 @@ interface TableBoardProps {
   createdAt: string | null;
   category: string;
   private: boolean;
+  writer: string;
 }
 
 const Board: React.VFC = () => {
@@ -59,6 +60,7 @@ const Board: React.VFC = () => {
               createdAt: getDate(elem.createdAt || ""),
               category: elem.category,
               private: elem.private || false,
+              writer: elem.writer || "",
             };
             if (elem.private === false) {
               return dataSource.push(obj);
@@ -75,6 +77,8 @@ const Board: React.VFC = () => {
   useEffect(() => {
     setTitle(ConvertTitle(subparam));
     if (subparam.split("-")[1] === "request") {
+      setWriteAble(true);
+    } else if (subparam.split("-")[1] === "help") {
       setWriteAble(true);
     } else {
       setWriteAble(false);
@@ -157,10 +161,13 @@ const Board: React.VFC = () => {
             <Dropdown overlay={menu} className="dropdown">
               <Button>{searchCategory}&ensp;&ensp;&or;</Button>
             </Dropdown>
-            <input placeholder="test" />
+            <input placeholder="검색어를 입력해 주세요" />
             <button className="board-search-button">검색</button>
             {writeAble && (
-              <Link className="board-button" to="/">
+              <Link
+                className="board-button"
+                to={`/main/write/${param}/${subparam}`}
+              >
                 글쓰기
               </Link>
             )}
@@ -209,16 +216,21 @@ const Board: React.VFC = () => {
             title={() => {
               return (
                 <Space>
-                  <TableTitle>관리자</TableTitle>
+                  <TableTitle>작성자</TableTitle>
                 </Space>
               );
             }}
             dataIndex="관리자"
             key="관리자"
-            render={() => {
+            render={(text, record: TableBoardProps) => {
               return (
                 <Space>
-                  <TableDesc>관리자</TableDesc>
+                  <TableDesc>
+                    {subparam.split("-")[1] === "request" ||
+                    subparam.split("-")[1] === "help"
+                      ? record.writer
+                      : "관리자"}
+                  </TableDesc>
                 </Space>
               );
             }}
@@ -350,7 +362,6 @@ const SubMenu = styled.div<middleMenuProps>`
     position: absolute;
     bottom: 0;
     font-size: 15px;
-
     & .submenu-content {
       max-width: 1280px;
       min-width: 800px;
@@ -461,6 +472,7 @@ const BoardTitle = styled.div`
       align-items: center;
       height: 80%;
       & .board-page-title {
+        text-align: center;
         min-width: 350px;
         margin: 0 auto;
         font-size: 40px;
