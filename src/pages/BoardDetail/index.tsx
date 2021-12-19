@@ -72,10 +72,7 @@ const BoardDetail: React.VFC = () => {
             }
           })}
         </CoverTitle>
-        <SubMenu
-          isBigger={param === "major" || param === "basic" ? true : false}
-          margin="5%"
-        >
+        <SubMenu isBigger={param === "major" ? true : false} margin="5%">
           <div className="submenu-content">
             {NavigationData.map((item, idx) => {
               if (item.title === param) {
@@ -92,7 +89,7 @@ const BoardDetail: React.VFC = () => {
                         to={`/main/board/${param}/${elem.key}`}
                         first={colored}
                       >
-                        <span style={{ fontWeight: 600 }}>{elem.ko_title}</span>
+                        <span style={{ fontWeight: 400 }}>{elem.ko_title}</span>
                       </StyleLink>
                     </ContentCell>
                   );
@@ -284,7 +281,7 @@ const SubMenu = styled.div<middleMenuProps>`
     font-size: 15px;
     & .submenu-content {
       max-width: 1200px;
-      min-width: 800px;
+      min-width: 1000px;
       min-height: 50px;
       height: ${(props) => (props.isBigger ? "100px" : "50px")};
       margin: 0 auto;
@@ -296,7 +293,6 @@ const SubMenu = styled.div<middleMenuProps>`
     & .submenu-col {
       width: 16%;
       height: 50px;
-      display: flex;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -315,7 +311,7 @@ const StyleLink = styled(Link)<MenuCellProps>`
     align-items: center;
     justify-content: center;
     padding: 2px 5px;
-    font-size: 13px;
+    font-size: 16px;
     color: ${(props) => (props.first === 0 ? "white" : "black")};
     &:hover {
       color: white;

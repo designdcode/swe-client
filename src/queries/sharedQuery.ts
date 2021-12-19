@@ -125,3 +125,47 @@ export const GET_VIDEO_LINK = gql`
     }
   }
 `;
+
+export const SEARCH_BOARD = gql`
+  query searchBoard($category: String!, $title: String!) {
+    searchBoard(category: $category, title: $title) {
+      ok
+      err
+      data {
+        id
+        title
+        content
+        category
+        private
+        type
+        writer
+        link
+        createdAt
+        updatedAt
+        deleteAt
+      }
+    }
+  }
+`;
+
+export const SEARCH_BOARD_BY_CONTENT = gql`
+  query searchBoardByContent($category: String!, $content: String!) {
+    searchBoardByContent(category: $category, content: $content) {
+      ok
+      err
+      data {
+        id
+        title
+        content
+        category
+        private
+        type
+        writer
+        link
+        createdAt
+        updatedAt
+        deleteAt
+      }
+    }
+  }
+`;
