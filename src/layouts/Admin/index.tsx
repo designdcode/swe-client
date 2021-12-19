@@ -95,7 +95,7 @@ const Admin: React.FC = () => {
         <>
           <Header className="header">
             <div className="logo">
-              <img src="/img/logo.png" alt="logoimg" width={200} />
+              <img src="/img/admin_logo.png" alt="logoimg" width={200} />
             </div>
             <Menu
               theme="dark"
