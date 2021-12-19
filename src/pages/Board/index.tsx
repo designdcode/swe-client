@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "@emotion/styled";
 import {
   BREAKPOINT_BIGGER_THAN_PC,
@@ -19,6 +19,7 @@ import { Link } from "react-router-dom";
 import { ConvertTitle } from "../../utils/convertTitle";
 import { NavigationData } from "../../assets/NavigationData";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import useInput from "../../hooks/useInput";
 
 interface ParamProps {
   param: string;
@@ -33,15 +34,18 @@ interface TableBoardProps {
   category: string;
   private: boolean;
   writer: string;
+  content: string;
 }
 
 const Board: React.VFC = () => {
   const screen = useWindowSize();
   const { param, subparam } = useParams<ParamProps>();
   const [boards, setBoards] = useState<Array<TableBoardProps>>();
+  const [subBoards, setSubBoards] = useState<Array<TableBoardProps>>();
   const [title, setTitle] = useState<string>();
   const [writeAble, setWriteAble] = useState<boolean>(false);
-  const [searchCategory, setSearchCategory] = useState<string>("제목 + 내용");
+  const [searchCategory, setSearchCategory] = useState<string>("전체보기");
+  const [term, onChangeTerm, setTerm] = useInput("");
   const { loading } = useQuery<getBoardByCategory, getBoardByCategoryVariables>(
     GET_BOARD_BY_CATEGORY,
     {
@@ -61,6 +65,7 @@ const Board: React.VFC = () => {
               category: elem.category,
               private: elem.private || false,
               writer: elem.writer || "",
+              content: elem.content || "",
             };
             if (elem.private === false) {
               return dataSource.push(obj);
@@ -68,12 +73,14 @@ const Board: React.VFC = () => {
             return null;
           });
           setBoards(dataSource);
+          setSubBoards(dataSource);
         } else {
           console.log(err);
         }
       },
     }
   );
+
   useEffect(() => {
     setTitle(ConvertTitle(subparam));
     if (subparam.split("-")[1] === "request") {
@@ -85,16 +92,33 @@ const Board: React.VFC = () => {
     }
   }, [subparam]);
 
+  const onSearchBoard = useCallback(() => {
+    setTerm("");
+    switch (searchCategory) {
+      case "전체보기":
+        setBoards(subBoards);
+        break;
+      case "제목":
+        setBoards(subBoards?.filter((item) => item.title?.includes(term)));
+        break;
+      case "내용":
+        setBoards(subBoards?.filter((item) => item.content?.includes(term)));
+        break;
+      default:
+        break;
+    }
+  }, [setTerm, subBoards, term, searchCategory]);
+
   const menu = (
     <Menu>
-      <Menu.Item key={"제목 + 내용"}>
-        <div onClick={() => setSearchCategory("제목 + 내용")}>제목 + 내용</div>
+      <Menu.Item key={"all"}>
+        <div onClick={() => setSearchCategory("전체보기")}>전체보기</div>
       </Menu.Item>
       <Menu.Item key={"title"}>
         <div onClick={() => setSearchCategory("제목")}>제목</div>
       </Menu.Item>
       <Menu.Item key="content">
-        <div onClick={() => setSearchCategory("제목")}>내용</div>
+        <div onClick={() => setSearchCategory("내용")}>내용</div>
       </Menu.Item>
     </Menu>
   );
@@ -119,10 +143,7 @@ const Board: React.VFC = () => {
             }
           })}
         </CoverTitle>
-        <SubMenu
-          isBigger={param === "major" || param === "basic" ? true : false}
-          margin="5%"
-        >
+        <SubMenu isBigger={param === "major" ? true : false} margin="5%">
           <div className="submenu-content">
             {NavigationData.map((item, idx) => {
               if (item.title === param) {
@@ -136,7 +157,11 @@ const Board: React.VFC = () => {
                     >
                       <FakeLine first={colored} />
                       <StyleLink
-                        to={`/main/board/${param}/${elem.key}`}
+                        to={
+                          elem.key.split("-")[1] === "sitemap"
+                            ? `/main/detail/${param.split("-")[0]}/${elem.key}`
+                            : `/main/board/${param.split("-")[0]}/${elem.key}`
+                        }
                         first={colored}
                       >
                         <span style={{ fontWeight: 400 }}>{elem.ko_title}</span>
@@ -161,8 +186,14 @@ const Board: React.VFC = () => {
             <Dropdown overlay={menu} className="dropdown">
               <Button>{searchCategory}&ensp;&ensp;&or;</Button>
             </Dropdown>
-            <input placeholder="검색어를 입력해 주세요" />
-            <button className="board-search-button">검색</button>
+            <input
+              placeholder="검색어를 입력해 주세요"
+              value={term}
+              onChange={onChangeTerm}
+            />
+            <button className="board-search-button" onClick={onSearchBoard}>
+              검색
+            </button>
             {writeAble && (
               <Link
                 className="board-button"
@@ -374,7 +405,7 @@ const SubMenu = styled.div<middleMenuProps>`
       padding-left: ${(props) => props.margin};
     }
     & .submenu-col {
-      width: 18%;
+      width: 16%;
       height: 50px;
       display: flex;
       display: flex;
@@ -395,7 +426,7 @@ const StyleLink = styled(Link)<MenuCellProps>`
     align-items: center;
     justify-content: center;
     padding: 2px 5px;
-    font-size: 18px;
+    font-size: 16px;
     color: ${(props) => (props.first === 0 ? "white" : "black")};
     &:hover {
       color: white;

@@ -689,6 +689,86 @@ export interface getVideoLink {
 // @generated
 // This file was automatically generated and should not be edited.
 
+// ====================================================
+// GraphQL query operation: searchBoard
+// ====================================================
+
+export interface searchBoard_searchBoard_data {
+  __typename: "Board";
+  id: number;
+  title: string | null;
+  content: string | null;
+  category: string;
+  private: boolean | null;
+  type: string | null;
+  writer: string | null;
+  link: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+  deleteAt: string | null;
+}
+
+export interface searchBoard_searchBoard {
+  __typename: "searchBoardResponse";
+  ok: boolean;
+  err: string | null;
+  data: (searchBoard_searchBoard_data | null)[] | null;
+}
+
+export interface searchBoard {
+  searchBoard: searchBoard_searchBoard;
+}
+
+export interface searchBoardVariables {
+  category: string;
+  title: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: searchBoardByContent
+// ====================================================
+
+export interface searchBoardByContent_searchBoardByContent_data {
+  __typename: "Board";
+  id: number;
+  title: string | null;
+  content: string | null;
+  category: string;
+  private: boolean | null;
+  type: string | null;
+  writer: string | null;
+  link: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
+  deleteAt: string | null;
+}
+
+export interface searchBoardByContent_searchBoardByContent {
+  __typename: "searchBoardByContentResponse";
+  ok: boolean;
+  err: string | null;
+  data: (searchBoardByContent_searchBoardByContent_data | null)[] | null;
+}
+
+export interface searchBoardByContent {
+  searchBoardByContent: searchBoardByContent_searchBoardByContent;
+}
+
+export interface searchBoardByContentVariables {
+  category: string;
+  content: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
 //==============================================================
 // START Enums and Input Objects
 //==============================================================

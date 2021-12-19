@@ -182,8 +182,6 @@ const EditBoardPage: React.VFC = () => {
     [deleteFile, category]
   );
 
-  console.log(checkPrivate);
-
   const handleImageUpload = useCallback(
     (file: any) => {
       setProgress(progress + 1);

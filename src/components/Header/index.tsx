@@ -134,7 +134,13 @@ const Header: React.VFC = () => {
                         item.title.split("-")[0] === "achievement" ||
                         item.title.split("-")[0] === "community"
                       ) {
-                        to = `/main/board/${elem.title}/${item.key}`;
+                        if (item.key.split("-")[1] === "sitemap") {
+                          to = `/main/detail/${elem.title}/${
+                            item.key.split("-")[1]
+                          }`;
+                        } else {
+                          to = `/main/board/${elem.title}/${item.key}`;
+                        }
                       } else {
                         to = `/main/detail/${elem.title}/${item.key}`;
                       }
@@ -210,7 +216,6 @@ const Header: React.VFC = () => {
                 bodyStyle={subDrawerStyle}
               >
                 {NavigationData[onMenu]?.subMenu.map((item, i) => {
-                  console.log(item);
                   let to;
                   if (
                     item.title.split("-")[0] === "achievement" ||
