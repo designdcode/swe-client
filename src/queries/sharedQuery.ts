@@ -12,6 +12,7 @@ export const GET_BOARD_BY_ID = gql`
         category
         private
         type
+        writer
         files {
           id
           url
@@ -106,6 +107,16 @@ export const GET_POPUP_STATUS = gql`
         url
         up
       }
+    }
+  }
+`;
+
+export const GET_VIDEO_LINK = gql`
+  query getVideoLink {
+    getVideoLink {
+      ok
+      err
+      link
     }
   }
 `;

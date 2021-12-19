@@ -1,59 +1,137 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
+import { toast } from "react-toastify";
 import styled from "@emotion/styled";
 import {
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../utils/mediaQuery";
-import { ConvertTitle } from "../../utils/convertTitle";
-import { useQuery } from "@apollo/client";
-import { GET_BOARD_BY_ID } from "../../queries/sharedQuery";
-import { getBoardById, getBoardByIdVariables } from "../../typings/api";
-import { getDate } from "../../utils/convertDate";
-import { GrAttachment } from "react-icons/gr";
-import { Link } from "react-router-dom";
 import { NavigationData } from "../../assets/NavigationData";
 import { useWindowSize } from "../../hooks/useWindowSize";
-import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import { Button, Input, Radio, Upload } from "antd";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
-interface ParamProps {
+import useInput from "../../hooks/useInput";
+import { useMutation } from "@apollo/client";
+import { CREATE_BOARD } from "../../queries/adminQuery";
+import { createBoard, createBoardVariables } from "../../typings/api";
+import { storage } from "../../utils/firebase";
+import { UploadOutlined } from "@ant-design/icons";
+
+interface paramProps {
   param: string;
   subparam: string;
-  id: string;
 }
 
-const BoardDetail: React.VFC = () => {
+interface fileProps {
+  url: string;
+  fileName: string;
+}
+
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+    ["bold", "italic"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["clean"],
+  ],
+};
+
+const formats = ["header", "bold", "italic", "underline", "list"];
+
+const Write: React.VFC = () => {
   const screen = useWindowSize();
-  const history = useHistory();
-  const { param, subparam, id } = useParams<ParamProps>();
-  const [pageTitle, setPageTitle] = useState<string>();
+  const { param, subparam } = useParams<paramProps>();
   const stno = localStorage.getItem("stno");
-  const { data, loading } = useQuery<getBoardById, getBoardByIdVariables>(
-    GET_BOARD_BY_ID,
+  const history = useHistory();
+  const [title, onChangeTitle, setTitle] = useInput("");
+  const [content, setContent] = useState<string>("");
+  const [isPrivate, setIsPrivate] = useState<boolean>(false);
+  const [file, setFile] = useState<fileProps[]>([]);
+  const [uploading, setUploading] = useState<boolean>(false);
+
+  const [createBoardMutation] = useMutation<createBoard, createBoardVariables>(
+    CREATE_BOARD,
     {
-      variables: {
-        id: parseInt(id, 10),
+      onCompleted: ({ createBoard }) => {
+        const { ok, err } = createBoard;
+        if (ok) {
+          toast.success("게시물이 등록 되었습니다");
+          history.push(`/main/board/${param}/${subparam}`, { refetch: true });
+        } else {
+          toast.error("게시물 등록에 실패 하였습니다");
+          console.log(err);
+        }
       },
     }
   );
 
-  useEffect(() => {
-    setPageTitle(ConvertTitle(subparam));
-  }, [subparam]);
+  const handleChange = (value: any) => {
+    setContent(value);
+  };
+
+  const handleFileUpload = useCallback(
+    (file: any) => {
+      const upload = storage
+        .ref(`/files/request/${stno ? stno : "empty"}/${file.name}`)
+        .put(file);
+      upload.on(
+        "state_changed",
+        (snapshot) => {},
+        (err) => console.log(err),
+        () => {
+          storage
+            .ref(`/files/request/${stno ? stno : "empty"}/${file.name}`)
+            .getDownloadURL()
+            .then((url) => {
+              setFile((prev) => [...prev, { url: url, fileName: file.name }]);
+              toast.success("파일 / 이미지가 업로드 되었습니다");
+            });
+        }
+      );
+      setUploading(false);
+    },
+    [stno]
+  );
+
+  const handleSubmit = useCallback(async () => {
+    await createBoardMutation({
+      variables: {
+        title,
+        content,
+        category: subparam,
+        private: isPrivate,
+        writer: stno,
+        files: file.length !== 0 ? file : null,
+      },
+    });
+  }, [createBoardMutation, title, content, subparam, isPrivate, stno, file]);
 
   useEffect(() => {
-    if (data?.getBoardById.data?.private) {
-      if (data.getBoardById.data.writer !== stno) {
-        toast.info("비밀글 입니다");
-        history.push(`/main/board/${param}/${subparam}`);
-      }
+    if (!stno) {
+      toast.error("로그인 후 이용 가능 합니다");
+      history.push(`/main/board/${param}/${subparam}`);
     }
-  }, [data, stno, param, subparam, history]);
+  }, [stno, param, subparam, history]);
 
-  if (loading) {
-    return <div>loading...</div>;
-  }
+  const handleFileRemover = useCallback(
+    (propFile: any) => {
+      storage
+        .ref(`/files/request/${stno ? stno : "empty"}/${propFile.name}`)
+        .delete()
+        .then(() => {
+          toast.success("업로드 된 파일/이미지가 삭제 되었습니다");
+          setFile(
+            file.filter((elem: fileProps) => elem.fileName !== propFile.name)
+          );
+        })
+        .catch((err) => toast.error(err));
+    },
+    [stno, file]
+  );
 
   return (
     <Wrapper>
@@ -74,7 +152,7 @@ const BoardDetail: React.VFC = () => {
         </CoverTitle>
         <SubMenu
           isBigger={param === "major" || param === "basic" ? true : false}
-          margin="5%"
+          margin={"5%"}
         >
           <div className="submenu-content">
             {NavigationData.map((item, idx) => {
@@ -105,70 +183,76 @@ const BoardDetail: React.VFC = () => {
         </SubMenu>
         <img src="/img/detailBG.jpeg" alt="cover" />
       </Cover>
-
       <Body>
         <div className="head">
-          <div></div>
-          <div className="head-title">{pageTitle}</div>
-          <div className="head-logo">
-            <img src="/img/blackLogo.jpeg" alt="logo" />
+          <div className="head-title">
+            {subparam.split("-")[1] === "request" ? "건의사항" : "헬프데스크"}
           </div>
         </div>
         <Content>
           <div className="content-head">
-            <div className="content-head-title">
-              {data?.getBoardById.data?.title}
-            </div>
-            <div className="content-head-desc">
-              <div className="content-head-desc-date">
-                {getDate(data?.getBoardById.data?.createdAt || "")}
-              </div>
-              <div>
-                {data?.getBoardById.data?.writer
-                  ? data?.getBoardById.data.writer
-                  : "관리자"}
-              </div>
-            </div>
+            <div className="content-head-title">문의하기</div>
           </div>
           <ContentBody>
-            {data?.getBoardById.data?.images &&
-            data.getBoardById.data.images[0] ? (
-              <img
-                src={data.getBoardById.data.images[0].url}
-                alt="news uploaded img"
+            <div className="input-box">
+              <Input
+                className="title-input"
+                placeholder="제목을 입력해 주세요"
+                value={title}
+                onChange={onChangeTitle}
               />
-            ) : (
-              ""
-            )}
-            <div
-              className="content-body-desc"
-              dangerouslySetInnerHTML={{
-                __html: data?.getBoardById.data?.content || "",
-              }}
-            ></div>
-            {data?.getBoardById.data?.files &&
-              data.getBoardById.data.files.length > 0 && (
-                <div className="content-body-attachment">
-                  {data?.getBoardById.data?.files.map((item, idx) => {
-                    return (
-                      <div key={idx} className="attachment-row">
-                        <GrAttachment size={screen.width > 375 ? 14 : 8} />
-                        <a
-                          href={item?.url}
-                          download
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {item?.fileName}
-                        </a>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+              <Radio
+                className="title-radio"
+                checked={isPrivate}
+                onClick={() => setIsPrivate(!isPrivate)}
+              >
+                비밀글 설정
+              </Radio>
+            </div>
+            <Editor
+              modules={modules}
+              formats={formats}
+              value={content || ""}
+              onChange={handleChange}
+              theme="snow"
+            />
+            <div className="content-upload">
+              <Upload
+                multiple={true}
+                customRequest={({ file }) => {
+                  setUploading(true);
+                  handleFileUpload(file);
+                }}
+                maxCount={4}
+                onChange={({ file: callbackFile }) => {
+                  if (file.length !== 0) {
+                    callbackFile.status = "done";
+                  } else {
+                    callbackFile.status = "removed";
+                  }
+                }}
+                onRemove={(file) => handleFileRemover(file)}
+              >
+                <Button
+                  disabled={uploading ? true : false}
+                  style={{ marginBottom: 20 }}
+                  icon={<UploadOutlined />}
+                >
+                  Upload
+                </Button>
+              </Upload>
+            </div>
           </ContentBody>
           <ContentBottom>
-            <Link to={`/main/board/${param}/${subparam}`}>목록보기</Link>
+            <Button
+              className="button-cancel"
+              onClick={() => history.push(`/main/board/${param}/${subparam}`)}
+            >
+              취소
+            </Button>
+            <Button className="button-submit" onClick={handleSubmit}>
+              {uploading ? "업로드 중입니다..." : "등록"}
+            </Button>
           </ContentBottom>
         </Content>
       </Body>
@@ -176,7 +260,7 @@ const BoardDetail: React.VFC = () => {
   );
 };
 
-export default BoardDetail;
+export default Write;
 
 interface CoverTitleMarginProps {
   margin: string;
@@ -193,12 +277,12 @@ interface MenuCellProps {
 
 const Wrapper = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    max-width: 375px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    /* width: 1280px; */
     margin: 0 auto;
     padding-top: 15px;
-    min-height: 50vh;
+    min-height: 100vh;
     min-width: 800px;
     max-width: 1920px;
   }
@@ -354,6 +438,7 @@ const FakeLine = styled.div<MenuCellProps>`
 
 const Body = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    max-width: 375px;
     & .head {
       height: 80px;
       width: 100%;
@@ -381,7 +466,7 @@ const Body = styled.div`
       min-height: 150px;
       width: 100%;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
     }
 
@@ -389,6 +474,8 @@ const Body = styled.div`
       font-size: 35px;
       font-weight: 500;
       color: #0c1b58;
+      text-align: center;
+      width: 300px;
     }
 
     & .head-logo {
@@ -402,7 +489,6 @@ const Body = styled.div`
 const Content = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     width: 100%;
-
     & .content-head {
       width: 100%;
       border-top: 2px solid black;
@@ -430,20 +516,19 @@ const Content = styled.div`
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 100%;
-    min-height: 30vh;
+    min-width: 1000px;
+    max-width: 1280px;
+    min-height: 60vh;
     border-top: 3px solid #0c1b58;
-
     & .content-head {
-      min-height: 150px;
+      min-height: 60px;
       width: 100%;
-      border-bottom: 1px solid black;
       padding: 30px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       & .content-head-title {
-        font-size: 20px;
+        font-size: 24px;
         font-weight: 600;
         min-height: 35px;
         display: flex;
@@ -465,102 +550,118 @@ const Content = styled.div`
 
 const ContentBody = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    padding: 20px;
+    width: 100%;
+    min-height: 30vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    & img {
-      width: 310px;
-      height: 150px;
-    }
-
-    & .content-body-desc {
-      font-size: 10px;
-      margin-top: 30px;
-      width: 310px;
-    }
-
-    & .content-body-attachment {
-      width: 80%;
+    margin-bottom: 20px;
+    & .input-box {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      font-size: 10px;
-      min-height: 20px;
-      margin: 30px 0;
-      /* padding:0 15px; */
-      background-color: #f7f7f7;
-      & .attachment-row {
-        display: flex;
-
-        a {
-          margin-left: 20px;
-          width: 230px;
-          display: block;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
+      align-items: center;
+      & .title-input {
+        padding: 8px 12px;
+        width: 220px;
+        margin-bottom: 25px;
       }
+      & .title-radio {
+        font-size: 8px;
+        height: 50px;
+        margin-left: 30px;
+        width: 100px;
+      }
+    }
+    & .content-upload {
+      display: none;
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     padding: 30px;
     width: 100%;
+    min-height: 30vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    & img {
-      width: 850px;
-      height: 450px;
-      object-fit: cover;
-    }
-
-    & .content-body-desc {
-      margin-top: 30px;
-    }
-
-    & .content-body-attachment {
+    margin-bottom: 50px;
+    & .input-box {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      width: 100%;
-      min-height: 40px;
-      background-color: #f7f7f7;
-      margin: 50px 0;
-      padding: 20px;
-      a {
-        margin-left: 20px;
+      align-items: center;
+      & .title-input {
+        padding: 8px 12px;
+        width: 800px;
+        margin-bottom: 25px;
       }
+      & .title-radio {
+        height: 50px;
+        margin-left: 30px;
+      }
+    }
+    & .content-upload {
+      min-height: 50px;
+      margin-top: 60px;
+      width: 100%;
+      border-bottom: 1px solid #c9c9c9;
+    }
+  }
+`;
+
+const Editor = styled(ReactQuill)`
+  background-color: white;
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    .ql-container {
+      min-height: 200px;
+      width: 100%;
+    }
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    height: 300px;
+    width: 100%;
+    .ql-container {
+      min-height: 300px;
+      width: 100%;
     }
   }
 `;
 
 const ContentBottom = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    height: 70px;
-    width: 100%;
+    height: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    a {
-      color: #b7b7b7;
-      font-size: 10px;
+    width: 50%;
+    margin: 10px auto;
+    margin-bottom: 50px;
+    justify-content: space-around;
+    & button {
+      width: 120px;
+      height: 50px;
+      color: white;
+      cursor: pointer;
+      margin: 0 10px;
+    }
+    & .button-cancel {
+      background-color: #959595;
+    }
+    & .button-submit {
+      background-color: #04083e;
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    height: 150px;
-    width: 100%;
+    height: 30px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-
-    a {
-      color: #b7b7b7;
-      font-size: 18px;
+    width: 50%;
+    margin: 30px auto;
+    margin-bottom: 100px;
+    justify-content: space-around;
+    & button {
+      width: 150px;
+      height: 50px;
+      color: white;
+      cursor: pointer;
+    }
+    & .button-cancel {
+      background-color: #959595;
+    }
+    & .button-submit {
+      background-color: #04083e;
     }
   }
 `;

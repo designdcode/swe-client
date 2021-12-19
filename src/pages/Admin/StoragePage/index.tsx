@@ -78,6 +78,26 @@ const menu: menuProps[] = [
       },
     ],
   },
+  {
+    title: [
+      {
+        k_title: "전체보기",
+        title: "all",
+      },
+      {
+        k_title: "SW기초교육",
+        title: "basic",
+      },
+      {
+        k_title: "SW전공교육",
+        title: "major",
+      },
+      {
+        k_title: "SW융합교육",
+        title: "convergence",
+      },
+    ],
+  },
 ];
 
 const StoragePage = () => {
@@ -92,7 +112,7 @@ const StoragePage = () => {
   const findSortNeededData = useCallback((subparam: string): boolean => {
     switch (subparam.split("-")[1]) {
       case "aidnews":
-        return false;
+        return true;
       case "valuenews":
         return true;
       case "coopnews":
@@ -124,9 +144,9 @@ const StoragePage = () => {
 
   const handleSort = useCallback(
     (title: string) => {
-      if (boards) {
+      if (boards && subBoard) {
         if (title !== "all") {
-          const tmp = boards.filter((item) => item.type === title);
+          const tmp = subBoard.filter((item) => item.type === title);
           setBoards(tmp);
         }
       }
@@ -203,7 +223,20 @@ const StoragePage = () => {
                     </Button>
                   );
                 })
-              : menu[1].title.map((item, idx) => {
+              : subparam.split("-")[1] === "coopnews"
+              ? menu[1].title.map((item, idx) => {
+                  return (
+                    <Button
+                      type="default"
+                      key={idx}
+                      className="sort-menu-button"
+                      onClick={() => handleSort(item.title)}
+                    >
+                      {item.k_title}
+                    </Button>
+                  );
+                })
+              : menu[2].title.map((item, idx) => {
                   return (
                     <Button
                       type="default"
