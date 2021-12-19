@@ -182,3 +182,29 @@ export const EDIT_POPUP = gql`
     }
   }
 `;
+
+export const CREATE_REPLY = gql`
+  mutation createReply($boardId: Int!, $content: String!) {
+    createReply(boardId: $boardId, content: $content) {
+      ok
+      err
+    }
+  }
+`;
+export const EDIT_REPLY = gql`
+  mutation editReply($replyId: Int!, $content: String) {
+    editReply(replyId: $replyId, content: $content) {
+      ok
+      err
+    }
+  }
+`;
+
+export const DELETE_REPLY = gql`
+  mutation deleteReply($replyId: Int!) {
+    deleteReply(replyId: $replyId) {
+      ok
+      err
+    }
+  }
+`;

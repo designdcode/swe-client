@@ -125,6 +125,8 @@ const StoragePage = () => {
   useEffect(() => {
     if (param === "achievement" && findSortNeededData(subparam)) {
       setIsSortNeeded(true);
+    } else {
+      setIsSortNeeded(false);
     }
   }, [param, subparam, findSortNeededData]);
 

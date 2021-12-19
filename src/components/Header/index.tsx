@@ -210,6 +210,7 @@ const Header: React.VFC = () => {
                 bodyStyle={subDrawerStyle}
               >
                 {NavigationData[onMenu]?.subMenu.map((item, i) => {
+                  console.log(item);
                   let to;
                   if (
                     item.title.split("-")[0] === "achievement" ||

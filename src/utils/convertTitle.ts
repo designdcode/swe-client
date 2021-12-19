@@ -14,7 +14,7 @@ export const ConvertTitle = (subparam: string): string => {
       return "공지사항";
     case "community-administration":
       return "학사공지";
-    case "community-storaoge":
+    case "community-storage":
       return "서식자료실";
     case "community-request":
       return "건의사항";

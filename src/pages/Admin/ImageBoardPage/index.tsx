@@ -99,6 +99,7 @@ const ImageBoardPage: React.VFC = () => {
         data?.getBoardByCategory.ok ? (
           <Button
             type="primary"
+            style={{ marginLeft: 25 }}
             onClick={() =>
               history.push(
                 `/admin/${param}/edit-image-${param}?category=${subparam}&id=${
@@ -113,6 +114,7 @@ const ImageBoardPage: React.VFC = () => {
         ) : (
           <Button
             type="primary"
+            style={{ marginLeft: 25 }}
             onClick={() =>
               history.push(
                 `/admin/${param}/create-image-${param}?category=${subparam}&param=${param}&subparam=${subparam}`

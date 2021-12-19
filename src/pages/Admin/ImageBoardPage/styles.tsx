@@ -4,7 +4,6 @@ import { Button as Btn } from "antd";
 export const Container = styled.div`
   & .button-group {
     display: flex;
-    justify-content: space-between;
   }
 
   &.attach-group {

@@ -164,9 +164,6 @@ const Detail = () => {
         <img src="/img/detailBG.jpeg" alt="cover" />
       </Cover>
       <Content>
-        {/* <div> */}
-        {param.toString() === "sitelink" && renderButton()}
-        {/* </div> */}
         <ContentImage>
           {data?.getBoardByCategory.data &&
             data.getBoardByCategory.data[0] &&
@@ -177,6 +174,12 @@ const Detail = () => {
               />
             )}
         </ContentImage>
+        {param.toString() === "sitelink" && (
+          <div className="button-text">
+            버튼을 클릭하시면 해당 사이트로 이동합니다
+            {renderButton()}
+          </div>
+        )}
       </Content>
     </Wrapper>
   );
@@ -350,6 +353,27 @@ const FakeLine = styled.div<MenuCellProps>`
 const Content = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     height: 100%;
+
+    & .link-button {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      min-height: 50px;
+      margin: 10px auto;
+      & img {
+        width: 200px;
+      }
+    }
+    & .button-text {
+      margin-top: 50px;
+      width: 100%;
+      height: 200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 1280px;
@@ -361,10 +385,19 @@ const Content = styled.div`
       width: 100%;
       min-height: 50px;
       margin: 20px auto;
-      margin-top: 100px;
       & img {
         width: 300px;
       }
+    }
+    & .button-text {
+      margin-top: 50px;
+      width: 400px;
+      height: 500px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   }
 `;
@@ -372,8 +405,11 @@ const Content = styled.div`
 const ContentImage = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     width: 100%;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
     & img {
-      width: 100%;
+      width: 80%;
       object-fit: contain;
     }
   }

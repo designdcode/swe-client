@@ -44,7 +44,7 @@ export default PopUp;
 
 const Wrapper = styled.div`
   width: 500px;
-  height: 600px;
+  height: 700px;
   position: absolute;
   background-color: white;
   margin-left: auto;

@@ -241,7 +241,7 @@ export const AdminNavData: NavProps[] = [
         ko_title: "학사공지",
       },
       {
-        key: "community-storaoge",
+        key: "community-storage",
         title: "community-storage",
         ko_title: "서식자료실",
       },

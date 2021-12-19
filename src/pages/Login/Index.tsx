@@ -70,7 +70,9 @@ const Login: React.VFC = () => {
         <LoginBody>
           <LoginDesc>
             <LoginDescTitle>로그인</LoginDescTitle>
-            <LoginDescSub>본교 학번으로 로그인 해주시기 바랍니다.</LoginDescSub>
+            <LoginDescSub>
+              본교 포털 아이디로 로그인 해주시기 바랍니다.
+            </LoginDescSub>
           </LoginDesc>
           <LoginInputBox>
             <Form.Item
@@ -80,7 +82,12 @@ const Login: React.VFC = () => {
                 { required: true, message: "Please input your username!" },
               ]}
             >
-              <Input value={id} onChange={onChangeId} className="form-input" />
+              <Input
+                placeholder="포털 아이디"
+                value={id}
+                onChange={onChangeId}
+                className="form-input"
+              />
             </Form.Item>
             <Form.Item
               className={"form-item"}
@@ -90,6 +97,7 @@ const Login: React.VFC = () => {
               ]}
             >
               <Input.Password
+                placeholder="비밀번호"
                 value={pwd}
                 onChange={onChangePwd}
                 className="form-input"

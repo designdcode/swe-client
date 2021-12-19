@@ -109,13 +109,7 @@ const HomeSWNews: React.VFC = () => {
 
   const renderSectionImage = useCallback(
     (image: getBoardByCategory_getBoardByCategory_data_images | null) => {
-      return (
-        <img
-          src={image ? image.url : ""}
-          alt="newsImage"
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      );
+      return <img src={image ? image.url : ""} alt="newsImage" />;
     },
     []
   );
@@ -157,9 +151,12 @@ const HomeSWNews: React.VFC = () => {
                     <div className="section-title">
                       {adata && adata[0].title}
                     </div>
-                    <div className="section-desc">
-                      {adata && adata[0].content}
-                    </div>
+                    <div
+                      className="section-desc"
+                      dangerouslySetInnerHTML={{
+                        __html: (adata && adata[0].content) || "",
+                      }}
+                    ></div>
                   </SectionDesc>
                 </SectionContent>
               </>
@@ -198,9 +195,12 @@ const HomeSWNews: React.VFC = () => {
                     <div className="section-title">
                       {cdata && cdata[0].title}
                     </div>
-                    <div className="section-desc">
-                      {cdata && cdata[0].content}
-                    </div>
+                    <div
+                      className="section-desc"
+                      dangerouslySetInnerHTML={{
+                        __html: (cdata && cdata[0].content) || "",
+                      }}
+                    ></div>
                   </SectionDesc>
                 </SectionContent>
               </>
@@ -241,9 +241,12 @@ const HomeSWNews: React.VFC = () => {
                     <div className="section-title">
                       {vdata && vdata[0].title}
                     </div>
-                    <div className="section-desc">
-                      {vdata && vdata[0].content}
-                    </div>
+                    <div
+                      className="section-desc"
+                      dangerouslySetInnerHTML={{
+                        __html: (vdata && vdata[0].content) || "",
+                      }}
+                    ></div>
                   </SectionDesc>
                 </SectionContent>
               </>
@@ -282,9 +285,12 @@ const HomeSWNews: React.VFC = () => {
                     <div className="section-title">
                       {sdata && sdata[0].title}
                     </div>
-                    <div className="section-desc">
-                      {sdata && sdata[0].content}
-                    </div>
+                    <div
+                      className="section-desc"
+                      dangerouslySetInnerHTML={{
+                        __html: (sdata && sdata[0].content) || "",
+                      }}
+                    ></div>
                   </SectionDesc>
                 </SectionContent>
               </>
@@ -307,6 +313,7 @@ const Wrapper = styled.div`
     background-image: url("img/homeswnews.jpeg");
     min-height: 500px;
     max-width: 1980px;
+    min-width: 1280px;
     background-position: center;
     box-shadow: 0px 6px 11px 0px rgba(0, 0, 0, 0.89);
   }
@@ -317,7 +324,7 @@ const Content = styled.div`
     width: 100%;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 900px;
+    width: 1280px;
     height: 100%;
     margin: 0 auto;
     display: flex;
@@ -343,13 +350,13 @@ const Row = styled.div`
 const Section = styled.div`
   color: black;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    height: 250px;
+    height: 450px;
     border-bottom: 3px dashed #eee;
     padding-top: 30px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    height: 200px;
-    width: 400px;
+    height: 370px;
+    width: 600px;
     margin-bottom: 50px;
     margin: 50px 0;
   }
@@ -398,9 +405,11 @@ const SectionTitle = styled.div`
       transform: rotate(90deg);
       color: black;
       opacity: 0.2;
+      font-size: 24px;
     }
     & .title-title {
       width: 75%;
+      font-size: 24px;
     }
 
     & .title-more {
@@ -417,6 +426,7 @@ const SectionTitle = styled.div`
 const SectionContent = styled(Link)`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 75%;
   }
@@ -426,6 +436,7 @@ const SectionContent = styled(Link)`
     height: 95%;
     padding: 5px;
     cursor: pointer;
+    justify-content: space-between;
     &:hover {
       transition: 0.2s linear;
       background-color: #eee;
@@ -438,11 +449,23 @@ const SectionImage = styled.div`
     width: 50%;
     height: 100%;
     margin-right: 10px;
+
+    & img {
+      width: 320px;
+      height: 200px;
+      margin: 0 auto;
+      object-fit: cover;
+    }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 50%;
     height: 100%;
     margin-right: 10px;
+    & img {
+      width: 350px;
+      height: 350px;
+      object-fit: cover;
+    }
   }
 `;
 
@@ -450,25 +473,26 @@ const SectionDesc = styled.div`
   color: black;
 
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    width: 50%;
+    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
     & .section-title {
-      height: 30%;
-      width: 80%;
+      height: 25%;
+      width: 95%;
       word-break: break-all;
       overflow: hidden;
       text-overflow: ellipsis;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
+      margin-top: 10px;
+      line-height: 1.4;
     }
 
     & .section-desc {
       height: 60%;
-      width: 80%;
+      width: 95%;
       word-break: break-all;
       text-overflow: ellipsis;
       line-height: 1.2;
@@ -476,31 +500,27 @@ const SectionDesc = styled.div`
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 50%;
+    width: 37%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-
+    justify-content: flex-end;
     & .section-title {
-      height: 38%;
+      height: 29%;
       width: 80%;
       word-break: break-all;
       overflow: hidden;
       text-overflow: ellipsis;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
     }
-
     & .section-desc {
       margin-top: 10px;
-      height: 54%;
+      height: 29%;
       width: 80%;
       display: block;
       overflow: hidden;
       word-break: break-all;
-      /* text-overflow: ellipsis; */
-      /* white-space: nowrap; */
       line-height: 1.6;
       font-size: 12px;
     }
