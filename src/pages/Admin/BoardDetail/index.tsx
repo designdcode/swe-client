@@ -16,7 +16,6 @@ import { DELETE_BOARD } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { getDate } from "../../../utils/convertDate";
-import Text from "antd/lib/typography/Text";
 
 interface locationProps {
   search: string;
@@ -161,7 +160,7 @@ const BoardDetail: React.VFC = () => {
             <>첨부파일 없음</>
           )}
         </Descriptions.Item>
-        {param === "achievement" && (
+        {(param === "achievement" || param === "community") && (
           <Descriptions.Item
             label="이미지"
             span={4}

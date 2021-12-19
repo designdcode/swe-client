@@ -11,15 +11,23 @@ import {
   getBoardByMonth,
   getBoardByMonthVariables,
   getBoardByMonth_getBoardByMonth_data,
+  getVideoLink,
 } from "../../../../typings/api";
 import { List } from "antd";
 import { getDate } from "../../../../utils/convertDate";
-import { GET_BOARD_BY_MONTH } from "../../../../queries/sharedQuery";
+import {
+  GET_BOARD_BY_MONTH,
+  GET_VIDEO_LINK,
+} from "../../../../queries/sharedQuery";
 import YouTube, { Options } from "react-youtube";
 import { Link } from "react-router-dom";
 
 interface NoticeProps {
   data: getBoardByMonth_getBoardByMonth_data[] | undefined;
+}
+
+interface VideoProps {
+  data: string | undefined | null;
 }
 
 const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
@@ -35,7 +43,9 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
     return (
       <NoticeList>
         <NoticeTitleBox>공지</NoticeTitleBox>
-        <NoticeListSpan>[안내] {item.title}</NoticeListSpan>
+        <Link to={`/main/detail/community/community-notice/${item.id}`}>
+          <NoticeListSpan>[안내] {item.title}</NoticeListSpan>
+        </Link>
         <NoticeDate>{itemDate}</NoticeDate>
       </NoticeList>
     );
@@ -74,7 +84,8 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   );
 };
 
-const VideoBoard = () => {
+const VideoBoard: React.FC<VideoProps> = ({ data }) => {
+  const videoId = data?.toString().split("v=")[1];
   const opts: Options = {
     height: "300px",
     width: "100%",
@@ -96,7 +107,7 @@ const VideoBoard = () => {
           </TitleWithLine>
         </div>
         <div className="video-container">
-          <YouTube videoId={"0ftF6DYPhUk"} opts={opts} onReady={onReady} />
+          <YouTube videoId={videoId} opts={opts} onReady={onReady} />
         </div>
       </div>
     </VideoContainer>
@@ -113,6 +124,7 @@ const HomeBoard: React.VFC = () => {
       },
     }
   );
+  const { data: videoData } = useQuery<getVideoLink>(GET_VIDEO_LINK);
 
   if (loading) {
     return <div>loading...</div>;
@@ -131,13 +143,13 @@ const HomeBoard: React.VFC = () => {
               )}
             </Col>
             <Col>
-              <VideoBoard />
+              <VideoBoard data={videoData?.getVideoLink.link} />
             </Col>
           </>
         ) : (
           <>
             <Col>
-              <VideoBoard />
+              <VideoBoard data={videoData?.getVideoLink.link} />
             </Col>
             <Col>
               {data?.getBoardByMonth.data === null ? (
@@ -322,6 +334,16 @@ const NoticeList = styled(List.Item)`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     padding: 5px;
     cursor: pointer;
+
+    & a {
+      font-size: 17px;
+      font-weight: 600;
+      width: 55%;
+      color: #0c1b58;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     &:hover {
       opacity: 0.7;
       transition: 0.2s linear;
@@ -364,13 +386,13 @@ const NoticeListSpan = styled.div`
     text-overflow: ellipsis;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    font-size: 17px;
+    /* font-size: 17px;
     font-weight: 600;
     width: 55%;
     color: #0c1b58;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; */
   }
 `;
 

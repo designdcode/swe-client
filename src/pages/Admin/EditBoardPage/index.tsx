@@ -288,7 +288,7 @@ const EditBoardPage: React.VFC = () => {
     }
   }, [progress]);
 
-  if (loading) {
+  if (loading || !board) {
     return <div>loading...</div>;
   }
 
@@ -410,7 +410,7 @@ const EditBoardPage: React.VFC = () => {
         )}
         <Descriptions.Item label="내용" span={4}>
           <Input.TextArea
-            placeholder={board?.content || undefined}
+            placeholder={board.content || ""}
             rows={10}
             value={content}
             onChange={onChangeContent}

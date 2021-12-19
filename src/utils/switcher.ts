@@ -12,7 +12,16 @@ export const linkSwitcher = (subparam?: string | null) => {
 
 export const imageSwitcher = (subparam: string) => {
   const sub = subparam?.toString().split("-")[0];
+  const subp = subparam?.toString().split("-")[1];
   switch (sub) {
+    case "community":
+      if (subp === "notice") {
+        return true;
+      } else if (subp === "administration") {
+        return true;
+      } else {
+        return false;
+      }
     case "storage":
       return true;
     case "achievement":
@@ -38,7 +47,16 @@ export const typeSwitcher = (subparam: string) => {
 
 export const fileSwitcher = (subparam?: string | null) => {
   const sub = subparam?.toString().split("-")[0];
+  const subp = subparam?.toString().split("-")[1];
   switch (sub) {
+    case "community":
+      if (subp === "notice") {
+        return true;
+      } else if (subp === "administration") {
+        return true;
+      } else {
+        return false;
+      }
     case "storage":
       return true;
     case "achievement":

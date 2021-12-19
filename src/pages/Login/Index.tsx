@@ -3,7 +3,6 @@ import React, { useCallback } from "react";
 import useInput from "../../hooks/useInput";
 import styled from "@emotion/styled";
 import {
-  breakpoints,
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
@@ -19,7 +18,7 @@ const Login: React.VFC = () => {
   const [id, onChangeId, setId] = useInput("");
   const [pwd, onChangePwd, setpwd] = useInput("");
 
-  const [UserLoginMutation, { data, loading }] = useMutation<
+  const [UserLoginMutation, { loading }] = useMutation<
     UserLogin,
     UserLoginVariables
   >(USER_LOGIN, {
@@ -204,7 +203,8 @@ const LoginDesc = styled.div`
     margin-bottom: 30px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    border: 1px solid red;
+    margin-top: 15px;
+    margin-bottom: 30px;
   }
 `;
 

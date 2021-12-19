@@ -62,7 +62,6 @@ const UploadBoardPage: React.VFC = () => {
   const queryObj = queryString.parse(search);
   const { category, param, subparam } = queryObj;
   const [title, onChangeTitle, setTitle] = useInput("");
-  // const [content, onChangeContent, setContent] = useInput("");
   const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
   const [showLink, setShowLink] = useState<boolean>(false);
@@ -128,7 +127,7 @@ const UploadBoardPage: React.VFC = () => {
           category,
           files: file.length !== 0 ? file : null,
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
-          private: checkPublic,
+          private: checkPublic ? false : true,
           type: type?.type,
         },
       });
@@ -141,7 +140,7 @@ const UploadBoardPage: React.VFC = () => {
           category,
           files: null,
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
-          private: checkPublic,
+          private: checkPublic ? false : true,
           type: type?.type,
         },
       });
@@ -151,7 +150,7 @@ const UploadBoardPage: React.VFC = () => {
           title: title.trim() ? title : null,
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
-          private: checkPublic,
+          private: checkPublic ? false : true,
           category,
           type: type?.type,
         },
@@ -240,12 +239,36 @@ const UploadBoardPage: React.VFC = () => {
           <div
             onClick={() =>
               setType({
-                type: "test",
-                title: "테스트",
+                type: "basic",
+                title: "SW기초교육",
               })
             }
           >
-            테스트
+            SW기초교육
+          </div>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <div
+            onClick={() =>
+              setType({
+                type: "major",
+                title: "SW전공교육",
+              })
+            }
+          >
+            SW전공교육
+          </div>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <div
+            onClick={() =>
+              setType({
+                type: "convergence",
+                title: "SW융합교육",
+              })
+            }
+          >
+            SW융합교육
           </div>
         </Menu.Item>
       </Menu>
@@ -404,6 +427,7 @@ const UploadBoardPage: React.VFC = () => {
               listType="picture"
               customRequest={({ file }) => handleImageUpload(file)}
               progress={{ showInfo: true }}
+              accept="image/*"
               onChange={({ file }) => {
                 if (imgUrl !== "") {
                   file.status = "done";
@@ -415,7 +439,9 @@ const UploadBoardPage: React.VFC = () => {
               maxCount={1}
               onRemove={() => handleImageRemover()}
             >
-              <Button icon={<UploadOutlined />}>Upload</Button>
+              {progress <= 0 && (
+                <Button icon={<UploadOutlined />}>Upload</Button>
+              )}
             </Upload>
           </Form.Item>
         )}
@@ -434,9 +460,11 @@ const UploadBoardPage: React.VFC = () => {
               }}
               onRemove={(file) => handleFileRemover(file)}
             >
-              <Button style={{ marginBottom: 20 }} icon={<UploadOutlined />}>
-                Upload
-              </Button>
+              {progress <= 0 && (
+                <Button style={{ marginBottom: 20 }} icon={<UploadOutlined />}>
+                  Upload
+                </Button>
+              )}
             </Upload>
           </Form.Item>
         )}

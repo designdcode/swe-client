@@ -10,6 +10,7 @@ export const CREATE_BOARD = gql`
     $link: String
     $type: String
     $private: Boolean
+    $writer: String
   ) {
     createBoard(
       title: $title
@@ -20,6 +21,7 @@ export const CREATE_BOARD = gql`
       link: $link
       type: $type
       private: $private
+      writer: $writer
     ) {
       ok
       err
@@ -39,6 +41,7 @@ export const GET_BOARD_BY_CATEGORY = gql`
         category
         private
         type
+        writer
         files {
           id
           url

@@ -52,7 +52,9 @@ const PopupManager: React.FC = () => {
           .getDownloadURL()
           .then(async (url) => {
             setImgUrl(url);
-            toast.success("파일 / 이미지가 업로드 되었습니다");
+            toast.success(
+              "파일 / 이미지가 업로드 되었습니다, 설정 버튼을 눌러주세요"
+            );
             setUploading(false);
           });
       }

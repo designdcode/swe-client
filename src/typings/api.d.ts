@@ -26,6 +26,7 @@ export interface createBoardVariables {
   link?: string | null;
   type?: string | null;
   private?: boolean | null;
+  writer?: string | null;
 }
 
 /* tslint:disable */
@@ -59,6 +60,7 @@ export interface getBoardByCategory_getBoardByCategory_data {
   category: string;
   private: boolean | null;
   type: string | null;
+  writer: string | null;
   files: (getBoardByCategory_getBoardByCategory_data_files | null)[] | null;
   images: (getBoardByCategory_getBoardByCategory_data_images | null)[] | null;
   link: string | null;
@@ -406,6 +408,7 @@ export interface getBoardById_getBoardById_data {
   category: string;
   private: boolean | null;
   type: string | null;
+  writer: string | null;
   files: (getBoardById_getBoardById_data_files | null)[] | null;
   images: (getBoardById_getBoardById_data_images | null)[] | null;
   link: string | null;
@@ -580,6 +583,26 @@ export interface getPopupStatus_getPopupStatus {
 
 export interface getPopupStatus {
   getPopupStatus: getPopupStatus_getPopupStatus;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: getVideoLink
+// ====================================================
+
+export interface getVideoLink_getVideoLink {
+  __typename: "getVideoLinkResponse";
+  ok: boolean;
+  err: string | null;
+  link: string | null;
+}
+
+export interface getVideoLink {
+  getVideoLink: getVideoLink_getVideoLink;
 }
 
 /* tslint:disable */
