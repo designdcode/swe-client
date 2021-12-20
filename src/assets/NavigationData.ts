@@ -120,8 +120,8 @@ export const NavigationData: NavProps[] = [
         ko_title: "해외현장실습",
       },
       {
-        key: "major-taprogram",
-        title: "major-taprogram",
+        key: "major-platform",
+        title: "major-platform",
         ko_title: "SW역량강화플랫폼",
       },
     ],
