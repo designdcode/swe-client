@@ -419,7 +419,7 @@ const Content = styled.div`
     & .route {
       width: 300px;
       height: 300px;
-      margin: 0 auto;
+      margin: 10px auto;
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
@@ -450,7 +450,7 @@ const Content = styled.div`
     & .route {
       width: 400px;
       height: 400px;
-      margin: 0 auto;
+      margin: 25px auto;
     }
   }
 `;
