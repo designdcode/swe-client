@@ -76,7 +76,7 @@ const HomeBanner: React.VFC = () => {
         <ImageBox>
           <Image
             src={
-              size.width > 375 ? "img/banner2.jpeg" : "img/mobileBanner2.jpeg"
+              size.width > 375 ? "img/banner2.jpeg" : "img/MobileBanner2.jpeg"
             }
             alt="banner2"
           />
@@ -116,6 +116,7 @@ const ImageBox = styled.div`
 const Image = styled.img`
   object-fit: contain;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 100%;
     height: 400px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {

@@ -189,7 +189,7 @@ const Dashboard: React.VFC = () => {
         </Row>
       )}
       <Divider />
-      <ExtendedRow>
+      {/* <ExtendedRow>
         <Typography.Title level={4}>사이트 링크</Typography.Title>
         {linkLoading ? (
           <>loading...</>
@@ -239,7 +239,7 @@ const Dashboard: React.VFC = () => {
             />
           </Table>
         )}
-      </ExtendedRow>
+      </ExtendedRow> */}
     </Container>
   );
 };
