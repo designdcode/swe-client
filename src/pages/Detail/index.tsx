@@ -439,7 +439,7 @@ const Content = styled.div`
     & .button-text {
       margin-top: 50px;
       width: 400px;
-      height: 500px;
+      height: 300px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -448,8 +448,8 @@ const Content = styled.div`
     }
 
     & .route {
-      width: 400px;
-      height: 400px;
+      width: 800px;
+      height: 600px;
       margin: 25px auto;
     }
   }
