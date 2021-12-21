@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { Card as StyledCard } from "antd";
 import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
+import { useHistory } from "react-router";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
 import { GET_BOARD_BY_CATEGORY } from "../../../../queries/adminQuery";
 import {
@@ -18,6 +19,7 @@ import {
 
 const HomeBNews: React.VFC = () => {
   const screen = useWindowSize();
+  const history = useHistory();
   const [newsData, setNewsData] = useState<
     getBoardByCategory_getBoardByCategory_data[] | undefined | null
   >();
@@ -90,7 +92,14 @@ const HomeBNews: React.VFC = () => {
                       url = item.images[item.images.length - 1]?.url;
                     }
                     return (
-                      <CarouselContent key={idx}>
+                      <CarouselContent
+                        key={idx}
+                        onClick={() =>
+                          history.push(
+                            `/main/detail/achievement/achievement-news/${item.id}`
+                          )
+                        }
+                      >
                         <Image src={url !== "" ? url : url} alt="news image" />
                         <div className="carousel-text">{item.title}</div>
                       </CarouselContent>
@@ -112,6 +121,11 @@ const HomeBNews: React.VFC = () => {
                         key={idx}
                         hoverable
                         bordered={false}
+                        onClick={() =>
+                          history.push(
+                            `/main/detail/achievement/achievement-news/${item.id}`
+                          )
+                        }
                         cover={
                           <img
                             src={url}
