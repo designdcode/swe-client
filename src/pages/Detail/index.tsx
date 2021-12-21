@@ -203,6 +203,17 @@ const Detail = () => {
             {renderButton()}
           </div>
         )}
+        {subparam.split("-")[1] === "online" && (
+          <div className="platform">
+            <div className="platform-text">
+              <span>&#9660; 하단 사이트 참고 &#9660;</span>
+              <a href="http://mpp.sunmoon.ac.kr">http://mpp.sunmoon.ac.kr</a>
+            </div>
+            <ContentImage>
+              <img src="/img/platform2.jpeg" alt="uploadedImage" />
+            </ContentImage>
+          </div>
+        )}
         {subparam.split("-")[1] === "route" && (
           <div className="route">
             <GoogleMapReact
@@ -451,6 +462,27 @@ const Content = styled.div`
       width: 800px;
       height: 600px;
       margin: 25px auto;
+    }
+
+    & .platform {
+      & .platform-text {
+        display: flex;
+        width: 300px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #0c1b58;
+        margin: 0 auto;
+        & span {
+          display: block;
+        }
+        & a {
+          color: #0c1b58;
+          text-decoration: underline;
+          font-size: 18px;
+          font-weight: 600;
+        }
+      }
     }
   }
 `;
