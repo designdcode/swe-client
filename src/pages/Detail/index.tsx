@@ -153,7 +153,6 @@ const Detail = () => {
                     elem.title.split("-")[0] === "achievement" ||
                     elem.title.split("-")[0] === "community"
                   ) {
-                    console.log(elem.key.split("-")[1], "yayy");
                     if (elem.key.split("-")[1] === "sitemap") {
                       to = `/main/detail/${elem.title.split("-")[0]}/${
                         elem.key
