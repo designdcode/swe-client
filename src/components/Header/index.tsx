@@ -135,9 +135,7 @@ const Header: React.VFC = () => {
                         item.title.split("-")[0] === "community"
                       ) {
                         if (item.key.split("-")[1] === "sitemap") {
-                          to = `/main/detail/${elem.title}/${
-                            item.key.split("-")[1]
-                          }`;
+                          to = `/main/detail/${elem.title}/${item.key}`;
                         } else {
                           to = `/main/board/${elem.title}/${item.key}`;
                         }
