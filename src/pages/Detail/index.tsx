@@ -207,7 +207,13 @@ const Detail = () => {
           <div className="platform">
             <div className="platform-text">
               <span>&#9660; 하단 사이트 참고 &#9660;</span>
-              <a href="http://mpp.sunmoon.ac.kr">http://mpp.sunmoon.ac.kr</a>
+              <a
+                href="http://mpp.sunmoon.ac.kr"
+                target="_blank"
+                rel="noreferrer"
+              >
+                http://mpp.sunmoon.ac.kr
+              </a>
             </div>
             <ContentImage>
               <img src="/img/platform2.jpeg" alt="uploadedImage" />
