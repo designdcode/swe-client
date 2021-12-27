@@ -5,9 +5,9 @@ import {
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../utils/mediaQuery";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { GET_BOARD_BY_CATEGORY } from "../../queries/adminQuery";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import {
   getBoardByCategory,
   getBoardByCategoryVariables,
@@ -37,8 +37,13 @@ interface TableBoardProps {
   content: string;
 }
 
+interface RefetchProps {
+  refetch?: boolean;
+}
+
 const Board: React.VFC = () => {
   const screen = useWindowSize();
+  const location = useLocation<RefetchProps>();
   const { param, subparam } = useParams<ParamProps>();
   const [boards, setBoards] = useState<Array<TableBoardProps>>();
   const [subBoards, setSubBoards] = useState<Array<TableBoardProps>>();
@@ -46,40 +51,49 @@ const Board: React.VFC = () => {
   const [writeAble, setWriteAble] = useState<boolean>(false);
   const [searchCategory, setSearchCategory] = useState<string>("전체보기");
   const [term, onChangeTerm, setTerm] = useInput("");
-  const { loading } = useQuery<getBoardByCategory, getBoardByCategoryVariables>(
-    GET_BOARD_BY_CATEGORY,
-    {
-      variables: {
-        category: subparam,
-      },
-      onCompleted: ({ getBoardByCategory }) => {
-        const { ok, err, data } = getBoardByCategory;
-        if (ok && data) {
-          let dataSource: Array<TableBoardProps> = [];
-          data.map((elem, i) => {
-            const obj: TableBoardProps = {
-              id: elem.id,
-              index: data.length - i,
-              title: elem.title,
-              createdAt: getDate(elem.createdAt || ""),
-              category: elem.category,
-              private: elem.private || false,
-              writer: elem.writer || "",
-              content: elem.content || "",
-            };
-            if (elem.private === false) {
-              return dataSource.push(obj);
-            }
-            return null;
-          });
-          setBoards(dataSource);
-          setSubBoards(dataSource);
-        } else {
-          console.log(err);
-        }
-      },
+  const { loading, refetch } = useQuery<
+    getBoardByCategory,
+    getBoardByCategoryVariables
+  >(GET_BOARD_BY_CATEGORY, {
+    fetchPolicy: "network-only",
+    variables: {
+      category: subparam,
+    },
+    onCompleted: ({ getBoardByCategory }) => {
+      const { ok, err, data } = getBoardByCategory;
+      if (ok && data) {
+        let dataSource: Array<TableBoardProps> = [];
+        data.map((elem, i) => {
+          const obj: TableBoardProps = {
+            id: elem.id,
+            index: data.length - i,
+            title: elem.title,
+            createdAt: getDate(elem.createdAt || ""),
+            category: elem.category,
+            private: elem.private || false,
+            writer: elem.writer || "",
+            content: elem.content || "",
+          };
+          if (elem.private === false) {
+            return dataSource.push(obj);
+          }
+          return null;
+        });
+        setBoards(dataSource);
+        setSubBoards(dataSource);
+      } else {
+        console.log(err);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (location) {
+      if (location.state && location.state.refetch) {
+        refetch();
+      }
     }
-  );
+  }, [refetch, location]);
 
   useEffect(() => {
     setTitle(ConvertTitle(subparam));

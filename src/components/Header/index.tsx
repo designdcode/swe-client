@@ -66,13 +66,13 @@ const Header: React.VFC = () => {
             <div>|</div>
             <div>
               {loggedIn ? (
-                <div onClick={() => userLogOut()}>LOG OUT</div>
+                <div onClick={() => userLogOut()}>LOGOUT</div>
               ) : (
                 <Link
                   to={"/main/login"}
                   style={{ textDecoration: "none", color: "white" }}
                 >
-                  LOGIN
+                  LOGIN&ensp;
                 </Link>
               )}
             </div>
@@ -95,14 +95,25 @@ const Header: React.VFC = () => {
                   height={40}
                 />
               </Link>
-              <Link to="/main/login" style={{ marginLeft: 15 }}>
-                <img
-                  src={"/img/homeLogin.jpeg"}
-                  alt="login"
-                  width={40}
-                  height={40}
-                />
-              </Link>
+              {loggedIn ? (
+                <div style={{ display: "inline-block", marginLeft: 15 }}>
+                  <img
+                    src={"/img/logout.jpeg"}
+                    alt="logout"
+                    width={35}
+                    height={35}
+                  />
+                </div>
+              ) : (
+                <Link to="/main/login" style={{ marginLeft: 15 }}>
+                  <img
+                    src={"/img/homeLogin.jpeg"}
+                    alt="login"
+                    width={40}
+                    height={40}
+                  />
+                </Link>
+              )}
             </div>
           </div>
           <div className="main-menu">
