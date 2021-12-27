@@ -90,20 +90,21 @@ const BoardDetail: React.VFC = () => {
     },
   });
 
-  const [createReplyMutation] = useMutation<createReply, createReplyVariables>(
-    CREATE_REPLY,
-    {
-      onCompleted: ({ createReply }) => {
-        const { ok, err } = createReply;
-        if (ok) {
-          refetch();
-          setShowReply(false);
-        } else {
-          console.log(err);
-        }
-      },
-    }
-  );
+  const [createReplyMutation, { loading: mutationLoading }] = useMutation<
+    createReply,
+    createReplyVariables
+  >(CREATE_REPLY, {
+    onCompleted: ({ createReply }) => {
+      const { ok, err } = createReply;
+      if (ok) {
+        setReply("");
+        setShowReply(false);
+        refetch();
+      } else {
+        console.log(err);
+      }
+    },
+  });
 
   const [deleteReplyMutation] = useMutation<deleteReply, deleteReplyVariables>(
     DELETE_REPLY,
@@ -305,7 +306,7 @@ const BoardDetail: React.VFC = () => {
                 );
               })
             ) : (
-              <div>
+              <div style={{ display: "block" }}>
                 {showReply ? (
                   <Editor
                     modules={modules}
@@ -321,20 +322,26 @@ const BoardDetail: React.VFC = () => {
                 )}
               </div>
             )}
-            {showReply ? (
-              <Button
-                type="primary"
-                onClick={() => {
-                  handleReplySubmit(board?.id);
-                }}
-              >
-                게시
-              </Button>
-            ) : (
-              <Button type="default" onClick={() => setShowReply(!showReply)}>
-                댓글 달기
-              </Button>
-            )}
+            {board?.replies &&
+              board.replies.length === 0 &&
+              (showReply ? (
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    handleReplySubmit(board?.id);
+                  }}
+                >
+                  게시
+                </Button>
+              ) : (
+                <Button
+                  type="default"
+                  disabled={mutationLoading}
+                  onClick={() => setShowReply(showReply ? false : true)}
+                >
+                  {mutationLoading ? "업로드 중" : "댓글달기"}
+                </Button>
+              ))}
           </Descriptions.Item>
         )}
       </Descriptions>

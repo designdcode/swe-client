@@ -238,7 +238,7 @@ const Write: React.VFC = () => {
                   style={{ marginBottom: 20 }}
                   icon={<UploadOutlined />}
                 >
-                  Upload
+                  첨부파일 업로드
                 </Button>
               </Upload>
             </div>
@@ -647,8 +647,8 @@ const ContentBottom = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     height: 30px;
     display: flex;
-    width: 50%;
-    margin: 30px auto;
+    width: 30%;
+    margin: 15px auto;
     margin-bottom: 100px;
     justify-content: space-around;
     & button {

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import styled from "@emotion/styled";
 import {
@@ -507,7 +507,7 @@ const ContentBody = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
 
     & img {
       width: 850px;
