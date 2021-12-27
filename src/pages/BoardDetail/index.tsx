@@ -143,7 +143,8 @@ const BoardDetail: React.VFC = () => {
                 __html: data?.getBoardById.data?.content || "",
               }}
             ></div>
-            {data?.getBoardById.data?.files &&
+            {data?.getBoardById.data?.showAttach &&
+              data?.getBoardById.data?.files &&
               data.getBoardById.data.files.length > 0 && (
                 <div className="content-body-attachment">
                   {data?.getBoardById.data?.files.map((item, idx) => {
@@ -164,6 +165,21 @@ const BoardDetail: React.VFC = () => {
                 </div>
               )}
           </ContentBody>
+          <ContentReply>
+            <div className="reply-title">&#x21aa;답글</div>
+            <div
+              className="reply-content"
+              dangerouslySetInnerHTML={{
+                __html:
+                  (data &&
+                    data.getBoardById.data &&
+                    data.getBoardById.data.replies &&
+                    data.getBoardById.data.replies[0] &&
+                    data.getBoardById.data.replies[0]?.content) ||
+                  "",
+              }}
+            ></div>
+          </ContentReply>
           <ContentBottom>
             <Link to={`/main/board/${param}/${subparam}`}>목록보기</Link>
           </ContentBottom>
@@ -389,8 +405,8 @@ const Body = styled.div`
 
     & .head-logo {
       img {
-        height: 130px;
-        width: 130px;
+        height: 100px;
+        width: 100px;
       }
     }
   }
@@ -531,6 +547,29 @@ const ContentBody = styled.div`
       a {
         margin-left: 20px;
       }
+    }
+  }
+`;
+
+const ContentReply = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: none;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 100%;
+    min-height: 50px;
+    margin: 0 auto;
+    border-top: 2px solid #dddddd;
+    padding: 20px 30px;
+    & .reply-title {
+      font-size: 24px;
+      color: #0c1b58;
+      font-weight: 600;
+    }
+
+    & .reply-content {
+      width: 90%;
+      padding: 10px 40px;
     }
   }
 `;
