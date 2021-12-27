@@ -40,6 +40,9 @@ import { storage } from "../../../utils/firebase";
 import { fileRemover } from "../../../utils/fileRemover";
 import { fileUploader } from "../../../utils/fileUploader";
 import { linkSwitcher } from "../../../utils/switcher";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import styled from "@emotion/styled";
 
 interface locationProps {
   search: string;
@@ -49,6 +52,21 @@ interface paramProps {
   param: string;
   subparam: string;
 }
+
+const layout = {
+  wrapperCol: { span: 16 },
+};
+
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+    ["bold", "italic"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["clean"],
+  ],
+};
+
+const formats = ["header", "bold", "italic", "underline", "list"];
 
 const EditBoardPage: React.VFC = () => {
   const { search } = useLocation<locationProps>();
@@ -68,7 +86,8 @@ const EditBoardPage: React.VFC = () => {
     useState<(getBoardById_getBoardById_data_images | undefined | null)[]>();
 
   const [title, onChangeTitle, setTitle] = useInput("");
-  const [content, onChangeContent, setContent] = useInput("");
+  // const [content, onChangeContent, setContent] = useInput("");
+  const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
   const [progress, setProgress] = useState<number>(0);
   const [imgUrl, setImgUrl] = useState<string | undefined>();
@@ -86,6 +105,10 @@ const EditBoardPage: React.VFC = () => {
       id: parseInt(id as string, 10),
     },
   });
+
+  const handleChange = (value: any) => {
+    setContent(value);
+  };
 
   useEffect(() => {
     setLinkNeeded(linkSwitcher(subparam as string));
@@ -407,11 +430,12 @@ const EditBoardPage: React.VFC = () => {
           </Descriptions.Item>
         )}
         <Descriptions.Item label="내용" span={4}>
-          <Input.TextArea
-            placeholder={board.content || ""}
-            rows={10}
-            value={content}
-            onChange={onChangeContent}
+          <Editor
+            modules={modules}
+            formats={formats}
+            value={content || ""}
+            onChange={handleChange}
+            theme={"snow"}
           />
         </Descriptions.Item>
       </Descriptions>
@@ -439,3 +463,11 @@ const EditBoardPage: React.VFC = () => {
 };
 
 export default EditBoardPage;
+
+const Editor = styled(ReactQuill)`
+  background-color: white;
+  min-height: 300px;
+  .ql-container {
+    min-height: 300px;
+  }
+`;

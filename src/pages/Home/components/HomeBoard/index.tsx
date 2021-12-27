@@ -19,7 +19,6 @@ import {
   GET_BOARD_BY_MONTH,
   GET_VIDEO_LINK,
 } from "../../../../queries/sharedQuery";
-import YouTube, { Options } from "react-youtube";
 import { Link } from "react-router-dom";
 
 interface NoticeProps {
@@ -85,18 +84,6 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
 };
 
 const VideoBoard: React.FC<VideoProps> = ({ data }) => {
-  const videoId = data?.toString().split("v=")[1];
-  const opts: Options = {
-    height: "300px",
-    width: "100%",
-    playerVars: {
-      autoplay: 1,
-    },
-  };
-  const onReady = (e: any) => {
-    e.target.pauseVideo();
-  };
-
   return (
     <VideoContainer>
       <div className="board-title">
@@ -107,7 +94,9 @@ const VideoBoard: React.FC<VideoProps> = ({ data }) => {
           </TitleWithLine>
         </div>
         <div className="video-container">
-          <YouTube videoId={videoId} opts={opts} onReady={onReady} />
+          <video width={480} height={300} autoPlay muted controls>
+            <source src={`/img/sunmoon.mp4`} type="video/mp4" />
+          </video>
         </div>
       </div>
     </VideoContainer>

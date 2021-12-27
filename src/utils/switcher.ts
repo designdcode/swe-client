@@ -19,6 +19,8 @@ export const imageSwitcher = (subparam: string) => {
         return true;
       } else if (subp === "administration") {
         return true;
+      } else if (subp === "storage") {
+        return true;
       } else {
         return false;
       }

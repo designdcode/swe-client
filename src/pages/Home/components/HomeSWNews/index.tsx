@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import styled from "@emotion/styled";
 import React, { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { GET_BOARD_BY_CATEGORY } from "../../../../queries/adminQuery";
 import {
   getBoardByCategory,
@@ -16,6 +16,7 @@ import {
 } from "../../../../utils/mediaQuery";
 
 const HomeSWNews: React.VFC = () => {
+  const history = useHistory();
   const [aurl, setAurl] = useState<
     (getBoardByCategory_getBoardByCategory_data_images | null)[] | null
   >();
@@ -124,7 +125,16 @@ const HomeSWNews: React.VFC = () => {
             ) : (
               <>
                 <SectionTitle>
-                  <div className="title-burger">|||</div>
+                  <div
+                    className="title-burger"
+                    onClick={() => {
+                      history.push(
+                        "/main/board/achievement/achievement-aidnews"
+                      );
+                    }}
+                  >
+                    |||
+                  </div>
                   <div className="title-title">SW 교육지원센터 소식</div>
                   <div className="title-more">
                     <Link
@@ -168,7 +178,16 @@ const HomeSWNews: React.VFC = () => {
             ) : (
               <>
                 <SectionTitle>
-                  <div className="title-burger">|||</div>
+                  <div
+                    className="title-burger"
+                    onClick={() => {
+                      history.push(
+                        "/main/board/achievement/achievement-coopnews"
+                      );
+                    }}
+                  >
+                    |||
+                  </div>
                   <div className="title-title">SW 산학협력 소식</div>
                   <div className="title-more">
                     <Link
@@ -214,7 +233,16 @@ const HomeSWNews: React.VFC = () => {
             ) : (
               <>
                 <SectionTitle>
-                  <div className="title-burger">|||</div>
+                  <div
+                    className="title-burger"
+                    onClick={() => {
+                      history.push(
+                        "/main/board/achievement/achievement-valuenews"
+                      );
+                    }}
+                  >
+                    |||
+                  </div>
                   <div className="title-title">SW 가치확산센터 소식</div>
                   <div className="title-more">
                     <Link
@@ -258,7 +286,16 @@ const HomeSWNews: React.VFC = () => {
             ) : (
               <>
                 <SectionTitle>
-                  <div className="title-burger">|||</div>
+                  <div
+                    className="title-burger"
+                    onClick={() => {
+                      history.push(
+                        "/main/board/achievement/achievement-startup"
+                      );
+                    }}
+                  >
+                    |||
+                  </div>
                   <div className="title-title">창업센터 소식</div>
                   <div className="title-more">
                     <Link
@@ -406,6 +443,7 @@ const SectionTitle = styled.div`
       color: black;
       opacity: 0.2;
       font-size: 24px;
+      cursor: pointer;
     }
     & .title-title {
       width: 75%;
