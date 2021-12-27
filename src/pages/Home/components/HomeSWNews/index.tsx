@@ -430,7 +430,7 @@ const SectionTitle = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     height: 25px;
-    width: 90%;
+    width: 80%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -533,7 +533,7 @@ const SectionDesc = styled.div`
       width: 95%;
       word-break: break-all;
       text-overflow: ellipsis;
-      line-height: 1.2;
+      line-height: 1.3;
       font-size: 9px;
     }
   }
