@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { NavigationData } from "../../assets/NavigationData";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { toast } from "react-toastify";
+import { replySwitcher } from "../../utils/switcher";
 
 interface ParamProps {
   param: string;
@@ -29,6 +30,7 @@ const BoardDetail: React.VFC = () => {
   const { param, subparam, id } = useParams<ParamProps>();
   const [pageTitle, setPageTitle] = useState<string>();
   const stno = localStorage.getItem("stno");
+  const [isReplyNeeded, setIsReplyNeeded] = useState<boolean>(false);
   const { data, loading } = useQuery<getBoardById, getBoardByIdVariables>(
     GET_BOARD_BY_ID,
     {
@@ -40,6 +42,7 @@ const BoardDetail: React.VFC = () => {
 
   useEffect(() => {
     setPageTitle(ConvertTitle(subparam));
+    setIsReplyNeeded(replySwitcher(subparam));
   }, [subparam]);
 
   useEffect(() => {
@@ -166,7 +169,7 @@ const BoardDetail: React.VFC = () => {
               )}
           </ContentBody>
           <ContentReply>
-            <div className="reply-title">&#x21aa;답글</div>
+            {isReplyNeeded && <div className="reply-title">&#x21aa;답글</div>}
             <div
               className="reply-content"
               dangerouslySetInnerHTML={{
