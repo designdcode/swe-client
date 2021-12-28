@@ -66,7 +66,9 @@ const Header: React.VFC = () => {
             <div>|</div>
             <div>
               {loggedIn ? (
-                <div onClick={() => userLogOut()}>LOGOUT</div>
+                <div style={{ cursor: "pointer" }} onClick={() => userLogOut()}>
+                  LOGOUT
+                </div>
               ) : (
                 <Link
                   to={"/main/login"}
@@ -96,7 +98,13 @@ const Header: React.VFC = () => {
                 />
               </Link>
               {loggedIn ? (
-                <div style={{ display: "inline-block", marginLeft: 15 }}>
+                <div
+                  style={{
+                    display: "inline-block",
+                    marginLeft: 15,
+                    cursor: "pointer",
+                  }}
+                >
                   <img
                     src={"/img/logout.jpeg"}
                     alt="logout"
