@@ -176,9 +176,11 @@ export const HeaderLine = styled.div<LineProps>`
   height: 4px;
   margin-bottom: 3px;
   background-color: ${(props) => (props.hoverProps ? "#f03fa8" : "none")};
-  /* transition: 0.2s linear; */
-  transition-property: opacity, left;
-  transition-duration: 3s, 5s, 2s, 1s;
+  transition: 0.2s;
+  right: calc(100% - 150px);
+  &:hover {
+    right: 0;
+  }
 `;
 
 export const MainMobile = styled.div`
