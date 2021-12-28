@@ -75,3 +75,15 @@ export const contentSwitcher = (subparam?: string | null) => {
   if (sub === "introduce") return false;
   else return true;
 };
+
+export const replySwitcher = (subparam?: string | null) => {
+  const sub = subparam?.toString().split("-")[1];
+  switch (sub) {
+    case "help":
+      return true;
+    case "request":
+      return true;
+    default:
+      return false;
+  }
+};
