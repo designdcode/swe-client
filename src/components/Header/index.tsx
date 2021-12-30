@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { NavigationData, NavProps } from "../../assets/NavigationData";
 import {
   HeaderContainer,
@@ -9,20 +9,20 @@ import {
   MainMobile,
   Cover,
   HeaderLine,
-  MobileDrawerBlock,
-  MobileDrawerSubBlock,
 } from "./styles";
 import { BsPersonCircle } from "react-icons/bs";
 import { IoIosLogOut } from "react-icons/io";
-import { Drawer } from "antd";
 import { userLogOut } from "../../utils/loginResolver";
+import { Box, Drawer, List, ListItem, ListItemText } from "@mui/material";
 
 const Header: React.VFC = () => {
+  const history = useHistory();
   const [hover, setHover] = useState<number | null>(null);
   const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
   const [childrenDrawer, setChildrenDrawer] = useState<boolean>(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [onMenu, setOnMenu] = useState<number>(-1);
+  const [subMenuTitle, setSubMenuTitle] = useState<string>("");
 
   useEffect(() => {
     if (localStorage.getItem("stno")) {
@@ -40,14 +40,37 @@ const Header: React.VFC = () => {
     [childrenDrawer]
   );
 
-  const onClose = useCallback(() => {
-    setDrawerVisible(false);
-  }, []);
-
-  const onChildrenDrawerClose = useCallback(() => {
-    setChildrenDrawer(false);
-    setOnMenu(-1);
-  }, []);
+  const renderList = () => {
+    return (
+      <Box
+        sx={{
+          width: 250,
+          backgroundColor: "#0c1b58",
+          color: "white",
+          height: "100%",
+        }}
+        role="presentation"
+      >
+        <List>
+          {NavigationData.map((item, idx) => {
+            return (
+              <ListItem
+                key={idx}
+                onClick={() => {
+                  handleMenuClick(idx);
+                  setSubMenuTitle(item.ko_title);
+                }}
+              >
+                <ListItemText sx={{ fontSize: "18px" }} disableTypography>
+                  {item.ko_title}
+                </ListItemText>
+              </ListItem>
+            );
+          })}
+        </List>
+      </Box>
+    );
+  };
 
   return (
     <HeaderContainer>
@@ -205,59 +228,82 @@ const Header: React.VFC = () => {
               )}
             </div>
             <Drawer
-              width={180}
-              closable={false}
-              onClose={onClose}
-              visible={drawerVisible}
-              placement={"left"}
-              bodyStyle={drawerStyle}
+              anchor="left"
+              open={drawerVisible}
+              onClose={() => setDrawerVisible(!drawerVisible)}
             >
-              {NavigationData.map((elem: NavProps, idx) => {
-                return (
-                  <MobileDrawerBlock
-                    key={idx}
-                    menuOpen={onMenu === idx ? true : false}
-                  >
-                    <button onClick={() => handleMenuClick(idx)}>
-                      {elem.ko_title}
-                    </button>
-                  </MobileDrawerBlock>
-                );
-              })}
-              <Drawer
-                width={180}
-                closable={false}
-                onClose={onChildrenDrawerClose}
-                visible={childrenDrawer}
-                placement={"left"}
-                bodyStyle={subDrawerStyle}
-              >
-                {NavigationData[onMenu]?.subMenu.map((item, i) => {
-                  let to;
-                  if (
-                    item.title.split("-")[0] === "achievement" ||
-                    item.title.split("-")[0] === "community"
-                  ) {
-                    to = `/main/board/${item.title}/${item.key}`;
-                  } else {
-                    to = `/main/detail/${item.title}/${item.key}`;
-                  }
-                  return (
-                    <MobileDrawerSubBlock
-                      key={i}
-                      onClick={() => {
-                        setDrawerVisible(false);
-                        setChildrenDrawer(false);
-                        setOnMenu(-1);
-                      }}
+              <div style={menuStyles}>
+                <div>&ensp;</div>
+                <div
+                  style={{ cursor: "pointer", fontWeight: 600 }}
+                  onClick={() => setDrawerVisible(!drawerVisible)}
+                >
+                  X
+                </div>
+              </div>
+              {renderList()}
+            </Drawer>
+            <Drawer
+              anchor="left"
+              open={onMenu > -1 ? true : false}
+              onClose={() => setOnMenu(-1)}
+            >
+              {onMenu > -1 && (
+                <>
+                  <div style={subMenuStyles}>
+                    <div onClick={() => setOnMenu(-1)}>&lsaquo;</div>
+                    <div style={{ fontSize: "18px" }}>{subMenuTitle}</div>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setOnMenu(-1)}
                     >
-                      <Link to={to} style={{ color: "white" }}>
-                        {item.ko_title}
-                      </Link>
-                    </MobileDrawerSubBlock>
-                  );
-                })}
-              </Drawer>
+                      X
+                    </div>
+                  </div>
+                  <Box
+                    sx={{
+                      width: 250,
+                      backgroundColor: "#384270",
+                      color: "white",
+                      height: "100%",
+                    }}
+                    role="presentation"
+                    onClick={() => setOnMenu(-1)}
+                  >
+                    <List>
+                      {NavigationData[onMenu].subMenu.map((elem, idx) => {
+                        let to: string;
+                        if (
+                          elem.title.split("-")[0] === "achievement" ||
+                          elem.title.split("-")[0] === "community"
+                        ) {
+                          to = `/main/board/${elem.title}/${elem.key}`;
+                        } else {
+                          to = `/main/detail/${elem.title}/${elem.key}`;
+                        }
+                        return (
+                          <ListItem
+                            key={idx}
+                            onClick={() => {
+                              history.push(to);
+                              setDrawerVisible(false);
+                              setChildrenDrawer(false);
+                              setOnMenu(-1);
+                            }}
+                          >
+                            <ListItemText
+                              sx={{ fontSize: "18px" }}
+                              disableTypography
+                            >
+                              {elem.ko_title}
+                            </ListItemText>
+                          </ListItem>
+                        );
+                      })}
+                    </List>
+                  </Box>
+                </>
+              )}
             </Drawer>
           </div>
         </MainMobile>
@@ -268,16 +314,25 @@ const Header: React.VFC = () => {
 
 export default Header;
 
-const drawerStyle = {
-  backgroundColor: " #0c1b58",
-  paddingTop: "50px",
-  paddingRight: 0,
-  paddingLeft: 0,
+const menuStyles = {
+  height: "50px",
+  width: "100%",
+  backgroundColor: "#0c1b58",
+  color: "white",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  paddingRight: "20px",
 };
 
-const subDrawerStyle = {
+const subMenuStyles = {
+  height: "50px",
+  width: "100%",
   backgroundColor: "#384270",
-  paddingTop: "60px",
-  paddingRight: 0,
+  color: "white",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  paddingRight: "20px",
   paddingLeft: "20px",
 };

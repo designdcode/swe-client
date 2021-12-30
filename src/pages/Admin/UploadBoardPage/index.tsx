@@ -31,6 +31,10 @@ import { storage } from "../../../utils/firebase";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import styled from "@emotion/styled";
+import {
+  createBoard as createBoardType,
+  createBoardVariables,
+} from "../../../typings/api";
 
 interface locationProps {
   search: string;
@@ -62,6 +66,7 @@ const UploadBoardPage: React.VFC = () => {
   const queryObj = queryString.parse(search);
   const { category, param, subparam } = queryObj;
   const [title, onChangeTitle, setTitle] = useInput("");
+  const [createdAt, onChangeCreatedAt, setCreatedAt] = useInput("");
   const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
   const [showLink, setShowLink] = useState<boolean>(false);
@@ -91,7 +96,10 @@ const UploadBoardPage: React.VFC = () => {
     setContent(value);
   };
 
-  const [createBoard, { loading }] = useMutation(CREATE_BOARD, {
+  const [createBoard, { loading }] = useMutation<
+    createBoardType,
+    createBoardVariables
+  >(CREATE_BOARD, {
     onCompleted: ({ createBoard }) => {
       const { ok, err } = createBoard;
       if (ok) {
@@ -99,6 +107,7 @@ const UploadBoardPage: React.VFC = () => {
         setContent("");
         setLink("");
         setImgUrl("");
+        setCreatedAt("");
         toast.success("게시물을 생성 하였습니다");
         history.push({
           pathname: `/admin/${param}/${subparam}`,
@@ -125,12 +134,13 @@ const UploadBoardPage: React.VFC = () => {
           title: title.trim() ? title : null,
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
-          category,
+          category: category as string,
           files: file.length !== 0 ? file : null,
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
           private: checkPublic ? false : true,
           type: type?.type,
           showAttach: showAttach ? true : false,
+          inputCreatedAt: createdAt,
         },
       });
     } else if (imgUrl) {
@@ -139,12 +149,13 @@ const UploadBoardPage: React.VFC = () => {
           title: title.trim() ? title : null,
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
-          category,
+          category: category as string,
           files: null,
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
           private: checkPublic ? false : true,
           type: type?.type,
           showAttach: showAttach ? true : false,
+          inputCreatedAt: createdAt,
         },
       });
     } else {
@@ -154,9 +165,10 @@ const UploadBoardPage: React.VFC = () => {
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
           private: checkPublic ? false : true,
-          category,
+          category: category as string,
           type: type?.type,
           showAttach: showAttach ? true : false,
+          inputCreatedAt: createdAt,
         },
       });
     }
@@ -172,6 +184,7 @@ const UploadBoardPage: React.VFC = () => {
     checkPublic,
     type,
     showAttach,
+    createdAt,
   ]);
 
   const handleImageUpload = useCallback(
@@ -392,6 +405,15 @@ const UploadBoardPage: React.VFC = () => {
         <Form.Item name={["title"]} label="제목">
           <Input type="text" onChange={onChangeTitle} value={title} />
         </Form.Item>
+        <Form.Item name={["create"]} label="생성날짜">
+          <Input
+            placeholder="YYYY-MM-DD"
+            type="text"
+            onChange={onChangeCreatedAt}
+            value={createdAt}
+            style={{ width: 200 }}
+          />
+        </Form.Item>
         <Form.Item name={["checked"]} label={"공개 / 비공개"}>
           <Switch
             defaultChecked
@@ -451,7 +473,7 @@ const UploadBoardPage: React.VFC = () => {
           </Form.Item>
         )}
         {isFileNeeded && (
-          <Form.Item name={["file"]} label={"파일"}>
+          <Form.Item name={["file"]} label={"첨부파일"}>
             <Upload
               multiple={true}
               customRequest={({ file }) => handleFileUpload(file)}
@@ -498,7 +520,7 @@ const UploadBoardPage: React.VFC = () => {
             initialValue=""
           >
             <Switch
-              defaultChecked
+              defaultChecked={true}
               onChange={() => setShowAttach(!showAttach)}
             />
           </Form.Item>

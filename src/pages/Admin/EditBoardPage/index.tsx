@@ -53,10 +53,6 @@ interface paramProps {
   subparam: string;
 }
 
-const layout = {
-  wrapperCol: { span: 16 },
-};
-
 const modules = {
   toolbar: [
     [{ header: [1, 2, false] }],
@@ -86,13 +82,13 @@ const EditBoardPage: React.VFC = () => {
     useState<(getBoardById_getBoardById_data_images | undefined | null)[]>();
 
   const [title, onChangeTitle, setTitle] = useInput("");
-  // const [content, onChangeContent, setContent] = useInput("");
   const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
   const [progress, setProgress] = useState<number>(0);
   const [imgUrl, setImgUrl] = useState<string | undefined>();
   const [imgName, setImgName] = useState<string>();
   const [checkPrivate, setCheckPrivate] = useState<boolean>();
+  const [attach, setAttach] = useState<boolean>();
 
   const [linkNeeded, setLinkNeeded] = useState<boolean>(false);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
@@ -189,9 +185,10 @@ const EditBoardPage: React.VFC = () => {
         content: content,
         link,
         private: checkPrivate,
+        showAttach: attach,
       },
     });
-  }, [id, title, content, link, editBoard, checkPrivate]);
+  }, [id, title, content, link, editBoard, checkPrivate, attach]);
 
   const handleDeleteFile = useCallback(
     async (id: number, name?: string) => {
@@ -280,6 +277,7 @@ const EditBoardPage: React.VFC = () => {
   useEffect(() => {
     if (data && data.getBoardById && data.getBoardById.data) {
       setCheckPrivate(data.getBoardById.data.private ? true : false);
+      setAttach(data.getBoardById.data.showAttach ? true : false);
       setBoard(data.getBoardById.data);
       setTitle(data.getBoardById.data.title || "");
       setContent(data.getBoardById.data.content || "");
@@ -374,6 +372,30 @@ const EditBoardPage: React.VFC = () => {
           >
             <Button icon={<UploadOutlined />}>파일 업로드</Button>
           </Upload>
+        </Descriptions.Item>
+
+        <Descriptions.Item
+          label="파일공개"
+          span={4}
+          labelStyle={{ width: 120 }}
+        >
+          <div>
+            <div>
+              {attach ? (
+                <span style={{ color: "#0081fa" }}>공개</span>
+              ) : (
+                <span style={{ color: "#ff4447" }}>비공개</span>
+              )}
+            </div>
+            <div>
+              <Switch
+                defaultChecked={
+                  data?.getBoardById.data?.showAttach ? true : false
+                }
+                onChange={() => setAttach(!attach)}
+              />
+            </div>
+          </div>
         </Descriptions.Item>
         {param === "achievement" && (
           <Descriptions.Item label="공개" span={4}>

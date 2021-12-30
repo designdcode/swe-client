@@ -32,11 +32,13 @@ interface VideoProps {
 const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   const now = new Date().getMonth() + 1;
   const yearMonth = `${new Date().getFullYear()}.${new Date().getMonth() + 1}`;
-  const filtered = data
-    ?.filter(
-      (item) => parseInt(getDate(item.createdAt || "").split("-")[1]) === now
-    )
-    .splice(0, 6);
+  let filtered;
+  if (data && data.length > 6) {
+    filtered = data.splice(0, 6);
+  } else {
+    filtered = data;
+  }
+
   const renderListItem = useCallback((item) => {
     const itemDate = getDate(item.createdAt);
     return (
@@ -94,7 +96,7 @@ const VideoBoard: React.FC<VideoProps> = ({ data }) => {
           </TitleWithLine>
         </div>
         <div className="video-container">
-          <video width={480} height={300} autoPlay muted controls>
+          <video autoPlay muted controls>
             <source src={`/img/sunmoon.mp4`} type="video/mp4" />
           </video>
         </div>
@@ -405,11 +407,19 @@ const VideoContainer = styled.div`
   padding: 0 35px;
   padding-top: 15px;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    height: 400px;
+    height: 320px;
     display: flex;
+    max-width: 375px;
     width: 100%;
     box-shadow: 5px 5px 14px #0000005a;
     padding: 15px 35px;
+    .video-container {
+      & video {
+        width: 310px;
+        margin: 0 auto;
+        height: 250px;
+      }
+    }
   }
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
@@ -417,6 +427,9 @@ const VideoContainer = styled.div`
 
     .video-container {
       margin-top: 20px;
+      & video {
+        width: 480px;
+      }
     }
   }
 `;
