@@ -94,7 +94,7 @@ const VideoBoard: React.FC<VideoProps> = ({ data }) => {
           </TitleWithLine>
         </div>
         <div className="video-container">
-          <video width={480} height={300} autoPlay muted controls>
+          <video autoPlay muted controls>
             <source src={`/img/sunmoon.mp4`} type="video/mp4" />
           </video>
         </div>
@@ -405,11 +405,19 @@ const VideoContainer = styled.div`
   padding: 0 35px;
   padding-top: 15px;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    height: 400px;
+    height: 320px;
     display: flex;
+    max-width: 375px;
     width: 100%;
     box-shadow: 5px 5px 14px #0000005a;
     padding: 15px 35px;
+    .video-container {
+      & video {
+        width: 310px;
+        margin: 0 auto;
+        height: 250px;
+      }
+    }
   }
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
@@ -417,6 +425,9 @@ const VideoContainer = styled.div`
 
     .video-container {
       margin-top: 20px;
+      & video {
+        width: 480px;
+      }
     }
   }
 `;
