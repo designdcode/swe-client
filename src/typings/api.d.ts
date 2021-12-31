@@ -27,6 +27,7 @@ export interface createBoardVariables {
   type?: string | null;
   private?: boolean | null;
   writer?: string | null;
+  showAttach?: boolean | null;
 }
 
 /* tslint:disable */
@@ -133,6 +134,7 @@ export interface editBoardVariables {
   link?: string | null;
   private?: boolean | null;
   type?: string | null;
+  showAttach?: boolean | null;
 }
 
 /* tslint:disable */

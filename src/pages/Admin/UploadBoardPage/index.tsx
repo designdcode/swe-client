@@ -31,6 +31,10 @@ import { storage } from "../../../utils/firebase";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import styled from "@emotion/styled";
+import {
+  createBoard as createBoardType,
+  createBoardVariables,
+} from "../../../typings/api";
 
 interface locationProps {
   search: string;
@@ -91,7 +95,10 @@ const UploadBoardPage: React.VFC = () => {
     setContent(value);
   };
 
-  const [createBoard, { loading }] = useMutation(CREATE_BOARD, {
+  const [createBoard, { loading }] = useMutation<
+    createBoardType,
+    createBoardVariables
+  >(CREATE_BOARD, {
     onCompleted: ({ createBoard }) => {
       const { ok, err } = createBoard;
       if (ok) {
@@ -125,7 +132,7 @@ const UploadBoardPage: React.VFC = () => {
           title: title.trim() ? title : null,
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
-          category,
+          category: category as string,
           files: file.length !== 0 ? file : null,
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
           private: checkPublic ? false : true,
@@ -139,7 +146,7 @@ const UploadBoardPage: React.VFC = () => {
           title: title.trim() ? title : null,
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
-          category,
+          category: category as string,
           files: null,
           images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
           private: checkPublic ? false : true,
@@ -154,7 +161,7 @@ const UploadBoardPage: React.VFC = () => {
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
           private: checkPublic ? false : true,
-          category,
+          category: category as string,
           type: type?.type,
           showAttach: showAttach ? true : false,
         },
@@ -498,7 +505,7 @@ const UploadBoardPage: React.VFC = () => {
             initialValue=""
           >
             <Switch
-              defaultChecked
+              defaultChecked={true}
               onChange={() => setShowAttach(!showAttach)}
             />
           </Form.Item>

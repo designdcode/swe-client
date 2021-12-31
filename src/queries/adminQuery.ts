@@ -11,6 +11,7 @@ export const CREATE_BOARD = gql`
     $type: String
     $private: Boolean
     $writer: String
+    $showAttach: Boolean
   ) {
     createBoard(
       title: $title
@@ -22,6 +23,7 @@ export const CREATE_BOARD = gql`
       type: $type
       private: $private
       writer: $writer
+      showAttach: $showAttach
     ) {
       ok
       err
@@ -78,6 +80,7 @@ export const EDIT_BOARD = gql`
     $link: String
     $private: Boolean
     $type: String
+    $showAttach: Boolean
   ) {
     editBoard(
       id: $id
@@ -86,6 +89,7 @@ export const EDIT_BOARD = gql`
       link: $link
       private: $private
       type: $type
+      showAttach: $showAttach
     ) {
       ok
       err
