@@ -32,11 +32,13 @@ interface VideoProps {
 const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   const now = new Date().getMonth() + 1;
   const yearMonth = `${new Date().getFullYear()}.${new Date().getMonth() + 1}`;
-  const filtered = data
-    ?.filter(
-      (item) => parseInt(getDate(item.createdAt || "").split("-")[1]) === now
-    )
-    .splice(0, 6);
+  let filtered;
+  if (data && data.length > 6) {
+    filtered = data.splice(0, 6);
+  } else {
+    filtered = data;
+  }
+
   const renderListItem = useCallback((item) => {
     const itemDate = getDate(item.createdAt);
     return (
