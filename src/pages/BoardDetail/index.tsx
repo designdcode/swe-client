@@ -10,7 +10,6 @@ import { ConvertTitle } from "../../utils/convertTitle";
 import { useQuery } from "@apollo/client";
 import { GET_BOARD_BY_ID } from "../../queries/sharedQuery";
 import { getBoardById, getBoardByIdVariables } from "../../typings/api";
-import { getDate } from "../../utils/convertDate";
 import { GrAttachment } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { NavigationData } from "../../assets/NavigationData";
@@ -121,7 +120,8 @@ const BoardDetail: React.VFC = () => {
             </div>
             <div className="content-head-desc">
               <div className="content-head-desc-date">
-                {getDate(data?.getBoardById.data?.createdAt || "")}
+                {data?.getBoardById.data?.inputCreatedAt}
+                {/* {getDate(data?.getBoardById.data?.createdAt || "")} */}
               </div>
               <div>
                 {data?.getBoardById.data?.writer
