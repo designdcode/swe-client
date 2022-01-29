@@ -293,7 +293,6 @@ const Board: React.VFC = () => {
             dataIndex="createdAt"
             key="createdAt"
             render={(text) => {
-              console.log(text);
               return <TableDesc>{text}</TableDesc>;
             }}
             width={screen.width > 375 ? 150 : 90}
