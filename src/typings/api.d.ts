@@ -28,6 +28,7 @@ export interface createBoardVariables {
   private?: boolean | null;
   writer?: string | null;
   showAttach?: boolean | null;
+  inputCreatedAt?: string | null;
 }
 
 /* tslint:disable */
@@ -62,6 +63,7 @@ export interface getBoardByCategory_getBoardByCategory_data {
   private: boolean | null;
   type: string | null;
   writer: string | null;
+  inputCreatedAt: string | null;
   files: (getBoardByCategory_getBoardByCategory_data_files | null)[] | null;
   images: (getBoardByCategory_getBoardByCategory_data_images | null)[] | null;
   link: string | null;
@@ -135,6 +137,7 @@ export interface editBoardVariables {
   private?: boolean | null;
   type?: string | null;
   showAttach?: boolean | null;
+  inputCreatedAt?: string | null;
 }
 
 /* tslint:disable */
@@ -489,6 +492,7 @@ export interface getBoardById_getBoardById_data {
   type: string | null;
   writer: string | null;
   showAttach: boolean | null;
+  inputCreatedAt: string | null;
   replies: (getBoardById_getBoardById_data_replies | null)[] | null;
   files: (getBoardById_getBoardById_data_files | null)[] | null;
   images: (getBoardById_getBoardById_data_images | null)[] | null;

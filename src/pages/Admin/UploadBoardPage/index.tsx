@@ -66,6 +66,7 @@ const UploadBoardPage: React.VFC = () => {
   const queryObj = queryString.parse(search);
   const { category, param, subparam } = queryObj;
   const [title, onChangeTitle, setTitle] = useInput("");
+  const [createdAt, onChangeCreatedAt, setCreatedAt] = useInput("");
   const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
   const [showLink, setShowLink] = useState<boolean>(false);
@@ -106,6 +107,7 @@ const UploadBoardPage: React.VFC = () => {
         setContent("");
         setLink("");
         setImgUrl("");
+        setCreatedAt("");
         toast.success("게시물을 생성 하였습니다");
         history.push({
           pathname: `/admin/${param}/${subparam}`,
@@ -138,6 +140,7 @@ const UploadBoardPage: React.VFC = () => {
           private: checkPublic ? false : true,
           type: type?.type,
           showAttach: showAttach ? true : false,
+          inputCreatedAt: createdAt,
         },
       });
     } else if (imgUrl) {
@@ -152,6 +155,7 @@ const UploadBoardPage: React.VFC = () => {
           private: checkPublic ? false : true,
           type: type?.type,
           showAttach: showAttach ? true : false,
+          inputCreatedAt: createdAt,
         },
       });
     } else {
@@ -164,6 +168,7 @@ const UploadBoardPage: React.VFC = () => {
           category: category as string,
           type: type?.type,
           showAttach: showAttach ? true : false,
+          inputCreatedAt: createdAt,
         },
       });
     }
@@ -179,6 +184,7 @@ const UploadBoardPage: React.VFC = () => {
     checkPublic,
     type,
     showAttach,
+    createdAt,
   ]);
 
   const handleImageUpload = useCallback(
@@ -398,6 +404,15 @@ const UploadBoardPage: React.VFC = () => {
       <Form {...layout} name="upload-board" onFinish={onFinish}>
         <Form.Item name={["title"]} label="제목">
           <Input type="text" onChange={onChangeTitle} value={title} />
+        </Form.Item>
+        <Form.Item name={["create"]} label="생성날짜">
+          <Input
+            placeholder="YYYY-MM-DD"
+            type="text"
+            onChange={onChangeCreatedAt}
+            value={createdAt}
+            style={{ width: 200 }}
+          />
         </Form.Item>
         <Form.Item name={["checked"]} label={"공개 / 비공개"}>
           <Switch
