@@ -68,7 +68,7 @@ const Board: React.VFC = () => {
             id: elem.id,
             index: data.length - i,
             title: elem.title,
-            createdAt: getDate(elem.createdAt || ""),
+            createdAt: elem.inputCreatedAt,
             category: elem.category,
             private: elem.private || false,
             writer: elem.writer || "",

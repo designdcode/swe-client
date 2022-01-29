@@ -14,6 +14,7 @@ export const GET_BOARD_BY_ID = gql`
         type
         writer
         showAttach
+        inputCreatedAt
         replies {
           id
           content

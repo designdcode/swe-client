@@ -217,7 +217,8 @@ const BoardDetail: React.VFC = () => {
           span={3}
           labelStyle={{ width: 100 }}
         >
-          {getDate(board?.createdAt || "")}
+          {/* {getDate(board?.createdAt || "")} */}
+          {board?.inputCreatedAt}
         </Descriptions.Item>
         <Descriptions.Item
           key="file"

@@ -12,6 +12,7 @@ export const CREATE_BOARD = gql`
     $private: Boolean
     $writer: String
     $showAttach: Boolean
+    $inputCreatedAt: String
   ) {
     createBoard(
       title: $title
@@ -24,6 +25,7 @@ export const CREATE_BOARD = gql`
       private: $private
       writer: $writer
       showAttach: $showAttach
+      inputCreatedAt: $inputCreatedAt
     ) {
       ok
       err
@@ -44,6 +46,7 @@ export const GET_BOARD_BY_CATEGORY = gql`
         private
         type
         writer
+        inputCreatedAt
         files {
           id
           url
@@ -81,6 +84,7 @@ export const EDIT_BOARD = gql`
     $private: Boolean
     $type: String
     $showAttach: Boolean
+    $inputCreatedAt: String
   ) {
     editBoard(
       id: $id
@@ -90,6 +94,7 @@ export const EDIT_BOARD = gql`
       private: $private
       type: $type
       showAttach: $showAttach
+      inputCreatedAt: $inputCreatedAt
     ) {
       ok
       err
