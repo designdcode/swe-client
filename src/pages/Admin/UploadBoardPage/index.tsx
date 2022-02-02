@@ -473,7 +473,7 @@ const UploadBoardPage: React.VFC = () => {
           </Form.Item>
         )}
         {isFileNeeded && (
-          <Form.Item name={["file"]} label={"파일"}>
+          <Form.Item name={["file"]} label={"첨부파일"}>
             <Upload
               multiple={true}
               customRequest={({ file }) => handleFileUpload(file)}
