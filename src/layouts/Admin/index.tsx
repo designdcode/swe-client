@@ -26,10 +26,6 @@ const Admin: React.FC = () => {
   const [adminPW, adminPWOnChange, setAdminPW] = useInput("");
   const [pickMenu, setPickMenu] = useState<string>("대시보드");
   const [parentMenu, setParentMenu] = useState<string>("대시보드");
-  const [params, setParams] = useState<ParamProps>({
-    param: "dashboard",
-    subparam: "dashboard",
-  });
   const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(false);
   const { SubMenu } = Menu;
   const { Header, Content, Sider } = Layout;
@@ -50,10 +46,6 @@ const Admin: React.FC = () => {
       setShowBreadCrumb(true);
       setParentMenu(koParentMenu);
       setPickMenu(koMenu);
-      setParams({
-        param: menu,
-        subparam: parentMenu,
-      });
     },
     []
   );
@@ -62,10 +54,6 @@ const Admin: React.FC = () => {
     setShowBreadCrumb(false);
     setParentMenu("대시보드");
     setPickMenu("대시보드");
-    setParams({
-      param: "dashboard",
-      subparam: "dashboard",
-    });
   }, []);
 
   useEffect(() => {
@@ -73,10 +61,6 @@ const Admin: React.FC = () => {
       setShowBreadCrumb(true);
       setParentMenu(getTitle(param));
       setPickMenu(getSubTitle(param, subparam));
-      setParams({
-        param: param,
-        subparam: subparam,
-      });
     }
   }, [param, subparam, history]);
 

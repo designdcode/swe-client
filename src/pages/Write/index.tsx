@@ -108,7 +108,17 @@ const Write: React.VFC = () => {
         files: file.length !== 0 ? file : null,
       },
     });
-  }, [createBoardMutation, title, content, subparam, isPrivate, stno, file]);
+    setTitle("");
+  }, [
+    createBoardMutation,
+    title,
+    content,
+    subparam,
+    isPrivate,
+    stno,
+    file,
+    setTitle,
+  ]);
 
   useEffect(() => {
     if (!stno) {
@@ -277,7 +287,7 @@ interface MenuCellProps {
 
 const Wrapper = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    max-width: 375px;
+    max-width: 412px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     margin: 0 auto;
@@ -438,7 +448,7 @@ const FakeLine = styled.div<MenuCellProps>`
 
 const Body = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    max-width: 375px;
+    max-width: 412px;
     & .head {
       height: 80px;
       width: 100%;

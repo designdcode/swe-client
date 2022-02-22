@@ -76,7 +76,7 @@ const HomeBNews: React.VFC = () => {
             <>업로드 된 소식이 없습니다</>
           ) : (
             <>
-              {screen.width < 376 ? (
+              {screen.width < parseInt(BREAKPOINT_PHONE_MEDIUM + 1, 10) ? (
                 <Carousel
                   showIndicators={false}
                   showStatus={false}
@@ -277,7 +277,7 @@ const CarouselContent = styled.div`
   width: 100%;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     width: 350px;
-    max-width: 375px;
+    max-width: 412px;
     margin: 0 auto;
     & .carousel-text {
       margin-top: 25px;

@@ -129,7 +129,7 @@ const Detail = () => {
     <Wrapper>
       <Cover>
         <CoverTitle margin={screen.width > 1500 ? "25%" : "15%"}>
-          {NavigationData.map((item, idx) => {
+          {NavigationData.map((item) => {
             if (item.title === param.split("-")[0]) {
               return (
                 <div key={item.key}>
@@ -234,7 +234,6 @@ const Detail = () => {
               defaultZoom={16}
             >
               <Marker />
-              {/* <Mark lat={36.79914269604194} lng={127.07465313893422} /> */}
             </GoogleMapReact>
           </div>
         )}
@@ -343,15 +342,17 @@ const SubMenu = styled.div<middleMenuProps>`
       max-width: 1280px;
       min-width: 1000px;
       min-height: 50px;
-      height: ${(props) => (props.isBigger ? "100px" : "50px")};
+      height: 50px;
       margin: 0 auto;
       display: flex;
-      align-items: center;
       flex-wrap: wrap;
-      padding-left: 5%;
+      align-self: center;
+      align-items: center;
+      justify-content: center;
     }
     & .submenu-col {
-      width: 16%;
+      min-width: 14%;
+      padding: 0 5px;
       height: 50px;
       display: flex;
       align-items: center;

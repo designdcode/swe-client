@@ -23,7 +23,6 @@ import {
 } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { getDate } from "../../../utils/convertDate";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import styled from "@emotion/styled";

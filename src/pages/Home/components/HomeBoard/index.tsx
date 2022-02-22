@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "@emotion/styled";
 import {
+  breakpoints,
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
@@ -124,7 +125,7 @@ const HomeBoard: React.VFC = () => {
   return (
     <Wrapper>
       <Content>
-        {size.width > 375 ? (
+        {size.width > breakpoints.phoneMedium ? (
           <>
             <Col>
               {data?.getBoardByMonth.data === null ? (
@@ -409,7 +410,7 @@ const VideoContainer = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     height: 320px;
     display: flex;
-    max-width: 375px;
+    max-width: 412px;
     width: 100%;
     box-shadow: 5px 5px 14px #0000005a;
     padding: 15px 35px;
