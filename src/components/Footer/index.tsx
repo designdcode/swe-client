@@ -11,6 +11,20 @@ const Footer = () => {
     <FooterContaier>
       <img src={"/img/footerLogo.jpg"} alt="logoimg" className="mobile" />
       <span>
+        <a
+          href="https://www.instagram.com/sw_sunmoonuniv/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src={"img/insta.png"} alt="insta" />
+        </a>
+        <a
+          href="https://www.youtube.com/channel/UC6CYp3QV8cL-D4-hBXb_Nbw"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src={"img/youtube.png"} alt="insta" />
+        </a>
         TEL . 041-530-8311 FAX. 041-530-8315 <br />
         우) 31460 충남 아산시 탕정면 선문로 221번길 70 선문대학교
         SW융합관(원화관) 506호 70,

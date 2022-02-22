@@ -343,7 +343,7 @@ const SubMenu = styled.div<middleMenuProps>`
       max-width: 1280px;
       min-width: 1000px;
       min-height: 50px;
-      height: ${(props) => (props.isBigger ? "100px" : "50px")};
+      height: 50px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -351,7 +351,7 @@ const SubMenu = styled.div<middleMenuProps>`
       padding-left: 5%;
     }
     & .submenu-col {
-      width: 16%;
+      width: 14%;
       height: 50px;
       display: flex;
       align-items: center;
