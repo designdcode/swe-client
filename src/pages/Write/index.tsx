@@ -108,7 +108,17 @@ const Write: React.VFC = () => {
         files: file.length !== 0 ? file : null,
       },
     });
-  }, [createBoardMutation, title, content, subparam, isPrivate, stno, file]);
+    setTitle("");
+  }, [
+    createBoardMutation,
+    title,
+    content,
+    subparam,
+    isPrivate,
+    stno,
+    file,
+    setTitle,
+  ]);
 
   useEffect(() => {
     if (!stno) {
