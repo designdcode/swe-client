@@ -5,14 +5,13 @@ import {
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../utils/mediaQuery";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { GET_BOARD_BY_CATEGORY } from "../../queries/adminQuery";
 import { useLocation, useParams } from "react-router";
 import {
   getBoardByCategory,
   getBoardByCategoryVariables,
 } from "../../typings/api";
-import { getDate } from "../../utils/convertDate";
 import { Button, Dropdown, Menu, Space, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import { Link } from "react-router-dom";

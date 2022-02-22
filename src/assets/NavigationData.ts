@@ -97,22 +97,22 @@ export const NavigationData: NavProps[] = [
       {
         key: "major-project",
         title: "major-project",
-        ko_title: "프로젝트 기반 교육과정",
+        ko_title: "프로젝트기반교육과정",
       },
       {
         key: "major-sw",
         title: "major-sw",
-        ko_title: "몰입형 SW교육과정",
+        ko_title: "몰입형SW교육과정",
       },
       {
         key: "major-opensource",
         title: "major-opensource",
-        ko_title: "오픈소스 SW 교육",
+        ko_title: "오픈소스SW교육",
       },
       {
         key: "major-verify",
         title: "major-verify",
-        ko_title: "소프트웨어전문역량인증제",
+        ko_title: "소프트웨어역량인증제",
       },
       {
         key: "major-training",
