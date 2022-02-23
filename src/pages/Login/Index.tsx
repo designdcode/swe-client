@@ -124,7 +124,7 @@ const Container = styled.div`
   width: 100%;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     height: 80%;
-    width: 375px;
+    width: 412px;
     margin: 0 auto;
     & .login-form {
       height: 100%;

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 import {
+  breakpoints,
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
@@ -22,7 +23,7 @@ const HomeBanner: React.VFC = () => {
         showThumbs={false}
         showStatus={false}
         renderIndicator={
-          size.width > 375
+          size.width > breakpoints.phoneMedium
             ? (onClickHandler, isSelected, index, label) => {
                 const defStyle = {
                   marginLeft: 10,
@@ -65,22 +66,26 @@ const HomeBanner: React.VFC = () => {
         <ImageBox>
           <Image
             src={
-              size.width > 375 ? "img/banner1.jpeg" : "img/mobileBanner.jpeg"
+              size.width > breakpoints.phoneMedium
+                ? "img/banner1.jpeg"
+                : "img/mobileBanner.jpeg"
             }
             alt="banner"
           />
-          {size.width > 375 && (
+          {size.width > breakpoints.phoneMedium && (
             <ImageCover src={"img/banner2_cover.jpeg"} alt="banner cover" />
           )}
         </ImageBox>
         <ImageBox>
           <Image
             src={
-              size.width > 375 ? "img/banner2.jpeg" : "img/MobileBanner2.jpeg"
+              size.width > breakpoints.phoneMedium
+                ? "img/banner2.jpeg"
+                : "img/MobileBanner2.jpeg"
             }
             alt="banner2"
           />
-          {size.width > 375 && (
+          {size.width > breakpoints.phoneMedium && (
             <ImageCover src={"img/banner1_cover.jpeg"} alt="banner2 cover" />
           )}
         </ImageBox>

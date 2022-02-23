@@ -196,7 +196,6 @@ export const MainMobile = styled.div`
     background-color: #0c1b58;
     color: white;
     padding: 0 15px;
-
     & .menu {
       font-size: 24px;
       transform: rotate(90deg);
