@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import styled from "@emotion/styled";
 import {
+  breakpoints,
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
@@ -153,7 +154,9 @@ const BoardDetail: React.VFC = () => {
                   {data?.getBoardById.data?.files.map((item, idx) => {
                     return (
                       <div key={idx} className="attachment-row">
-                        <GrAttachment size={screen.width > 375 ? 14 : 8} />
+                        <GrAttachment
+                          size={screen.width > breakpoints.phoneMedium ? 14 : 8}
+                        />
                         <a
                           href={item?.url}
                           download

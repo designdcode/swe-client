@@ -4,6 +4,7 @@ import PopUp from "../../components/PopUp";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { GET_POPUP_STATUS } from "../../queries/sharedQuery";
 import { getPopupStatus } from "../../typings/api";
+import { breakpoints } from "../../utils/mediaQuery";
 import { Wrapper } from "../styles";
 import HomeBanner from "./components/HomeBanner";
 import HomeBNews from "./components/HomeBNews";
@@ -34,7 +35,7 @@ const Home: React.VFC = () => {
 
   return (
     <Wrapper>
-      {screen.width > 376 &&
+      {screen.width > breakpoints.phoneMedium &&
         data?.getPopupStatus.data &&
         data.getPopupStatus.data.up && (
           <PopUp

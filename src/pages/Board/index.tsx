@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import styled from "@emotion/styled";
 import {
+  breakpoints,
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
@@ -223,7 +224,9 @@ const Board: React.VFC = () => {
             title={() => {
               return (
                 <Space>
-                  <TableTitle>{screen.width > 375 ? "번호" : "#"}</TableTitle>
+                  <TableTitle>
+                    {screen.width > breakpoints.phoneMedium ? "번호" : "#"}
+                  </TableTitle>
                 </Space>
               );
             }}
@@ -232,7 +235,7 @@ const Board: React.VFC = () => {
             render={(text) => {
               return <TableDesc>{text}</TableDesc>;
             }}
-            width={screen.width > 375 ? 80 : 30}
+            width={screen.width > breakpoints.phoneMedium ? 80 : 30}
           />
           <Column
             title={() => {
@@ -278,7 +281,7 @@ const Board: React.VFC = () => {
                 </Space>
               );
             }}
-            width={screen.width > 375 ? 150 : 65}
+            width={screen.width > breakpoints.phoneMedium ? 150 : 65}
           />
           <Column
             align={"center"}
@@ -294,7 +297,7 @@ const Board: React.VFC = () => {
             render={(text) => {
               return <TableDesc>{text}</TableDesc>;
             }}
-            width={screen.width > 375 ? 150 : 90}
+            width={screen.width > breakpoints.phoneMedium ? 150 : 90}
           />
         </StyledTable>
       </Container>
@@ -410,12 +413,13 @@ const SubMenu = styled.div<middleMenuProps>`
       max-width: 1280px;
       min-width: 1000px;
       min-height: 50px;
-      height: ${(props) => (props.isBigger ? "100px" : "50px")};
+      height: 50px;
       margin: 0 auto;
       display: flex;
-      align-items: center;
       flex-wrap: wrap;
-      padding-left: ${(props) => props.margin};
+      align-self: center;
+      align-items: center;
+      justify-content: center;
     }
     & .submenu-col {
       width: 16%;
