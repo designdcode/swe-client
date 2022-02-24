@@ -69,7 +69,7 @@ export const FooterContaier = styled.div`
     & .image-link {
       a {
         img {
-          width: 20px;
+          width: 15px;
           margin: 0 10px;
         }
       }
@@ -103,7 +103,7 @@ export const FooterContaier = styled.div`
     & .image-link {
       a {
         img {
-          width: 40px;
+          width: 20px;
           margin: 0 10px;
         }
       }
