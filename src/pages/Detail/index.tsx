@@ -344,11 +344,10 @@ const SubMenu = styled.div<middleMenuProps>`
       min-height: 50px;
       height: 50px;
       margin: 0 auto;
+      padding-left: 5%;
       display: flex;
       flex-wrap: wrap;
-      align-self: center;
       align-items: center;
-      justify-content: center;
     }
     & .submenu-col {
       min-width: 14%;

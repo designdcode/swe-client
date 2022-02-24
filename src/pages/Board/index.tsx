@@ -417,9 +417,8 @@ const SubMenu = styled.div<middleMenuProps>`
       margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
-      align-self: center;
+      padding-left: 5%;
       align-items: center;
-      justify-content: center;
     }
     & .submenu-col {
       width: 16%;
