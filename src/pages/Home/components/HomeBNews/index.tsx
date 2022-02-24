@@ -12,6 +12,7 @@ import {
   getBoardByCategory_getBoardByCategory_data,
 } from "../../../../typings/api";
 import {
+  breakpoints,
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
@@ -76,7 +77,7 @@ const HomeBNews: React.VFC = () => {
             <>업로드 된 소식이 없습니다</>
           ) : (
             <>
-              {screen.width < parseInt(BREAKPOINT_PHONE_MEDIUM + 1, 10) ? (
+              {screen.width < breakpoints.phoneMedium + 1 ? (
                 <Carousel
                   showIndicators={false}
                   showStatus={false}
@@ -100,7 +101,10 @@ const HomeBNews: React.VFC = () => {
                           )
                         }
                       >
-                        <Image src={url !== "" ? url : url} alt="news image" />
+                        <Image
+                          src={url !== "" ? url : "/img/blackLogo.jpeg"}
+                          alt="news image"
+                        />
                         <div className="carousel-text">{item.title}</div>
                       </CarouselContent>
                     );
@@ -128,7 +132,7 @@ const HomeBNews: React.VFC = () => {
                         }
                         cover={
                           <img
-                            src={url}
+                            src={url ? url : "/img/blackLogo.jpeg"}
                             alt="example"
                             height={270}
                             width={240}
@@ -236,6 +240,7 @@ const Image = styled.img`
     width: 285px;
     height: 260px;
     object-fit: cover;
+    object-position: center;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 100%;

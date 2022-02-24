@@ -554,7 +554,10 @@ export default UploadBoardPage;
 const Editor = styled(ReactQuill)`
   background-color: white;
   min-height: 300px;
-  .ql-container {
+  & .ql-container {
+    min-height: 300px;
+  }
+  & .ql-editor {
     min-height: 300px;
   }
 `;
