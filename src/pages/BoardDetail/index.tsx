@@ -58,9 +58,9 @@ const BoardDetail: React.VFC = () => {
     if (!time) {
       return "";
     }
-    const year = time.substr(0, 3);
-    const month = time.substr(4, 5);
-    const day = time.substr(6, 7);
+    const year = time.substr(0, 4);
+    const month = time.substr(4, 2);
+    const day = time.substr(6, 2);
     return `${year}년 ${month}월 ${day}일`;
   };
 
