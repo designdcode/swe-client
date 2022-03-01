@@ -199,20 +199,7 @@ const HomeSWNews: React.VFC = () => {
                     adata && adata[0].id
                   }`}
                 >
-                  <SectionImage>
-                    {aurl ? renderSectionImage(aurl[0]) : <>none</>}
-                  </SectionImage>
-                  <SectionDesc>
-                    <div className="section-title">
-                      {adata && adata[0].title}
-                    </div>
-                    <div
-                      className="section-desc"
-                      dangerouslySetInnerHTML={{
-                        __html: (adata && adata[0].content) || "",
-                      }}
-                    ></div>
-                  </SectionDesc>
+                  {handleRoute(adata, aurl)}
                 </SectionContent>
               </>
             )}
@@ -449,7 +436,7 @@ const SectionDesc = styled.div`
     display: flex;
     flex-direction: column;
     & .section-title {
-      height: 10%;
+      height: 15%;
       width: 95%;
       word-break: break-all;
       overflow: hidden;
@@ -461,7 +448,7 @@ const SectionDesc = styled.div`
     }
 
     & .section-desc {
-      height: 42%;
+      height: 30%;
       width: 95%;
       word-break: break-all;
       overflow: hidden;
