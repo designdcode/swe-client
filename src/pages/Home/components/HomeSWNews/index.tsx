@@ -110,10 +110,79 @@ const HomeSWNews: React.VFC = () => {
 
   const renderSectionImage = useCallback(
     (image: getBoardByCategory_getBoardByCategory_data_images | null) => {
-      return <img src={image ? image.url : ""} alt="newsImage" />;
+      return (
+        <img src={image ? image.url : `/img/blackLogo.jpeg`} alt="newsImage" />
+      );
     },
     []
   );
+
+  const handleRoute = useCallback(
+    (
+      data?: getBoardByCategory_getBoardByCategory_data[] | undefined,
+      url?:
+        | (getBoardByCategory_getBoardByCategory_data_images | null)[]
+        | null
+        | undefined
+    ) => {
+      return (
+        <>
+          <SectionImage>
+            {url ? renderSectionImage(url[0]) : <>none</>}
+          </SectionImage>
+          <SectionDesc>
+            <div className="section-title">{data && data[0].title}</div>
+            <div
+              className="section-desc"
+              dangerouslySetInnerHTML={{
+                __html: (data && data[0].content) || "",
+              }}
+            ></div>
+          </SectionDesc>
+        </>
+      );
+    },
+    [renderSectionImage]
+  );
+
+  const renderSectionTitle = useCallback((param: string) => {
+    let title: string = "title";
+    switch (param) {
+      case "achievement-valuenews":
+        title = "SW 가치확산센터 소식";
+        break;
+      case "achievement-startup":
+        title = "창업센터 소식";
+        break;
+      case "achievement-coopnews":
+        title = "SW 산학협력 소식";
+        break;
+      case "achievement-aidnews":
+        title = "SW 교육지원센터 소식";
+        break;
+      default:
+        break;
+    }
+
+    return (
+      <SectionTitle>
+        <div
+          className="title-burger"
+          onClick={() => {
+            history.push(`/main/board/achievement/${param}`);
+          }}
+        >
+          |||
+        </div>
+        <div className="title-title">{title}</div>
+        <div className="title-more">
+          <Link to={`/main/board/achievement/${param}`} className="title-link">
+            더보기+
+          </Link>
+        </div>
+      </SectionTitle>
+    );
+  }, []);
 
   return (
     <Wrapper>
@@ -124,38 +193,14 @@ const HomeSWNews: React.VFC = () => {
               <>loading</>
             ) : (
               <>
-                <SectionTitle>
-                  <div
-                    className="title-burger"
-                    onClick={() => {
-                      history.push(
-                        "/main/board/achievement/achievement-aidnews"
-                      );
-                    }}
-                  >
-                    |||
-                  </div>
-                  <div className="title-title">SW 교육지원센터 소식</div>
-                  <div className="title-more">
-                    <Link
-                      to="/main/board/achievement/achievement-aidnews"
-                      className="title-link"
-                    >
-                      더보기+
-                    </Link>
-                  </div>
-                </SectionTitle>
+                {renderSectionTitle("achievement-aidnews")}
                 <SectionContent
                   to={`/main/detail/achievement/achievement-aidnews/${
-                    adata && adata[adata.length - 1].id
+                    adata && adata[0].id
                   }`}
                 >
                   <SectionImage>
-                    {aurl ? (
-                      renderSectionImage(aurl[aurl.length - 1])
-                    ) : (
-                      <>none</>
-                    )}
+                    {aurl ? renderSectionImage(aurl[0]) : <>none</>}
                   </SectionImage>
                   <SectionDesc>
                     <div className="section-title">
@@ -177,50 +222,13 @@ const HomeSWNews: React.VFC = () => {
               <>loading</>
             ) : (
               <>
-                <SectionTitle>
-                  <div
-                    className="title-burger"
-                    onClick={() => {
-                      history.push(
-                        "/main/board/achievement/achievement-coopnews"
-                      );
-                    }}
-                  >
-                    |||
-                  </div>
-                  <div className="title-title">SW 산학협력 소식</div>
-                  <div className="title-more">
-                    <Link
-                      to="/main/board/achievement/achievement-coopnews"
-                      className="title-link"
-                    >
-                      더보기+
-                    </Link>
-                  </div>
-                </SectionTitle>
+                {renderSectionTitle("achievement-coopnews")}
                 <SectionContent
                   to={`/main/detail/achievement/achievement-coopnews/${
-                    cdata && cdata[cdata.length - 1].id
+                    cdata && cdata[0].id
                   }`}
                 >
-                  <SectionImage>
-                    {curl ? (
-                      renderSectionImage(curl[curl.length - 1])
-                    ) : (
-                      <>none</>
-                    )}
-                  </SectionImage>
-                  <SectionDesc>
-                    <div className="section-title">
-                      {cdata && cdata[0].title}
-                    </div>
-                    <div
-                      className="section-desc"
-                      dangerouslySetInnerHTML={{
-                        __html: (cdata && cdata[0].content) || "",
-                      }}
-                    ></div>
-                  </SectionDesc>
+                  {handleRoute(cdata, curl)}
                 </SectionContent>
               </>
             )}
@@ -232,50 +240,13 @@ const HomeSWNews: React.VFC = () => {
               <>loading</>
             ) : (
               <>
-                <SectionTitle>
-                  <div
-                    className="title-burger"
-                    onClick={() => {
-                      history.push(
-                        "/main/board/achievement/achievement-valuenews"
-                      );
-                    }}
-                  >
-                    |||
-                  </div>
-                  <div className="title-title">SW 가치확산센터 소식</div>
-                  <div className="title-more">
-                    <Link
-                      to="/main/board/achievement/achievement-valuenews"
-                      className="title-link"
-                    >
-                      더보기+
-                    </Link>
-                  </div>
-                </SectionTitle>
+                {renderSectionTitle("achievement-valuenews")}
                 <SectionContent
                   to={`/main/detail/achievement/achievement-valuenews/${
-                    vdata && vdata[vdata.length - 1].id
+                    vdata && vdata[0].id
                   }`}
                 >
-                  <SectionImage>
-                    {vurl ? (
-                      renderSectionImage(vurl[vurl.length - 1])
-                    ) : (
-                      <>none</>
-                    )}
-                  </SectionImage>
-                  <SectionDesc>
-                    <div className="section-title">
-                      {vdata && vdata[0].title}
-                    </div>
-                    <div
-                      className="section-desc"
-                      dangerouslySetInnerHTML={{
-                        __html: (vdata && vdata[0].content) || "",
-                      }}
-                    ></div>
-                  </SectionDesc>
+                  {handleRoute(vdata, vurl)}
                 </SectionContent>
               </>
             )}
@@ -285,50 +256,13 @@ const HomeSWNews: React.VFC = () => {
               <>loading</>
             ) : (
               <>
-                <SectionTitle>
-                  <div
-                    className="title-burger"
-                    onClick={() => {
-                      history.push(
-                        "/main/board/achievement/achievement-startup"
-                      );
-                    }}
-                  >
-                    |||
-                  </div>
-                  <div className="title-title">창업센터 소식</div>
-                  <div className="title-more">
-                    <Link
-                      to="/main/board/achievement/achievement-startup"
-                      className="title-link"
-                    >
-                      더보기+
-                    </Link>
-                  </div>
-                </SectionTitle>
+                {renderSectionTitle("achievement-startup")}
                 <SectionContent
                   to={`/main/detail/achievement/achievement-startup/${
-                    sdata && sdata[sdata.length - 1].id
+                    sdata && sdata[0].id
                   }`}
                 >
-                  <SectionImage>
-                    {surl ? (
-                      renderSectionImage(surl[surl.length - 1])
-                    ) : (
-                      <>none</>
-                    )}
-                  </SectionImage>
-                  <SectionDesc>
-                    <div className="section-title">
-                      {sdata && sdata[0].title}
-                    </div>
-                    <div
-                      className="section-desc"
-                      dangerouslySetInnerHTML={{
-                        __html: (sdata && sdata[0].content) || "",
-                      }}
-                    ></div>
-                  </SectionDesc>
+                  {handleRoute(sdata, surl)}
                 </SectionContent>
               </>
             )}
@@ -472,7 +406,7 @@ const SectionContent = styled(Link)`
     display: flex;
     width: 100%;
     height: 95%;
-    padding: 5px;
+    padding: 1px;
     cursor: pointer;
     justify-content: space-between;
     &:hover {
@@ -487,7 +421,6 @@ const SectionImage = styled.div`
     width: 50%;
     height: 100%;
     margin-right: 10px;
-
     & img {
       width: 320px;
       height: 200px;
@@ -515,9 +448,8 @@ const SectionDesc = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     & .section-title {
-      height: 25%;
+      height: 10%;
       width: 95%;
       word-break: break-all;
       overflow: hidden;
@@ -529,10 +461,13 @@ const SectionDesc = styled.div`
     }
 
     & .section-desc {
-      height: 60%;
+      height: 42%;
       width: 95%;
       word-break: break-all;
+      overflow: hidden;
       text-overflow: ellipsis;
+      line-height: 2;
+      margin-top: 20px;
       line-height: 1.3;
       font-size: 9px;
     }
