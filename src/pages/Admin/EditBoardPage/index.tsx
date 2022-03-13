@@ -82,6 +82,7 @@ const EditBoardPage: React.VFC = () => {
     useState<(getBoardById_getBoardById_data_images | undefined | null)[]>();
 
   const [title, onChangeTitle, setTitle] = useInput("");
+  const [createDate, onChangeCreateDate] = useInput("");
   const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
   const [progress, setProgress] = useState<number>(0);
@@ -186,9 +187,10 @@ const EditBoardPage: React.VFC = () => {
         link,
         private: checkPrivate,
         showAttach: attach,
+        inputCreatedAt: createDate,
       },
     });
-  }, [id, title, content, link, editBoard, checkPrivate, attach]);
+  }, [id, title, content, link, editBoard, checkPrivate, attach, createDate]);
 
   const handleDeleteFile = useCallback(
     async (id: number, name?: string) => {
@@ -326,6 +328,18 @@ const EditBoardPage: React.VFC = () => {
             placeholder={board?.title || undefined}
             value={title}
             onChange={onChangeTitle}
+          />
+        </Descriptions.Item>
+        <Descriptions.Item
+          label="생성날짜"
+          span={4}
+          labelStyle={{ width: 100 }}
+        >
+          <Input
+            placeholder={board?.inputCreatedAt || "YYYY-MM-DD"}
+            value={createDate}
+            onChange={onChangeCreateDate}
+            style={{ width: 200 }}
           />
         </Descriptions.Item>
         <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>

@@ -184,8 +184,8 @@ export const EDIT_LINK = gql`
 `;
 
 export const EDIT_POPUP = gql`
-  mutation editPopup($up: String!, $url: String) {
-    editPopup(up: $up, url: $url) {
+  mutation editPopup($up: String!, $url: String, $link: String) {
+    editPopup(up: $up, url: $url, link: $link) {
       ok
       err
     }

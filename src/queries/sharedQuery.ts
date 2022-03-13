@@ -112,6 +112,7 @@ export const GET_POPUP_STATUS = gql`
       data {
         url
         up
+        link
       }
     }
   }
