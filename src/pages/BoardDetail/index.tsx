@@ -607,12 +607,13 @@ const ContentBottom = styled.div`
     height: 150px;
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-
     a {
-      color: #b7b7b7;
+      color: white;
+      padding: 4px 10px;
       font-size: 18px;
+      background-color: #0c1b58;
     }
   }
 `;
