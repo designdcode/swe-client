@@ -51,9 +51,11 @@ const layout = {
 
 const modules = {
   toolbar: [
-    [{ header: [1, 2, false] }],
-    ["bold", "italic"],
+    [{ header: "1" }, { header: "2" }],
+    [{ size: [] }],
+    ["bold", "size", "italic"],
     [{ list: "ordered" }, { list: "bullet" }],
+    ["link", "image"],
     ["clean"],
   ],
 };
@@ -131,7 +133,7 @@ const UploadBoardPage: React.VFC = () => {
     if (file.length !== 0) {
       await createBoard({
         variables: {
-          title: title.trim() ? title : null,
+          title: title.trim() ? title : "제목없음",
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
           category: category as string,
@@ -146,7 +148,7 @@ const UploadBoardPage: React.VFC = () => {
     } else if (imgUrl) {
       await createBoard({
         variables: {
-          title: title.trim() ? title : null,
+          title: title.trim() ? title : "제목없음",
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
           category: category as string,
@@ -161,7 +163,7 @@ const UploadBoardPage: React.VFC = () => {
     } else {
       await createBoard({
         variables: {
-          title: title.trim() ? title : null,
+          title: title.trim() ? title : "제목없음",
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
           private: checkPublic ? false : true,

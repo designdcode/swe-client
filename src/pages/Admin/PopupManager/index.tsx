@@ -7,21 +7,26 @@ import {
   editPopupVariables,
   getPopupStatus,
 } from "../../../typings/api";
-import { Button, Descriptions, Switch, Upload } from "antd";
+import { Button, Descriptions, Input, Switch, Upload } from "antd";
 import { EDIT_POPUP } from "../../../queries/adminQuery";
 import { storage } from "../../../utils/firebase";
 import { toast } from "react-toastify";
 import { UploadOutlined } from "@ant-design/icons";
+import useInput from "../../../hooks/useInput";
 
 const PopupManager: React.FC = () => {
   const [status, setStatus] = useState<string>("");
+  const [link, onChangeLink, setLink] = useInput("");
   const [imgUrl, setImgUrl] = useState<string>();
+  const [editLink, setEditLink] = useState<boolean>(false);
   const { data, loading, refetch } = useQuery<getPopupStatus>(GET_POPUP_STATUS);
   const [editPopup] = useMutation<editPopup, editPopupVariables>(EDIT_POPUP, {
     onCompleted: ({ editPopup }) => {
       const { ok, err } = editPopup;
       if (ok) {
         toast.success("팝업이 성공적으로 설정 되었습니다");
+        setLink("");
+        setEditLink(false);
         refetch();
       } else {
         toast.error(err);
@@ -66,9 +71,10 @@ const PopupManager: React.FC = () => {
       variables: {
         up: status,
         url: imgUrl,
+        link: link.includes("http") ? link : `http://${link}`,
       },
     });
-  }, [status, imgUrl, editPopup]);
+  }, [status, imgUrl, editPopup, link]);
 
   const imageRemover = () => {
     storage
@@ -97,6 +103,30 @@ const PopupManager: React.FC = () => {
             checked={status === "on" ? true : false}
             onChange={() => setStatus(status === "on" ? "off" : "on")}
           />
+        </Descriptions.Item>
+        <Descriptions.Item
+          label="팝업링크"
+          span={4}
+          key={"링크"}
+          labelStyle={{ width: 120 }}
+        >
+          <LinkSwitchContainer>
+            <span className="edit-link">링크 수정</span>
+            <Switch
+              checked={editLink}
+              onChange={() => setEditLink(!editLink)}
+            />
+          </LinkSwitchContainer>
+          {editLink ? (
+            <Input
+              style={{ width: 500 }}
+              placeholder={`${data?.getPopupStatus.data?.link}`}
+              value={link}
+              onChange={onChangeLink}
+            />
+          ) : (
+            <span>현재 설정된 링크: {data?.getPopupStatus.data?.link}</span>
+          )}
         </Descriptions.Item>
         <Descriptions.Item
           label="게시물"
@@ -165,4 +195,11 @@ const Container = styled.div``;
 
 const StyledButton = styled(Button)`
   margin: 30px;
+`;
+
+const LinkSwitchContainer = styled.div`
+  margin: 10px 0;
+  & .edit-link {
+    margin-right: 10px;
+  }
 `;

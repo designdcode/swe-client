@@ -5,9 +5,15 @@ interface IPopUpProps {
   showPopup: boolean;
   setShowPopUp: React.Dispatch<SetStateAction<boolean>>;
   url: string;
+  link?: string | null;
 }
 
-const PopUp: React.FC<IPopUpProps> = ({ showPopup, setShowPopUp, url }) => {
+const PopUp: React.FC<IPopUpProps> = ({
+  showPopup,
+  setShowPopUp,
+  url,
+  link,
+}) => {
   const onPopUpNotShot = () => {
     const fuzePopUpNotShow = localStorage.getItem("fuzePopUpNotShow");
     const fuzePopUpNotShowUNIX = Date.parse(fuzePopUpNotShow || "");
@@ -28,7 +34,13 @@ const PopUp: React.FC<IPopUpProps> = ({ showPopup, setShowPopUp, url }) => {
       {showPopup && (
         <Wrapper>
           <ImageWrapper>
-            <img src={url} alt="popupimg" />
+            {link ? (
+              <a href={link.toString()} target="_blank" rel="noreferrer">
+                <img src={url} alt="popupimg" />
+              </a>
+            ) : (
+              <img src={url} alt="popupimg" />
+            )}
           </ImageWrapper>
           <TodayWrapper>
             <button onClick={onPopUpNotShot}>오늘 하루 보지 않기</button>
@@ -44,7 +56,6 @@ export default PopUp;
 
 const Wrapper = styled.div`
   width: 500px;
-  height: 700px;
   position: absolute;
   background-color: white;
   margin-left: auto;
@@ -53,6 +64,7 @@ const Wrapper = styled.div`
   left: 0;
   right: 35%;
   z-index: 9999;
+  border: 1px solid #353535;
 `;
 
 const ImageWrapper = styled.div`
@@ -71,5 +83,13 @@ const ImageWrapper = styled.div`
 const TodayWrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 2px 20px;
+  background-color: #353535;
+  & button {
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+    border: none;
+  }
 `;
