@@ -380,6 +380,7 @@ export interface editPopup {
 export interface editPopupVariables {
   up: string;
   url?: string | null;
+  link?: string | null;
 }
 
 /* tslint:disable */
@@ -657,6 +658,7 @@ export interface getPopupStatus_getPopupStatus_data {
   __typename: "Popup";
   url: string | null;
   up: boolean;
+  link: string | null;
 }
 
 export interface getPopupStatus_getPopupStatus {

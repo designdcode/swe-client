@@ -1,4 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
+import { useMutation } from "@apollo/client";
+import { useHistory, useLocation } from "react-router";
+import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
+
 import queryString from "query-string";
 import useInput from "../../../hooks/useInput";
 import { Container } from "./styles";
@@ -12,11 +16,9 @@ import {
   Menu,
   Dropdown,
 } from "antd";
-import { useCallback } from "react";
-import { useMutation } from "@apollo/client";
+import { storage } from "../../../utils/firebase";
 import { CREATE_BOARD } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
-import { useHistory, useLocation } from "react-router";
 import {
   contentSwitcher,
   fileSwitcher,
@@ -24,17 +26,15 @@ import {
   linkSwitcher,
   typeSwitcher,
 } from "../../../utils/switcher";
-import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import { fileUploader } from "../../../utils/fileUploader";
 import { fileRemover } from "../../../utils/fileRemover";
-import { storage } from "../../../utils/firebase";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import styled from "@emotion/styled";
+
 import {
   createBoard as createBoardType,
   createBoardVariables,
 } from "../../../typings/api";
+import Editor from "../../../components/Editor";
+// import { b64toBlob } from "../../../utils/b64ToBlob";
 
 interface locationProps {
   search: string;
@@ -48,17 +48,6 @@ interface fileProps {
 const layout = {
   wrapperCol: { span: 16 },
 };
-
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ["bold", "italic"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["clean"],
-  ],
-};
-
-const formats = ["header", "bold", "italic", "underline", "list"];
 
 const UploadBoardPage: React.VFC = () => {
   const history = useHistory();
@@ -92,7 +81,22 @@ const UploadBoardPage: React.VFC = () => {
     setIsTypeNeeded(typeSwitcher(subparam as string));
   }, [subparam]);
 
-  const handleChange = (value: any) => {
+  const handleChange = (value: string) => {
+    // if (value.includes('<img src=')) {
+    //   const base64Data: string = value.split('base64,')[1].split('"')[0]
+    //   const fileName = value.split('file-name=')[1].split('" data-file')[0].replace(`"`, "")
+    //   const blob = b64toBlob(base64Data, 'image/png');
+
+    //   promiseFileUploader(
+    //     "images",
+    //     blob,
+    //     category as string,
+    //     fileName,
+    //     progress,
+    //     setProgress
+    //   )
+
+    // }
     setContent(value);
   };
 
@@ -102,6 +106,7 @@ const UploadBoardPage: React.VFC = () => {
   >(CREATE_BOARD, {
     onCompleted: ({ createBoard }) => {
       const { ok, err } = createBoard;
+      console.log(ok, err);
       if (ok) {
         setTitle("");
         setContent("");
@@ -131,7 +136,7 @@ const UploadBoardPage: React.VFC = () => {
     if (file.length !== 0) {
       await createBoard({
         variables: {
-          title: title.trim() ? title : null,
+          title: title.trim() ? title : "제목없음",
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
           category: category as string,
@@ -146,7 +151,7 @@ const UploadBoardPage: React.VFC = () => {
     } else if (imgUrl) {
       await createBoard({
         variables: {
-          title: title.trim() ? title : null,
+          title: title.trim() ? title : "제목없음",
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
           category: category as string,
@@ -161,7 +166,7 @@ const UploadBoardPage: React.VFC = () => {
     } else {
       await createBoard({
         variables: {
-          title: title.trim() ? title : null,
+          title: title.trim() ? title : "제목없음",
           content: content.trim() ? content : null,
           link: link.trim() ? link : null,
           private: checkPublic ? false : true,
@@ -503,13 +508,7 @@ const UploadBoardPage: React.VFC = () => {
             initialValue=""
             rules={[{ required: true }]}
           >
-            <Editor
-              modules={modules}
-              formats={formats}
-              value={content || ""}
-              onChange={handleChange}
-              theme={"snow"}
-            />
+            <Editor onChange={handleChange} content={content} />
           </Form.Item>
         )}
         {isFileNeeded && (
@@ -525,7 +524,10 @@ const UploadBoardPage: React.VFC = () => {
             />
           </Form.Item>
         )}
-        <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+        <Form.Item
+          wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
+          name={"Upload"}
+        >
           <Button
             type="primary"
             htmlType="submit"
@@ -550,14 +552,3 @@ const UploadBoardPage: React.VFC = () => {
 };
 
 export default UploadBoardPage;
-
-const Editor = styled(ReactQuill)`
-  background-color: white;
-  min-height: 300px;
-  & .ql-container {
-    min-height: 300px;
-  }
-  & .ql-editor {
-    min-height: 300px;
-  }
-`;

@@ -19,7 +19,6 @@ import {
   DeleteOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
-import { storage } from "../../../utils/firebase";
 import {
   CREATE_FILE,
   CREATE_IMAGE,
@@ -31,6 +30,7 @@ import { toast } from "react-toastify";
 import { fileUploader } from "../../../utils/fileUploader";
 import { fileRemover } from "../../../utils/fileRemover";
 import { fileSwitcher, linkSwitcher } from "../../../utils/switcher";
+import { storage } from "../../../utils/firebase";
 
 interface locationProps {
   search: string;

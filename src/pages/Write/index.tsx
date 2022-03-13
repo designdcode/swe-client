@@ -11,8 +11,6 @@ import { NavigationData } from "../../assets/NavigationData";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { Link } from "react-router-dom";
 import { Button, Input, Radio, Upload } from "antd";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 
 import useInput from "../../hooks/useInput";
 import { useMutation } from "@apollo/client";
@@ -20,6 +18,7 @@ import { CREATE_BOARD } from "../../queries/adminQuery";
 import { createBoard, createBoardVariables } from "../../typings/api";
 import { storage } from "../../utils/firebase";
 import { UploadOutlined } from "@ant-design/icons";
+import Editor from "../../components/Editor";
 
 interface paramProps {
   param: string;
@@ -30,17 +29,6 @@ interface fileProps {
   url: string;
   fileName: string;
 }
-
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ["bold", "italic"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["clean"],
-  ],
-};
-
-const formats = ["header", "bold", "italic", "underline", "list"];
 
 const Write: React.VFC = () => {
   const screen = useWindowSize();
@@ -219,13 +207,9 @@ const Write: React.VFC = () => {
                 비밀글 설정
               </Radio>
             </div>
-            <Editor
-              modules={modules}
-              formats={formats}
-              value={content || ""}
-              onChange={handleChange}
-              theme="snow"
-            />
+
+            <Editor onChange={handleChange} content={content} />
+
             <div className="content-upload">
               <Upload
                 multiple={true}
@@ -614,23 +598,23 @@ const ContentBody = styled.div`
   }
 `;
 
-const Editor = styled(ReactQuill)`
-  background-color: white;
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    .ql-container {
-      min-height: 200px;
-      width: 100%;
-    }
-  }
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    height: 300px;
-    width: 100%;
-    .ql-container {
-      min-height: 300px;
-      width: 100%;
-    }
-  }
-`;
+// const Editor = styled(ReactQuill)`
+//   background-color: white;
+//   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+//     .ql-container {
+//       min-height: 200px;
+//       width: 100%;
+//     }
+//   }
+//   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+//     height: 300px;
+//     width: 100%;
+//     .ql-container {
+//       min-height: 300px;
+//       width: 100%;
+//     }
+//   }
+// `;
 
 const ContentBottom = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {

@@ -35,7 +35,7 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   const yearMonth = `${new Date().getFullYear()}.${new Date().getMonth() + 1}`;
   let filtered;
   if (data && data.length > 6) {
-    filtered = data.splice(0, 6);
+    filtered = data.splice(0, 3);
   } else {
     filtered = data;
   }
@@ -55,18 +55,6 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   return (
     <BoardContainer>
       <div className="board-title">
-        <div className="board-top-title">
-          <TitleWithLine>
-            <div className="line"></div>
-            <span className="title">공지사항</span>
-          </TitleWithLine>
-          <Link
-            to="/main/board/community/community-notice"
-            style={{ color: "black" }}
-          >
-            더보기 +
-          </Link>
-        </div>
         <div className="board-bottom-title">
           <div className="date">
             <span className="date-title">{now}</span>
@@ -129,9 +117,18 @@ const HomeBoard: React.VFC = () => {
           <>
             <Col>
               {data?.getBoardByMonth.data === null ? (
-                <>no data</>
+                <div>저장된 데이터가 없습니다</div>
               ) : (
-                <NoticeBoard data={data?.getBoardByMonth.data} />
+                <>
+                  <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSdpCBD4dNPsNWguHfat1s620Fmxqpi-TBAK6ehdCoMeL23eQw/viewform"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <BannerImage src="/img/mainBanner.png" alt="main banner" />
+                  </a>
+                  <NoticeBoard data={data?.getBoardByMonth.data} />
+                </>
               )}
             </Col>
             <Col>
@@ -145,9 +142,12 @@ const HomeBoard: React.VFC = () => {
             </Col>
             <Col>
               {data?.getBoardByMonth.data === null ? (
-                <>no data</>
+                <div>저장된 데이터가 없습니다</div>
               ) : (
-                <NoticeBoard data={data?.getBoardByMonth.data} />
+                <>
+                  <BannerImage src="/img/mainBanner.png" alt="main banner" />
+                  <NoticeBoard data={data?.getBoardByMonth.data} />
+                </>
               )}
             </Col>
           </>
@@ -165,8 +165,8 @@ const Wrapper = styled.div`
     width: 100%;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    height: 400px;
     max-width: 1980px;
+    padding-bottom: 25px;
   }
 `;
 
@@ -176,7 +176,6 @@ const Content = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 1280px;
-    height: 100%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -188,7 +187,6 @@ const Col = styled.div`
     min-height: 300px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    height: 90%;
     width: 600px;
   }
 `;
@@ -196,11 +194,11 @@ const Col = styled.div`
 const BoardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: 500px;
   width: 100%;
   padding: 0 35px;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     padding-top: 30px;
+    height: 300px;
     & .board-title {
       display: flex;
       flex-direction: column;
@@ -327,7 +325,6 @@ const NoticeList = styled(List.Item)`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     padding: 5px;
     cursor: pointer;
-
     & a {
       font-size: 17px;
       font-weight: 600;
@@ -424,13 +421,20 @@ const VideoContainer = styled.div`
   }
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    height: 500px;
-
     .video-container {
       margin-top: 20px;
       & video {
         width: 480px;
       }
     }
+  }
+`;
+
+const BannerImage = styled.img`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    max-width: 100%;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    max-width: 100%;
   }
 `;

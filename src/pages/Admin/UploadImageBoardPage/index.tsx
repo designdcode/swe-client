@@ -9,9 +9,9 @@ import { toast } from "react-toastify";
 import { Button, Checkbox, Form, Input, Upload } from "antd";
 import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import { fileUploader } from "../../../utils/fileUploader";
-import { storage } from "../../../utils/firebase";
 import { fileRemover } from "../../../utils/fileRemover";
 import styled from "@emotion/styled";
+import { storage } from "../../../utils/firebase";
 
 interface locationProps {
   search: string;

@@ -42,6 +42,7 @@ const Home: React.VFC = () => {
             showPopup={showPopUp}
             setShowPopUp={setShowPopUp}
             url={data.getPopupStatus.data.url || ""}
+            link={data.getPopupStatus.data.link}
           />
         )}
       <HomeBanner />

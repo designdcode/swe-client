@@ -40,9 +40,7 @@ import { storage } from "../../../utils/firebase";
 import { fileRemover } from "../../../utils/fileRemover";
 import { fileUploader } from "../../../utils/fileUploader";
 import { linkSwitcher } from "../../../utils/switcher";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import styled from "@emotion/styled";
+import Editor from "../../../components/Editor";
 
 interface locationProps {
   search: string;
@@ -52,17 +50,6 @@ interface paramProps {
   param: string;
   subparam: string;
 }
-
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ["bold", "italic"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["clean"],
-  ],
-};
-
-const formats = ["header", "bold", "italic", "underline", "list"];
 
 const EditBoardPage: React.VFC = () => {
   const { search } = useLocation<locationProps>();
@@ -82,6 +69,7 @@ const EditBoardPage: React.VFC = () => {
     useState<(getBoardById_getBoardById_data_images | undefined | null)[]>();
 
   const [title, onChangeTitle, setTitle] = useInput("");
+  const [createDate, onChangeCreateDate] = useInput("");
   const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
   const [progress, setProgress] = useState<number>(0);
@@ -186,9 +174,10 @@ const EditBoardPage: React.VFC = () => {
         link,
         private: checkPrivate,
         showAttach: attach,
+        inputCreatedAt: createDate,
       },
     });
-  }, [id, title, content, link, editBoard, checkPrivate, attach]);
+  }, [id, title, content, link, editBoard, checkPrivate, attach, createDate]);
 
   const handleDeleteFile = useCallback(
     async (id: number, name?: string) => {
@@ -328,6 +317,18 @@ const EditBoardPage: React.VFC = () => {
             onChange={onChangeTitle}
           />
         </Descriptions.Item>
+        <Descriptions.Item
+          label="생성날짜"
+          span={4}
+          labelStyle={{ width: 100 }}
+        >
+          <Input
+            placeholder={board?.inputCreatedAt || "YYYY-MM-DD"}
+            value={createDate}
+            onChange={onChangeCreateDate}
+            style={{ width: 200 }}
+          />
+        </Descriptions.Item>
         <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>
           {files && files.length !== 0 ? (
             <>
@@ -452,13 +453,7 @@ const EditBoardPage: React.VFC = () => {
           </Descriptions.Item>
         )}
         <Descriptions.Item label="내용" span={4}>
-          <Editor
-            modules={modules}
-            formats={formats}
-            value={content || ""}
-            onChange={handleChange}
-            theme={"snow"}
-          />
+          <Editor onChange={handleChange} content={content} />
         </Descriptions.Item>
       </Descriptions>
       <div className="button-group">
@@ -485,11 +480,3 @@ const EditBoardPage: React.VFC = () => {
 };
 
 export default EditBoardPage;
-
-const Editor = styled(ReactQuill)`
-  background-color: white;
-  min-height: 300px;
-  .ql-container {
-    min-height: 300px;
-  }
-`;
