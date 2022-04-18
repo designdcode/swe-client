@@ -145,44 +145,50 @@ const HomeSWNews: React.VFC = () => {
     [renderSectionImage]
   );
 
-  const renderSectionTitle = useCallback((param: string) => {
-    let title: string = "title";
-    switch (param) {
-      case "achievement-valuenews":
-        title = "SW 가치확산센터 소식";
-        break;
-      case "achievement-startup":
-        title = "창업센터 소식";
-        break;
-      case "achievement-coopnews":
-        title = "SW 산학협력 소식";
-        break;
-      case "achievement-aidnews":
-        title = "SW 교육지원센터 소식";
-        break;
-      default:
-        break;
-    }
+  const renderSectionTitle = useCallback(
+    (param: string) => {
+      let title: string = "title";
+      switch (param) {
+        case "achievement-valuenews":
+          title = "SW 가치확산센터 소식";
+          break;
+        case "achievement-startup":
+          title = "창업센터 소식";
+          break;
+        case "achievement-coopnews":
+          title = "SW 산학협력 소식";
+          break;
+        case "achievement-aidnews":
+          title = "SW 교육지원센터 소식";
+          break;
+        default:
+          break;
+      }
 
-    return (
-      <SectionTitle>
-        <div
-          className="title-burger"
-          onClick={() => {
-            history.push(`/main/board/achievement/${param}`);
-          }}
-        >
-          |||
-        </div>
-        <div className="title-title">{title}</div>
-        <div className="title-more">
-          <Link to={`/main/board/achievement/${param}`} className="title-link">
-            더보기+
-          </Link>
-        </div>
-      </SectionTitle>
-    );
-  }, []);
+      return (
+        <SectionTitle>
+          <div
+            className="title-burger"
+            onClick={() => {
+              history.push(`/main/board/achievement/${param}`);
+            }}
+          >
+            |||
+          </div>
+          <div className="title-title">{title}</div>
+          <div className="title-more">
+            <Link
+              to={`/main/board/achievement/${param}`}
+              className="title-link"
+            >
+              더보기+
+            </Link>
+          </div>
+        </SectionTitle>
+      );
+    },
+    [history]
+  );
 
   return (
     <Wrapper>

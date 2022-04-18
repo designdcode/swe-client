@@ -40,3 +40,34 @@ export const fileUploader = (
     }
   );
 };
+
+export const promiseFileUploader = async (
+  type: string,
+  file: any,
+  category: string,
+  filename: string,
+  progress: number,
+  setProgress: Dispatch<SetStateAction<number>>
+): Promise<string> => {
+  const upload = storage.ref(`/${type}/${category}/${filename}`).put(file);
+  let tmpurl = "";
+  upload.on(
+    "state_changed",
+    (snapshot) => {},
+    (err) => console.log(err),
+    () => {
+      setProgress(1);
+      storage
+        .ref(`/${type}/${category}/${filename}`)
+        .getDownloadURL()
+        .then(async (url) => {
+          tmpurl = (await url) as string;
+          setProgress(0);
+        });
+    }
+  );
+
+  console.log(tmpurl);
+
+  return tmpurl;
+};

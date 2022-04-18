@@ -40,9 +40,7 @@ import { storage } from "../../../utils/firebase";
 import { fileRemover } from "../../../utils/fileRemover";
 import { fileUploader } from "../../../utils/fileUploader";
 import { linkSwitcher } from "../../../utils/switcher";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import styled from "@emotion/styled";
+import Editor from "../../../components/Editor";
 
 interface locationProps {
   search: string;
@@ -52,17 +50,6 @@ interface paramProps {
   param: string;
   subparam: string;
 }
-
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ["bold", "italic"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["clean"],
-  ],
-};
-
-const formats = ["header", "bold", "italic", "underline", "list"];
 
 const EditBoardPage: React.VFC = () => {
   const { search } = useLocation<locationProps>();
@@ -466,13 +453,7 @@ const EditBoardPage: React.VFC = () => {
           </Descriptions.Item>
         )}
         <Descriptions.Item label="내용" span={4}>
-          <Editor
-            modules={modules}
-            formats={formats}
-            value={content || ""}
-            onChange={handleChange}
-            theme={"snow"}
-          />
+          <Editor onChange={handleChange} content={content} />
         </Descriptions.Item>
       </Descriptions>
       <div className="button-group">
@@ -499,11 +480,3 @@ const EditBoardPage: React.VFC = () => {
 };
 
 export default EditBoardPage;
-
-const Editor = styled(ReactQuill)`
-  background-color: white;
-  min-height: 300px;
-  .ql-container {
-    min-height: 300px;
-  }
-`;

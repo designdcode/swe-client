@@ -23,9 +23,7 @@ import {
 } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import styled from "@emotion/styled";
+import Editor from "../../../components/Editor";
 
 interface locationProps {
   search: string;
@@ -34,17 +32,6 @@ interface locationProps {
 interface paramProps {
   param: string;
 }
-
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ["bold", "italic"],
-    [{ list: "ordered" }, { list: "bullet" }],
-    ["clean"],
-  ],
-};
-
-const formats = ["header", "bold", "italic", "underline", "list"];
 
 const BoardDetail: React.VFC = () => {
   const { search } = useLocation<locationProps>();
@@ -308,13 +295,7 @@ const BoardDetail: React.VFC = () => {
             ) : (
               <div style={{ display: "block" }}>
                 {showReply ? (
-                  <Editor
-                    modules={modules}
-                    formats={formats}
-                    value={reply || ""}
-                    onChange={handleChange}
-                    theme="snow"
-                  />
+                  <Editor onChange={handleChange} content={reply} />
                 ) : (
                   <span style={{ display: "block", marginBottom: 15 }}>
                     답글이 없습니다
@@ -360,11 +341,3 @@ const BoardDetail: React.VFC = () => {
 };
 
 export default BoardDetail;
-
-const Editor = styled(ReactQuill)`
-  background-color: white;
-  min-height: 150px;
-  .ql-container {
-    min-height: 150px;
-  }
-`;
