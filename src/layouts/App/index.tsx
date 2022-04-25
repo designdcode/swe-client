@@ -11,8 +11,8 @@ const Renewal = lodable(() => import("../Renewal"))
 const App: React.FC = () => {
   return (
     <Switch>
-      {/* <Redirect exact path="/" to="/main" /> */}
-            <Redirect exact path="/" to="/renewal" />
+      <Redirect exact path="/" to="/main" />
+      {/* <Redirect exact path="/" to="/renewal" /> */}
       <Redirect exact path="/admin" to="/admin/dashboard/dashboard" />
 
       <Route path="/renewal" component={Renewal} />
