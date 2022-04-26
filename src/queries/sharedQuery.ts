@@ -97,6 +97,7 @@ export const GET_BOARD_BY_MONTH = gql`
         category
         link
         createdAt
+        inputCreatedAt
         updatedAt
         deleteAt
       }

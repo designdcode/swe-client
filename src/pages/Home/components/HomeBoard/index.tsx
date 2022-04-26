@@ -15,12 +15,12 @@ import {
   getVideoLink,
 } from "../../../../typings/api";
 import { List } from "antd";
-import { getDate } from "../../../../utils/convertDate";
 import {
   GET_BOARD_BY_MONTH,
   GET_VIDEO_LINK,
 } from "../../../../queries/sharedQuery";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 interface NoticeProps {
   data: getBoardByMonth_getBoardByMonth_data[] | undefined;
@@ -41,14 +41,13 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   }
 
   const renderListItem = useCallback((item) => {
-    const itemDate = getDate(item.createdAt);
     return (
       <NoticeList>
         <NoticeTitleBox>공지</NoticeTitleBox>
         <Link to={`/main/detail/community/community-notice/${item.id}`}>
           <NoticeListSpan>[안내] {item.title}</NoticeListSpan>
         </Link>
-        <NoticeDate>{itemDate}</NoticeDate>
+        <NoticeDate>{moment(new Date(item.createdInputdate))}</NoticeDate>
       </NoticeList>
     );
   }, []);

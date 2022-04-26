@@ -9,7 +9,6 @@ import {
   GET_BOARD_BY_CATEGORY,
 } from "../../../queries/adminQuery";
 import { getBoardByCategory } from "../../../typings/api";
-import { getDate } from "../../../utils/convertDate";
 import styled from "@emotion/styled";
 
 interface ParamProps {
@@ -52,7 +51,11 @@ const BoardPage = () => {
   });
 
   useEffect(() => {
-    getBoard({ variables: { category: subparam } });
+    getBoard({
+      variables: {
+        category: subparam,
+      },
+    });
   }, [getBoard, subparam]);
 
   useEffect(() => {
@@ -121,8 +124,8 @@ const BoardPage = () => {
         />
         <Column
           title="작성일"
-          dataIndex="createdAt"
-          key="createdAt"
+          dataIndex="inputCreatedAt"
+          key="inputCreatedAt"
           width={100}
         />
         <Column

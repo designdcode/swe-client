@@ -29,7 +29,7 @@ import {
 } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Container, Button } from "./styles";
-import { Descriptions, Input, Switch, Upload } from "antd";
+import { DatePicker, Descriptions, Input, Switch, Upload } from "antd";
 import useInput from "../../../hooks/useInput";
 import {
   DeleteOutlined,
@@ -41,6 +41,7 @@ import { fileRemover } from "../../../utils/fileRemover";
 import { fileUploader } from "../../../utils/fileUploader";
 import { linkSwitcher } from "../../../utils/switcher";
 import Editor from "../../../components/Editor";
+import moment from "moment";
 
 interface locationProps {
   search: string;
@@ -69,7 +70,7 @@ const EditBoardPage: React.VFC = () => {
     useState<(getBoardById_getBoardById_data_images | undefined | null)[]>();
 
   const [title, onChangeTitle, setTitle] = useInput("");
-  const [createDate, onChangeCreateDate] = useInput("");
+  const [createDate, setCreateDate] = useState<string>(new Date().toString());
   const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
   const [progress, setProgress] = useState<number>(0);
@@ -93,6 +94,10 @@ const EditBoardPage: React.VFC = () => {
   const handleChange = (value: any) => {
     setContent(value);
   };
+
+  const onChangeCreatedAt = useCallback((date) => {
+    setCreateDate(new Date(date).toString());
+  }, []);
 
   useEffect(() => {
     setLinkNeeded(linkSwitcher(subparam as string));
@@ -322,11 +327,11 @@ const EditBoardPage: React.VFC = () => {
           span={4}
           labelStyle={{ width: 100 }}
         >
-          <Input
-            placeholder={board?.inputCreatedAt || "YYYY-MM-DD"}
-            value={createDate}
-            onChange={onChangeCreateDate}
-            style={{ width: 200 }}
+          <DatePicker
+            placeholder={moment(new Date(board.inputCreatedAt || ""), true)
+              .format("YYYY/MM/DD")
+              .toString()}
+            onChange={onChangeCreatedAt}
           />
         </Descriptions.Item>
         <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>

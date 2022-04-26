@@ -20,6 +20,7 @@ import { ConvertTitle } from "../../utils/convertTitle";
 import { NavigationData } from "../../assets/NavigationData";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import useInput from "../../hooks/useInput";
+import moment from "moment";
 
 interface ParamProps {
   param: string;
@@ -68,7 +69,9 @@ const Board: React.VFC = () => {
             id: elem.id,
             index: data.length - i,
             title: elem.title,
-            createdAt: elem.inputCreatedAt,
+            createdAt: moment(new Date(elem.inputCreatedAt || ""), true)
+              .format("YYYY/MM/DD")
+              .toString(),
             category: elem.category,
             private: elem.private || false,
             writer: elem.writer || "",

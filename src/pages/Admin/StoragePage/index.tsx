@@ -9,7 +9,7 @@ import {
   GET_BOARD_BY_CATEGORY,
 } from "../../../queries/adminQuery";
 import { getBoardByCategory } from "../../../typings/api";
-import { getDate } from "../../../utils/convertDate";
+import moment from "moment";
 import styled from "@emotion/styled";
 
 interface ParamProps {
@@ -184,7 +184,9 @@ const StoragePage = () => {
           id: elem.id,
           index: res.length - i,
           title: elem.title,
-          createdAt: getDate(elem.createdAt || ""),
+          createdAt: moment(new Date(elem.inputCreatedAt || ""), true)
+            .format("YYYY/MM/DD")
+            .toString(),
           category: elem.category,
           private: elem.private || false,
           type: elem.type || "",

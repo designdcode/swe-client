@@ -24,6 +24,7 @@ import {
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Editor from "../../../components/Editor";
+import Moment from "react-moment";
 
 interface locationProps {
   search: string;
@@ -175,7 +176,6 @@ const BoardDetail: React.VFC = () => {
       </Button>
       <Descriptions
         bordered
-        // column={{ xxl: 4, xl: 3, lg: 3, md: 3, sm: 2, xs: 1 }}
         layout="horizontal"
         style={{ display: "flex", flexDirection: "column" }}
       >
@@ -203,8 +203,7 @@ const BoardDetail: React.VFC = () => {
           span={3}
           labelStyle={{ width: 100 }}
         >
-          {/* {getDate(board?.createdAt || "")} */}
-          {board?.inputCreatedAt}
+          <Moment format="YYYY/MM/DD">{board?.inputCreatedAt || 0}</Moment>
         </Descriptions.Item>
         <Descriptions.Item
           key="file"

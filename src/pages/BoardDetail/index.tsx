@@ -17,6 +17,7 @@ import { NavigationData } from "../../assets/NavigationData";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { toast } from "react-toastify";
 import { replySwitcher } from "../../utils/switcher";
+import moment from "moment";
 
 interface ParamProps {
   param: string;
@@ -53,16 +54,6 @@ const BoardDetail: React.VFC = () => {
       }
     }
   }, [data, stno, param, subparam, history]);
-
-  const produceTime = (time?: string | null) => {
-    if (!time) {
-      return "";
-    }
-    const year = time.substr(0, 4);
-    const month = time.substr(4, 2);
-    const day = time.substr(6, 2);
-    return `${year}년 ${month}월 ${day}일`;
-  };
 
   if (loading) {
     return <div>loading...</div>;
@@ -131,9 +122,12 @@ const BoardDetail: React.VFC = () => {
             </div>
             <div className="content-head-desc">
               <div className="content-head-desc-date">
-                {/* {data?.getBoardById.data?.inputCreatedAt} */}
-                {produceTime(data?.getBoardById.data?.inputCreatedAt)}
-                {/* {getDate(data?.getBoardById.data?.createdAt || "")} */}
+                {moment(
+                  new Date(data?.getBoardById.data?.inputCreatedAt || ""),
+                  true
+                )
+                  .format("YYYY/MM/DD")
+                  .toString()}
               </div>
               <div>
                 {data?.getBoardById.data?.writer
