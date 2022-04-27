@@ -63,7 +63,7 @@ const BoardDetail: React.VFC = () => {
     <Wrapper>
       <Cover>
         <CoverTitle margin={screen.width > 1500 ? "25%" : "15%"}>
-          {NavigationData.map((item, idx) => {
+          {NavigationData.map((item) => {
             if (item.title === param.split("-")[0]) {
               return (
                 <div key={item.key}>
@@ -78,7 +78,7 @@ const BoardDetail: React.VFC = () => {
         </CoverTitle>
         <SubMenu isBigger={param === "major" ? true : false} margin="5%">
           <div className="submenu-content">
-            {NavigationData.map((item, idx) => {
+            {NavigationData.map((item) => {
               if (item.title === param) {
                 return item.subMenu.map((elem, i) => {
                   const colored = elem.key === subparam ? 0 : 1;

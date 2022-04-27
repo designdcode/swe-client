@@ -284,8 +284,8 @@ const StoragePage = () => {
         />
         <Column
           title="작성일"
-          dataIndex="createdAt"
-          key="createdAt"
+          dataIndex="inputCreatedAt"
+          key="inputCreatedAt"
           width={120}
         />
         <Column

@@ -20,7 +20,7 @@ import {
   GET_VIDEO_LINK,
 } from "../../../../queries/sharedQuery";
 import { Link } from "react-router-dom";
-import moment from "moment";
+import Moment from "react-moment";
 
 interface NoticeProps {
   data: getBoardByMonth_getBoardByMonth_data[] | undefined;
@@ -41,13 +41,16 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   }
 
   const renderListItem = useCallback((item) => {
+    console.log(item.createdInputdate)
     return (
       <NoticeList>
         <NoticeTitleBox>공지</NoticeTitleBox>
         <Link to={`/main/detail/community/community-notice/${item.id}`}>
           <NoticeListSpan>[안내] {item.title}</NoticeListSpan>
         </Link>
-        <NoticeDate>{moment(new Date(item.createdInputdate))}</NoticeDate>
+        <NoticeDate>
+          <Moment format="YYYY/MM/DD">{item.inputCreatedAt || 0}</Moment>
+        </NoticeDate>
       </NoticeList>
     );
   }, []);
