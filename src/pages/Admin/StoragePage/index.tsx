@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Table, Space, Button } from "antd";
 import Column from "antd/lib/table/Column";
 import { useCallback, useEffect, useState } from "react";
@@ -21,6 +21,7 @@ interface TableBoardProps {
   index: number | null;
   title: string | null;
   createdAt: string | null;
+  inputCreatedAt: string | null;
   category: string;
   private: boolean;
   type: string;
@@ -106,8 +107,11 @@ const StoragePage = () => {
   const [boards, setBoards] = useState<Array<TableBoardProps>>();
   const [subBoard, setSubBoard] = useState<Array<TableBoardProps>>();
   const [isSortNeeded, setIsSortNeeded] = useState<boolean>(false);
-  const [getBoard, { loading, data, refetch }] =
-    useLazyQuery<getBoardByCategory>(GET_BOARD_BY_CATEGORY);
+  const { loading, data, refetch } = useQuery<getBoardByCategory>(GET_BOARD_BY_CATEGORY, {
+    variables: {
+      category: subparam
+    }
+  })
 
   const findSortNeededData = useCallback((subparam: string): boolean => {
     switch (subparam.split("-")[1]) {
@@ -160,10 +164,6 @@ const StoragePage = () => {
   );
 
   useEffect(() => {
-    getBoard({ variables: { category: subparam } });
-  }, [getBoard, subparam]);
-
-  useEffect(() => {
     const excuteRefetch = () => {
       if (refetch) {
         refetch();
@@ -185,6 +185,9 @@ const StoragePage = () => {
           index: res.length - i,
           title: elem.title,
           createdAt: moment(new Date(elem.inputCreatedAt || ""), true)
+            .format("YYYY/MM/DD")
+            .toString(),
+          inputCreatedAt: moment(new Date(elem.inputCreatedAt || ""), true)
             .format("YYYY/MM/DD")
             .toString(),
           category: elem.category,
@@ -216,19 +219,19 @@ const StoragePage = () => {
           <div className="sort-menu">
             {subparam.split("-")[1] === "valuenews"
               ? menu[0].title.map((item, idx) => {
-                  return (
-                    <Button
-                      type="default"
-                      key={idx}
-                      className="sort-menu-button"
-                      onClick={() => handleSort(item.title)}
-                    >
-                      {item.k_title}
-                    </Button>
-                  );
-                })
+                return (
+                  <Button
+                    type="default"
+                    key={idx}
+                    className="sort-menu-button"
+                    onClick={() => handleSort(item.title)}
+                  >
+                    {item.k_title}
+                  </Button>
+                );
+              })
               : subparam.split("-")[1] === "coopnews"
-              ? menu[1].title.map((item, idx) => {
+                ? menu[1].title.map((item, idx) => {
                   return (
                     <Button
                       type="default"
@@ -240,7 +243,7 @@ const StoragePage = () => {
                     </Button>
                   );
                 })
-              : menu[2].title.map((item, idx) => {
+                : menu[2].title.map((item, idx) => {
                   return (
                     <Button
                       type="default"
@@ -325,7 +328,7 @@ interface StyleProps {
   private: boolean;
 }
 
-const StyledSpace = styled(Space)<StyleProps>`
+const StyledSpace = styled(Space) <StyleProps>`
   & span {
     color: ${(props) => (props.private ? "#ff4448" : "#27ae60")};
   }

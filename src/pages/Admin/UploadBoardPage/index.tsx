@@ -82,21 +82,6 @@ const UploadBoardPage: React.VFC = () => {
   }, [subparam]);
 
   const handleChange = (value: string) => {
-    // if (value.includes('<img src=')) {
-    //   const base64Data: string = value.split('base64,')[1].split('"')[0]
-    //   const fileName = value.split('file-name=')[1].split('" data-file')[0].replace(`"`, "")
-    //   const blob = b64toBlob(base64Data, 'image/png');
-
-    //   promiseFileUploader(
-    //     "images",
-    //     blob,
-    //     category as string,
-    //     fileName,
-    //     progress,
-    //     setProgress
-    //   )
-
-    // }
     setContent(value);
   };
 
