@@ -563,6 +563,7 @@ export interface getBoard_getBoard_data {
   category: string;
   link: string | null;
   createdAt: string | null;
+  inputCreatedAt: string | null;
   updatedAt: string | null;
   deleteAt: string | null;
 }

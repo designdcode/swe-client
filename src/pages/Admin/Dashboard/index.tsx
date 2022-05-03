@@ -11,6 +11,7 @@ import {
 import Column from "antd/lib/table/Column";
 import { Link, useLocation } from "react-router-dom";
 import { getDate } from "../../../utils/convertDate";
+import Moment from "react-moment";
 
 interface LocationProps {
   refresh?: boolean;
@@ -90,7 +91,7 @@ const Dashboard: React.VFC = () => {
                 }}
               />
               <Column
-                dataIndex="createdAt"
+                dataIndex="inputCreatedAt"
                 align="right"
                 key={"noticetime"}
                 render={(value, record: getBoard_getBoard_data, i) => {
@@ -99,7 +100,7 @@ const Dashboard: React.VFC = () => {
                       <Link
                         to={`/admin/community/detail-community?category=${record.category}&id=${record.id}`}
                       >
-                        {getDate(value)}
+                        <Moment format={"YYYY/MM/DD"}>{value}</Moment>
                       </Link>
                     </span>
                   );

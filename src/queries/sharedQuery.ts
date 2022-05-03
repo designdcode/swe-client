@@ -65,6 +65,7 @@ export const GET_BOARD = gql`
         category
         link
         createdAt
+        inputCreatedAt
         updatedAt
         deleteAt
       }

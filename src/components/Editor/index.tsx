@@ -35,7 +35,7 @@ const Editor: FC<Props> = ({ content, onChange }) => {
         buttonList: [
           ["fontSize", "bold", "underline", "italic", "fontColor", "list"],
           ['hiliteColor', 'outdent', 'indent',],
-          ['image']
+          ['link','image']
         ],
       }}
     />
