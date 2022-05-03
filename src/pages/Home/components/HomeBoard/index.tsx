@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import {
   breakpoints,
@@ -23,7 +23,14 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 
 interface NoticeProps {
-  data: getBoardByMonth_getBoardByMonth_data[] | undefined;
+  data:
+    | Array<
+        Pick<
+          getBoardByMonth_getBoardByMonth_data,
+          "inputCreatedAt" & "title" & "id"
+        >
+      >
+    | undefined;
 }
 
 interface VideoProps {
@@ -34,6 +41,8 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   const now = new Date().getMonth() + 1;
   const yearMonth = `${new Date().getFullYear()}.${new Date().getMonth() + 1}`;
   let filtered;
+
+  console.log(data);
   if (data && data.length > 6) {
     filtered = data.splice(0, 3);
   } else {
@@ -41,7 +50,6 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   }
 
   const renderListItem = useCallback((item) => {
-    console.log(item.createdInputdate)
     return (
       <NoticeList>
         <NoticeTitleBox>공지</NoticeTitleBox>
@@ -98,6 +106,11 @@ const VideoBoard: React.FC<VideoProps> = ({ data }) => {
 
 const HomeBoard: React.VFC = () => {
   const size = useWindowSize();
+  const [boardData, setBoardData] = useState<
+    Array<
+      Pick<getBoardByMonth_getBoardByMonth_data, "inputCreatedAt" & "title">
+    >
+  >([]);
   const { loading, data } = useQuery<getBoardByMonth, getBoardByMonthVariables>(
     GET_BOARD_BY_MONTH,
     {
@@ -107,6 +120,17 @@ const HomeBoard: React.VFC = () => {
     }
   );
   const { data: videoData } = useQuery<getVideoLink>(GET_VIDEO_LINK);
+
+  useEffect(() => {
+    if (data && data.getBoardByMonth && data.getBoardByMonth.data) {
+      const sorted = data.getBoardByMonth.data.map((item) => ({
+        inputCreatedAt: item.inputCreatedAt,
+        title: item.title,
+        id: item.id,
+      }));
+      setBoardData(sorted);
+    }
+  }, [data]);
 
   if (loading) {
     return <div>loading...</div>;
@@ -129,7 +153,7 @@ const HomeBoard: React.VFC = () => {
                   >
                     <BannerImage src="/img/mainBanner.png" alt="main banner" />
                   </a>
-                  <NoticeBoard data={data?.getBoardByMonth.data} />
+                  <NoticeBoard data={boardData} />
                 </>
               )}
             </Col>
@@ -148,7 +172,7 @@ const HomeBoard: React.VFC = () => {
               ) : (
                 <>
                   <BannerImage src="/img/mainBanner.png" alt="main banner" />
-                  <NoticeBoard data={data?.getBoardByMonth.data} />
+                  <NoticeBoard data={boardData} />
                 </>
               )}
             </Col>

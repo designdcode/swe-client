@@ -67,7 +67,5 @@ export const promiseFileUploader = async (
     }
   );
 
-  console.log(tmpurl);
-
   return tmpurl;
 };

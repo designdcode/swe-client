@@ -16,13 +16,7 @@ const Editor: FC<Props> = ({ content, onChange }) => {
     editor.current = sunEditor;
   }, []);
 
-  const handleImageUpload = useCallback((props) => {
-
-    if (props && props.imageInfo) {
-      const base64 = props.imageInfo.split("base64,");
-      console.log(base64);
-    }
-  }, []);
+  const handleImageUpload = useCallback((props) => {}, []);
 
   return (
     <StyledEditor
@@ -34,8 +28,8 @@ const Editor: FC<Props> = ({ content, onChange }) => {
         minHeight: "400px",
         buttonList: [
           ["fontSize", "bold", "underline", "italic", "fontColor", "list"],
-          ['hiliteColor', 'outdent', 'indent',],
-          ['link','image']
+          ["hiliteColor", "outdent", "indent"],
+          ["link", "image"],
         ],
       }}
     />
@@ -46,11 +40,11 @@ export default Editor;
 
 const StyledEditor = styled(SunEditor)`
   background-color: white;
-  min-height: 300px;
+  min-height: 400px;
   & .ql-container {
-    min-height: 300px;
+    min-height: 400px;
   }
   & .ql-editor {
-    min-height: 300px;
+    min-height: 400px;
   }
 `;
