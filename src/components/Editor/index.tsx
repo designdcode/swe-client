@@ -17,6 +17,7 @@ const Editor: FC<Props> = ({ content, onChange }) => {
   }, []);
 
   const handleImageUpload = useCallback((props) => {
+
     if (props && props.imageInfo) {
       const base64 = props.imageInfo.split("base64,");
       console.log(base64);
@@ -28,11 +29,13 @@ const Editor: FC<Props> = ({ content, onChange }) => {
       getSunEditorInstance={getEditorInstance}
       onChange={onChange}
       onImageUpload={handleImageUpload}
+      defaultValue={content}
       setOptions={{
         minHeight: "400px",
         buttonList: [
-          // ['fontSize', 'bold', 'underline', 'italic', 'fontColor', 'list', 'image']
           ["fontSize", "bold", "underline", "italic", "fontColor", "list"],
+          ['hiliteColor', 'outdent', 'indent',],
+          ['image']
         ],
       }}
     />

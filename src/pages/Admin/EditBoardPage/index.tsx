@@ -89,6 +89,11 @@ const EditBoardPage: React.VFC = () => {
     variables: {
       id: parseInt(id as string, 10),
     },
+    onCompleted: ({ getBoardById }) => {
+      if (getBoardById) {
+        setContent(getBoardById.data?.content || '');
+      }
+    }
   });
 
   const handleChange = (value: any) => {
@@ -225,7 +230,7 @@ const EditBoardPage: React.VFC = () => {
       const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
       upload.on(
         "state_changed",
-        (snapshot) => {},
+        (snapshot) => { },
         (err) => console.log(err),
         () => {
           storage
@@ -458,7 +463,10 @@ const EditBoardPage: React.VFC = () => {
           </Descriptions.Item>
         )}
         <Descriptions.Item label="내용" span={4}>
-          <Editor onChange={handleChange} content={content} />
+          <Editor
+          onChange={handleChange}
+          content={content}
+          />
         </Descriptions.Item>
       </Descriptions>
       <div className="button-group">
