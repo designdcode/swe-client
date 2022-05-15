@@ -17,8 +17,6 @@ const editorOptions: SunEditorOptions ={
     ["hiliteColor", "outdent", "indent"],
     ["link", "image"],
   ],
-  imageWidth: "600",
-  imageHeight: "400",
   imageUploadSizeLimit: 10000000, 
 }
 
