@@ -23,6 +23,7 @@ interface TableBoardProps {
   category: string;
   private: boolean;
   type: string;
+  writer: string | null;
 }
 
 interface LocationProps {
@@ -84,6 +85,7 @@ const BoardPage = () => {
           category: elem.category,
           private: elem.private || false,
           type: elem.type || "",
+          writer: elem.writer || ""
         };
         return dataSource.push(obj);
       });
@@ -121,6 +123,12 @@ const BoardPage = () => {
               </Space>
             );
           }}
+        />
+        <Column
+          title="작성자"
+          dataIndex="writer"
+          key="writer"
+          width={100}
         />
         <Column
           title="작성일"

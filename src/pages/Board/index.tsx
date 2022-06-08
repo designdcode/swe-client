@@ -273,13 +273,14 @@ const Board: React.VFC = () => {
             dataIndex="관리자"
             key="관리자"
             render={(text, record: TableBoardProps) => {
+              console.log(record)
               return (
                 <Space>
                   <TableDesc>
-                    {subparam.split("-")[1] === "request" ||
-                    subparam.split("-")[1] === "help"
-                      ? record.writer
-                      : "관리자"}
+                    {subparam.split("-")[1] === "request"
+                      ? "관리자" : (record.writer === null || record.writer === "")
+                        ? '관리자' : record.writer
+                    }
                   </TableDesc>
                 </Space>
               );
@@ -434,7 +435,7 @@ const SubMenu = styled.div<middleMenuProps>`
   }
 `;
 
-const StyleLink = styled(Link)<MenuCellProps>`
+const StyleLink = styled(Link) <MenuCellProps>`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
   }
 

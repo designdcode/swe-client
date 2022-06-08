@@ -73,6 +73,7 @@ const EditBoardPage: React.VFC = () => {
   const [createDate, setCreateDate] = useState<string>(new Date().toString());
   const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
+  const [writerName, onChangeWriterName, setWriterName] = useInput("");
   const [progress, setProgress] = useState<number>(0);
   const [imgUrl, setImgUrl] = useState<string | undefined>();
   const [imgName, setImgName] = useState<string>();
@@ -185,9 +186,10 @@ const EditBoardPage: React.VFC = () => {
         private: checkPrivate,
         showAttach: attach,
         inputCreatedAt: createDate,
+        writer: writerName
       },
     });
-  }, [id, title, content, link, editBoard, checkPrivate, attach, createDate]);
+  }, [id, title, content, link, editBoard, checkPrivate, attach, createDate, writerName]);
 
   const handleDeleteFile = useCallback(
     async (id: number, name?: string) => {
@@ -281,6 +283,7 @@ const EditBoardPage: React.VFC = () => {
       setTitle(data.getBoardById.data.title || "");
       setContent(data.getBoardById.data.content || "");
       setLink(data.getBoardById.data.link || "");
+     setWriterName(data.getBoardById.data.writer || '관리자');
     }
     if (
       data &&
@@ -298,7 +301,7 @@ const EditBoardPage: React.VFC = () => {
     ) {
       setImages(data.getBoardById.data.images);
     }
-  }, [data, setTitle, setContent, setLink]);
+  }, [data, setTitle, setContent, setLink, setWriterName]);
 
   useEffect(() => {
     if (progress < 0) {
@@ -325,6 +328,16 @@ const EditBoardPage: React.VFC = () => {
             placeholder={board?.title || undefined}
             value={title}
             onChange={onChangeTitle}
+          />
+        </Descriptions.Item>
+        <Descriptions.Item label="작성자" span={4} labelStyle={{ width: 100 }}>
+          <Input
+            placeholder={board?.writer || "관리자"}
+            value={title}
+            onChange={onChangeWriterName}
+            style={{
+              width:'150px'
+            }}
           />
         </Descriptions.Item>
         <Descriptions.Item

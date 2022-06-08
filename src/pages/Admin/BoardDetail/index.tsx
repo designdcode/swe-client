@@ -206,6 +206,16 @@ const BoardDetail: React.VFC = () => {
           <Moment format="YYYY/MM/DD">{board?.inputCreatedAt || 0}</Moment>
         </Descriptions.Item>
         <Descriptions.Item
+          key="writer"
+          label="상태"
+          span={3}
+          labelStyle={{ width: 100 }}
+        >
+          <Typography.Text>
+            {board?.writer === "" || board?.writer === null ? '관리자' : board?.writer}
+          </Typography.Text>
+        </Descriptions.Item>
+        <Descriptions.Item
           key="file"
           label="파일"
           span={3}

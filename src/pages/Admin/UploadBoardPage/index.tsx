@@ -58,6 +58,7 @@ const UploadBoardPage: React.VFC = () => {
   const [createdAt, setCreatedAt] = useState<string>(new Date().toString());
   const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
+  const [writerName, onChangeWriterName, setWriterName] = useInput("");
   const [showLink, setShowLink] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<string | undefined>();
   const [imgName, setImgName] = useState<string>();
@@ -101,6 +102,7 @@ const UploadBoardPage: React.VFC = () => {
         setContent("");
         setLink("");
         setImgUrl("");
+        setWriterName("");
         toast.success("게시물을 생성 하였습니다");
         history.push({
           pathname: `/admin/${param}/${subparam}`,
@@ -134,6 +136,7 @@ const UploadBoardPage: React.VFC = () => {
           type: type?.type,
           showAttach: showAttach ? true : false,
           inputCreatedAt: createdAt,
+          writer: writerName || '관리자'
         },
       });
     } else if (imgUrl) {
@@ -149,6 +152,7 @@ const UploadBoardPage: React.VFC = () => {
           type: type?.type,
           showAttach: showAttach ? true : false,
           inputCreatedAt: createdAt,
+          writer: writerName || '관리자'
         },
       });
     } else {
@@ -162,6 +166,7 @@ const UploadBoardPage: React.VFC = () => {
           type: type?.type,
           showAttach: showAttach ? true : false,
           inputCreatedAt: createdAt,
+          writer: writerName || '관리자'
         },
       });
     }
@@ -178,6 +183,7 @@ const UploadBoardPage: React.VFC = () => {
     type,
     showAttach,
     createdAt,
+    writerName
   ]);
 
   const handleImageUpload = useCallback(
@@ -204,7 +210,7 @@ const UploadBoardPage: React.VFC = () => {
       const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
       upload.on(
         "state_changed",
-        (snapshot) => {},
+        (snapshot) => { },
         (err) => console.log(err),
         () => {
           storage
@@ -397,6 +403,16 @@ const UploadBoardPage: React.VFC = () => {
       <Form {...layout} name="upload-board" onFinish={onFinish}>
         <Form.Item name={["title"]} label="제목">
           <Input type="text" onChange={onChangeTitle} value={title} />
+        </Form.Item>
+       <Form.Item name={["writer"]} label="작성자">
+          <Input
+          type="text"
+          onChange={onChangeWriterName}
+          value={writerName}
+          style={{
+            width:'200px'
+          }}
+          />
         </Form.Item>
         <Form.Item name={["create"]} label="생성날짜">
           <DatePicker onChange={onChangeCreatedAt} />

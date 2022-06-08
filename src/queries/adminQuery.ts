@@ -85,6 +85,7 @@ export const EDIT_BOARD = gql`
     $type: String
     $showAttach: Boolean
     $inputCreatedAt: String
+    $writer: String
   ) {
     editBoard(
       id: $id
@@ -95,6 +96,7 @@ export const EDIT_BOARD = gql`
       type: $type
       showAttach: $showAttach
       inputCreatedAt: $inputCreatedAt
+      writer: $writer
     ) {
       ok
       err

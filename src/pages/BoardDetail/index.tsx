@@ -140,6 +140,9 @@ const BoardDetail: React.VFC = () => {
             {data?.getBoardById.data?.images &&
             data.getBoardById.data.images[0] ? (
               <img
+              style={{
+                objectFit:'contain'
+              }}
                 src={data.getBoardById.data.images[0].url}
                 alt="news uploaded img"
               />
@@ -534,12 +537,10 @@ const ContentBody = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* align-items: center; */
 
     & img {
-      width: 850px;
-      height: 450px;
-      object-fit: cover;
+      width: 80%;
+      height: 550px;
     }
 
     & .content-body-desc {

@@ -138,6 +138,7 @@ export interface editBoardVariables {
   type?: string | null;
   showAttach?: boolean | null;
   inputCreatedAt?: string | null;
+  writer?: string | null;
 }
 
 /* tslint:disable */
