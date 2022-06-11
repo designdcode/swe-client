@@ -42,6 +42,8 @@ export const typeSwitcher = (subparam: string) => {
       return true;
     case "coopnews":
       return true;
+    case "achievement":
+      return true;
     default:
       return false;
   }

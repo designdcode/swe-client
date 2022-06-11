@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import queryString from "query-string";
 import {
@@ -29,7 +29,16 @@ import {
 } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Container, Button } from "./styles";
-import { DatePicker, Descriptions, Input, Switch, Upload } from "antd";
+import {
+  DatePicker,
+  Descriptions,
+  Dropdown,
+  Form,
+  Input,
+  Menu,
+  Switch,
+  Upload,
+} from "antd";
 import useInput from "../../../hooks/useInput";
 import {
   DeleteOutlined,
@@ -39,7 +48,7 @@ import {
 import { storage } from "../../../utils/firebase";
 import { fileRemover } from "../../../utils/fileRemover";
 import { fileUploader } from "../../../utils/fileUploader";
-import { linkSwitcher } from "../../../utils/switcher";
+import { linkSwitcher, typeSwitcher } from "../../../utils/switcher";
 import Editor from "../../../components/Editor";
 import moment from "moment";
 
@@ -80,7 +89,9 @@ const EditBoardPage: React.VFC = () => {
   const [checkPrivate, setCheckPrivate] = useState<boolean>();
   const [attach, setAttach] = useState<boolean>();
 
+  const [type, setType] = useState<{ type: string; title: string }>();
   const [linkNeeded, setLinkNeeded] = useState<boolean>(false);
+  const [isTypeNeeded, setIsTypeNeeded] = useState<boolean>(false);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
 
   const { data, loading, refetch } = useQuery<
@@ -92,9 +103,9 @@ const EditBoardPage: React.VFC = () => {
     },
     onCompleted: ({ getBoardById }) => {
       if (getBoardById) {
-        setContent(getBoardById.data?.content || '');
+        setContent(getBoardById.data?.content || "");
       }
-    }
+    },
   });
 
   const handleChange = (value: any) => {
@@ -107,6 +118,7 @@ const EditBoardPage: React.VFC = () => {
 
   useEffect(() => {
     setLinkNeeded(linkSwitcher(subparam as string));
+    setIsTypeNeeded(typeSwitcher(subparam as string));
   }, [subparam]);
 
   const [deleteBoard] = useMutation<deleteBoard, deleteBoardVariables>(
@@ -186,10 +198,22 @@ const EditBoardPage: React.VFC = () => {
         private: checkPrivate,
         showAttach: attach,
         inputCreatedAt: createDate,
-        writer: writerName
+        writer: writerName,
+        type: type?.type,
       },
     });
-  }, [id, title, content, link, editBoard, checkPrivate, attach, createDate, writerName]);
+  }, [
+    id,
+    title,
+    content,
+    link,
+    editBoard,
+    checkPrivate,
+    attach,
+    createDate,
+    writerName,
+    type,
+  ]);
 
   const handleDeleteFile = useCallback(
     async (id: number, name?: string) => {
@@ -232,7 +256,7 @@ const EditBoardPage: React.VFC = () => {
       const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
       upload.on(
         "state_changed",
-        (snapshot) => { },
+        (snapshot) => {},
         (err) => console.log(err),
         () => {
           storage
@@ -283,7 +307,7 @@ const EditBoardPage: React.VFC = () => {
       setTitle(data.getBoardById.data.title || "");
       setContent(data.getBoardById.data.content || "");
       setLink(data.getBoardById.data.link || "");
-     setWriterName(data.getBoardById.data.writer || '관리자');
+      setWriterName(data.getBoardById.data.writer || "관리자");
     }
     if (
       data &&
@@ -308,6 +332,149 @@ const EditBoardPage: React.VFC = () => {
       setProgress(0);
     }
   }, [progress]);
+
+  const testMenu = useMemo(() => {
+    return (
+      <Menu style={{ width: 150 }}>
+        <Menu.Item key="0">
+          <div
+            onClick={() =>
+              setType({
+                type: "basic",
+                title: "SW기초교육",
+              })
+            }
+          >
+            SW기초교육
+          </div>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <div
+            onClick={() =>
+              setType({
+                type: "major",
+                title: "SW전공교육",
+              })
+            }
+          >
+            SW전공교육
+          </div>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <div
+            onClick={() =>
+              setType({
+                type: "convergence",
+                title: "SW융합교육",
+              })
+            }
+          >
+            SW융합교육
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+  }, []);
+
+  const valueMenu = useMemo(() => {
+    return (
+      <Menu style={{ width: 150 }}>
+        <Menu.Item key="0">
+          <div
+            onClick={() =>
+              setType({
+                type: "edu",
+                title: "수요중심",
+              })
+            }
+          >
+            수요중심
+          </div>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <div
+            onClick={() =>
+              setType({
+                type: "training",
+                title: "선도자양성",
+              })
+            }
+          >
+            선도자양성
+          </div>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <div
+            onClick={() =>
+              setType({
+                type: "share",
+                title: "가치공유",
+              })
+            }
+          >
+            가치공유
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+  }, []);
+
+  const coopMenu = useMemo(() => {
+    return (
+      <Menu style={{ width: 150 }}>
+        <Menu.Item key="0">
+          <div
+            onClick={() =>
+              setType({
+                type: "network",
+                title: "기관 네트워크",
+              })
+            }
+          >
+            기관 네트워크
+          </div>
+        </Menu.Item>
+        <Menu.Item key="1">
+          <div
+            onClick={() =>
+              setType({
+                type: "project",
+                title: "기관 프로젝트",
+              })
+            }
+          >
+            기관 프로젝트
+          </div>
+        </Menu.Item>
+        <Menu.Item key="2">
+          <div
+            onClick={() =>
+              setType({
+                type: "internship",
+                title: "기관 인턴쉽",
+              })
+            }
+          >
+            기관 인턴쉽
+          </div>
+        </Menu.Item>
+      </Menu>
+    );
+  }, []);
+
+  const handleMenu = useCallback(
+    (prop?: string) => {
+      switch (prop) {
+        case "coopnews":
+          return coopMenu;
+        case "valuenews":
+          return valueMenu;
+        default:
+          return testMenu;
+      }
+    },
+    [coopMenu, valueMenu, testMenu]
+  );
 
   if (loading || !board) {
     return <div>loading...</div>;
@@ -336,7 +503,7 @@ const EditBoardPage: React.VFC = () => {
             value={title}
             onChange={onChangeWriterName}
             style={{
-              width:'150px'
+              width: "150px",
             }}
           />
         </Descriptions.Item>
@@ -352,6 +519,20 @@ const EditBoardPage: React.VFC = () => {
             onChange={onChangeCreatedAt}
           />
         </Descriptions.Item>
+        {isTypeNeeded && (
+          <Descriptions.Item label="타입" span={4} labelStyle={{ width: 100 }}>
+            <Form.Item name={["type"]}>
+              <Dropdown
+                overlay={() => handleMenu(subparam?.toString().split("-")[1])}
+                trigger={["click"]}
+              >
+                <Button>
+                  {!type ? "선택하기" : type.title}&ensp;&ensp;&or;
+                </Button>
+              </Dropdown>
+            </Form.Item>
+          </Descriptions.Item>
+        )}
         <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>
           {files && files.length !== 0 ? (
             <>
@@ -476,10 +657,7 @@ const EditBoardPage: React.VFC = () => {
           </Descriptions.Item>
         )}
         <Descriptions.Item label="내용" span={4}>
-          <Editor
-          onChange={handleChange}
-          content={content}
-          />
+          <Editor onChange={handleChange} content={content} />
         </Descriptions.Item>
       </Descriptions>
       <div className="button-group">
