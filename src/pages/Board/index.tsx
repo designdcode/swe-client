@@ -118,9 +118,6 @@ const Board: React.VFC = () => {
       case "제목":
         setBoards(subBoards?.filter((item) => item.title?.includes(term)));
         break;
-      case "내용":
-        setBoards(subBoards?.filter((item) => item.content?.includes(term)));
-        break;
       default:
         break;
     }
@@ -133,9 +130,6 @@ const Board: React.VFC = () => {
       </Menu.Item>
       <Menu.Item key={"title"}>
         <div onClick={() => setSearchCategory("제목")}>제목</div>
-      </Menu.Item>
-      <Menu.Item key="content">
-        <div onClick={() => setSearchCategory("내용")}>내용</div>
       </Menu.Item>
     </Menu>
   );
