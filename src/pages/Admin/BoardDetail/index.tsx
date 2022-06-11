@@ -207,12 +207,14 @@ const BoardDetail: React.VFC = () => {
         </Descriptions.Item>
         <Descriptions.Item
           key="writer"
-          label="상태"
+          label="작성자"
           span={3}
           labelStyle={{ width: 100 }}
         >
           <Typography.Text>
-            {board?.writer === "" || board?.writer === null ? '관리자' : board?.writer}
+            {board?.writer === "" || board?.writer === null
+              ? "관리자"
+              : board?.writer}
           </Typography.Text>
         </Descriptions.Item>
         <Descriptions.Item
@@ -248,7 +250,19 @@ const BoardDetail: React.VFC = () => {
               })}
             </>
           ) : (
-            <>첨부파일 없음</>
+            <div>
+              첨부파일 없음&ensp;
+              <span
+                style={{
+                  display: "inline-block",
+                  marginLeft: 15,
+                  fontSize: 10,
+                  color: `${board?.showAttach ? "#0081fa" : "red"}`,
+                }}
+              >
+                {board?.showAttach ? "공개" : "비공개"}
+              </span>
+            </div>
           )}
         </Descriptions.Item>
         {(param === "achievement" || param === "community") && (

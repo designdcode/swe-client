@@ -593,12 +593,8 @@ const EditBoardPage: React.VFC = () => {
               )}
             </div>
             <div>
-              <Switch
-                defaultChecked={
-                  data?.getBoardById.data?.showAttach ? true : false
-                }
-                onChange={() => setAttach(!attach)}
-              />
+              {console.log(data?.getBoardById.data?.showAttach, attach)}
+              <Switch checked={attach} onChange={() => setAttach(!attach)} />
             </div>
           </div>
         </Descriptions.Item>
