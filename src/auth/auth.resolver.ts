@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { Resolver, Mutation, Args } from '@nestjs/graphql';
-import { Auth } from './entities/auth.entity';
+import { Resolver, Mutation, Args, ObjectType, Field } from '@nestjs/graphql';
 import https from 'https';
 import * as xml2js from 'xml2js';
 
@@ -11,10 +10,29 @@ interface ResponseProps {
   };
 }
 
-@Resolver(() => Auth)
+@ObjectType()
+class Auth {
+  @Field(() => String)
+  id: string;
+  @Field(() => String)
+  stno: string;
+}
+@ObjectType({ isAbstract: true })
+abstract class AuthReturnType {
+  @Field(() => Boolean)
+  success: boolean;
+
+  @Field(() => Auth)
+  data: Auth;
+}
+
+@Resolver(() => AuthReturnType)
 export class AuthResolver {
-  @Mutation(() => Auth)
-  async userLogin(@Args('id') id: string, @Args('pwd') pwd: string) {
+  @Mutation(() => AuthReturnType)
+  async userLogin(
+    @Args('id') id: string,
+    @Args('pwd') pwd: string,
+  ): Promise<AuthReturnType> {
     try {
       const httpsAgent = new https.Agent({
         rejectUnauthorized: false,
@@ -24,11 +42,7 @@ export class AuthResolver {
         `https://lily.sunmoon.ac.kr/CheckIDPW_XML.aspx?id=${id}&pw=${pwd}`,
       );
       if (!res) {
-        return {
-          success: false,
-          error: 'Can not get Login query',
-          data: null,
-        };
+        throw new Error('Can not get Login query');
       }
       const cleanObj: ResponseProps = await xml2js.parseStringPromise(res.data);
       if (cleanObj.CheckLogin.Result[0] === 'Y') {
@@ -38,15 +52,10 @@ export class AuthResolver {
         };
         return {
           success: true,
-          error: null,
           data: data,
         };
       } else {
-        return {
-          success: false,
-          error: '로그인 실패',
-          data: null,
-        };
+        throw new Error('로그인 실패');
       }
     } catch (err) {
       throw new Error(err);
