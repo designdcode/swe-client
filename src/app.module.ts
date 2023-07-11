@@ -5,9 +5,10 @@ import { BoardModule } from './board/board.module';
 import { CommonnModule } from './common/common.module';
 import { CommentModule } from './comment/comment.module';
 import { PopupModule } from './popup/popup.module';
+import { LinkModule } from './link/link.module';
 
 @Module({
-  imports: [CommonnModule, BoardModule, CommentModule, PopupModule],
+  imports: [CommonnModule, BoardModule, CommentModule, PopupModule, LinkModule],
   controllers: [AppController],
   providers: [AppService],
 })

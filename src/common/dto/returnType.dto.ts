@@ -2,6 +2,7 @@ import { Type } from '@nestjs/common';
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Board } from '../../board/entities/board.entity';
 import { Popup } from '../../popup/entities/popup.entity';
+import { Link } from '../../link/entities/link.entity';
 
 function ReturnResult<T>(itemType: Type<T>) {
   @ObjectType({ isAbstract: true })
@@ -20,3 +21,6 @@ export class BoardReturnType extends ReturnResult(Board) {}
 
 @ObjectType()
 export class PopupReturnType extends ReturnResult(Popup) {}
+
+@ObjectType()
+export class LinkReturnType extends ReturnResult(Link) {}
