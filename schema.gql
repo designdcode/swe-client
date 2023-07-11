@@ -2,6 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Comment {
+  _id: String!
+  content: String!
+  board: Board!
+  boardId: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type AttachmentType {
   url: String!
   fileName: String!
@@ -22,12 +36,8 @@ type Board {
   images: [AttachmentType!]
   createdAt: DateTime!
   updatedAt: DateTime!
+  comments: [Comment!]
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type BoardReturnType {
   data: [Board!]!
@@ -43,6 +53,9 @@ type Mutation {
   createBoard(args: CreateBoardInput!): Board!
   updateBoard(args: UpdateBoardInput!): Board!
   removeBoard(_id: String!): Board!
+  createComment(args: CreateCommentInput!): Comment!
+  updateComment(args: UpdateCommentInput!): Comment!
+  removeComment(_id: String!): Comment!
 }
 
 input CreateBoardInput {
@@ -56,7 +69,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-11T09:19:01.568Z"
+  inputCreatedAt: DateTime! = "2023-07-11T09:38:55.095Z"
 }
 
 input AttachementInput {
@@ -75,6 +88,17 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-11T09:19:01.568Z"
+  inputCreatedAt: DateTime = "2023-07-11T09:38:55.095Z"
+  _id: String!
+}
+
+input CreateCommentInput {
+  content: String!
+  boardId: String!
+}
+
+input UpdateCommentInput {
+  content: String
+  boardId: String
   _id: String!
 }

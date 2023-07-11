@@ -2,6 +2,7 @@ import { Schema as MongooseSchema, Document } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { ObjectType, Field } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Comment } from '../../comment/entities/comment.entity';
 
 @ObjectType()
 class AttachmentType {
@@ -79,6 +80,13 @@ export class Board {
   @Prop({ default: Date.now })
   @Field(() => Date)
   updatedAt!: Date;
+
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+    default: [],
+  })
+  @Field(() => [Comment], { nullable: true, defaultValue: [] })
+  comments?: Comment[];
 }
 
 export const BoardSchema = SchemaFactory.createForClass(Board);
