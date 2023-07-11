@@ -27,6 +27,12 @@ export class PopupService {
     category: string,
   ): Promise<PopupReturnType> {
     try {
+      if (typeof args === 'undefined') {
+        return {
+          data: await this.popupModel.find(),
+          total: await this.popupModel.count(),
+        };
+      }
       const { skip, sort, take } = args;
       const sortOptions = {
         [sort?.field]: sort?.order?.toLowerCase() as SortOrder,

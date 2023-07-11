@@ -34,6 +34,12 @@ export class BoardService {
     args: PaginationArgs,
   ): Promise<BoardReturnType> {
     try {
+      if (typeof args === 'undefined') {
+        return {
+          data: await this.boardModel.find({ category }).populate('comments'),
+          total: await this.boardModel.count({ category }),
+        };
+      }
       const { skip, sort, take } = args;
       const sortOptions = {
         [sort?.field]: sort?.order?.toLowerCase() as SortOrder,
