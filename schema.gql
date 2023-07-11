@@ -66,12 +66,17 @@ type PopupReturnType {
   total: Int!
 }
 
+type LinkReturnType {
+  data: [Link!]!
+  total: Int!
+}
+
 type Query {
   boards(category: String, args: PaginationArgs): BoardReturnType!
   board(_id: String!): Board!
   popups(args: PaginationArgs, category: String): PopupReturnType!
   popup(_id: String!): Popup!
-  links(args: PaginationArgs, category: String): [Link!]!
+  links(args: PaginationArgs, category: String): LinkReturnType!
   link(_id: String!): Link!
 }
 
@@ -112,7 +117,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-11T17:10:07.846Z"
+  inputCreatedAt: DateTime! = "2023-07-11T17:10:53.168Z"
 }
 
 input AttachementInput {
@@ -131,7 +136,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-11T17:10:07.846Z"
+  inputCreatedAt: DateTime = "2023-07-11T17:10:53.168Z"
   _id: String!
 }
 

@@ -4,6 +4,7 @@ import { Link } from './entities/link.entity';
 import { CreateLinkInput } from './dto/create-link.input';
 import { UpdateLinkInput } from './dto/update-link.input';
 import { PaginationArgs } from '../common/dto/paginate.input';
+import { LinkReturnType } from '../common/dto/returnType.dto';
 
 @Resolver(() => Link)
 export class LinkResolver {
@@ -14,11 +15,11 @@ export class LinkResolver {
     return await this.linkService.create(args);
   }
 
-  @Query(() => [Link], { name: 'links' })
+  @Query(() => LinkReturnType, { name: 'links' })
   async findAll(
     @Args('args', { nullable: true }) args?: PaginationArgs,
     @Args('category', { nullable: true }) category?: string,
-  ) {
+  ): Promise<LinkReturnType> {
     return await this.linkService.findAll(args, category);
   }
 
