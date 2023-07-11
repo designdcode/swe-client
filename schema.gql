@@ -1,0 +1,80 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AttachmentType {
+  url: String!
+  fileName: String!
+}
+
+type Board {
+  _id: String!
+  title: String
+  content: String
+  writer: String
+  category: String!
+  type: String
+  link: String
+  private: Boolean!
+  showAttach: Boolean!
+  inputCreatedAt: DateTime
+  files: [AttachmentType!]
+  images: [AttachmentType!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type BoardReturnType {
+  data: [Board!]!
+  total: Int!
+}
+
+type Query {
+  boards(category: String!): BoardReturnType!
+  board(_id: String!): Board!
+}
+
+type Mutation {
+  createBoard(args: CreateBoardInput!): Board!
+  updateBoard(args: UpdateBoardInput!): Board!
+  removeBoard(_id: String!): Board!
+}
+
+input CreateBoardInput {
+  title: String
+  content: String
+  category: String!
+  type: String
+  writer: String
+  link: String
+  files: [AttachementInput!]
+  images: [AttachementInput!]
+  private: Boolean! = false
+  showAttach: Boolean! = true
+  inputCreatedAt: DateTime! = "2023-07-11T09:19:01.568Z"
+}
+
+input AttachementInput {
+  url: String!
+  fileName: String!
+}
+
+input UpdateBoardInput {
+  title: String
+  content: String
+  category: String
+  type: String
+  writer: String
+  link: String
+  files: [AttachementInput!]
+  images: [AttachementInput!]
+  private: Boolean = false
+  showAttach: Boolean = true
+  inputCreatedAt: DateTime = "2023-07-11T09:19:01.568Z"
+  _id: String!
+}
