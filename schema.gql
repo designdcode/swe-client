@@ -71,6 +71,11 @@ type LinkReturnType {
   total: Int!
 }
 
+type Auth {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type Query {
   boards(category: String, args: PaginationArgs): BoardReturnType!
   board(_id: String!): Board!
@@ -104,6 +109,7 @@ type Mutation {
   createLink(args: CreateLinkInput!): Link!
   updateLink(args: UpdateLinkInput!): Link!
   removeLink(_id: String!): Link!
+  userLogin(id: String!): Auth!
 }
 
 input CreateBoardInput {
@@ -117,7 +123,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-11T17:10:53.168Z"
+  inputCreatedAt: DateTime! = "2023-07-11T17:51:58.903Z"
 }
 
 input AttachementInput {
@@ -136,7 +142,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-11T17:10:53.168Z"
+  inputCreatedAt: DateTime = "2023-07-11T17:51:58.903Z"
   _id: String!
 }
 
