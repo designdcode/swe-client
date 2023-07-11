@@ -112,7 +112,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-11T17:07:37.827Z"
+  inputCreatedAt: DateTime! = "2023-07-11T17:10:07.846Z"
 }
 
 input AttachementInput {
@@ -131,7 +131,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-11T17:07:37.827Z"
+  inputCreatedAt: DateTime = "2023-07-11T17:10:07.846Z"
   _id: String!
 }
 

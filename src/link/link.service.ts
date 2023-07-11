@@ -36,14 +36,14 @@ export class LinkService {
       const sortOptions = {
         [sort?.field]: sort?.order?.toLowerCase() as SortOrder,
       };
-      const popups = await this.linkModel
+      const links = await this.linkModel
         .find(null, null, {
           limit: take,
           skip,
         })
         .sort(sortOptions);
       return {
-        data: popups,
+        data: links,
         total: await this.linkModel.count(),
       };
     } catch (err) {
