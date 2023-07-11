@@ -59,10 +59,21 @@ type PopupReturnType {
 }
 
 type Query {
-  boards(category: String!): BoardReturnType!
+  boards(category: String!, args: PaginationArgs!): BoardReturnType!
   board(_id: String!): Board!
-  popups: PopupReturnType!
+  popups(args: PaginationArgs!, category: String): PopupReturnType!
   popup(_id: String!): Popup!
+}
+
+input PaginationArgs {
+  skip: Int! = 0
+  take: Int! = 25
+  sort: SortType
+}
+
+input SortType {
+  field: String!
+  order: String!
 }
 
 type Mutation {
@@ -88,7 +99,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-11T09:53:34.172Z"
+  inputCreatedAt: DateTime! = "2023-07-11T14:12:30.107Z"
 }
 
 input AttachementInput {
@@ -107,7 +118,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-11T09:53:34.172Z"
+  inputCreatedAt: DateTime = "2023-07-11T14:12:30.107Z"
   _id: String!
 }
 
