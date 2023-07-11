@@ -109,19 +109,21 @@ const Wrapper = styled.div`
 `;
 
 const ImageBox = styled.div`
-  width: 100%;
-  height: 100%;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 80%;
+    height: 100%;
     margin: 0;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    width: 100%;
+    height: 100%;
   }
 `;
 
 const Image = styled.img`
   object-fit: contain;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    width: 100%;
+    width: 90%;
     height: 400px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {

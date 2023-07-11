@@ -8,9 +8,6 @@ import {
   mediaQueries,
 } from "../../utils/mediaQuery";
 import { ConvertTitle } from "../../utils/convertTitle";
-import { useQuery } from "@apollo/client";
-import { GET_BOARD_BY_ID } from "../../queries/sharedQuery";
-import { getBoardById, getBoardByIdVariables } from "../../typings/api";
 import { GrAttachment } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { NavigationData } from "../../assets/NavigationData";
@@ -18,6 +15,8 @@ import { useWindowSize } from "../../hooks/useWindowSize";
 import { toast } from "react-toastify";
 import { replySwitcher } from "../../utils/switcher";
 import moment from "moment";
+import { BoardQuery } from "../../typings/api.d";
+import { useBoardContext } from "../../contexts";
 
 interface ParamProps {
   param: string;
@@ -32,14 +31,15 @@ const BoardDetail: React.VFC = () => {
   const [pageTitle, setPageTitle] = useState<string>();
   const stno = localStorage.getItem("stno");
   const [isReplyNeeded, setIsReplyNeeded] = useState<boolean>(false);
-  const { data, loading } = useQuery<getBoardById, getBoardByIdVariables>(
-    GET_BOARD_BY_ID,
-    {
-      variables: {
-        id: parseInt(id, 10),
-      },
+  const { loading, boards } = useBoardContext();
+  const [data, setData] = useState<BoardQuery["board"]>();
+
+  useEffect(() => {
+    if (boards) {
+      const board = boards.find((v) => String(v._id) === String(id));
+      setData(board);
     }
-  );
+  }, [id, boards]);
 
   useEffect(() => {
     setPageTitle(ConvertTitle(subparam));
@@ -47,8 +47,8 @@ const BoardDetail: React.VFC = () => {
   }, [subparam]);
 
   useEffect(() => {
-    if (data?.getBoardById.data?.private) {
-      if (data.getBoardById.data.writer !== stno) {
+    if (data?.private) {
+      if (data?.writer !== stno) {
         toast.info("비밀글 입니다");
         history.push(`/main/board/${param}/${subparam}`);
       }
@@ -117,33 +117,23 @@ const BoardDetail: React.VFC = () => {
         </div>
         <Content>
           <div className="content-head">
-            <div className="content-head-title">
-              {data?.getBoardById.data?.title}
-            </div>
+            <div className="content-head-title">{data?.title}</div>
             <div className="content-head-desc">
               <div className="content-head-desc-date">
-                {moment(
-                  new Date(data?.getBoardById.data?.inputCreatedAt || ""),
-                  true
-                )
+                {moment(new Date(data?.inputCreatedAt || ""), true)
                   .format("YYYY/MM/DD")
                   .toString()}
               </div>
-              <div>
-                {data?.getBoardById.data?.writer
-                  ? data?.getBoardById.data.writer
-                  : "관리자"}
-              </div>
+              <div>{data?.writer ? data?.writer : "관리자"}</div>
             </div>
           </div>
           <ContentBody>
-            {data?.getBoardById.data?.images &&
-            data.getBoardById.data.images[0] ? (
+            {data?.images && data.images[0] ? (
               <img
-              style={{
-                objectFit:'contain'
-              }}
-                src={data.getBoardById.data.images[0].url}
+                style={{
+                  objectFit: "contain",
+                }}
+                src={data.images[0].url}
                 alt="news uploaded img"
               />
             ) : (
@@ -152,32 +142,30 @@ const BoardDetail: React.VFC = () => {
             <div
               className="content-body-desc"
               dangerouslySetInnerHTML={{
-                __html: data?.getBoardById.data?.content || "",
+                __html: data?.content || "",
               }}
             ></div>
-            {data?.getBoardById.data?.showAttach &&
-              data?.getBoardById.data?.files &&
-              data.getBoardById.data.files.length > 0 && (
-                <div className="content-body-attachment">
-                  {data?.getBoardById.data?.files.map((item, idx) => {
-                    return (
-                      <div key={idx} className="attachment-row">
-                        <GrAttachment
-                          size={screen.width > breakpoints.phoneMedium ? 14 : 8}
-                        />
-                        <a
-                          href={item?.url}
-                          download
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {item?.fileName}
-                        </a>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+            {data?.showAttach && data?.files && data.files.length > 0 && (
+              <div className="content-body-attachment">
+                {data?.files.map((item, idx) => {
+                  return (
+                    <div key={idx} className="attachment-row">
+                      <GrAttachment
+                        size={screen.width > breakpoints.phoneMedium ? 14 : 8}
+                      />
+                      <a
+                        href={item?.url}
+                        download
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {item?.fileName}
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </ContentBody>
           <ContentReply>
             {isReplyNeeded && <div className="reply-title">&#x21aa;답글</div>}
@@ -186,10 +174,10 @@ const BoardDetail: React.VFC = () => {
               dangerouslySetInnerHTML={{
                 __html:
                   (data &&
-                    data.getBoardById.data &&
-                    data.getBoardById.data.replies &&
-                    data.getBoardById.data.replies[0] &&
-                    data.getBoardById.data.replies[0]?.content) ||
+                    data &&
+                    data?.comments &&
+                    data?.comments[0] &&
+                    data?.comments[0]?.content) ||
                   "",
               }}
             ></div>

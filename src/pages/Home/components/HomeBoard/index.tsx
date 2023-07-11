@@ -7,30 +7,15 @@ import {
   mediaQueries,
 } from "../../../../utils/mediaQuery";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
-import { useQuery } from "@apollo/client";
-import {
-  getBoardByMonth,
-  getBoardByMonthVariables,
-  getBoardByMonth_getBoardByMonth_data,
-  getVideoLink,
-} from "../../../../typings/api";
 import { List } from "antd";
-import {
-  GET_BOARD_BY_MONTH,
-  GET_VIDEO_LINK,
-} from "../../../../queries/sharedQuery";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
+import { BoardQuery, BoardsQuery } from "../../../../typings/api.d";
+import { useBoardContext } from "../../../../contexts";
+import moment from "moment";
 
 interface NoticeProps {
-  data:
-    | Array<
-        Pick<
-          getBoardByMonth_getBoardByMonth_data,
-          "inputCreatedAt" & "title" & "id"
-        >
-      >
-    | undefined;
+  data?: BoardsQuery["boards"]["data"];
 }
 
 interface VideoProps {
@@ -42,7 +27,6 @@ const NoticeBoard: React.FC<NoticeProps> = ({ data }) => {
   const yearMonth = `${new Date().getFullYear()}.${new Date().getMonth() + 1}`;
   let filtered;
 
-  console.log(data);
   if (data && data.length > 6) {
     filtered = data.splice(0, 3);
   } else {
@@ -106,31 +90,26 @@ const VideoBoard: React.FC<VideoProps> = ({ data }) => {
 
 const HomeBoard: React.VFC = () => {
   const size = useWindowSize();
-  const [boardData, setBoardData] = useState<
-    Array<
-      Pick<getBoardByMonth_getBoardByMonth_data, "inputCreatedAt" & "title">
-    >
-  >([]);
-  const { loading, data } = useQuery<getBoardByMonth, getBoardByMonthVariables>(
-    GET_BOARD_BY_MONTH,
-    {
-      variables: {
-        category: "community-notice",
-      },
-    }
-  );
-  const { data: videoData } = useQuery<getVideoLink>(GET_VIDEO_LINK);
+  const { boards, loading } = useBoardContext();
+  const [boardData, setBoardData] = useState<BoardsQuery["boards"]["data"]>();
+  const [videoData, setVideoData] = useState<BoardQuery["board"]>();
 
   useEffect(() => {
-    if (data && data.getBoardByMonth && data.getBoardByMonth.data) {
-      const sorted = data.getBoardByMonth.data.map((item) => ({
-        inputCreatedAt: item.inputCreatedAt,
-        title: item.title,
-        id: item.id,
-      }));
+    if (boards) {
+      const sorted = boards.filter((v) => {
+        if (
+          moment(v.inputCreatedAt).format("MM") === moment().format("MM") &&
+          v.category === "community-notice"
+        ) {
+          return true;
+        }
+        return false;
+      });
       setBoardData(sorted);
+      const videos = boards.filter((v) => v.category === "link");
+      setVideoData(videos[videos.length - 1] || undefined);
     }
-  }, [data]);
+  }, [boards]);
 
   if (loading) {
     return <div>loading...</div>;
@@ -142,7 +121,7 @@ const HomeBoard: React.VFC = () => {
         {size.width > breakpoints.phoneMedium ? (
           <>
             <Col>
-              {data?.getBoardByMonth.data === null ? (
+              {boardData === null ? (
                 <div>저장된 데이터가 없습니다</div>
               ) : (
                 <>
@@ -158,16 +137,16 @@ const HomeBoard: React.VFC = () => {
               )}
             </Col>
             <Col>
-              <VideoBoard data={videoData?.getVideoLink.link} />
+              <VideoBoard data={videoData?.link || ""} />
             </Col>
           </>
         ) : (
           <>
             <Col>
-              <VideoBoard data={videoData?.getVideoLink.link} />
+              <VideoBoard data={videoData?.link || ""} />
             </Col>
             <Col>
-              {data?.getBoardByMonth.data === null ? (
+              {boardData === null ? (
                 <div>저장된 데이터가 없습니다</div>
               ) : (
                 <>
@@ -394,7 +373,6 @@ const NoticeListSpan = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     font-size: 11px;
     font-weight: 600;
-    width: 55%;
     max-width: 200px;
     color: #0c1b58;
     white-space: nowrap;

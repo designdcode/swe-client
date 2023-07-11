@@ -6,13 +6,7 @@ import {
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../utils/mediaQuery";
-import { useQuery } from "@apollo/client";
-import { GET_BOARD_BY_CATEGORY } from "../../queries/adminQuery";
-import { useLocation, useParams } from "react-router";
-import {
-  getBoardByCategory,
-  getBoardByCategoryVariables,
-} from "../../typings/api";
+import { useParams } from "react-router";
 import { Button, Dropdown, Menu, Space, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import { Link } from "react-router-dom";
@@ -20,6 +14,7 @@ import { ConvertTitle } from "../../utils/convertTitle";
 import { NavigationData } from "../../assets/NavigationData";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import useInput from "../../hooks/useInput";
+import { useBoardContext } from "../../contexts";
 import moment from "moment";
 
 interface ParamProps {
@@ -28,7 +23,7 @@ interface ParamProps {
 }
 
 interface TableBoardProps {
-  id: number | null;
+  id: string | null;
   index: number | null;
   title: string | null;
   createdAt: string | null;
@@ -38,13 +33,8 @@ interface TableBoardProps {
   content: string;
 }
 
-interface RefetchProps {
-  refetch?: boolean;
-}
-
 const Board: React.VFC = () => {
   const screen = useWindowSize();
-  const location = useLocation<RefetchProps>();
   const { param, subparam } = useParams<ParamProps>();
   const [boards, setBoards] = useState<Array<TableBoardProps>>();
   const [subBoards, setSubBoards] = useState<Array<TableBoardProps>>();
@@ -52,51 +42,38 @@ const Board: React.VFC = () => {
   const [writeAble, setWriteAble] = useState<boolean>(false);
   const [searchCategory, setSearchCategory] = useState<string>("전체보기");
   const [term, onChangeTerm, setTerm] = useInput("");
-  const { loading, refetch } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    fetchPolicy: "network-only",
-    variables: {
-      category: subparam,
-    },
-    onCompleted: ({ getBoardByCategory }) => {
-      const { ok, err, data } = getBoardByCategory;
-      if (ok && data) {
-        let dataSource: Array<TableBoardProps> = [];
-        data.map((elem, i) => {
-          const obj: TableBoardProps = {
-            id: elem.id,
-            index: data.length - i,
-            title: elem.title,
-            createdAt: moment(new Date(elem.inputCreatedAt || ""), true)
-              .format("YYYY/MM/DD")
-              .toString(),
-            category: elem.category,
-            private: elem.private || false,
-            writer: elem.writer || "",
-            content: elem.content || "",
-          };
-          if (elem.private === false) {
-            return dataSource.push(obj);
-          }
-          return null;
-        });
-        setBoards(dataSource);
-        setSubBoards(dataSource);
-      } else {
-        console.log(err);
-      }
-    },
-  });
+  const { boards: boardsContext, loading, refetch } = useBoardContext();
 
   useEffect(() => {
-    if (location) {
-      if (location.state && location.state.refetch) {
-        refetch();
-      }
+    if (boardsContext) {
+      let dataSource: Array<TableBoardProps> = [];
+      const data = boardsContext.filter((v) => v.category === subparam);
+      data.map((elem, i) => {
+        const obj: TableBoardProps = {
+          id: elem._id,
+          index: boardsContext.length - i,
+          title: elem.title || "",
+          createdAt: moment(elem.createdAt).format("YYYY-MM-DD"),
+          category: elem.category,
+          private: elem.private || false,
+          writer: elem.writer || "",
+          content: elem.content || "",
+        };
+        if (elem.private === false) {
+          return dataSource.push(obj);
+        }
+        return null;
+      });
+      setBoards(dataSource);
+      setSubBoards(dataSource);
     }
-  }, [refetch, location]);
+  }, [boardsContext, subparam]);
+
+  useEffect(() => {
+    if (refetch) {
+      refetch();
+    }
+  }, [refetch]);
 
   useEffect(() => {
     setTitle(ConvertTitle(subparam));
@@ -267,14 +244,14 @@ const Board: React.VFC = () => {
             dataIndex="관리자"
             key="관리자"
             render={(text, record: TableBoardProps) => {
-              console.log(record)
               return (
                 <Space>
                   <TableDesc>
                     {subparam.split("-")[1] === "request"
-                      ? "관리자" : (record.writer === null || record.writer === "")
-                        ? '관리자' : record.writer
-                    }
+                      ? "관리자"
+                      : record.writer === null || record.writer === ""
+                      ? "관리자"
+                      : record.writer}
                   </TableDesc>
                 </Space>
               );
@@ -429,7 +406,7 @@ const SubMenu = styled.div<middleMenuProps>`
   }
 `;
 
-const StyleLink = styled(Link) <MenuCellProps>`
+const StyleLink = styled(Link)<MenuCellProps>`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
   }
 

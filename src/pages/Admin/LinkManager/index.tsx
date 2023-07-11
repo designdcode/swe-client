@@ -1,14 +1,12 @@
 import { Container, List, Row } from "./styles";
 import { Input, Button, Divider } from "antd";
 import useInput from "../../../hooks/useInput";
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_LINK } from "../../../queries/sharedQuery";
-import { getLinks } from "../../../typings/api";
 import {
-  CREATE_LINK,
-  DELETE_LINK,
-  EDIT_LINK,
-} from "../../../queries/adminQuery";
+  useCreateLinkMutation,
+  useLinksQuery,
+  useRemoveLinkMutation,
+  useUpdateLinkMutation,
+} from "../../../typings/api.d";
 import {
   CheckOutlined,
   DeleteOutlined,
@@ -24,11 +22,11 @@ const LinkManager: React.VFC = () => {
   const [onAdd, setOnAdd] = useState<boolean>(false);
   const [onEdit, setOnEdit] = useState<number>(0);
 
-  const { data, loading, refetch } = useQuery<getLinks>(GET_LINK);
+  const { data, loading, refetch } = useLinksQuery();
 
-  const [createLink] = useMutation(CREATE_LINK);
-  const [editLink] = useMutation(EDIT_LINK);
-  const [deleteLink] = useMutation(DELETE_LINK);
+  const [createLink] = useCreateLinkMutation();
+  const [editLink] = useUpdateLinkMutation();
+  const [deleteLink] = useRemoveLinkMutation();
 
   const handleAdd = useCallback(async () => {
     if (!url.trim() || !url) {
@@ -38,30 +36,28 @@ const LinkManager: React.VFC = () => {
     }
     await createLink({
       variables: {
-        url: url.includes("http") ? url : `http://${url}`,
-        title,
+        args: {
+          url: url.includes("http") ? url : `http://${url}`,
+          title,
+        },
       },
     }).then(({ data }) => {
-      if (data?.createLink.ok) {
-        setUrl("");
-        setTitle("");
-        toast.success("링크가 생성되었습니다");
-      }
+      setUrl("");
+      setTitle("");
+      toast.success("링크가 생성되었습니다");
     });
     refetch();
     setOnAdd(false);
   }, [url, title, createLink, refetch, setUrl, setTitle]);
 
   const handleDelete = useCallback(
-    async (id: number) => {
+    async (id: string) => {
       await deleteLink({
         variables: {
-          id,
+          _id: id,
         },
       }).then(({ data }) => {
-        if (data?.deleteLink.ok) {
-          toast.success("링크가 삭제 되었습니다");
-        }
+        toast.success("링크가 삭제 되었습니다");
       });
       refetch();
     },
@@ -69,17 +65,17 @@ const LinkManager: React.VFC = () => {
   );
 
   const handleEdit = useCallback(
-    async (id: number) => {
+    async (id: string) => {
       await editLink({
         variables: {
-          id,
-          title,
-          url: url.includes("http") ? url : `http://${url}`,
+          args: {
+            _id: id,
+            title,
+            url: url.includes("http") ? url : `http://${url}`,
+          },
         },
       }).then(({ data }) => {
-        if (data?.editLink.ok) {
-          toast.success("링크가 수정 되었습니다");
-        }
+        toast.success("링크가 수정 되었습니다");
       });
       setOnEdit(0);
       setTitle("");
@@ -96,12 +92,12 @@ const LinkManager: React.VFC = () => {
   return (
     <Container>
       <List style={{ backgroundColor: "white" }}>
-        {data?.getLinks.data?.map((elem, idx) => {
+        {data?.links.data.map((elem, idx) => {
           return (
             <div key={idx}>
               <Divider style={{ marginTop: 5 }} />
               <div className="list-description">
-                {onEdit === elem?.id ? (
+                {onEdit === idx ? (
                   <Input
                     placeholder={"사이트 명"}
                     className="edit-input"
@@ -111,7 +107,7 @@ const LinkManager: React.VFC = () => {
                 ) : (
                   <span className="list-title">{elem?.title}</span>
                 )}
-                {onEdit === elem?.id ? (
+                {onEdit === idx ? (
                   <Input
                     placeholder={"링크 URL"}
                     className="edit-input"
@@ -135,9 +131,9 @@ const LinkManager: React.VFC = () => {
                       if (onEdit === 0) {
                         setUrl(elem!.url);
                         setTitle(elem!.title);
-                        setOnEdit(elem!.id);
+                        setOnEdit(idx);
                       } else {
-                        handleEdit(elem!.id);
+                        handleEdit(elem!._id);
                       }
                     }}
                   >
@@ -145,7 +141,7 @@ const LinkManager: React.VFC = () => {
                   </button>
                   <button
                     className="button delete-button"
-                    onClick={() => handleDelete(elem!.id)}
+                    onClick={() => handleDelete(elem!._id)}
                   >
                     <DeleteOutlined />
                   </button>

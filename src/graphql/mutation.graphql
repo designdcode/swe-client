@@ -1,0 +1,132 @@
+mutation createBoard($args: CreateBoardInput!) {
+  createBoard(args: $args) {
+    title
+    content
+    writer
+    category
+    type
+    link
+    private
+    showAttach
+    inputCreatedAt
+    files {
+      url
+      fileName
+    }
+    images {
+      url
+      fileName
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+mutation updateBoard($args: UpdateBoardInput!) {
+  updateBoard(args: $args) {
+    _id
+    title
+    content
+    writer
+    category
+    type
+    link
+    private
+    showAttach
+    inputCreatedAt
+    files {
+      url
+      fileName
+    }
+    images {
+      url
+      fileName
+    }
+    createdAt
+    updatedAt
+  }
+}
+
+mutation removeBoard($_id: String!) {
+  removeBoard(_id: $_id) {
+    _id
+  }
+}
+
+mutation createComment($args: CreateCommentInput!) {
+  createComment(args: $args) {
+    content
+    boardId
+  }
+}
+
+mutation updateComment($args: UpdateCommentInput!) {
+  updateComment(args: $args) {
+    _id
+    content
+    boardId
+  }
+}
+
+mutation removeComment($_id: String!) {
+  removeComment(_id: $_id) {
+    _id
+  }
+}
+
+mutation createPopup($args: CreatePopupInput!) {
+  createPopup(args: $args) {
+    url
+    link
+    up
+  }
+}
+
+mutation updatePopup($args: UpdatePopupInput!) {
+  updatePopup(args: $args) {
+    _id
+    url
+    link
+    up
+  }
+}
+
+mutation removePopup($_id: String!) {
+  removePopup(_id: $_id) {
+    _id
+    url
+    link
+    up
+  }
+}
+
+mutation createLink($args: CreateLinkInput!) {
+  createLink(args: $args) {
+    url
+    title
+  }
+}
+
+mutation updateLink($args: UpdateLinkInput!) {
+  updateLink(args: $args) {
+    _id
+    url
+    title
+  }
+}
+
+mutation removeLink($_id: String!) {
+  removeLink(_id: $_id) {
+    _id
+  }
+}
+
+mutation userLogin($id: String!, $pwd: String!) {
+  userLogin(id: $id, pwd: $pwd) {
+    success
+    data {
+      id
+      stno
+    }
+  }
+}

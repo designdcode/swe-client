@@ -1,115 +1,56 @@
-import { useQuery } from "@apollo/client";
 import styled from "@emotion/styled";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { GET_BOARD_BY_CATEGORY } from "../../../../queries/adminQuery";
-import {
-  getBoardByCategory,
-  getBoardByCategoryVariables,
-  getBoardByCategory_getBoardByCategory_data,
-  getBoardByCategory_getBoardByCategory_data_images,
-} from "../../../../typings/api";
 import {
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../../../utils/mediaQuery";
+import { BoardQuery, BoardsQuery } from "../../../../typings/api.d";
+import { useBoardContext } from "../../../../contexts";
 
 const HomeSWNews: React.VFC = () => {
   const history = useHistory();
-  const [aurl, setAurl] = useState<
-    (getBoardByCategory_getBoardByCategory_data_images | null)[] | null
-  >();
-  const [vurl, setVurl] = useState<
-    (getBoardByCategory_getBoardByCategory_data_images | null)[] | null
-  >();
-  const [curl, setCurl] = useState<
-    (getBoardByCategory_getBoardByCategory_data_images | null)[] | null
-  >();
-  const [surl, setSurl] = useState<
-    (getBoardByCategory_getBoardByCategory_data_images | null)[] | null
-  >();
+  const [aurl, setAurl] = useState<BoardQuery["board"]["images"]>();
+  const [vurl, setVurl] = useState<BoardQuery["board"]["images"]>();
+  const [curl, setCurl] = useState<BoardQuery["board"]["images"]>();
+  const [surl, setSurl] = useState<BoardQuery["board"]["images"]>();
 
-  const [adata, setAdata] =
-    useState<getBoardByCategory_getBoardByCategory_data[]>();
-  const [cdata, setCdata] =
-    useState<getBoardByCategory_getBoardByCategory_data[]>();
-  const [vdata, setVdata] =
-    useState<getBoardByCategory_getBoardByCategory_data[]>();
-  const [sdata, setSdata] =
-    useState<getBoardByCategory_getBoardByCategory_data[]>();
+  const [adata, setAdata] = useState<BoardsQuery["boards"]["data"]>();
+  const [cdata, setCdata] = useState<BoardsQuery["boards"]["data"]>();
+  const [vdata, setVdata] = useState<BoardsQuery["boards"]["data"]>();
+  const [sdata, setSdata] = useState<BoardsQuery["boards"]["data"]>();
 
-  const { loading: aloading } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: "achievement-aidnews",
-    },
-    onCompleted: ({ getBoardByCategory }) => {
-      const { ok, err, data } = getBoardByCategory;
-      if (ok && data && data.length > 0) {
-        setAurl(data[0].images);
-        setAdata(data);
-      } else {
-        console.log(err);
-      }
-    },
-  });
-  const { loading: vloading } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: "achievement-valuenews",
-    },
-    onCompleted: ({ getBoardByCategory }) => {
-      const { ok, err, data } = getBoardByCategory;
-      if (ok && data && data.length > 0) {
-        setVurl(data[0].images);
-        setVdata(data);
-      } else {
-        console.log(err);
-      }
-    },
-  });
-  const { loading: cloading } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: "achievement-coopnews",
-    },
-    onCompleted: ({ getBoardByCategory }) => {
-      const { ok, err, data } = getBoardByCategory;
-      if (ok && data && data.length > 0) {
-        setCurl(data[0].images);
-        setCdata(data);
-      } else {
-        console.log(err);
-      }
-    },
-  });
-  const { loading: sloading } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: "achievement-startup",
-    },
-    onCompleted: ({ getBoardByCategory }) => {
-      const { ok, err, data } = getBoardByCategory;
-      if (ok && data && data.length > 0) {
-        setSurl(data[0].images);
-        setSdata(data);
-      } else {
-        console.log(err);
-      }
-    },
-  });
+  const { boards, loading } = useBoardContext();
+
+  useEffect(() => {
+    if (boards) {
+      const aidNews = boards.filter(
+        (v) => v.category === "achievement-aidnews"
+      );
+      const valueNews = boards.filter(
+        (v) => v.category === "achievement-valuenews"
+      );
+      const coopNews = boards.filter(
+        (v) => v.category === "achievement-coopnews"
+      );
+      const startupNews = boards.filter(
+        (v) => v.category === "achievement-startup"
+      );
+
+      setAurl(aidNews[0]?.images);
+      setAdata(aidNews);
+      setVurl(valueNews[0]?.images);
+      setVdata(valueNews);
+      setCurl(coopNews[0]?.images);
+      setCdata(coopNews);
+      setSurl(startupNews[0]?.images);
+      setSdata(startupNews);
+    }
+  }, [boards]);
 
   const renderSectionImage = useCallback(
-    (image: getBoardByCategory_getBoardByCategory_data_images | null) => {
+    (image: { url: string; fileName: string } | null) => {
       return (
         <img src={image ? image.url : `/img/blackLogo.jpeg`} alt="newsImage" />
       );
@@ -119,27 +60,24 @@ const HomeSWNews: React.VFC = () => {
 
   const handleRoute = useCallback(
     (
-      data?: getBoardByCategory_getBoardByCategory_data[] | undefined,
-      url?:
-        | (getBoardByCategory_getBoardByCategory_data_images | null)[]
-        | null
-        | undefined
+      data?: BoardsQuery["boards"]["data"] | undefined,
+      url?: BoardQuery["board"]["images"] | null | undefined
     ) => {
       return (
-        <>
+        <SectionBox>
           <SectionImage>
-            {url ? renderSectionImage(url[0]) : <>none</>}
+            {url ? renderSectionImage(url[0]) : renderSectionImage(null)}
           </SectionImage>
           <SectionDesc>
-            <div className="section-title">{data && data[0].title}</div>
+            <div className="section-title">{data && data[0]?.title}</div>
             <div
               className="section-desc"
               dangerouslySetInnerHTML={{
-                __html: (data && data[0].content) || "",
+                __html: (data && data[0]?.content) || "",
               }}
             ></div>
           </SectionDesc>
-        </>
+        </SectionBox>
       );
     },
     [renderSectionImage]
@@ -190,74 +128,72 @@ const HomeSWNews: React.VFC = () => {
     [history]
   );
 
+  if (loading) {
+    return (
+      <Wrapper>
+        <div>로딩중입니다...</div>
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
       <Content>
         <Row>
           <Section>
-            {aloading ? (
-              <>loading</>
+            {renderSectionTitle("achievement-aidnews")}
+            {!adata || typeof adata[0]?._id === "undefined" ? (
+              <div />
             ) : (
-              <>
-                {renderSectionTitle("achievement-aidnews")}
-                <SectionContent
-                  to={`/main/detail/achievement/achievement-aidnews/${
-                    adata && adata[0].id
-                  }`}
-                >
-                  {handleRoute(adata, aurl)}
-                </SectionContent>
-              </>
+              <SectionContent
+                to={`/main/detail/achievement/achievement-aidnews/${
+                  adata && adata[0]?._id
+                }`}
+              >
+                {handleRoute(adata, aurl)}
+              </SectionContent>
             )}
           </Section>
           <Section>
-            {cloading ? (
-              <>loading</>
+            {renderSectionTitle("achievement-coopnews")}
+            {!cdata || typeof cdata[0]?._id === "undefined" ? (
+              <div />
             ) : (
-              <>
-                {renderSectionTitle("achievement-coopnews")}
-                <SectionContent
-                  to={`/main/detail/achievement/achievement-coopnews/${
-                    cdata && cdata[0].id
-                  }`}
-                >
-                  {handleRoute(cdata, curl)}
-                </SectionContent>
-              </>
+              <SectionContent
+                to={`/main/detail/achievement/achievement-coopnews/${
+                  cdata && cdata[0]?._id
+                }`}
+              >
+                {handleRoute(cdata, curl)}
+              </SectionContent>
             )}
           </Section>
         </Row>
         <Row>
           <Section>
-            {vloading ? (
-              <>loading</>
+            {renderSectionTitle("achievement-valuenews")}
+            {!vdata || typeof vdata[0]?._id === "undefined" ? (
+              <div />
             ) : (
-              <>
-                {renderSectionTitle("achievement-valuenews")}
-                <SectionContent
-                  to={`/main/detail/achievement/achievement-valuenews/${
-                    vdata && vdata[0].id
-                  }`}
-                >
-                  {handleRoute(vdata, vurl)}
-                </SectionContent>
-              </>
+              <SectionContent
+                to={`/main/detail/achievement/achievement-valuenews/${
+                  vdata && vdata[0]?._id
+                }`}
+              >
+                {handleRoute(vdata, vurl)}
+              </SectionContent>
             )}
           </Section>
           <Section>
-            {sloading ? (
-              <>loading</>
+            {renderSectionTitle("achievement-startup")}
+            {!sdata || typeof sdata[0]?._id === "undefined" ? (
+              <div />
             ) : (
-              <>
-                {renderSectionTitle("achievement-startup")}
-                <SectionContent
-                  to={`/main/detail/achievement/achievement-startup/${
-                    sdata && sdata[0].id
-                  }`}
-                >
-                  {handleRoute(sdata, surl)}
-                </SectionContent>
-              </>
+              <SectionContent
+                to={`/main/detail/achievement/achievement-startup/${sdata[0]?._id}`}
+              >
+                {handleRoute(sdata, surl)}
+              </SectionContent>
             )}
           </Section>
         </Row>
@@ -409,22 +345,30 @@ const SectionContent = styled(Link)`
   }
 `;
 
+const SectionBox = styled.div`
+  display: flex;
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+  }
+`;
+
 const SectionImage = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    width: 50%;
-    height: 100%;
-    margin-right: 10px;
     & img {
-      width: 320px;
+      max-width: 320px;
       height: 200px;
-      margin: 0 auto;
       object-fit: cover;
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 50%;
-    height: 100%;
-    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 15px;
     & img {
       width: 350px;
       height: 350px;
@@ -435,59 +379,54 @@ const SectionImage = styled.div`
 
 const SectionDesc = styled.div`
   color: black;
-
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     & .section-title {
-      height: 15%;
-      width: 95%;
-      word-break: break-all;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      max-height: 15%;
       font-size: 12px;
       font-weight: 600;
       margin-top: 10px;
-      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     & .section-desc {
-      height: 30%;
-      width: 95%;
-      word-break: break-all;
+      max-height: 30%;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 2;
       margin-top: 20px;
-      line-height: 1.3;
       font-size: 9px;
     }
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 37%;
-    height: 100%;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     & .section-title {
-      height: 29%;
-      width: 80%;
-      word-break: break-all;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
+      max-height: 30%;
       font-size: 16px;
       font-weight: 600;
     }
     & .section-desc {
-      margin-top: 10px;
-      height: 29%;
-      width: 80%;
-      display: block;
+      max-height: 40%;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      word-break: break-all;
-      line-height: 1.6;
+      text-overflow: ellipsis;
+      margin-top: 10px;
       font-size: 12px;
     }
   }

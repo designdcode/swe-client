@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { useMutation } from "@apollo/client";
 import { useHistory, useLocation } from "react-router";
 import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 
@@ -17,8 +16,6 @@ import {
   Dropdown,
   DatePicker,
 } from "antd";
-import { storage } from "../../../utils/firebase";
-import { CREATE_BOARD } from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import {
   contentSwitcher,
@@ -27,14 +24,9 @@ import {
   linkSwitcher,
   typeSwitcher,
 } from "../../../utils/switcher";
-import { fileUploader } from "../../../utils/fileUploader";
-import { fileRemover } from "../../../utils/fileRemover";
-import {
-  createBoard as createBoardType,
-  createBoardVariables,
-} from "../../../typings/api";
 import Editor from "../../../components/Editor";
-// import { b64toBlob } from "../../../utils/b64ToBlob";
+import { useCreateBoardMutation } from "../../../typings/api.d";
+import { attachmentUploader } from "../../../utils/attachmentUploader";
 
 interface locationProps {
   search: string;
@@ -70,9 +62,11 @@ const UploadBoardPage: React.VFC = () => {
   const [isContentNeeded, setIsContentNeeded] = useState<boolean>(true);
   const [isTypeNeeded, setIsTypeNeeded] = useState<boolean>(false);
   const [checkPublic, setCheckPublic] = useState<boolean>(true);
-  const [progress, setProgress] = useState<number>(0);
   const [type, setType] = useState<{ type: string; title: string }>();
   const [showAttach, setShowAttach] = useState<boolean>(true);
+  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
+
+  console.log("updateboardpage");
 
   useEffect(() => {
     setIsImageNeeded(imageSwitcher(subparam as string));
@@ -90,28 +84,18 @@ const UploadBoardPage: React.VFC = () => {
     setCreatedAt(new Date(date).toString());
   }, []);
 
-  const [createBoard, { loading }] = useMutation<
-    createBoardType,
-    createBoardVariables
-  >(CREATE_BOARD, {
-    onCompleted: ({ createBoard }) => {
-      const { ok, err } = createBoard;
-      console.log(ok, err);
-      if (ok) {
-        setTitle("");
-        setContent("");
-        setLink("");
-        setImgUrl("");
-        setWriterName("");
-        toast.success("게시물을 생성 하였습니다");
-        history.push({
-          pathname: `/admin/${param}/${subparam}`,
-          state: { refresh: true },
-        });
-      } else {
-        console.log(err);
-        toast.error("게시물을 생성 할 수 없습니다");
-      }
+  const [createBoard, { loading }] = useCreateBoardMutation({
+    onCompleted: () => {
+      setTitle("");
+      setContent("");
+      setLink("");
+      setImgUrl("");
+      setWriterName("");
+      toast.success("게시물을 생성 하였습니다");
+      history.push({
+        pathname: `/admin/${param}/${subparam}`,
+        state: { refresh: true },
+      });
     },
   });
 
@@ -126,47 +110,57 @@ const UploadBoardPage: React.VFC = () => {
     if (file.length !== 0) {
       await createBoard({
         variables: {
-          title: title.trim() ? title : "제목없음",
-          content: content.trim() ? content : null,
-          link: link.trim() ? link : null,
-          category: category as string,
-          files: file.length !== 0 ? file : null,
-          images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
-          private: checkPublic ? false : true,
-          type: type?.type,
-          showAttach: showAttach ? true : false,
-          inputCreatedAt: createdAt,
-          writer: writerName || '관리자'
+          args: {
+            title: title.trim() ? title : "제목없음",
+            content: content.trim() ? content : null,
+            link: link.trim() ? link : null,
+            category: category as string,
+            files: file.length !== 0 ? file : null,
+            images: imgUrl?.trim()
+              ? [{ url: imgUrl, fileName: imgName || "" }]
+              : undefined,
+            private: checkPublic ? false : true,
+            type: type?.type,
+            showAttach: showAttach ? true : false,
+            inputCreatedAt: createdAt,
+            writer: writerName || "관리자",
+          },
         },
       });
     } else if (imgUrl) {
       await createBoard({
         variables: {
-          title: title.trim() ? title : "제목없음",
-          content: content.trim() ? content : null,
-          link: link.trim() ? link : null,
-          category: category as string,
-          files: null,
-          images: imgUrl?.trim() ? [{ url: imgUrl, fileName: imgName }] : null,
-          private: checkPublic ? false : true,
-          type: type?.type,
-          showAttach: showAttach ? true : false,
-          inputCreatedAt: createdAt,
-          writer: writerName || '관리자'
+          args: {
+            title: title.trim() ? title : "제목없음",
+            content: content.trim() ? content : null,
+            link: link.trim() ? link : null,
+            category: category as string,
+            files: null,
+            images: imgUrl?.trim()
+              ? [{ url: imgUrl, fileName: imgName || "" }]
+              : null,
+            private: checkPublic ? false : true,
+            type: type?.type,
+            showAttach: showAttach ? true : false,
+            inputCreatedAt: createdAt,
+            writer: writerName || "관리자",
+          },
         },
       });
     } else {
       await createBoard({
         variables: {
-          title: title.trim() ? title : "제목없음",
-          content: content.trim() ? content : null,
-          link: link.trim() ? link : null,
-          private: checkPublic ? false : true,
-          category: category as string,
-          type: type?.type,
-          showAttach: showAttach ? true : false,
-          inputCreatedAt: createdAt,
-          writer: writerName || '관리자'
+          args: {
+            title: title.trim() ? title : "제목없음",
+            content: content.trim() ? content : null,
+            link: link.trim() ? link : null,
+            private: checkPublic ? false : true,
+            category: category as string,
+            type: type?.type,
+            showAttach: showAttach ? true : false,
+            inputCreatedAt: createdAt,
+            writer: writerName || "관리자",
+          },
         },
       });
     }
@@ -183,70 +177,44 @@ const UploadBoardPage: React.VFC = () => {
     type,
     showAttach,
     createdAt,
-    writerName
+    writerName,
   ]);
 
   const handleImageUpload = useCallback(
     (file: any) => {
-      setProgress(progress + 1);
-      const filename = file.name;
+      setUploadLoading(true);
       setImgName(file.name);
-      fileUploader(
-        "images",
-        file,
-        category as string,
-        filename,
-        setImgUrl,
-        progress,
-        setProgress
-      );
+      Promise.resolve(
+        attachmentUploader({
+          type: "images",
+          file,
+          category: String(category) || "",
+        })
+      ).then((url) => {
+        setImgUrl(url);
+        toast.success("파일 / 이미지가 업로드 되었습니다");
+      });
+      setUploadLoading(false);
     },
-    [category, progress]
+    [category]
   );
 
   const handleFileUpload = useCallback(
     (file: any) => {
-      setProgress(progress + 1);
-      const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
-      upload.on(
-        "state_changed",
-        (snapshot) => { },
-        (err) => console.log(err),
-        () => {
-          storage
-            .ref(`/files/${category}/${file.name}`)
-            .getDownloadURL()
-            .then((url) => {
-              setFile((prev) => [...prev, { url: url, fileName: file.name }]);
-              toast.success("파일 / 이미지가 업로드 되었습니다");
-              setProgress(progress - 1);
-            });
-        }
-      );
-    },
-    [category, progress]
-  );
-
-  const handleImageRemover = useCallback(() => {
-    if (imgName && imgName.trim()) {
-      fileRemover("images", category as string, imgName, setImgUrl);
-    }
-  }, [category, imgName]);
-
-  const handleFileRemover = useCallback(
-    (propFile: any) => {
-      storage
-        .ref(`/files/${category}/${propFile.name}`)
-        .delete()
-        .then(() => {
-          toast.success("업로드 된 파일/이미지가 삭제 되었습니다");
-          setFile(
-            file.filter((elem: fileProps) => elem.fileName !== propFile.name)
-          );
+      setUploadLoading(true);
+      Promise.resolve(
+        attachmentUploader({
+          type: "fileds",
+          file,
+          category: String(category) || "",
         })
-        .catch((err) => toast.error(err));
+      ).then((url) => {
+        setFile((prev) => [...prev, { url: url, fileName: file.name }]);
+        toast.success("파일 / 이미지가 업로드 되었습니다");
+      });
+      setUploadLoading(false);
     },
-    [category, file]
+    [category]
   );
 
   const testMenu = useMemo(() => {
@@ -392,26 +360,20 @@ const UploadBoardPage: React.VFC = () => {
     [coopMenu, valueMenu, testMenu]
   );
 
-  useEffect(() => {
-    if (progress < 0) {
-      setProgress(0);
-    }
-  }, [progress]);
-
   return (
     <Container>
       <Form {...layout} name="upload-board" onFinish={onFinish}>
         <Form.Item name={["title"]} label="제목">
           <Input type="text" onChange={onChangeTitle} value={title} />
         </Form.Item>
-       <Form.Item name={["writer"]} label="작성자">
+        <Form.Item name={["writer"]} label="작성자">
           <Input
-          type="text"
-          onChange={onChangeWriterName}
-          value={writerName}
-          style={{
-            width:'200px'
-          }}
+            type="text"
+            onChange={onChangeWriterName}
+            value={writerName}
+            style={{
+              width: "200px",
+            }}
           />
         </Form.Item>
         <Form.Item name={["create"]} label="생성날짜">
@@ -452,27 +414,43 @@ const UploadBoardPage: React.VFC = () => {
         )}
         {isImageNeeded && (
           <Form.Item name={["image"]} label={"이미지"}>
-            <Upload
-              style={{ marginBottom: 20 }}
-              listType="picture"
-              customRequest={({ file }) => handleImageUpload(file)}
-              progress={{ showInfo: true }}
-              accept="image/*"
-              onChange={({ file }) => {
-                if (imgUrl !== "") {
-                  file.status = "done";
-                } else {
-                  file.status = "removed";
-                }
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
               }}
-              className="upload-list-inline"
-              maxCount={1}
-              onRemove={() => handleImageRemover()}
             >
-              {progress <= 0 && (
-                <Button icon={<UploadOutlined />}>Upload</Button>
+              {imgUrl && (
+                <img
+                  src={imgUrl}
+                  width={200}
+                  alt={"uploadimage"}
+                  style={{
+                    marginBottom: 20,
+                  }}
+                />
               )}
-            </Upload>
+              <Upload
+                style={{ marginBottom: 20 }}
+                listType="picture"
+                customRequest={({ file }) => handleImageUpload(file)}
+                accept="image/*"
+                showUploadList={false}
+                onChange={({ file }) => {
+                  if (imgUrl !== "") {
+                    file.status = "done";
+                  } else {
+                    file.status = "removed";
+                  }
+                }}
+                className="upload-list-inline"
+                maxCount={1}
+              >
+                {!uploadLoading && (
+                  <Button icon={<UploadOutlined />}>Upload</Button>
+                )}
+              </Upload>
+            </div>
           </Form.Item>
         )}
         {isFileNeeded && (
@@ -488,9 +466,8 @@ const UploadBoardPage: React.VFC = () => {
                   callbackFile.status = "removed";
                 }
               }}
-              onRemove={(file) => handleFileRemover(file)}
             >
-              {progress <= 0 && (
+              {!uploadLoading && (
                 <Button style={{ marginBottom: 20 }} icon={<UploadOutlined />}>
                   Upload
                 </Button>
@@ -526,13 +503,9 @@ const UploadBoardPage: React.VFC = () => {
           wrapperCol={{ ...layout.wrapperCol, offset: 8 }}
           name={"Upload"}
         >
-          <Button
-            type="primary"
-            htmlType="submit"
-            disabled={progress !== 0 ? true : false}
-          >
+          <Button type="primary" htmlType="submit" disabled={uploadLoading}>
             {!loading ? (
-              progress <= 0 ? (
+              !uploadLoading ? (
                 "올리기"
               ) : (
                 <>

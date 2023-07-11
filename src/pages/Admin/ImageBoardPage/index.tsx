@@ -2,15 +2,9 @@ import { Descriptions, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import { Container, Button } from "./styles";
-import { useQuery } from "@apollo/client";
-import {
-  getBoardByCategory,
-  getBoardByCategoryVariables,
-  getBoardByCategory_getBoardByCategory_data_files,
-  getBoardByCategory_getBoardByCategory_data_images,
-} from "../../../typings/api";
-import { GET_BOARD_BY_CATEGORY } from "../../../queries/adminQuery";
 import { fileSwitcher, linkSwitcher } from "../../../utils/switcher";
+import { BoardQuery, BoardsQuery } from "../../../typings/api.d";
+import { useBoardContext } from "../../../contexts";
 
 interface ParamProps {
   param: string;
@@ -27,13 +21,10 @@ const ImageBoardPage: React.VFC = () => {
   const { param, subparam } = useParams<ParamProps>();
   let sub = subparam;
   const { state } = useLocation<locationProps>();
-  const [file, setFile] = useState<
-    (getBoardByCategory_getBoardByCategory_data_files | null)[] | undefined
-  >();
-  const [image, setImage] =
-    useState<
-      (getBoardByCategory_getBoardByCategory_data_images | null | undefined)[]
-    >();
+  const [data, setData] = useState<BoardsQuery["boards"]["data"]>();
+  const { boards, loading, refetch } = useBoardContext();
+  const [file, setFile] = useState<BoardQuery["board"]["files"]>();
+  const [image, setImage] = useState<BoardQuery["board"]["images"]>();
   const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
   const [isLinkNeeded, setIsLinkNeeded] = useState<boolean>(false);
 
@@ -42,30 +33,19 @@ const ImageBoardPage: React.VFC = () => {
     setIsLinkNeeded(linkSwitcher(subparam as string));
   }, [subparam]);
 
-  const { data, loading, refetch } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: sub,
-    },
-  });
+  useEffect(() => {
+    if (boards) {
+      const board = boards.filter((v) => v.category === sub);
+      setData(board);
+      setImage(board[0]?.images);
+    }
+  }, [boards, sub]);
 
   useEffect(() => {
     const initData = () => {
-      if (
-        data?.getBoardByCategory.ok &&
-        data.getBoardByCategory.data?.length !== 0
-      ) {
-        if (
-          data.getBoardByCategory.data &&
-          data.getBoardByCategory.data.length !== 0
-        ) {
-          if (data.getBoardByCategory.data[0].files)
-            setFile(data.getBoardByCategory.data[0].files);
-          if (data.getBoardByCategory.data[0].images)
-            setImage(data.getBoardByCategory.data[0].images);
-        }
+      if (data) {
+        if (data[0]?.files) setFile(data[0].files);
+        if (data[0]?.images) setImage(data[0].images);
       } else {
         setFile([]);
         setImage([]);
@@ -85,6 +65,8 @@ const ImageBoardPage: React.VFC = () => {
     return () => excuteRefetch();
   }, [refetch, state]);
 
+  console.log("image board page");
+
   if (loading) {
     return <>loading</>;
   }
@@ -95,17 +77,13 @@ const ImageBoardPage: React.VFC = () => {
         <Button type="ghost" onClick={() => history.goBack()}>
           뒤로
         </Button>
-        {data?.getBoardByCategory.data?.length !== 0 &&
-        data?.getBoardByCategory.ok ? (
+        {data && data.length > 0 ? (
           <Button
             type="primary"
             style={{ marginLeft: 25 }}
             onClick={() =>
               history.push(
-                `/admin/${param}/edit-image-${param}?category=${subparam}&id=${
-                  data.getBoardByCategory.data &&
-                  data.getBoardByCategory.data[0].id
-                }`
+                `/admin/${param}/edit-image-${param}?category=${subparam}&id=${data[0]?._id}`
               )
             }
           >
@@ -132,18 +110,9 @@ const ImageBoardPage: React.VFC = () => {
       >
         {isLinkNeeded && (
           <Descriptions.Item label="링크" span={4} labelStyle={{ width: 100 }}>
-            {data?.getBoardByCategory.data?.length !== 0 &&
-            data?.getBoardByCategory.ok ? (
-              <a
-                href={`${
-                  data.getBoardByCategory.data &&
-                  data.getBoardByCategory.data[0].link
-                }`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {data.getBoardByCategory.data &&
-                  data.getBoardByCategory.data[0].link}
+            {data ? (
+              <a href={`${data[0].link}`} target="_blank" rel="noreferrer">
+                {data && data[0].link}
               </a>
             ) : (
               <Typography.Text>링크가 없습니다</Typography.Text>

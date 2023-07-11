@@ -9,10 +9,8 @@ import {
 } from "../../utils/mediaQuery";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { Link } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import { getBoardByCategory } from "../../typings/api";
-import { GET_BOARD_BY_CATEGORY } from "../../queries/adminQuery";
 import Map from "../../components/Map";
+import { useBoardContext } from "../../contexts";
 interface ParamProps {
   param: string;
   subparam: string;
@@ -29,14 +27,7 @@ interface MenuCellProps {
 const Detail = () => {
   const screen = useWindowSize();
   const { param, subparam } = useParams<ParamProps>();
-  const { loading, data } = useQuery<getBoardByCategory>(
-    GET_BOARD_BY_CATEGORY,
-    {
-      variables: {
-        category: subparam,
-      },
-    }
-  );
+  const { boards, loading } = useBoardContext();
 
   const renderButton = useCallback(() => {
     switch (subparam.split("-")[1]) {
@@ -177,14 +168,9 @@ const Detail = () => {
       </Cover>
       <Content>
         <ContentImage>
-          {data?.getBoardByCategory.data &&
-            data.getBoardByCategory.data[0] &&
-            data.getBoardByCategory.data[0].images && (
-              <img
-                src={data.getBoardByCategory.data[0].images[0]?.url}
-                alt="uploadedImage"
-              />
-            )}
+          {boards && boards[0] && boards[0].images && (
+            <img src={boards[0].images[0]?.url} alt="uploadedImage" />
+          )}
         </ContentImage>
         {param.toString() === "sitelink" && (
           <div className="button-text">

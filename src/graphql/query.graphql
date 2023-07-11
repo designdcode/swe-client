@@ -1,0 +1,108 @@
+query boards($args: PaginationArgs) {
+  boards(args: $args) {
+    data {
+      _id
+      title
+      content
+      writer
+      category
+      type
+      link
+      private
+      showAttach
+      inputCreatedAt
+      files {
+        url
+        fileName
+      }
+      images {
+        url
+        fileName
+      }
+      createdAt
+      updatedAt
+      comments {
+        _id
+        content
+        boardId
+        createdAt
+      }
+    }
+    total
+  }
+}
+
+query board($_id: String!) {
+  board(_id: $_id) {
+    _id
+    title
+    content
+    writer
+    category
+    type
+    link
+    private
+    showAttach
+    inputCreatedAt
+    files {
+      url
+      fileName
+    }
+    images {
+      url
+      fileName
+    }
+    createdAt
+    updatedAt
+    comments {
+      _id
+      content
+      boardId
+      createdAt
+    }
+  }
+}
+
+query popups($args: PaginationArgs, $category: String) {
+  popups(args: $args, category: $category) {
+    data {
+      _id
+      url
+      link
+      up
+      createdAt
+    }
+    total
+  }
+}
+
+query popup($_id: String!) {
+  popup(_id: $_id) {
+    _id
+    url
+    link
+    up
+    createdAt
+  }
+}
+
+query links($args: PaginationArgs, $category: String) {
+  links(args: $args, category: $category) {
+    data {
+      _id
+      url
+      title
+      createdAt
+    }
+    total
+  }
+}
+
+query ink($_id: String!) {
+  link(_id: $_id) {
+    _id
+    url
+    title
+    createdAt
+  }
+}

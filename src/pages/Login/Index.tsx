@@ -7,33 +7,22 @@ import {
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../utils/mediaQuery";
-import { useMutation } from "@apollo/client";
-import { UserLogin, UserLoginVariables } from "../../typings/api";
-import { USER_LOGIN } from "../../queries/sharedQuery";
 import { userLogin } from "../../utils/loginResolver";
 import { toast } from "react-toastify";
 import { forceHistory } from "../../utils/forceHistory";
+import { useUserLoginMutation } from "../../typings/api.d";
 
 const Login: React.VFC = () => {
   const [id, onChangeId, setId] = useInput("");
   const [pwd, onChangePwd, setpwd] = useInput("");
 
-  const [UserLoginMutation, { loading }] = useMutation<
-    UserLogin,
-    UserLoginVariables
-  >(USER_LOGIN, {
-    onCompleted: ({ UserLogin }) => {
-      const { success, error, data } = UserLogin;
-      if (success && data) {
-        userLogin(data.stno);
-        toast.success("로그인 성공");
-        setTimeout(() => {
-          forceHistory.push("/main");
-        }, 1000);
-      } else {
-        console.log(error);
-        toast.error("아이디와 비밀번호를 확인 해 주세요");
-      }
+  const [UserLoginMutation, { loading }] = useUserLoginMutation({
+    onCompleted: ({ userLogin: result }) => {
+      userLogin(result.data.stno);
+      toast.success("로그인 성공");
+      setTimeout(() => {
+        forceHistory.push("/main");
+      }, 300);
     },
   });
 
