@@ -4,6 +4,7 @@ import { Popup } from './entities/popup.entity';
 import { CreatePopupInput } from './dto/create-popup.input';
 import { UpdatePopupInput } from './dto/update-popup.input';
 import { PopupReturnType } from '../common/dto/returnType.dto';
+import { PaginationArgs } from '../common/dto/paginate.input';
 
 @Resolver(() => Popup)
 export class PopupResolver {
@@ -15,8 +16,11 @@ export class PopupResolver {
   }
 
   @Query(() => PopupReturnType, { name: 'popups' })
-  async findAll() {
-    return await this.popupService.findAll();
+  async findAll(
+    @Args('args') args?: PaginationArgs,
+    @Args('category', { nullable: true }) category?: string,
+  ) {
+    return await this.popupService.findAll(args, category);
   }
 
   @Query(() => Popup, { name: 'popup' })

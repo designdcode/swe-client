@@ -4,6 +4,7 @@ import { Board } from './entities/board.entity';
 import { CreateBoardInput } from './dto/create-board.input';
 import { UpdateBoardInput } from './dto/update-board.input';
 import { BoardReturnType } from '../common/dto/returnType.dto';
+import { PaginationArgs } from '../common/dto/paginate.input';
 
 @Resolver(() => Board)
 export class BoardResolver {
@@ -15,8 +16,11 @@ export class BoardResolver {
   }
 
   @Query(() => BoardReturnType, { name: 'boards' })
-  async findAll(@Args('category') category: string): Promise<BoardReturnType> {
-    return await this.boardService.findAll(category);
+  async findAll(
+    @Args('category') category: string,
+    @Args('args') args?: PaginationArgs,
+  ): Promise<BoardReturnType> {
+    return await this.boardService.findAll(category, args);
   }
 
   @Query(() => Board, { name: 'board' })
