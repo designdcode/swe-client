@@ -14,7 +14,7 @@ interface ResponseProps {
 @Resolver(() => Auth)
 export class AuthResolver {
   @Mutation(() => Auth)
-  async userLogin(@Args('id') id: string, pwd: string) {
+  async userLogin(@Args('id') id: string, @Args('pwd') pwd: string) {
     try {
       const httpsAgent = new https.Agent({
         rejectUnauthorized: false,

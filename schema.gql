@@ -109,7 +109,7 @@ type Mutation {
   createLink(args: CreateLinkInput!): Link!
   updateLink(args: UpdateLinkInput!): Link!
   removeLink(_id: String!): Link!
-  userLogin(id: String!): Auth!
+  userLogin(id: String!, pwd: String!): Auth!
 }
 
 input CreateBoardInput {
@@ -123,7 +123,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-11T17:52:54.106Z"
+  inputCreatedAt: DateTime! = "2023-07-11T17:53:49.589Z"
 }
 
 input AttachementInput {
@@ -142,7 +142,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-11T17:52:54.106Z"
+  inputCreatedAt: DateTime = "2023-07-11T17:53:49.589Z"
   _id: String!
 }
 
