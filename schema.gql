@@ -39,14 +39,30 @@ type Board {
   comments: [Comment!]
 }
 
+type Popup {
+  _id: String!
+  url: String
+  link: String
+  up: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type BoardReturnType {
   data: [Board!]!
+  total: Int!
+}
+
+type PopupReturnType {
+  data: [Popup!]!
   total: Int!
 }
 
 type Query {
   boards(category: String!): BoardReturnType!
   board(_id: String!): Board!
+  popups: PopupReturnType!
+  popup(_id: String!): Popup!
 }
 
 type Mutation {
@@ -56,6 +72,9 @@ type Mutation {
   createComment(args: CreateCommentInput!): Comment!
   updateComment(args: UpdateCommentInput!): Comment!
   removeComment(_id: String!): Comment!
+  createPopup(args: CreatePopupInput!): Popup!
+  updatePopup(args: UpdatePopupInput!): Popup!
+  removePopup(_id: String!): Popup!
 }
 
 input CreateBoardInput {
@@ -69,7 +88,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-11T09:38:55.095Z"
+  inputCreatedAt: DateTime! = "2023-07-11T09:53:34.172Z"
 }
 
 input AttachementInput {
@@ -88,7 +107,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-11T09:38:55.095Z"
+  inputCreatedAt: DateTime = "2023-07-11T09:53:34.172Z"
   _id: String!
 }
 
@@ -100,5 +119,18 @@ input CreateCommentInput {
 input UpdateCommentInput {
   content: String
   boardId: String
+  _id: String!
+}
+
+input CreatePopupInput {
+  url: String
+  link: String
+  up: Boolean! = true
+}
+
+input UpdatePopupInput {
+  url: String
+  link: String
+  up: Boolean = true
   _id: String!
 }
