@@ -48,6 +48,14 @@ type Popup {
   updatedAt: DateTime!
 }
 
+type Link {
+  _id: String!
+  title: String!
+  url: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type BoardReturnType {
   data: [Board!]!
   total: Int!
@@ -63,6 +71,8 @@ type Query {
   board(_id: String!): Board!
   popups(args: PaginationArgs, category: String): PopupReturnType!
   popup(_id: String!): Popup!
+  links(args: PaginationArgs, category: String): [Link!]!
+  link(_id: String!): Link!
 }
 
 input PaginationArgs {
@@ -86,6 +96,9 @@ type Mutation {
   createPopup(args: CreatePopupInput!): Popup!
   updatePopup(args: UpdatePopupInput!): Popup!
   removePopup(_id: String!): Popup!
+  createLink(args: CreateLinkInput!): Link!
+  updateLink(args: UpdateLinkInput!): Link!
+  removeLink(_id: String!): Link!
 }
 
 input CreateBoardInput {
@@ -99,7 +112,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-11T16:56:10.820Z"
+  inputCreatedAt: DateTime! = "2023-07-11T17:07:37.827Z"
 }
 
 input AttachementInput {
@@ -118,7 +131,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-11T16:56:10.820Z"
+  inputCreatedAt: DateTime = "2023-07-11T17:07:37.827Z"
   _id: String!
 }
 
@@ -143,5 +156,16 @@ input UpdatePopupInput {
   url: String
   link: String
   up: Boolean = true
+  _id: String!
+}
+
+input CreateLinkInput {
+  url: String
+  title: String
+}
+
+input UpdateLinkInput {
+  url: String
+  title: String
   _id: String!
 }
