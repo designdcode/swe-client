@@ -3,8 +3,9 @@ import { CreatePopupInput } from './dto/create-popup.input';
 import { UpdatePopupInput } from './dto/update-popup.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Popup } from './entities/popup.entity';
-import { Model } from 'mongoose';
+import { Model, SortOrder } from 'mongoose';
 import { PopupReturnType } from '../common/dto/returnType.dto';
+import { PaginationArgs } from '../common/dto/paginate.input';
 
 @Injectable()
 export class PopupService {
@@ -21,9 +22,21 @@ export class PopupService {
     }
   }
 
-  async findAll(): Promise<PopupReturnType> {
+  async findAll(
+    args: PaginationArgs,
+    category: string,
+  ): Promise<PopupReturnType> {
     try {
-      const popups = await this.popupModel.find();
+      const { skip, sort, take } = args;
+      const sortOptions = {
+        [sort?.field]: sort?.order?.toLowerCase() as SortOrder,
+      };
+      const popups = await this.popupModel
+        .find(null, null, {
+          limit: take,
+          skip,
+        })
+        .sort(sortOptions);
       return {
         data: popups,
         total: await this.popupModel.count(),

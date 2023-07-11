@@ -3,8 +3,9 @@ import { CreateBoardInput } from './dto/create-board.input';
 import { UpdateBoardInput } from './dto/update-board.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Board } from './entities/board.entity';
-import { Model } from 'mongoose';
+import { Model, SortOrder } from 'mongoose';
 import { BoardReturnType } from '../common/dto/returnType.dto';
+import { PaginationArgs } from '../common/dto/paginate.input';
 
 @Injectable()
 export class BoardService {
@@ -28,14 +29,28 @@ export class BoardService {
     }
   }
 
-  async findAll(category: string): Promise<BoardReturnType> {
+  async findAll(
+    category: string,
+    args: PaginationArgs,
+  ): Promise<BoardReturnType> {
     try {
-      const boards = await this.boardModel.find(
-        {
-          category,
-        },
-        null,
-      );
+      const { skip, sort, take } = args;
+      const sortOptions = {
+        [sort?.field]: sort?.order?.toLowerCase() as SortOrder,
+      };
+      const boards = await this.boardModel
+        .find(
+          {
+            category,
+          },
+          null,
+          {
+            limit: take,
+            skip,
+          },
+        )
+        .sort(sortOptions)
+        .populate('comments');
 
       return {
         data: boards,
