@@ -17,7 +17,7 @@ export class PopupResolver {
 
   @Query(() => PopupReturnType, { name: 'popups' })
   async findAll(
-    @Args('args') args?: PaginationArgs,
+    @Args('args', { nullable: true }) args?: PaginationArgs,
     @Args('category', { nullable: true }) category?: string,
   ) {
     return await this.popupService.findAll(args, category);

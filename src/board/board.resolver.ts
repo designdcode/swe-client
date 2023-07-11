@@ -17,8 +17,8 @@ export class BoardResolver {
 
   @Query(() => BoardReturnType, { name: 'boards' })
   async findAll(
-    @Args('category') category: string,
-    @Args('args') args?: PaginationArgs,
+    @Args('category', { nullable: true }) category: string,
+    @Args('args', { nullable: true }) args?: PaginationArgs,
   ): Promise<BoardReturnType> {
     return await this.boardService.findAll(category, args);
   }

@@ -59,9 +59,9 @@ type PopupReturnType {
 }
 
 type Query {
-  boards(category: String!, args: PaginationArgs!): BoardReturnType!
+  boards(category: String, args: PaginationArgs): BoardReturnType!
   board(_id: String!): Board!
-  popups(args: PaginationArgs!, category: String): PopupReturnType!
+  popups(args: PaginationArgs, category: String): PopupReturnType!
   popup(_id: String!): Popup!
 }
 
@@ -99,7 +99,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-11T14:12:30.107Z"
+  inputCreatedAt: DateTime! = "2023-07-11T15:16:27.177Z"
 }
 
 input AttachementInput {
@@ -118,7 +118,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-11T14:12:30.107Z"
+  inputCreatedAt: DateTime = "2023-07-11T15:16:27.177Z"
   _id: String!
 }
 
