@@ -1,20 +1,18 @@
-import { useQuery } from "@apollo/client";
 import React, { useState, useEffect } from "react";
 import PopUp from "../../components/PopUp";
 import { useWindowSize } from "../../hooks/useWindowSize";
-import { GET_POPUP_STATUS } from "../../queries/sharedQuery";
-import { getPopupStatus } from "../../typings/api";
 import { breakpoints } from "../../utils/mediaQuery";
 import { Wrapper } from "../styles";
 import HomeBanner from "./components/HomeBanner";
 import HomeBNews from "./components/HomeBNews";
 import HomeBoard from "./components/HomeBoard";
 import HomeSWNews from "./components/HomeSWNews";
+import { usePopupContext } from "../../contexts";
 
 const Home: React.VFC = () => {
   const [showPopUp, setShowPopUp] = useState<boolean>(false);
   const screen = useWindowSize();
-  const { data } = useQuery<getPopupStatus>(GET_POPUP_STATUS);
+  const { popups } = usePopupContext();
   localStorage.setItem("fuzePopUpNotShow", new Date().getTime().toString());
 
   useEffect(() => {
@@ -36,13 +34,13 @@ const Home: React.VFC = () => {
   return (
     <Wrapper>
       {screen.width > breakpoints.phoneMedium &&
-        data?.getPopupStatus.data &&
-        data.getPopupStatus.data.up && (
+        popups &&
+        popups[popups.length - 1]?.up && (
           <PopUp
             showPopup={showPopUp}
             setShowPopUp={setShowPopUp}
-            url={data.getPopupStatus.data.url || ""}
-            link={data.getPopupStatus.data.link}
+            url={popups[popups.length - 1].url || ""}
+            link={popups[popups.length - 1].link}
           />
         )}
       <HomeBanner />

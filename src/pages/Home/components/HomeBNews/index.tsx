@@ -1,46 +1,31 @@
-import { useQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { Card as StyledCard } from "antd";
-import React, { useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { useHistory } from "react-router";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
-import { GET_BOARD_BY_CATEGORY } from "../../../../queries/adminQuery";
-import {
-  getBoardByCategory,
-  getBoardByCategoryVariables,
-  getBoardByCategory_getBoardByCategory_data,
-} from "../../../../typings/api";
 import {
   breakpoints,
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../../../utils/mediaQuery";
+import { useBoardContext } from "../../../../contexts";
+import { BoardsQuery } from "../../../../typings/api.d";
 
 const HomeBNews: React.VFC = () => {
   const screen = useWindowSize();
   const history = useHistory();
-  const [newsData, setNewsData] = useState<
-    getBoardByCategory_getBoardByCategory_data[] | undefined | null
-  >();
+  const [newsData, setNewsData] = useState<BoardsQuery["boards"]["data"]>();
   const [currentDot, setCurrentDot] = useState<number>(0);
-  const { loading } = useQuery<getBoardByCategory, getBoardByCategoryVariables>(
-    GET_BOARD_BY_CATEGORY,
-    {
-      variables: {
-        category: "achievement-news",
-      },
-      onCompleted: ({ getBoardByCategory }) => {
-        const { ok, data, err } = getBoardByCategory;
-        if (ok && data && data !== null) {
-          setNewsData(data);
-        } else {
-          console.log(err);
-        }
-      },
+  const { loading, boards } = useBoardContext();
+
+  useEffect(() => {
+    if (boards) {
+      const filtered = boards.filter((v) => v.category === "achievement-news");
+      setNewsData(filtered);
     }
-  );
+  }, [boards]);
 
   if (loading) {
     return <div>loading...</div>;
@@ -97,7 +82,7 @@ const HomeBNews: React.VFC = () => {
                         key={idx}
                         onClick={() =>
                           history.push(
-                            `/main/detail/achievement/achievement-news/${item.id}`
+                            `/main/detail/achievement/achievement-news/${item._id}`
                           )
                         }
                       >
@@ -127,7 +112,7 @@ const HomeBNews: React.VFC = () => {
                         bordered={false}
                         onClick={() =>
                           history.push(
-                            `/main/detail/achievement/achievement-news/${item.id}`
+                            `/main/detail/achievement/achievement-news/${item._id}`
                           )
                         }
                         cover={

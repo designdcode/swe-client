@@ -1,32 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import queryString from "query-string";
-import {
-  createFile,
-  createFileVariables,
-  createImage,
-  createImageVariables,
-  deleteBoard,
-  deleteBoardVariables,
-  deleteFile,
-  deleteFileVariables,
-  editBoard,
-  editBoardVariables,
-  getBoardByCategory_getBoardByCategory_data_files,
-  getBoardById,
-  getBoardByIdVariables,
-  getBoardById_getBoardById_data,
-  getBoardById_getBoardById_data_images,
-} from "../../../typings/api";
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_BOARD_BY_ID } from "../../../queries/sharedQuery";
-import {
-  CREATE_FILE,
-  CREATE_IMAGE,
-  DELETE_BOARD,
-  DELETE_FILE,
-  EDIT_BOARD,
-} from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Container, Button } from "./styles";
 import {
@@ -40,17 +14,18 @@ import {
   Upload,
 } from "antd";
 import useInput from "../../../hooks/useInput";
-import {
-  DeleteOutlined,
-  LoadingOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
-import { storage } from "../../../utils/firebase";
-import { fileRemover } from "../../../utils/fileRemover";
-import { fileUploader } from "../../../utils/fileUploader";
+import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import { linkSwitcher, typeSwitcher } from "../../../utils/switcher";
 import Editor from "../../../components/Editor";
 import moment from "moment";
+import {
+  AttachmentType,
+  BoardQuery,
+  useRemoveBoardMutation,
+  useUpdateBoardMutation,
+} from "../../../typings/api.d";
+import { useBoardContext } from "../../../contexts";
+import { attachmentUploader } from "../../../utils/attachmentUploader";
 
 interface locationProps {
   search: string;
@@ -63,20 +38,15 @@ interface paramProps {
 
 const EditBoardPage: React.VFC = () => {
   const { search } = useLocation<locationProps>();
+  const { param, subparam } = useParams<paramProps>();
+  const { boards, loading } = useBoardContext();
   const queryObj = queryString.parse(search);
   const history = useHistory();
-  const { param, subparam } = useParams<paramProps>();
   const { id, category } = queryObj;
-  const [board, setBoard] = useState<getBoardById_getBoardById_data>();
-  const [files, setFiles] =
-    useState<
-      (getBoardByCategory_getBoardByCategory_data_files | null | undefined)[]
-    >();
-  const [tmpFiles, setTmpFiles] = useState<{ url: string; fileName: string }[]>(
-    []
-  );
-  const [images, setImages] =
-    useState<(getBoardById_getBoardById_data_images | undefined | null)[]>();
+  const [board, setBoard] = useState<BoardQuery["board"]>();
+  const [files, setFiles] = useState<AttachmentType[]>([]);
+  const [images, setImages] = useState<BoardQuery["board"]["images"]>();
+  const [imageName, setImageName] = useState<string>("");
 
   const [title, onChangeTitle, setTitle] = useInput("");
   const [createDate, setCreateDate] = useState<string>(new Date().toString());
@@ -85,7 +55,6 @@ const EditBoardPage: React.VFC = () => {
   const [writerName, onChangeWriterName, setWriterName] = useInput("");
   const [progress, setProgress] = useState<number>(0);
   const [imgUrl, setImgUrl] = useState<string | undefined>();
-  const [imgName, setImgName] = useState<string>();
   const [checkPrivate, setCheckPrivate] = useState<boolean>();
   const [attach, setAttach] = useState<boolean>();
 
@@ -94,19 +63,33 @@ const EditBoardPage: React.VFC = () => {
   const [isTypeNeeded, setIsTypeNeeded] = useState<boolean>(false);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
 
-  const { data, loading, refetch } = useQuery<
-    getBoardById,
-    getBoardByIdVariables
-  >(GET_BOARD_BY_ID, {
-    variables: {
-      id: parseInt(id as string, 10),
-    },
-    onCompleted: ({ getBoardById }) => {
-      if (getBoardById) {
-        setContent(getBoardById.data?.content || "");
-      }
+  const [deleteBoard] = useRemoveBoardMutation({
+    onCompleted: () => {
+      toast.success("게시물이 삭제 되었습니다");
+      history.push({
+        pathname: `/admin/${param}/${category}`,
+        state: { refresh: true },
+      });
     },
   });
+  const [editBoard] = useUpdateBoardMutation({
+    onCompleted: () => {
+      toast.success("게시물이 수정 되었습니다");
+      history.push({
+        pathname: `/admin/${param}/${category}`,
+        state: { refresh: true },
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (boards) {
+      const foundBoard = boards.find((v) => String(v._id) === String(id));
+      setBoard(foundBoard);
+      const content = foundBoard?.content || "";
+      setContent(content);
+    }
+  }, [boards, id]);
 
   const handleChange = (value: any) => {
     setContent(value);
@@ -121,85 +104,48 @@ const EditBoardPage: React.VFC = () => {
     setIsTypeNeeded(typeSwitcher(subparam as string));
   }, [subparam]);
 
-  const [deleteBoard] = useMutation<deleteBoard, deleteBoardVariables>(
-    DELETE_BOARD,
-    {
-      onCompleted: ({ deleteBoard }) => {
-        const { ok, err } = deleteBoard;
-        if (ok) {
-          toast.success("게시물이 삭제 되었습니다");
-          history.push({
-            pathname: `/admin/${param}/${category}`,
-            state: { refresh: true },
-          });
-        } else {
-          console.log(err);
-          toast.error("게시물을 삭제 할 수 없습니다");
-        }
-      },
-    }
-  );
-
-  const [deleteFile] = useMutation<deleteFile, deleteFileVariables>(
-    DELETE_FILE,
-    {
-      onCompleted: ({ deleteFile }) => {
-        const { ok, err } = deleteFile;
-        if (ok) {
-          toast.success("파일이 삭제 되었습니다");
-          if (refetch) refetch();
-          else {
-            console.log(err);
-            toast.error(err);
-          }
-        }
-      },
-    }
-  );
-
-  const [createFile] = useMutation<createFile, createFileVariables>(
-    CREATE_FILE
-  );
-  const [createImage] = useMutation<createImage, createImageVariables>(
-    CREATE_IMAGE
-  );
-
-  const [editBoard] = useMutation<editBoard, editBoardVariables>(EDIT_BOARD, {
-    onCompleted: ({ editBoard }) => {
-      const { ok, err } = editBoard;
-      if (ok) {
-        toast.success("게시물이 수정 되었습니다");
-        history.push({
-          pathname: `/admin/${param}/${category}`,
-          state: { refresh: true },
-        });
-      } else {
-        console.log(err);
-        toast.error("게시물을 삭제 할 수 없습니다");
-      }
-    },
-  });
-
   const handleDeleteBoard = useCallback(() => {
     deleteBoard({
       variables: {
-        id: parseInt(id as string, 10),
+        _id: String(id),
       },
     });
   }, [id, deleteBoard]);
 
   const handleEditBoard = useCallback(async () => {
+    let trimmedFiles:
+      | {
+          url: string;
+          fileName: string;
+        }[]
+      | undefined = undefined;
+    if (files) {
+      trimmedFiles = files.map((v) => ({
+        url: v.url,
+        fileName: v.fileName,
+      }));
+    }
+
     await editBoard({
       variables: {
-        id: parseInt(id as string, 10),
-        title,
-        content: content,
-        link,
-        private: checkPrivate,
-        showAttach: attach,
-        inputCreatedAt: createDate,
-        writer: writerName,
-        type: type?.type,
+        args: {
+          _id: String(id),
+          title,
+          content: content,
+          link,
+          private: checkPrivate,
+          showAttach: attach,
+          inputCreatedAt: createDate,
+          writer: writerName,
+          type: type?.type,
+          files: trimmedFiles,
+          images: [
+            {
+              url: imgUrl || "",
+              fileName: imageName,
+            },
+          ],
+        },
       },
     });
   }, [
@@ -213,119 +159,66 @@ const EditBoardPage: React.VFC = () => {
     createDate,
     writerName,
     type,
+    files,
+    imgUrl,
+    imageName,
   ]);
-
-  const handleDeleteFile = useCallback(
-    async (id: number, name?: string) => {
-      storage.ref(`/files/${category}/${name}`).delete();
-      await deleteFile({
-        variables: {
-          id,
-        },
-      });
-    },
-    [deleteFile, category]
-  );
 
   const handleImageUpload = useCallback(
     (file: any) => {
       setProgress(progress + 1);
-      setImgName(file.name);
       setUploadLoading(true);
-      fileUploader(
-        "images",
-        file,
-        category as string,
-        file.name,
-        setImgUrl,
-        progress,
-        setProgress,
-        createImage,
-        parseInt(id as string, 10)
-      );
-      setUploadLoading(false);
-      setProgress(0);
+      Promise.resolve(
+        attachmentUploader({
+          type: "images",
+          file,
+          category: String(category),
+        })
+      ).then((url) => {
+        setImgUrl(url);
+        setImageName(file.name);
+        setUploadLoading(false);
+        setProgress(0);
+      });
     },
-    [category, progress, createImage, id]
+    [category, progress]
   );
 
   const handleFileUpload = useCallback(
     (file: any) => {
       setUploadLoading(true);
-      setProgress(progress + 1);
-      const upload = storage.ref(`/files/${category}/${file.name}`).put(file);
-      upload.on(
-        "state_changed",
-        (snapshot) => {},
-        (err) => console.log(err),
-        () => {
-          storage
-            .ref(`/files/${category}/${file.name}`)
-            .getDownloadURL()
-            .then(async (url) => {
-              setTmpFiles((prev) => [
-                ...prev,
-                { url: url, fileName: file.name },
-              ]);
-              await createFile({
-                variables: {
-                  url,
-                  fileName: file.name,
-                  boardId: parseInt(id as string, 10),
-                },
-                onCompleted: ({ createFile }) => {
-                  const { ok, err } = createFile;
-                  if (ok) {
-                    toast.success("파일이 업로드 되었습니다");
-                    if (refetch) refetch();
-                  } else {
-                    toast.error("파일 업로드에 실패 하였습니다");
-                    console.log(err);
-                  }
-                },
-              });
-              setUploadLoading(false);
-              setProgress(progress - 1);
-            });
-        }
-      );
+      Promise.resolve(
+        attachmentUploader({
+          type: "files",
+          file,
+          category: String(category),
+        })
+      ).then((url) => {
+        setFiles((prev) => [...prev, { url: url, fileName: file.name }]);
+        setUploadLoading(false);
+      });
+      toast.success("파일이 업로드 되었습니다");
     },
-    [createFile, id, category, progress, refetch]
+    [category]
   );
 
-  const handleImageRemover = useCallback(() => {
-    if (imgName && imgName.trim()) {
-      fileRemover("images", category as string, imgName, setImgUrl);
-    }
-  }, [category, imgName]);
-
   useEffect(() => {
-    if (data && data.getBoardById && data.getBoardById.data) {
-      setCheckPrivate(data.getBoardById.data.private ? true : false);
-      setAttach(data.getBoardById.data.showAttach ? true : false);
-      setBoard(data.getBoardById.data);
-      setTitle(data.getBoardById.data.title || "");
-      setContent(data.getBoardById.data.content || "");
-      setLink(data.getBoardById.data.link || "");
-      setWriterName(data.getBoardById.data.writer || "관리자");
+    if (board) {
+      setCheckPrivate(board.private ? true : false);
+      setAttach(board.showAttach ? true : false);
+      setBoard(board);
+      setTitle(board.title || "");
+      setContent(board.content || "");
+      setLink(board.link || "");
+      setWriterName(board.writer || "관리자");
+      if (board.files) {
+        setFiles(board.files);
+      }
+      if (board.images) {
+        setImages(board.images);
+      }
     }
-    if (
-      data &&
-      data.getBoardById &&
-      data.getBoardById.data &&
-      data.getBoardById.data.files
-    ) {
-      setFiles(data.getBoardById.data.files);
-    }
-    if (
-      data &&
-      data.getBoardById &&
-      data.getBoardById.data &&
-      data.getBoardById.data.images
-    ) {
-      setImages(data.getBoardById.data.images);
-    }
-  }, [data, setTitle, setContent, setLink, setWriterName]);
+  }, [board, setTitle, setContent, setLink, setWriterName]);
 
   useEffect(() => {
     if (progress < 0) {
@@ -500,7 +393,7 @@ const EditBoardPage: React.VFC = () => {
         <Descriptions.Item label="작성자" span={4} labelStyle={{ width: 100 }}>
           <Input
             placeholder={board?.writer || "관리자"}
-            value={title}
+            value={writerName}
             onChange={onChangeWriterName}
             style={{
               width: "150px",
@@ -534,6 +427,7 @@ const EditBoardPage: React.VFC = () => {
           </Descriptions.Item>
         )}
         <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>
+          {uploadLoading && <LoadingOutlined />}
           {files && files.length !== 0 ? (
             <>
               {files.map((elem, idx) => {
@@ -547,18 +441,16 @@ const EditBoardPage: React.VFC = () => {
                     >
                       {elem?.fileName}
                     </a>
-                    <button
-                      className="attach-button"
-                      onClick={() => handleDeleteFile(elem!.id, elem!.fileName)}
-                    >
-                      <DeleteOutlined />
-                    </button>
                   </div>
                 );
               })}
             </>
-          ) : tmpFiles.length === 0 ? (
-            <div>첨부파일 없음</div>
+          ) : files?.length === 0 ? (
+            uploadLoading ? (
+              <div>업로드 중입니다...</div>
+            ) : (
+              <div>첨부파일 없음</div>
+            )
           ) : (
             <></>
           )}
@@ -566,16 +458,20 @@ const EditBoardPage: React.VFC = () => {
             multiple={true}
             maxCount={4}
             className="upload-list-inline"
+            showUploadList={false}
             customRequest={({ file }) => handleFileUpload(file)}
             onChange={({ file: callbackFile }) => {
-              if (tmpFiles.length !== 0) {
+              if (files?.length !== 0) {
                 callbackFile.status = "done";
               } else {
                 callbackFile.status = "removed";
               }
             }}
+            disabled={uploadLoading}
           >
-            <Button icon={<UploadOutlined />}>파일 업로드</Button>
+            <Button disabled={uploadLoading} icon={<UploadOutlined />}>
+              파일 업로드
+            </Button>
           </Upload>
         </Descriptions.Item>
 
@@ -593,7 +489,6 @@ const EditBoardPage: React.VFC = () => {
               )}
             </div>
             <div>
-              {console.log(data?.getBoardById.data?.showAttach, attach)}
               <Switch checked={attach} onChange={() => setAttach(!attach)} />
             </div>
           </div>
@@ -601,7 +496,7 @@ const EditBoardPage: React.VFC = () => {
         {param === "achievement" && (
           <Descriptions.Item label="공개" span={4}>
             <Switch
-              defaultChecked={data?.getBoardById.data?.private ? false : true}
+              defaultChecked={board?.private ? false : true}
               onChange={() => setCheckPrivate(!checkPrivate)}
             />
           </Descriptions.Item>
@@ -616,42 +511,52 @@ const EditBoardPage: React.VFC = () => {
           </Descriptions.Item>
         )}
         {param === "achievement" && (
-          <Descriptions.Item
-            label="이미지"
-            span={4}
-            labelStyle={{ width: 100 }}
-          >
-            {images && images.length !== 0 ? (
-              <div>
-                {imgUrl ? (
-                  <img src={imgUrl} width={300} alt="upimage" />
-                ) : (
+          <>
+            <Descriptions.Item label="현재 업로드된 이미지">
+              {images && images.length !== 0 ? (
+                <div>
                   <img src={images[0]!.url} alt="ima" width={300} />
-                )}
-              </div>
-            ) : (
-              <div>이미지 없음</div>
-            )}
-            <Upload
-              multiple={true}
-              maxCount={1}
-              listType="picture"
-              className="upload-list-inline"
-              progress={{ showInfo: true }}
-              onRemove={() => handleImageRemover()}
-              customRequest={({ file }) => handleImageUpload(file)}
-              onChange={({ file: callbackFile }) => {
-                if (tmpFiles.length !== 0) {
-                  callbackFile.status = "done";
-                } else {
-                  callbackFile.status = "removed";
-                }
-              }}
+                </div>
+              ) : (
+                <div>업로드된 이미지가 없습니다.</div>
+              )}
+            </Descriptions.Item>
+            <Descriptions.Item
+              label="새로 업로드 할 이미지"
+              span={4}
+              labelStyle={{ width: 100 }}
             >
-              <Button icon={<UploadOutlined />}>이미지 업로드</Button>
-            </Upload>
-          </Descriptions.Item>
+              {uploadLoading && <LoadingOutlined />}
+              {imgUrl ? (
+                <div>
+                  <img src={imgUrl} width={300} alt="upimage" />
+                </div>
+              ) : (
+                <div>이미지 없음</div>
+              )}
+              <Upload
+                multiple={true}
+                maxCount={1}
+                listType="picture"
+                className="upload-list-inline"
+                showUploadList={false}
+                progress={{ showInfo: true }}
+                // onRemove={() => handleImageRemover()}
+                customRequest={({ file }) => handleImageUpload(file)}
+                onChange={({ file: callbackFile }) => {
+                  if (files?.length !== 0) {
+                    callbackFile.status = "done";
+                  } else {
+                    callbackFile.status = "removed";
+                  }
+                }}
+              >
+                <Button icon={<UploadOutlined />}>이미지 업로드</Button>
+              </Upload>
+            </Descriptions.Item>
+          </>
         )}
+
         <Descriptions.Item label="내용" span={4}>
           <Editor onChange={handleChange} content={content} />
         </Descriptions.Item>

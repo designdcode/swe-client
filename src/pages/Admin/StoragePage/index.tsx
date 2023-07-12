@@ -1,23 +1,19 @@
-import { useMutation, useQuery } from "@apollo/client";
 import { Table, Space, Button } from "antd";
 import Column from "antd/lib/table/Column";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import {
-  DELETE_BOARD,
-  GET_BOARD_BY_CATEGORY,
-} from "../../../queries/adminQuery";
-import { getBoardByCategory } from "../../../typings/api";
 import moment from "moment";
 import styled from "@emotion/styled";
+import { useBoardContext } from "../../../contexts";
+import { useRemoveBoardMutation } from "../../../typings/api.d";
 
 interface ParamProps {
   param: string;
   subparam: string;
 }
 interface TableBoardProps {
-  id: number | null;
+  id: string;
   index: number | null;
   title: string | null;
   createdAt: string | null;
@@ -108,11 +104,43 @@ const StoragePage = () => {
   const [boards, setBoards] = useState<Array<TableBoardProps>>();
   const [subBoard, setSubBoard] = useState<Array<TableBoardProps>>();
   const [isSortNeeded, setIsSortNeeded] = useState<boolean>(false);
-  const { loading, data, refetch } = useQuery<getBoardByCategory>(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: subparam
+
+  const { boards: data, loading, refetch } = useBoardContext();
+  const [deleteBoard] = useRemoveBoardMutation({
+    onCompleted: () => {
+      toast.success("게시물이 삭제 되었습니다");
+      if (refetch) {
+        refetch();
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (data) {
+      const dataSource: Array<TableBoardProps> = [];
+      const sortedData = data.filter((v) => v.category === subparam);
+      sortedData.map((elem, i) => {
+        const obj: TableBoardProps = {
+          id: elem._id,
+          index: data.length - i,
+          title: elem.title || "",
+          createdAt: moment(new Date(elem.inputCreatedAt || ""), true)
+            .format("YYYY/MM/DD")
+            .toString(),
+          inputCreatedAt: moment(new Date(elem.inputCreatedAt || ""), true)
+            .format("YYYY/MM/DD")
+            .toString(),
+          category: elem.category,
+          private: elem.private || false,
+          type: elem.type || "",
+          writer: elem.writer || "",
+        };
+        return dataSource.push(obj);
+      });
+      setBoards(dataSource);
+      setSubBoard(dataSource);
     }
-  })
+  }, [data, subparam]);
 
   const findSortNeededData = useCallback((subparam: string): boolean => {
     switch (subparam.split("-")[1]) {
@@ -134,20 +162,6 @@ const StoragePage = () => {
       setIsSortNeeded(false);
     }
   }, [param, subparam, findSortNeededData]);
-
-  const [deleteBoard] = useMutation(DELETE_BOARD, {
-    onCompleted: ({ deleteBoard }) => {
-      const { ok, err } = deleteBoard;
-      if (ok) {
-        toast.success("게시물이 삭제 되었습니다");
-        if (refetch) {
-          refetch();
-        }
-      } else {
-        toast.error(err);
-      }
-    },
-  });
 
   const handleSort = useCallback(
     (title: string) => {
@@ -176,33 +190,6 @@ const StoragePage = () => {
     return () => excuteRefetch();
   }, [refetch, state]);
 
-  useEffect(() => {
-    if (data && data.getBoardByCategory && data.getBoardByCategory.data) {
-      const res = data.getBoardByCategory.data;
-      const dataSource: Array<TableBoardProps> = [];
-      res.map((elem, i) => {
-        const obj: TableBoardProps = {
-          id: elem.id,
-          index: res.length - i,
-          title: elem.title,
-          createdAt: moment(new Date(elem.inputCreatedAt || ""), true)
-            .format("YYYY/MM/DD")
-            .toString(),
-          inputCreatedAt: moment(new Date(elem.inputCreatedAt || ""), true)
-            .format("YYYY/MM/DD")
-            .toString(),
-          category: elem.category,
-          private: elem.private || false,
-          type: elem.type || "",
-          writer: elem.writer || ""
-        };
-        return dataSource.push(obj);
-      });
-      setBoards(dataSource);
-      setSubBoard(dataSource);
-    }
-  }, [data]);
-
   if (loading) {
     return <>loading</>;
   }
@@ -221,19 +208,6 @@ const StoragePage = () => {
           <div className="sort-menu">
             {subparam.split("-")[1] === "valuenews"
               ? menu[0].title.map((item, idx) => {
-                return (
-                  <Button
-                    type="default"
-                    key={idx}
-                    className="sort-menu-button"
-                    onClick={() => handleSort(item.title)}
-                  >
-                    {item.k_title}
-                  </Button>
-                );
-              })
-              : subparam.split("-")[1] === "coopnews"
-                ? menu[1].title.map((item, idx) => {
                   return (
                     <Button
                       type="default"
@@ -245,7 +219,20 @@ const StoragePage = () => {
                     </Button>
                   );
                 })
-                : menu[2].title.map((item, idx) => {
+              : subparam.split("-")[1] === "coopnews"
+              ? menu[1].title.map((item, idx) => {
+                  return (
+                    <Button
+                      type="default"
+                      key={idx}
+                      className="sort-menu-button"
+                      onClick={() => handleSort(item.title)}
+                    >
+                      {item.k_title}
+                    </Button>
+                  );
+                })
+              : menu[2].title.map((item, idx) => {
                   return (
                     <Button
                       type="default"
@@ -287,12 +274,7 @@ const StoragePage = () => {
             );
           }}
         />
-        <Column
-          title="작성자"
-          dataIndex="writer"
-          key="writer"
-          width={100}
-        />
+        <Column title="작성자" dataIndex="writer" key="writer" width={100} />
         <Column
           title="작성일"
           dataIndex="inputCreatedAt"
@@ -318,7 +300,7 @@ const StoragePage = () => {
               <Button
                 type="primary"
                 danger
-                onClick={() => deleteBoard({ variables: { id: record.id } })}
+                onClick={() => deleteBoard({ variables: { _id: record.id } })}
               >
                 삭제
               </Button>
@@ -336,7 +318,7 @@ interface StyleProps {
   private: boolean;
 }
 
-const StyledSpace = styled(Space) <StyleProps>`
+const StyledSpace = styled(Space)<StyleProps>`
   & span {
     color: ${(props) => (props.private ? "#ff4448" : "#27ae60")};
   }

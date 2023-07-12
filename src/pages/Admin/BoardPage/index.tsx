@@ -1,22 +1,18 @@
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useEffect, useState } from "react";
 import { Table, Space, Button } from "antd";
 import Column from "antd/lib/table/Column";
-import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import {
-  DELETE_BOARD,
-  GET_BOARD_BY_CATEGORY,
-} from "../../../queries/adminQuery";
-import { getBoardByCategory } from "../../../typings/api";
 import styled from "@emotion/styled";
+import { useBoardContext } from "../../../contexts";
+import { useRemoveBoardMutation } from "../../../typings/api.d";
 
 interface ParamProps {
   param: string;
   subparam: string;
 }
 interface TableBoardProps {
-  id: number | null;
+  id: string;
   index: number | null;
   title: string | null;
   createdAt: string | null;
@@ -33,31 +29,18 @@ interface LocationProps {
 const BoardPage = () => {
   const { param, subparam } = useParams<ParamProps>();
   const { state } = useLocation<LocationProps>();
-  const [boards, setBoards] = useState<Array<TableBoardProps>>();
-  const [getBoard, { loading, data, refetch }] =
-    useLazyQuery<getBoardByCategory>(GET_BOARD_BY_CATEGORY);
-
-  const [deleteBoard] = useMutation(DELETE_BOARD, {
-    onCompleted: ({ deleteBoard }) => {
-      const { ok, err } = deleteBoard;
-      if (ok) {
-        toast.success("게시물이 삭제 되었습니다");
-        if (refetch) {
-          refetch();
-        }
-      } else {
-        toast.error(err);
+  const { boards: boardsContext, loading, refetch } = useBoardContext();
+  const [boards, setBoards] = useState<TableBoardProps[]>();
+  const [deleteBoard] = useRemoveBoardMutation({
+    onCompleted: () => {
+      toast.success("게시물이 삭제 되었습니다");
+      if (refetch) {
+        refetch();
       }
     },
   });
 
-  useEffect(() => {
-    getBoard({
-      variables: {
-        category: subparam,
-      },
-    });
-  }, [getBoard, subparam]);
+  console.log("board page", boards);
 
   useEffect(() => {
     const excuteRefetch = () => {
@@ -72,26 +55,23 @@ const BoardPage = () => {
   }, [refetch, state]);
 
   useEffect(() => {
-    if (data && data.getBoardByCategory && data.getBoardByCategory.data) {
-      const res = data.getBoardByCategory.data;
-      const dataSource: Array<TableBoardProps> = [];
-      res.map((elem, i) => {
-        const obj: TableBoardProps = {
-          id: elem.id,
-          index: res.length - i,
-          title: elem.title,
+    if (boardsContext) {
+      const dataSource: Array<TableBoardProps> = boardsContext.map(
+        (elem, i) => ({
+          id: elem._id,
+          index: boardsContext.length - i,
+          title: elem.title || "",
           createdAt: elem.inputCreatedAt,
           // createdAt: getDate(elem.createdAt || ""),
           category: elem.category,
           private: elem.private || false,
           type: elem.type || "",
-          writer: elem.writer || ""
-        };
-        return dataSource.push(obj);
-      });
+          writer: elem.writer || "",
+        })
+      );
       setBoards(dataSource);
     }
-  }, [data]);
+  }, [boardsContext]);
 
   if (loading) {
     return <>loading</>;
@@ -124,12 +104,7 @@ const BoardPage = () => {
             );
           }}
         />
-        <Column
-          title="작성자"
-          dataIndex="writer"
-          key="writer"
-          width={100}
-        />
+        <Column title="작성자" dataIndex="writer" key="writer" width={100} />
         <Column
           title="작성일"
           dataIndex="inputCreatedAt"
@@ -153,7 +128,7 @@ const BoardPage = () => {
               <Button
                 type="primary"
                 danger
-                onClick={() => deleteBoard({ variables: { id: record.id } })}
+                onClick={() => deleteBoard({ variables: { _id: record.id } })}
               >
                 삭제
               </Button>

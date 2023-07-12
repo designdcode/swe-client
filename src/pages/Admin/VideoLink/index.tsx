@@ -1,60 +1,35 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Container } from "../LinkManager/styles";
 import styled from "@emotion/styled";
-import { useMutation, useQuery } from "@apollo/client";
-import {
-  CREATE_BOARD,
-  GET_BOARD_BY_CATEGORY,
-} from "../../../queries/adminQuery";
-import {
-  createBoard,
-  createBoardVariables,
-  getBoardByCategory,
-  getBoardByCategoryVariables,
-} from "../../../typings/api";
 import YouTube, { Options } from "react-youtube";
 import useInput from "../../../hooks/useInput";
 import { Input } from "antd";
 import { toast } from "react-toastify";
+import { useBoardContext } from "../../../contexts";
+import { useCreateBoardMutation } from "../../../typings/api.d";
 
 const VideoLink: React.VFC = () => {
   const [videoId, setVideoId] = useState<string>("");
   const [url, onChangeUrl, setUrl] = useInput("");
   const [inputOpen, setInputOpen] = useState<boolean>(false);
-  const { loading, refetch } = useQuery<
-    getBoardByCategory,
-    getBoardByCategoryVariables
-  >(GET_BOARD_BY_CATEGORY, {
-    variables: {
-      category: "link",
-    },
-    onCompleted: ({ getBoardByCategory }) => {
-      const { ok, err, data } = getBoardByCategory;
-      if (ok && data && data.length > 0) {
-        if (data[0].link) {
-          setVideoId(data[0].link.split("v=")[1]);
-        }
-      } else {
-        console.log(err);
-      }
+  const { boards, loading, refetch } = useBoardContext();
+
+  const [createBoardMutation] = useCreateBoardMutation({
+    onCompleted: () => {
+      toast.success("성공적으로 업로드 되었습니다");
+      setUrl("");
+      window.location.reload();
     },
   });
 
-  const [createBoardMutation] = useMutation<createBoard, createBoardVariables>(
-    CREATE_BOARD,
-    {
-      onCompleted: ({ createBoard }) => {
-        const { ok, err } = createBoard;
-        if (ok) {
-          toast.success("성공적으로 업로드 되었습니다");
-          setUrl("");
-          window.location.reload();
-        } else {
-          console.log(err);
-        }
-      },
+  useEffect(() => {
+    if (boards) {
+      const filtered = boards.filter((v) => v.category === "link");
+      if (filtered[0] && filtered[0].link) {
+        setVideoId(filtered[0].link.split("v=")[1]);
+      }
     }
-  );
+  }, [boards]);
 
   const opts: Options = {
     height: "350",
@@ -67,13 +42,17 @@ const VideoLink: React.VFC = () => {
   const handleSubmit = useCallback(async () => {
     await createBoardMutation({
       variables: {
-        title: "video link",
-        content: "video-content",
-        link: url,
-        category: "link",
+        args: {
+          title: "video link",
+          content: "video-content",
+          link: url,
+          category: "link",
+        },
       },
     }).then((res) => {
-      refetch();
+      if (refetch) {
+        refetch();
+      }
     });
     setUrl("");
   }, [url, createBoardMutation, refetch, setUrl]);

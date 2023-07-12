@@ -1,30 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 import queryString from "query-string";
 import { useHistory, useLocation, useParams } from "react-router";
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_BOARD_BY_ID } from "../../../queries/sharedQuery";
-import {
-  createReply,
-  createReplyVariables,
-  deleteReply,
-  deleteReplyVariables,
-  getBoardById,
-  getBoardByIdVariables,
-  getBoardById_getBoardById_data,
-  getBoardById_getBoardById_data_files,
-  getBoardById_getBoardById_data_images,
-} from "../../../typings/api";
 import { Descriptions, Typography } from "antd";
 import { Button, Container } from "./styles";
-import {
-  CREATE_REPLY,
-  DELETE_BOARD,
-  DELETE_REPLY,
-} from "../../../queries/adminQuery";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Editor from "../../../components/Editor";
 import Moment from "react-moment";
+import {
+  BoardQuery,
+  useCreateCommentMutation,
+  useRemoveBoardMutation,
+  useRemoveCommentMutation,
+} from "../../../typings/api.d";
+import { useBoardContext } from "../../../contexts";
 
 interface locationProps {
   search: string;
@@ -40,127 +29,91 @@ const BoardDetail: React.VFC = () => {
   const history = useHistory();
   const queryObj = queryString.parse(search);
   const { id, category } = queryObj;
-  const [board, setBoard] = useState<getBoardById_getBoardById_data>();
-  const [files, setFiles] =
-    useState<(getBoardById_getBoardById_data_files | undefined | null)[]>();
-  const [images, setImages] =
-    useState<(getBoardById_getBoardById_data_images | undefined | null)[]>();
+  const [board, setBoard] = useState<BoardQuery["board"]>();
+  const [files, setFiles] = useState<BoardQuery["board"]["files"]>();
+  const [images, setImages] = useState<BoardQuery["board"]["images"]>();
   const [showReply, setShowReply] = useState<boolean>(false);
   const [reply, setReply] = useState<string>("");
+  const { boards, loading, refetch } = useBoardContext();
 
-  const { data, loading, refetch } = useQuery<
-    getBoardById,
-    getBoardByIdVariables
-  >(GET_BOARD_BY_ID, {
-    variables: {
-      id: parseInt(id as string, 10),
+  console.log("board detail");
+
+  const [deleteBoard] = useRemoveBoardMutation({
+    onCompleted: () => {
+      toast.success("게시물이 삭제 되었습니다.");
+      history.push({
+        pathname: `/admin/${param}/${category}`,
+        state: { refresh: true },
+      });
     },
   });
+
+  const [createReplyMutation, { loading: mutationLoading }] =
+    useCreateCommentMutation({
+      onCompleted: () => {
+        setReply("");
+        setShowReply(false);
+        if (refetch) refetch();
+      },
+    });
+
+  const [deleteReplyMutation] = useRemoveCommentMutation({
+    onCompleted: () => {
+      if (refetch) {
+        refetch();
+        toast.info("답글이 삭제 되었습니다.");
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (boards) {
+      setBoard(boards.find((v) => String(v._id) === String(id)));
+    }
+  }, [boards, id]);
 
   const handleChange = (value: any) => {
     setReply(value);
   };
 
-  const [deleteBoard] = useMutation(DELETE_BOARD, {
-    onCompleted: ({ deleteBoard }) => {
-      const { ok, err } = deleteBoard;
-      if (ok) {
-        toast.success("게시물이 삭제 되었습니다.");
-        history.push({
-          pathname: `/admin/${param}/${category}`,
-          state: { refresh: true },
-        });
-      } else {
-        console.log(err);
-        toast.error("게시물을 삭제 할 수 없습니다");
-      }
-    },
-  });
-
-  const [createReplyMutation, { loading: mutationLoading }] = useMutation<
-    createReply,
-    createReplyVariables
-  >(CREATE_REPLY, {
-    onCompleted: ({ createReply }) => {
-      const { ok, err } = createReply;
-      if (ok) {
-        setReply("");
-        setShowReply(false);
-        refetch();
-      } else {
-        console.log(err);
-      }
-    },
-  });
-
-  const [deleteReplyMutation] = useMutation<deleteReply, deleteReplyVariables>(
-    DELETE_REPLY,
-    {
-      onCompleted: ({ deleteReply }) => {
-        const { ok, err } = deleteReply;
-        if (ok) {
-          refetch();
-          toast.info("답글이 삭제 되었습니다.");
-        } else {
-          console.log(err);
-        }
-      },
-    }
-  );
-
   const handleDeleteBoard = useCallback(() => {
     deleteBoard({
       variables: {
-        id: parseInt(id as string, 10),
+        _id: String(id),
       },
     });
   }, [id, deleteBoard]);
 
   useEffect(() => {
-    if (data && data.getBoardById && data.getBoardById.data) {
-      setBoard(data.getBoardById.data);
+    if (board && board.files) {
+      setFiles(board.files);
     }
-    if (
-      data &&
-      data.getBoardById &&
-      data.getBoardById.data &&
-      data.getBoardById.data.files
-    ) {
-      setFiles(data.getBoardById.data.files);
+    if (board && board.images) {
+      setImages(board.images);
     }
-    if (
-      data &&
-      data.getBoardById &&
-      data.getBoardById.data &&
-      data.getBoardById.data.images
-    ) {
-      setImages(data.getBoardById.data.images);
-    }
-  }, [data]);
+  }, [board]);
 
   const handleReplySubmit = useCallback(
-    async (id?: number) => {
-      if (id) {
-        await createReplyMutation({
-          variables: {
+    async (id: string) => {
+      await createReplyMutation({
+        variables: {
+          args: {
             boardId: id,
             content: reply,
           },
-        });
-      }
+        },
+      });
     },
     [createReplyMutation, reply]
   );
 
   const handleDeleteReply = useCallback(
-    async (id?: number) => {
-      if (id) {
-        await deleteReplyMutation({
-          variables: {
-            replyId: id,
-          },
-        });
-      }
+    async (id: string) => {
+      await deleteReplyMutation({
+        variables: {
+          _id: id,
+        },
+      });
     },
     [deleteReplyMutation]
   );
@@ -227,7 +180,12 @@ const BoardDetail: React.VFC = () => {
             <>
               {files.map((elem, idx) => {
                 return (
-                  <span key={idx} style={{ display: "inline-block" }}>
+                  <div
+                    key={idx}
+                    style={{
+                      padding: "6px",
+                    }}
+                  >
                     <a
                       href={elem?.url}
                       download
@@ -236,16 +194,7 @@ const BoardDetail: React.VFC = () => {
                     >
                       {elem?.fileName}
                     </a>
-                    <span
-                      style={{
-                        display: "inline-block",
-                        marginLeft: 15,
-                        color: `${board?.showAttach ? "#0081fa" : "red"}`,
-                      }}
-                    >
-                      {board?.showAttach ? "공개" : "비공개"}
-                    </span>
-                  </span>
+                  </div>
                 );
               })}
             </>
@@ -272,6 +221,7 @@ const BoardDetail: React.VFC = () => {
             labelStyle={{ width: 100 }}
             key="image"
           >
+            {console.log(images)}
             {images && images.length !== 0 ? (
               <img
                 src={images[images.length - 1]!.url}
@@ -292,8 +242,8 @@ const BoardDetail: React.VFC = () => {
         {(category?.toString().split("-")[1] === "request" ||
           category?.toString().split("-")[1] === "help") && (
           <Descriptions.Item label="답글" span={4} key="content">
-            {board?.replies && board.replies.length > 0 ? (
-              board.replies.map((item, idx) => {
+            {board?.comments && board.comments.length > 0 ? (
+              board.comments.map((item, idx) => {
                 return (
                   <div key={idx} style={{ display: "flex" }}>
                     <span
@@ -302,13 +252,15 @@ const BoardDetail: React.VFC = () => {
                         minWidth: 200,
                         minHeight: 100,
                       }}
-                      dangerouslySetInnerHTML={{ __html: item?.content || "" }}
+                      dangerouslySetInnerHTML={{
+                        __html: item?.content || "",
+                      }}
                     ></span>
                     <Button
                       type="primary"
                       danger
                       style={{ marginLeft: 15 }}
-                      onClick={() => handleDeleteReply(item?.id)}
+                      onClick={() => handleDeleteReply(item._id)}
                     >
                       답글 삭제
                     </Button>
@@ -326,13 +278,13 @@ const BoardDetail: React.VFC = () => {
                 )}
               </div>
             )}
-            {board?.replies &&
-              board.replies.length === 0 &&
+            {board?.comments &&
+              board.comments.length === 0 &&
               (showReply ? (
                 <Button
                   type="primary"
                   onClick={() => {
-                    handleReplySubmit(board?.id);
+                    handleReplySubmit(board._id);
                   }}
                 >
                   게시

@@ -13,12 +13,10 @@ import { Link } from "react-router-dom";
 import { Button, Input, Radio, Upload } from "antd";
 
 import useInput from "../../hooks/useInput";
-import { useMutation } from "@apollo/client";
-import { CREATE_BOARD } from "../../queries/adminQuery";
-import { createBoard, createBoardVariables } from "../../typings/api";
-import { storage } from "../../utils/firebase";
 import { UploadOutlined } from "@ant-design/icons";
 import Editor from "../../components/Editor";
+import { useCreateBoardMutation } from "../../typings/api.d";
+import { attachmentUploader } from "../../utils/attachmentUploader";
 
 interface paramProps {
   param: string;
@@ -41,21 +39,16 @@ const Write: React.VFC = () => {
   const [file, setFile] = useState<fileProps[]>([]);
   const [uploading, setUploading] = useState<boolean>(false);
 
-  const [createBoardMutation] = useMutation<createBoard, createBoardVariables>(
-    CREATE_BOARD,
-    {
-      onCompleted: ({ createBoard }) => {
-        const { ok, err } = createBoard;
-        if (ok) {
-          toast.success("게시물이 등록 되었습니다");
-          history.push(`/main/board/${param}/${subparam}`, { refetch: true });
-        } else {
-          toast.error("게시물 등록에 실패 하였습니다");
-          console.log(err);
-        }
-      },
-    }
-  );
+  const [createBoardMutation] = useCreateBoardMutation({
+    onCompleted: () => {
+      toast.success("게시물이 등록 되었습니다");
+      history.push(`/main/board/${param}/${subparam}`, { refetch: true });
+    },
+    onError: (err) => {
+      toast.error("게시물 등록에 실패 하였습니다");
+      console.error(err);
+    },
+  });
 
   const handleChange = (value: any) => {
     setContent(value);
@@ -63,24 +56,17 @@ const Write: React.VFC = () => {
 
   const handleFileUpload = useCallback(
     (file: any) => {
-      const upload = storage
-        .ref(`/files/request/${stno ? stno : "empty"}/${file.name}`)
-        .put(file);
-      upload.on(
-        "state_changed",
-        (snapshot) => {},
-        (err) => console.log(err),
-        () => {
-          storage
-            .ref(`/files/request/${stno ? stno : "empty"}/${file.name}`)
-            .getDownloadURL()
-            .then((url) => {
-              setFile((prev) => [...prev, { url: url, fileName: file.name }]);
-              toast.success("파일 / 이미지가 업로드 되었습니다");
-            });
-        }
-      );
-      setUploading(false);
+      Promise.resolve(
+        attachmentUploader({
+          type: "fileds",
+          file: file,
+          category: String(stno) || "",
+        })
+      ).then((url) => {
+        setFile((prev) => [...prev, { url: url, fileName: file.name }]);
+        toast.success("파일 / 이미지가 업로드 되었습니다");
+        setUploading(false);
+      });
     },
     [stno]
   );
@@ -88,12 +74,14 @@ const Write: React.VFC = () => {
   const handleSubmit = useCallback(async () => {
     await createBoardMutation({
       variables: {
-        title,
-        content,
-        category: subparam,
-        private: isPrivate,
-        writer: stno,
-        files: file.length !== 0 ? file : null,
+        args: {
+          title,
+          content,
+          category: subparam,
+          private: isPrivate,
+          writer: stno,
+          files: file.length !== 0 ? file : null,
+        },
       },
     });
     setTitle("");
@@ -115,21 +103,22 @@ const Write: React.VFC = () => {
     }
   }, [stno, param, subparam, history]);
 
-  const handleFileRemover = useCallback(
-    (propFile: any) => {
-      storage
-        .ref(`/files/request/${stno ? stno : "empty"}/${propFile.name}`)
-        .delete()
-        .then(() => {
-          toast.success("업로드 된 파일/이미지가 삭제 되었습니다");
-          setFile(
-            file.filter((elem: fileProps) => elem.fileName !== propFile.name)
-          );
-        })
-        .catch((err) => toast.error(err));
-    },
-    [stno, file]
-  );
+  // const handleFileRemover = useCallback(
+  //   (propFile: any) => {
+
+  //     storage
+  //       .ref(`/files/request/${stno ? stno : "empty"}/${propFile.name}`)
+  //       .delete()
+  //       .then(() => {
+  //         toast.success("업로드 된 파일/이미지가 삭제 되었습니다");
+  //         setFile(
+  //           file.filter((elem: fileProps) => elem.fileName !== propFile.name)
+  //         );
+  //       })
+  //       .catch((err) => toast.error(err));
+  //   },
+  //   [stno, file]
+  // );
 
   return (
     <Wrapper>
@@ -225,7 +214,6 @@ const Write: React.VFC = () => {
                     callbackFile.status = "removed";
                   }
                 }}
-                onRemove={(file) => handleFileRemover(file)}
               >
                 <Button
                   disabled={uploading ? true : false}
@@ -597,24 +585,6 @@ const ContentBody = styled.div`
     }
   }
 `;
-
-// const Editor = styled(ReactQuill)`
-//   background-color: white;
-//   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-//     .ql-container {
-//       min-height: 200px;
-//       width: 100%;
-//     }
-//   }
-//   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-//     height: 300px;
-//     width: 100%;
-//     .ql-container {
-//       min-height: 300px;
-//       width: 100%;
-//     }
-//   }
-// `;
 
 const ContentBottom = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {

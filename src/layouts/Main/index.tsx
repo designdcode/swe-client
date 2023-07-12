@@ -5,6 +5,7 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Login from "../../pages/Login/Index";
 import { Content } from "./styles";
+import { PopupContextProvider } from "../../contexts";
 
 const Home = loadable(() => import("../../pages/Home/index"));
 const Detail = loadable(() => import("../../pages/Detail/index"));
@@ -26,7 +27,9 @@ const Main: React.VFC = () => {
           <Route path="/main/write/:param/:subparam" component={Write} />
           <Route path="/main/detail/:param/:subparam" component={Detail} />
           <Route path="/main/login" component={Login} />
-          <Route path="/main" component={Home} />
+          <PopupContextProvider>
+            <Route path="/main" component={Home} />
+          </PopupContextProvider>
         </Switch>
       </Content>
       <Footer />

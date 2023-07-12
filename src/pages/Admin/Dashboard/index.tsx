@@ -1,60 +1,45 @@
 import React, { useEffect, useState } from "react";
 import { Container, Col, TableRowSpan } from "./styles";
 import { Row, Typography, Table, Divider } from "antd";
-import { useQuery } from "@apollo/client";
-import { GET_BOARD, GET_LINK } from "../../../queries/sharedQuery";
-import {
-  getBoard,
-  getBoard_getBoard_data,
-  getLinks,
-} from "../../../typings/api";
 import Column from "antd/lib/table/Column";
 import { Link, useLocation } from "react-router-dom";
 import { getDate } from "../../../utils/convertDate";
 import Moment from "react-moment";
+import { useBoardContext } from "../../../contexts";
+import { BoardQuery, BoardsQuery } from "../../../typings/api.d";
 
 interface LocationProps {
   refresh?: boolean;
 }
 
 const Dashboard: React.VFC = () => {
-  const { data, loading, refetch, error } = useQuery<getBoard>(GET_BOARD);
-  const { refetch: linkRefetch, error: linkError } =
-    useQuery<getLinks>(GET_LINK);
+  const { boards, loading, refetch } = useBoardContext();
   const { state } = useLocation<LocationProps>();
-  const [notice, setNotice] = useState<
-    Array<getBoard_getBoard_data> | undefined
-  >();
-  const [admission, setAdmission] = useState<
-    Array<getBoard_getBoard_data> | undefined
-  >();
+  const [notice, setNotice] = useState<BoardsQuery["boards"]["data"]>();
+  const [admission, setAdmission] = useState<BoardsQuery["boards"]["data"]>();
 
   useEffect(() => {
-    if (data?.getBoard.data) {
+    if (boards) {
       setNotice(
-        data.getBoard.data
-          .filter((item) => item.category.includes("community-notice"))
+        boards
+          .filter((item) => item.category === "community-notice")
           .slice(0, 5)
       );
       setAdmission(
-        data.getBoard.data
-          .filter((item) => item.category.includes("community-administration"))
+        boards
+          .filter((item) => item.category === "community-administration")
           .slice(0, 5)
       );
     }
-  }, [data]);
+  }, [boards]);
 
   useEffect(() => {
     const excuteRefetch = () => {
       if (refetch) refetch();
-      if (linkRefetch) linkRefetch();
     };
     if (state && state.refresh) excuteRefetch();
     return () => excuteRefetch();
-  }, [refetch, state, linkRefetch]);
-
-  if (error) console.error(error);
-  if (linkError) console.error(linkError);
+  }, [refetch, state]);
 
   return (
     <Container>
@@ -78,11 +63,11 @@ const Dashboard: React.VFC = () => {
                 align="left"
                 ellipsis={true}
                 key={"noticesubid"}
-                render={(value, record: getBoard_getBoard_data, i) => {
+                render={(value, record: BoardQuery["board"], i) => {
                   return (
                     <TableRowSpan key={i}>
                       <Link
-                        to={`/admin/community/detail-community?category=${record.category}&id=${record.id}`}
+                        to={`/admin/community/detail-community?category=${record.category}&id=${record._id}`}
                       >
                         {value}
                       </Link>
@@ -94,11 +79,11 @@ const Dashboard: React.VFC = () => {
                 dataIndex="inputCreatedAt"
                 align="right"
                 key={"noticetime"}
-                render={(value, record: getBoard_getBoard_data, i) => {
+                render={(value, record: BoardQuery["board"], i) => {
                   return (
                     <span key={i}>
                       <Link
-                        to={`/admin/community/detail-community?category=${record.category}&id=${record.id}`}
+                        to={`/admin/community/detail-community?category=${record.category}&id=${record._id}`}
                       >
                         <Moment format={"YYYY/MM/DD"}>{value}</Moment>
                       </Link>
@@ -124,11 +109,11 @@ const Dashboard: React.VFC = () => {
                 align="left"
                 ellipsis={true}
                 key={"subadmissionkey"}
-                render={(value, record: getBoard_getBoard_data, id) => {
+                render={(value, record: BoardQuery["board"], id) => {
                   return (
                     <TableRowSpan key={id}>
                       <Link
-                        to={`/admin/community/detail-community?category=${record.category}&id=${record.id}`}
+                        to={`/admin/community/detail-community?category=${record.category}&id=${record._id}`}
                       >
                         {value}
                       </Link>
@@ -140,11 +125,11 @@ const Dashboard: React.VFC = () => {
                 dataIndex="createdAt"
                 align="right"
                 key={"subadmissionkeydate"}
-                render={(value, record: getBoard_getBoard_data, idx) => {
+                render={(value, record: BoardQuery["board"], idx) => {
                   return (
                     <span key={idx}>
                       <Link
-                        to={`/admin/community/detail-community?category=${record.category}&id=${record.id}`}
+                        to={`/admin/community/detail-community?category=${record.category}&id=${record._id}`}
                       >
                         {getDate(value)}
                       </Link>
