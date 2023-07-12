@@ -5,11 +5,7 @@ import { useHistory, useLocation, useParams } from "react-router";
 import { Container } from "./styles";
 import useInput from "../../../hooks/useInput";
 import { Button } from "../EditBoardPage/styles";
-import {
-  UploadOutlined,
-  DeleteOutlined,
-  LoadingOutlined,
-} from "@ant-design/icons";
+import { UploadOutlined, LoadingOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import { fileSwitcher, linkSwitcher } from "../../../utils/switcher";
 import {
@@ -46,8 +42,6 @@ const EditImageBoardPage: React.VFC = () => {
   const [isFileNeeded, setIsFileNeeded] = useState<boolean>(false);
   const [isLinkNeeded, setIsLinkNeeded] = useState<boolean>(false);
 
-  console.log("editimageboard");
-
   useEffect(() => {
     setIsFileNeeded(fileSwitcher(subparam as string));
     setIsLinkNeeded(linkSwitcher(subparam as string));
@@ -82,14 +76,20 @@ const EditImageBoardPage: React.VFC = () => {
           file,
           category: String(category) || "",
         })
-      ).then((url) => {
-        setImgUrl(url);
-        setImage({
-          url,
-          fileName: file.name,
+      )
+        .then((url) => {
+          setImgUrl(url);
+          setImage({
+            url,
+            fileName: file.name,
+          });
+          setUploadLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("업로드에 실패하였습니다. 잠시후 다시 시도해 주세요");
+          setUploadLoading(false);
         });
-      });
-      setUploadLoading(false);
     },
     [category]
   );
@@ -103,17 +103,23 @@ const EditImageBoardPage: React.VFC = () => {
           file,
           category: String(category) || "",
         })
-      ).then((url) => {
-        setImgUrl(url);
-        setFiles((prev) => [
-          ...prev,
-          {
-            url,
-            fileName: file.name,
-          },
-        ]);
-      });
-      setUploadLoading(false);
+      )
+        .then((url) => {
+          setImgUrl(url);
+          setFiles((prev) => [
+            ...prev,
+            {
+              url,
+              fileName: file.name,
+            },
+          ]);
+          setUploadLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("업로드에 실패하였습니다. 잠시후 다시 시도해 주세요");
+          setUploadLoading(false);
+        });
     },
     [category]
   );
@@ -188,6 +194,7 @@ const EditImageBoardPage: React.VFC = () => {
         )}
         {isFileNeeded && (
           <Descriptions.Item label="파일" span={4} labelStyle={{ width: 100 }}>
+            <div>{uploadLoading && <LoadingOutlined size={40} />}</div>
             {files && files.length !== 0 ? (
               <>
                 {files.map((elem, idx) => {
@@ -201,9 +208,6 @@ const EditImageBoardPage: React.VFC = () => {
                       >
                         {elem?.fileName}
                       </a>
-                      <button className="attach-button">
-                        <DeleteOutlined />
-                      </button>
                     </div>
                   );
                 })}
@@ -220,6 +224,7 @@ const EditImageBoardPage: React.VFC = () => {
               customRequest={({ file }) => {
                 handleFileUpload(file);
               }}
+              showUploadList={false}
               disabled={uploadLoading}
               onChange={({ file: callbackFile }) => {
                 if (files.length !== 0) {
@@ -236,6 +241,7 @@ const EditImageBoardPage: React.VFC = () => {
           </Descriptions.Item>
         )}
         <Descriptions.Item label="이미지" span={4} labelStyle={{ width: 100 }}>
+          <div>{uploadLoading && <LoadingOutlined size={40} />}</div>
           <div
             style={{
               display: "flex",
@@ -262,6 +268,7 @@ const EditImageBoardPage: React.VFC = () => {
                 handleImageUpload(file);
               }}
               showUploadList={false}
+              disabled={uploadLoading}
               progress={{ showInfo: true }}
               onChange={({ file: callbackFile }) => {
                 if (imgUrl) {

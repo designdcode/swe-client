@@ -107,29 +107,41 @@ const UploadImageBoardPage = () => {
           file,
           category: String(category) || "",
         })
-      ).then((url) => {
-        setImgUrl(url);
-        toast.success("파일 / 이미지가 업로드 되었습니다");
-      });
-      setUploadLoading(false);
+      )
+        .then((url) => {
+          setImgUrl(url);
+          toast.success("파일 / 이미지가 업로드 되었습니다");
+          setUploadLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("업로드에 실패하였습니다. 잠시후 다시 시도해 주세요");
+          setUploadLoading(false);
+        });
     },
     [category]
   );
 
-  console.log("upload image board page");
-
   const handleFileUpload = useCallback(
     (file: any) => {
+      setUploadLoading(true);
       Promise.resolve(
         attachmentUploader({
           type: "files",
           file,
           category: String(category) || "",
         })
-      ).then((url) => {
-        setFile((prev) => [...prev, { url: url, fileName: file.name }]);
-        toast.success("파일 / 이미지가 업로드 되었습니다");
-      });
+      )
+        .then((url) => {
+          setFile((prev) => [...prev, { url: url, fileName: file.name }]);
+          toast.success("파일 / 이미지가 업로드 되었습니다");
+          setUploadLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("업로드에 실패하였습니다. 잠시후 다시 시도해 주세요");
+          setUploadLoading(false);
+        });
     },
     [category]
   );

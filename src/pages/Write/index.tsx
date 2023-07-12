@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import { Button, Input, Radio, Upload } from "antd";
 
 import useInput from "../../hooks/useInput";
-import { UploadOutlined } from "@ant-design/icons";
+import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import Editor from "../../components/Editor";
 import { useCreateBoardMutation } from "../../typings/api.d";
 import { attachmentUploader } from "../../utils/attachmentUploader";
@@ -62,11 +62,17 @@ const Write: React.VFC = () => {
           file: file,
           category: String(stno) || "",
         })
-      ).then((url) => {
-        setFile((prev) => [...prev, { url: url, fileName: file.name }]);
-        toast.success("파일 / 이미지가 업로드 되었습니다");
-        setUploading(false);
-      });
+      )
+        .then((url) => {
+          setFile((prev) => [...prev, { url: url, fileName: file.name }]);
+          toast.success("파일 / 이미지가 업로드 되었습니다");
+          setUploading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("업로드에 실패하였습니다. 잠시후 다시 시도해 주세요");
+          setUploading(false);
+        });
     },
     [stno]
   );
@@ -102,23 +108,6 @@ const Write: React.VFC = () => {
       history.push(`/main/board/${param}/${subparam}`);
     }
   }, [stno, param, subparam, history]);
-
-  // const handleFileRemover = useCallback(
-  //   (propFile: any) => {
-
-  //     storage
-  //       .ref(`/files/request/${stno ? stno : "empty"}/${propFile.name}`)
-  //       .delete()
-  //       .then(() => {
-  //         toast.success("업로드 된 파일/이미지가 삭제 되었습니다");
-  //         setFile(
-  //           file.filter((elem: fileProps) => elem.fileName !== propFile.name)
-  //         );
-  //       })
-  //       .catch((err) => toast.error(err));
-  //   },
-  //   [stno, file]
-  // );
 
   return (
     <Wrapper>
@@ -200,12 +189,14 @@ const Write: React.VFC = () => {
             <Editor onChange={handleChange} content={content} />
 
             <div className="content-upload">
+              <div>{uploading && <LoadingOutlined size={40} />}</div>
               <Upload
                 multiple={true}
                 customRequest={({ file }) => {
                   setUploading(true);
                   handleFileUpload(file);
                 }}
+                disabled={uploading}
                 maxCount={4}
                 onChange={({ file: callbackFile }) => {
                   if (file.length !== 0) {

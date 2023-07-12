@@ -174,12 +174,18 @@ const EditBoardPage: React.VFC = () => {
           file,
           category: String(category),
         })
-      ).then((url) => {
-        setImgUrl(url);
-        setImageName(file.name);
-        setUploadLoading(false);
-        setProgress(0);
-      });
+      )
+        .then((url) => {
+          setImgUrl(url);
+          setImageName(file.name);
+          setUploadLoading(false);
+          setProgress(0);
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("업로드에 실패하였습니다. 잠시후 다시 시도해 주세요");
+          setUploadLoading(false);
+        });
     },
     [category, progress]
   );
@@ -193,11 +199,17 @@ const EditBoardPage: React.VFC = () => {
           file,
           category: String(category),
         })
-      ).then((url) => {
-        setFiles((prev) => [...prev, { url: url, fileName: file.name }]);
-        setUploadLoading(false);
-      });
-      toast.success("파일이 업로드 되었습니다");
+      )
+        .then((url) => {
+          setFiles((prev) => [...prev, { url: url, fileName: file.name }]);
+          setUploadLoading(false);
+          toast.success("파일이 업로드 되었습니다");
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("업로드에 실패하였습니다. 잠시후 다시 시도해 주세요");
+          setUploadLoading(false);
+        });
     },
     [category]
   );
@@ -541,7 +553,7 @@ const EditBoardPage: React.VFC = () => {
                 className="upload-list-inline"
                 showUploadList={false}
                 progress={{ showInfo: true }}
-                // onRemove={() => handleImageRemover()}
+                disabled={uploadLoading}
                 customRequest={({ file }) => handleImageUpload(file)}
                 onChange={({ file: callbackFile }) => {
                   if (files?.length !== 0) {
