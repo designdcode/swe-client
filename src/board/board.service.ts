@@ -19,7 +19,7 @@ export class BoardService {
       const data = {
         ...rest,
         files: files ? JSON.parse(JSON.stringify(files)) : [],
-        images: images ? JSON.parse(JSON.stringify(files)) : [],
+        images: images ? JSON.parse(JSON.stringify(images)) : [],
       };
       const board = new this.boardModel(data);
 
@@ -29,15 +29,12 @@ export class BoardService {
     }
   }
 
-  async findAll(
-    category: string,
-    args: PaginationArgs,
-  ): Promise<BoardReturnType> {
+  async findAll(args: PaginationArgs): Promise<BoardReturnType> {
     try {
       if (typeof args === 'undefined') {
         return {
-          data: await this.boardModel.find({ category }).populate('comments'),
-          total: await this.boardModel.count({ category }),
+          data: await this.boardModel.find().populate('comments'),
+          total: await this.boardModel.count(),
         };
       }
       const { skip, sort, take } = args;
@@ -45,22 +42,16 @@ export class BoardService {
         [sort?.field]: sort?.order?.toLowerCase() as SortOrder,
       };
       const boards = await this.boardModel
-        .find(
-          {
-            category,
-          },
-          null,
-          {
-            limit: take,
-            skip,
-          },
-        )
+        .find(null, null, {
+          limit: take,
+          skip,
+        })
         .sort(sortOptions)
         .populate('comments');
 
       return {
         data: boards,
-        total: await this.boardModel.count({ category }),
+        total: await this.boardModel.count(),
       };
     } catch (err) {
       throw new Error(err);
