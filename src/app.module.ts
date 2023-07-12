@@ -9,7 +9,14 @@ import { LinkModule } from './link/link.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [CommonnModule, BoardModule, CommentModule, PopupModule, LinkModule, AuthModule],
+  imports: [
+    CommonnModule,
+    BoardModule,
+    CommentModule,
+    PopupModule,
+    LinkModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
