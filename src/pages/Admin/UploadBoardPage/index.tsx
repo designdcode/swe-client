@@ -66,8 +66,6 @@ const UploadBoardPage: React.VFC = () => {
   const [showAttach, setShowAttach] = useState<boolean>(true);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
 
-  console.log("updateboardpage");
-
   useEffect(() => {
     setIsImageNeeded(imageSwitcher(subparam as string));
     setIsLinkNeeded(linkSwitcher(subparam as string));
@@ -190,11 +188,17 @@ const UploadBoardPage: React.VFC = () => {
           file,
           category: String(category) || "",
         })
-      ).then((url) => {
-        setImgUrl(url);
-        toast.success("파일 / 이미지가 업로드 되었습니다");
-      });
-      setUploadLoading(false);
+      )
+        .then((url) => {
+          setImgUrl(url);
+          toast.success("파일 / 이미지가 업로드 되었습니다");
+          setUploadLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("업로드에 실패하였습니다. 잠시후 다시 시도해 주세요");
+          setUploadLoading(false);
+        });
     },
     [category]
   );
@@ -208,11 +212,17 @@ const UploadBoardPage: React.VFC = () => {
           file,
           category: String(category) || "",
         })
-      ).then((url) => {
-        setFile((prev) => [...prev, { url: url, fileName: file.name }]);
-        toast.success("파일 / 이미지가 업로드 되었습니다");
-      });
-      setUploadLoading(false);
+      )
+        .then((url) => {
+          setFile((prev) => [...prev, { url: url, fileName: file.name }]);
+          toast.success("파일 / 이미지가 업로드 되었습니다");
+          setUploadLoading(false);
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("업로드에 실패하였습니다. 잠시후 다시 시도해 주세요");
+          setUploadLoading(false);
+        });
     },
     [category]
   );
@@ -362,7 +372,12 @@ const UploadBoardPage: React.VFC = () => {
 
   return (
     <Container>
-      <Form {...layout} name="upload-board" onFinish={onFinish}>
+      <Form
+        {...layout}
+        name="upload-board"
+        onFinish={onFinish}
+        disabled={uploadLoading}
+      >
         <Form.Item name={["title"]} label="제목">
           <Input type="text" onChange={onChangeTitle} value={title} />
         </Form.Item>
@@ -420,6 +435,11 @@ const UploadBoardPage: React.VFC = () => {
                 flexDirection: "column",
               }}
             >
+              {uploadLoading && (
+                <div>
+                  <LoadingOutlined size={30} />
+                </div>
+              )}
               {imgUrl && (
                 <img
                   src={imgUrl}
@@ -436,6 +456,7 @@ const UploadBoardPage: React.VFC = () => {
                 customRequest={({ file }) => handleImageUpload(file)}
                 accept="image/*"
                 showUploadList={false}
+                disabled={uploadLoading}
                 onChange={({ file }) => {
                   if (imgUrl !== "") {
                     file.status = "done";
@@ -455,10 +476,39 @@ const UploadBoardPage: React.VFC = () => {
         )}
         {isFileNeeded && (
           <Form.Item name={["file"]} label={"첨부파일"}>
+            <div
+              style={{
+                marginBottom: "15px",
+              }}
+            >
+              {file &&
+                file.map((elem, idx) => {
+                  return (
+                    <div
+                      key={idx}
+                      className="attach-group"
+                      style={{
+                        padding: "8px",
+                      }}
+                    >
+                      <a
+                        href={elem?.url}
+                        download
+                        target={"_blank"}
+                        rel="noreferrer"
+                      >
+                        {elem?.fileName}
+                      </a>
+                    </div>
+                  );
+                })}
+            </div>
             <Upload
               multiple={true}
               customRequest={({ file }) => handleFileUpload(file)}
               maxCount={4}
+              disabled={uploadLoading}
+              showUploadList={false}
               onChange={({ file: callbackFile }) => {
                 if (file.length !== 0) {
                   callbackFile.status = "done";
@@ -467,11 +517,9 @@ const UploadBoardPage: React.VFC = () => {
                 }
               }}
             >
-              {!uploadLoading && (
-                <Button style={{ marginBottom: 20 }} icon={<UploadOutlined />}>
-                  Upload
-                </Button>
-              )}
+              <Button style={{ marginBottom: 20 }} icon={<UploadOutlined />}>
+                Upload
+              </Button>
             </Upload>
           </Form.Item>
         )}

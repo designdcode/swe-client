@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { Button, Descriptions, Input, Switch, Upload } from "antd";
 import { toast } from "react-toastify";
-import { UploadOutlined } from "@ant-design/icons";
+import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import useInput from "../../../hooks/useInput";
 import {
   PopupQuery,
@@ -48,13 +48,19 @@ const PopupManager: React.FC = () => {
         file,
         category: "popupImage",
       })
-    ).then((url) => {
-      setImgUrl(url);
-      toast.success(
-        "파일 / 이미지가 업로드 되었습니다, 설정 버튼을 눌러주세요"
-      );
-      setUploading(false);
-    });
+    )
+      .then((url) => {
+        setImgUrl(url);
+        toast.success(
+          "파일 / 이미지가 업로드 되었습니다, 설정 버튼을 눌러주세요"
+        );
+        setUploading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("업로드에 실패하였습니다. 잠시후 다시 시도해 주세요");
+        setUploading(false);
+      });
   }, []);
 
   const handleSubmit = useCallback(async () => {
@@ -134,6 +140,7 @@ const PopupManager: React.FC = () => {
               게시물이 없습니다
             </span>
           )}
+          <div>{uploading && <LoadingOutlined size={40} />}</div>
           <Upload
             style={{ marginBottom: 20, display: "block" }}
             listType={"picture"}
@@ -143,6 +150,7 @@ const PopupManager: React.FC = () => {
             }}
             progress={{ showInfo: true }}
             maxCount={0}
+            disabled={uploading}
             onChange={({ file: callbackFile }) => {
               if (imgUrl !== "") {
                 callbackFile.status = "done";

@@ -65,8 +65,6 @@ const ImageBoardPage: React.VFC = () => {
     return () => excuteRefetch();
   }, [refetch, state]);
 
-  console.log("image board page");
-
   if (loading) {
     return <>loading</>;
   }
