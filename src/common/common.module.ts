@@ -7,4 +7,4 @@ import { GraphqlModule } from './graphql.module';
   imports: [ConfigModule, MongoModule, GraphqlModule],
   exports: [ConfigModule, MongoModule, GraphqlModule],
 })
-export class CommonnModule {}
+export class CommonModule {}
