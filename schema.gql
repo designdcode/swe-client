@@ -56,6 +56,17 @@ type Link {
   updatedAt: DateTime!
 }
 
+type Member {
+  _id: String!
+  name: String!
+  phoneNumber: String!
+  email: String!
+  job: String
+  department: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type BoardReturnType {
   data: [Board!]!
   total: Int!
@@ -71,6 +82,11 @@ type LinkReturnType {
   total: Int!
 }
 
+type MemberReturnType {
+  data: [Member!]!
+  total: Int!
+}
+
 type Auth {
   id: String!
   stno: String!
@@ -83,6 +99,8 @@ type Query {
   popup(_id: String!): Popup!
   links(args: PaginationArgs, category: String): LinkReturnType!
   link(_id: String!): Link!
+  members(args: PaginationArgs): MemberReturnType!
+  member(_id: String!): Member!
 }
 
 input PaginationArgs {
@@ -110,6 +128,9 @@ type Mutation {
   updateLink(args: UpdateLinkInput!): Link!
   removeLink(_id: String!): Link!
   userLogin(id: String!, pwd: String!): AuthReturnType!
+  createMember(args: CreateMemberInput!): Member!
+  updateMember(args: UpdateMemberInput!): Member!
+  removeMember(_id: String!): Member!
 }
 
 input CreateBoardInput {
@@ -123,7 +144,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-28T07:06:13.196Z"
+  inputCreatedAt: DateTime! = "2023-07-28T07:29:56.112Z"
 }
 
 input AttachementInput {
@@ -142,7 +163,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-28T07:06:13.196Z"
+  inputCreatedAt: DateTime = "2023-07-28T07:29:56.112Z"
   _id: String!
 }
 
@@ -184,4 +205,21 @@ input UpdateLinkInput {
 type AuthReturnType {
   success: Boolean!
   data: Auth!
+}
+
+input CreateMemberInput {
+  name: String!
+  phoneNumber: String!
+  email: String!
+  job: String! = ""
+  department: String!
+}
+
+input UpdateMemberInput {
+  name: String
+  phoneNumber: String
+  email: String
+  job: String = ""
+  department: String
+  _id: String!
 }
