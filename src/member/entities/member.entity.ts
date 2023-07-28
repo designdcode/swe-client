@@ -8,18 +8,23 @@ export class Member {
   @Field(() => String)
   _id: MongooseSchema.Types.ObjectId;
 
+  @Prop()
   @Field(() => String, { nullable: false })
-  name: string;
+  memberName: string;
 
+  @Prop()
   @Field(() => String, { nullable: false })
   phoneNumber: string;
 
+  @Prop()
   @Field(() => String, { nullable: false })
   email: string;
 
+  @Prop()
   @Field(() => String, { nullable: true })
   job: string | null;
 
+  @Prop()
   @Field(() => String, { nullable: false, defaultValue: '' })
   department: string;
 

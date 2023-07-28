@@ -58,7 +58,7 @@ type Link {
 
 type Member {
   _id: String!
-  name: String!
+  memberName: String!
   phoneNumber: String!
   email: String!
   job: String
@@ -144,7 +144,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-28T07:29:56.112Z"
+  inputCreatedAt: DateTime! = "2023-07-28T13:37:06.840Z"
 }
 
 input AttachementInput {
@@ -163,7 +163,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-28T07:29:56.112Z"
+  inputCreatedAt: DateTime = "2023-07-28T13:37:06.840Z"
   _id: String!
 }
 
@@ -208,7 +208,7 @@ type AuthReturnType {
 }
 
 input CreateMemberInput {
-  name: String!
+  memberName: String!
   phoneNumber: String!
   email: String!
   job: String! = ""
@@ -216,7 +216,7 @@ input CreateMemberInput {
 }
 
 input UpdateMemberInput {
-  name: String
+  memberName: String
   phoneNumber: String
   email: String
   job: String = ""

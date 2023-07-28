@@ -11,7 +11,7 @@ export class MemberResolver {
   constructor(private readonly memberService: MemberService) {}
 
   @Mutation(() => Member)
-  async createMember(@Args('args') args: CreateMemberInput) {
+  async createMember(@Args('args') args: CreateMemberInput): Promise<Member> {
     return await this.memberService.create(args);
   }
 
