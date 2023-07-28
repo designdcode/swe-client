@@ -2,6 +2,7 @@ export interface ObjProps {
   key: string;
   title: string;
   ko_title: string;
+  isList?: boolean;
 }
 export interface NavProps {
   title: string;
@@ -35,6 +36,7 @@ export const AdminNavData: NavProps[] = [
         key: "intro-task",
         title: "intro-task",
         ko_title: "조직도 및 업무",
+        isList: true,
       },
       {
         key: "intro-route",
@@ -202,26 +204,31 @@ export const AdminNavData: NavProps[] = [
         key: "achievement-news",
         title: "achievement-news",
         ko_title: "사업단 소식",
+        isList: true,
       },
       {
         key: "achievement-aidnews",
         title: "achievement-aidnews",
         ko_title: "SW교육지원센터 소식",
+        isList: true,
       },
       {
         key: "achievement-valuenews",
         title: "achievement-valuenews",
         ko_title: "SW가치확산센터 소식",
+        isList: true,
       },
       {
         key: "achievement-coopnews",
         title: "achievement-coopnews",
         ko_title: "SW산학협력소식",
+        isList: true,
       },
       {
         key: "achievement-startup",
         title: "achievement-startup",
         ko_title: "창업지원 소식",
+        isList: true,
       },
     ],
   },
@@ -234,26 +241,31 @@ export const AdminNavData: NavProps[] = [
         key: "community-notice",
         title: "community-notice",
         ko_title: "공지사항",
+        isList: true,
       },
       {
         key: "community-administration",
         title: "community-administration",
         ko_title: "학사공지",
+        isList: true,
       },
       {
         key: "community-storage",
         title: "community-storage",
         ko_title: "서식자료실",
+        isList: true,
       },
       {
         key: "community-request",
         title: "community-request",
         ko_title: "건의사항",
+        isList: true,
       },
       {
         key: "community-help",
         title: "community-help",
         ko_title: "헬프데스크",
+        isList: true,
       },
       {
         key: "community-sitemap",

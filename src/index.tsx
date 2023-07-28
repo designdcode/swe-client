@@ -10,7 +10,7 @@ import { BoardContextProvider } from "./contexts";
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <BrowserRouter forceRefresh>
+    <BrowserRouter>
       <ToastContainer position="bottom-right" autoClose={3000} />
       <BoardContextProvider>
         <App />

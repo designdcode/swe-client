@@ -4,23 +4,29 @@ import SunEditor from "suneditor-react";
 import SunEditorCore from "suneditor/src/lib/core";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import { SunEditorOptions } from "suneditor/src/options";
+import { SunEditorReactProps } from "suneditor-react/dist/types/SunEditorReactProps";
 
-interface Props {
+interface Props extends SunEditorReactProps {
   onChange: (value: any) => void;
   content: string;
 }
 
-const editorOptions: SunEditorOptions ={
+const editorOptions: SunEditorOptions = {
   minHeight: "500",
   buttonList: [
     ["fontSize", "bold", "underline", "italic", "fontColor", "list"],
     ["hiliteColor", "outdent", "indent"],
     ["link", "image"],
   ],
-  imageUploadSizeLimit: 10000000, 
-}
+  imageUploadSizeLimit: 10000000,
+};
 
-const Editor: FC<Props> = ({ content, onChange }) => {
+const Editor: FC<Props> = ({
+  content,
+  onChange,
+  placeholder,
+  defaultValue,
+}) => {
   const editor = useRef<SunEditorCore>();
 
   const getEditorInstance = useCallback((sunEditor) => {
@@ -34,8 +40,9 @@ const Editor: FC<Props> = ({ content, onChange }) => {
       getSunEditorInstance={getEditorInstance}
       onChange={onChange}
       onImageUpload={handleImageUpload}
-      defaultValue={content}
+      defaultValue={defaultValue}
       setOptions={editorOptions}
+      placeholder={placeholder}
     />
   );
 };

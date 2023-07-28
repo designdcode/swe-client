@@ -130,3 +130,30 @@ mutation userLogin($id: String!, $pwd: String!) {
     }
   }
 }
+
+mutation createMember($args: CreateMemberInput!) {
+  createMember(args: $args) {
+    memberName
+    phoneNumber
+    email
+    job
+    department
+  }
+}
+
+mutation updateMember($args: UpdateMemberInput!) {
+  updateMember(args: $args) {
+    _id
+    memberName
+    phoneNumber
+    email
+    job
+    department
+  }
+}
+
+mutation removeMember($_id: String!) {
+  removeMember(_id: $_id) {
+    _id
+  }
+}

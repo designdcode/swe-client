@@ -106,3 +106,32 @@ query ink($_id: String!) {
     createdAt
   }
 }
+
+query members($args: PaginationArgs) {
+  members(args: $args) {
+    data {
+      _id
+      memberName
+      phoneNumber
+      email
+      job
+      department
+      createdAt
+      updatedAt
+    }
+    total
+  }
+}
+
+query member($_id: String!) {
+  member(_id: $_id) {
+    _id
+    memberName
+    phoneNumber
+    email
+    job
+    department
+    createdAt
+    updatedAt
+  }
+}
