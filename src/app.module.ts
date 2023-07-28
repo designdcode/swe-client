@@ -7,6 +7,7 @@ import { CommentModule } from './comment/comment.module';
 import { PopupModule } from './popup/popup.module';
 import { LinkModule } from './link/link.module';
 import { AuthModule } from './auth/auth.module';
+import { MemberModule } from './member/member.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AuthModule } from './auth/auth.module';
     PopupModule,
     LinkModule,
     AuthModule,
+    MemberModule,
   ],
   controllers: [AppController],
   providers: [AppService],
