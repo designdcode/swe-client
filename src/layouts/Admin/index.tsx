@@ -41,14 +41,11 @@ const Admin: React.FC = () => {
     }
   }, [adminId, adminPW, setAdminId, setAdminPW]);
 
-  const handlePickMenu = useCallback(
-    (koMenu, koParentMenu, menu, parentMenu) => {
-      setShowBreadCrumb(true);
-      setParentMenu(koParentMenu);
-      setPickMenu(koMenu);
-    },
-    []
-  );
+  const handlePickMenu = useCallback((koMenu, koParentMenu) => {
+    setShowBreadCrumb(true);
+    setParentMenu(koParentMenu);
+    setPickMenu(koMenu);
+  }, []);
 
   const handleClickDashboard = useCallback(() => {
     setShowBreadCrumb(false);
@@ -126,14 +123,11 @@ const Admin: React.FC = () => {
                         return (
                           <Menu.Item key={elem.title}>
                             <Link
-                              to={`/admin/${data.title}/${elem.key}`}
+                              to={`/admin/${data.title}/${
+                                elem.isList ? "list" : "show"
+                              }/${elem.key}`}
                               onClick={() =>
-                                handlePickMenu(
-                                  elem.ko_title,
-                                  data.ko_title,
-                                  data.title,
-                                  elem.key
-                                )
+                                handlePickMenu(elem.ko_title, data.ko_title)
                               }
                             >
                               <span>{elem.ko_title}</span>

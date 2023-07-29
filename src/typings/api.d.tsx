@@ -113,6 +113,14 @@ export type CreateLinkInput = {
   url?: InputMaybe<Scalars["String"]["input"]>;
 };
 
+export type CreateMemberInput = {
+  department: Scalars["String"]["input"];
+  email: Scalars["String"]["input"];
+  job?: Scalars["String"]["input"];
+  memberName: Scalars["String"]["input"];
+  phoneNumber: Scalars["String"]["input"];
+};
+
 export type CreatePopupInput = {
   link?: InputMaybe<Scalars["String"]["input"]>;
   up?: Scalars["Boolean"]["input"];
@@ -134,19 +142,40 @@ export type LinkReturnType = {
   total: Scalars["Int"]["output"];
 };
 
+export type Member = {
+  __typename?: "Member";
+  _id: Scalars["String"]["output"];
+  createdAt: Scalars["DateTime"]["output"];
+  department: Scalars["String"]["output"];
+  email: Scalars["String"]["output"];
+  job?: Maybe<Scalars["String"]["output"]>;
+  memberName: Scalars["String"]["output"];
+  phoneNumber: Scalars["String"]["output"];
+  updatedAt: Scalars["DateTime"]["output"];
+};
+
+export type MemberReturnType = {
+  __typename?: "MemberReturnType";
+  data: Array<Member>;
+  total: Scalars["Int"]["output"];
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   createBoard: Board;
   createComment: Comment;
   createLink: Link;
+  createMember: Member;
   createPopup: Popup;
   removeBoard: Board;
   removeComment: Comment;
   removeLink: Link;
+  removeMember: Member;
   removePopup: Popup;
   updateBoard: Board;
   updateComment: Comment;
   updateLink: Link;
+  updateMember: Member;
   updatePopup: Popup;
   userLogin: AuthReturnType;
 };
@@ -161,6 +190,10 @@ export type MutationCreateCommentArgs = {
 
 export type MutationCreateLinkArgs = {
   args: CreateLinkInput;
+};
+
+export type MutationCreateMemberArgs = {
+  args: CreateMemberInput;
 };
 
 export type MutationCreatePopupArgs = {
@@ -179,6 +212,10 @@ export type MutationRemoveLinkArgs = {
   _id: Scalars["String"]["input"];
 };
 
+export type MutationRemoveMemberArgs = {
+  _id: Scalars["String"]["input"];
+};
+
 export type MutationRemovePopupArgs = {
   _id: Scalars["String"]["input"];
 };
@@ -193,6 +230,10 @@ export type MutationUpdateCommentArgs = {
 
 export type MutationUpdateLinkArgs = {
   args: UpdateLinkInput;
+};
+
+export type MutationUpdateMemberArgs = {
+  args: UpdateMemberInput;
 };
 
 export type MutationUpdatePopupArgs = {
@@ -232,6 +273,8 @@ export type Query = {
   boards: BoardReturnType;
   link: Link;
   links: LinkReturnType;
+  member: Member;
+  members: MemberReturnType;
   popup: Popup;
   popups: PopupReturnType;
 };
@@ -251,6 +294,14 @@ export type QueryLinkArgs = {
 export type QueryLinksArgs = {
   args?: InputMaybe<PaginationArgs>;
   category?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type QueryMemberArgs = {
+  _id: Scalars["String"]["input"];
+};
+
+export type QueryMembersArgs = {
+  args?: InputMaybe<PaginationArgs>;
 };
 
 export type QueryPopupArgs = {
@@ -292,6 +343,15 @@ export type UpdateLinkInput = {
   _id: Scalars["String"]["input"];
   title?: InputMaybe<Scalars["String"]["input"]>;
   url?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type UpdateMemberInput = {
+  _id: Scalars["String"]["input"];
+  department?: InputMaybe<Scalars["String"]["input"]>;
+  email?: InputMaybe<Scalars["String"]["input"]>;
+  job?: InputMaybe<Scalars["String"]["input"]>;
+  memberName?: InputMaybe<Scalars["String"]["input"]>;
+  phoneNumber?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type UpdatePopupInput = {
@@ -492,6 +552,48 @@ export type UserLoginMutation = {
   };
 };
 
+export type CreateMemberMutationVariables = Exact<{
+  args: CreateMemberInput;
+}>;
+
+export type CreateMemberMutation = {
+  __typename?: "Mutation";
+  createMember: {
+    __typename?: "Member";
+    memberName: string;
+    phoneNumber: string;
+    email: string;
+    job?: string | null;
+    department: string;
+  };
+};
+
+export type UpdateMemberMutationVariables = Exact<{
+  args: UpdateMemberInput;
+}>;
+
+export type UpdateMemberMutation = {
+  __typename?: "Mutation";
+  updateMember: {
+    __typename?: "Member";
+    _id: string;
+    memberName: string;
+    phoneNumber: string;
+    email: string;
+    job?: string | null;
+    department: string;
+  };
+};
+
+export type RemoveMemberMutationVariables = Exact<{
+  _id: Scalars["String"]["input"];
+}>;
+
+export type RemoveMemberMutation = {
+  __typename?: "Mutation";
+  removeMember: { __typename?: "Member"; _id: string };
+};
+
 export type BoardsQueryVariables = Exact<{
   args?: InputMaybe<PaginationArgs>;
 }>;
@@ -645,6 +747,48 @@ export type InkQuery = {
     url: string;
     title: string;
     createdAt: any;
+  };
+};
+
+export type MembersQueryVariables = Exact<{
+  args?: InputMaybe<PaginationArgs>;
+}>;
+
+export type MembersQuery = {
+  __typename?: "Query";
+  members: {
+    __typename?: "MemberReturnType";
+    total: number;
+    data: Array<{
+      __typename?: "Member";
+      _id: string;
+      memberName: string;
+      phoneNumber: string;
+      email: string;
+      job?: string | null;
+      department: string;
+      createdAt: any;
+      updatedAt: any;
+    }>;
+  };
+};
+
+export type MemberQueryVariables = Exact<{
+  _id: Scalars["String"]["input"];
+}>;
+
+export type MemberQuery = {
+  __typename?: "Query";
+  member: {
+    __typename?: "Member";
+    _id: string;
+    memberName: string;
+    phoneNumber: string;
+    email: string;
+    job?: string | null;
+    department: string;
+    createdAt: any;
+    updatedAt: any;
   };
 };
 
@@ -1353,6 +1497,165 @@ export type UserLoginMutationOptions = Apollo.BaseMutationOptions<
   UserLoginMutation,
   UserLoginMutationVariables
 >;
+export const CreateMemberDocument = gql`
+  mutation createMember($args: CreateMemberInput!) {
+    createMember(args: $args) {
+      memberName
+      phoneNumber
+      email
+      job
+      department
+    }
+  }
+`;
+export type CreateMemberMutationFn = Apollo.MutationFunction<
+  CreateMemberMutation,
+  CreateMemberMutationVariables
+>;
+
+/**
+ * __useCreateMemberMutation__
+ *
+ * To run a mutation, you first call `useCreateMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMemberMutation, { data, loading, error }] = useCreateMemberMutation({
+ *   variables: {
+ *      args: // value for 'args'
+ *   },
+ * });
+ */
+export function useCreateMemberMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateMemberMutation,
+    CreateMemberMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateMemberMutation,
+    CreateMemberMutationVariables
+  >(CreateMemberDocument, options);
+}
+export type CreateMemberMutationHookResult = ReturnType<
+  typeof useCreateMemberMutation
+>;
+export type CreateMemberMutationResult =
+  Apollo.MutationResult<CreateMemberMutation>;
+export type CreateMemberMutationOptions = Apollo.BaseMutationOptions<
+  CreateMemberMutation,
+  CreateMemberMutationVariables
+>;
+export const UpdateMemberDocument = gql`
+  mutation updateMember($args: UpdateMemberInput!) {
+    updateMember(args: $args) {
+      _id
+      memberName
+      phoneNumber
+      email
+      job
+      department
+    }
+  }
+`;
+export type UpdateMemberMutationFn = Apollo.MutationFunction<
+  UpdateMemberMutation,
+  UpdateMemberMutationVariables
+>;
+
+/**
+ * __useUpdateMemberMutation__
+ *
+ * To run a mutation, you first call `useUpdateMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMemberMutation, { data, loading, error }] = useUpdateMemberMutation({
+ *   variables: {
+ *      args: // value for 'args'
+ *   },
+ * });
+ */
+export function useUpdateMemberMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateMemberMutation,
+    UpdateMemberMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateMemberMutation,
+    UpdateMemberMutationVariables
+  >(UpdateMemberDocument, options);
+}
+export type UpdateMemberMutationHookResult = ReturnType<
+  typeof useUpdateMemberMutation
+>;
+export type UpdateMemberMutationResult =
+  Apollo.MutationResult<UpdateMemberMutation>;
+export type UpdateMemberMutationOptions = Apollo.BaseMutationOptions<
+  UpdateMemberMutation,
+  UpdateMemberMutationVariables
+>;
+export const RemoveMemberDocument = gql`
+  mutation removeMember($_id: String!) {
+    removeMember(_id: $_id) {
+      _id
+    }
+  }
+`;
+export type RemoveMemberMutationFn = Apollo.MutationFunction<
+  RemoveMemberMutation,
+  RemoveMemberMutationVariables
+>;
+
+/**
+ * __useRemoveMemberMutation__
+ *
+ * To run a mutation, you first call `useRemoveMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeMemberMutation, { data, loading, error }] = useRemoveMemberMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useRemoveMemberMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveMemberMutation,
+    RemoveMemberMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RemoveMemberMutation,
+    RemoveMemberMutationVariables
+  >(RemoveMemberDocument, options);
+}
+export type RemoveMemberMutationHookResult = ReturnType<
+  typeof useRemoveMemberMutation
+>;
+export type RemoveMemberMutationResult =
+  Apollo.MutationResult<RemoveMemberMutation>;
+export type RemoveMemberMutationOptions = Apollo.BaseMutationOptions<
+  RemoveMemberMutation,
+  RemoveMemberMutationVariables
+>;
 export const BoardsDocument = gql`
   query boards($args: PaginationArgs) {
     boards(args: $args) {
@@ -1707,3 +2010,116 @@ export function useInkLazyQuery(
 export type InkQueryHookResult = ReturnType<typeof useInkQuery>;
 export type InkLazyQueryHookResult = ReturnType<typeof useInkLazyQuery>;
 export type InkQueryResult = Apollo.QueryResult<InkQuery, InkQueryVariables>;
+export const MembersDocument = gql`
+  query members($args: PaginationArgs) {
+    members(args: $args) {
+      data {
+        _id
+        memberName
+        phoneNumber
+        email
+        job
+        department
+        createdAt
+        updatedAt
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useMembersQuery__
+ *
+ * To run a query within a React component, call `useMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMembersQuery({
+ *   variables: {
+ *      args: // value for 'args'
+ *   },
+ * });
+ */
+export function useMembersQuery(
+  baseOptions?: Apollo.QueryHookOptions<MembersQuery, MembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MembersQuery, MembersQueryVariables>(
+    MembersDocument,
+    options
+  );
+}
+export function useMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<MembersQuery, MembersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MembersQuery, MembersQueryVariables>(
+    MembersDocument,
+    options
+  );
+}
+export type MembersQueryHookResult = ReturnType<typeof useMembersQuery>;
+export type MembersLazyQueryHookResult = ReturnType<typeof useMembersLazyQuery>;
+export type MembersQueryResult = Apollo.QueryResult<
+  MembersQuery,
+  MembersQueryVariables
+>;
+export const MemberDocument = gql`
+  query member($_id: String!) {
+    member(_id: $_id) {
+      _id
+      memberName
+      phoneNumber
+      email
+      job
+      department
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+/**
+ * __useMemberQuery__
+ *
+ * To run a query within a React component, call `useMemberQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMemberQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMemberQuery({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useMemberQuery(
+  baseOptions: Apollo.QueryHookOptions<MemberQuery, MemberQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MemberQuery, MemberQueryVariables>(
+    MemberDocument,
+    options
+  );
+}
+export function useMemberLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<MemberQuery, MemberQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MemberQuery, MemberQueryVariables>(
+    MemberDocument,
+    options
+  );
+}
+export type MemberQueryHookResult = ReturnType<typeof useMemberQuery>;
+export type MemberLazyQueryHookResult = ReturnType<typeof useMemberLazyQuery>;
+export type MemberQueryResult = Apollo.QueryResult<
+  MemberQuery,
+  MemberQueryVariables
+>;

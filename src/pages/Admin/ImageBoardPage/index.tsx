@@ -1,4 +1,4 @@
-import { Descriptions, Typography } from "antd";
+import { Descriptions, Image, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation, useParams } from "react-router";
 import { Container, Button } from "./styles";
@@ -72,9 +72,6 @@ const ImageBoardPage: React.VFC = () => {
   return (
     <Container>
       <div className="button-group">
-        <Button type="ghost" onClick={() => history.goBack()}>
-          뒤로
-        </Button>
         {data && data.length > 0 ? (
           <Button
             type="primary"
@@ -141,7 +138,7 @@ const ImageBoardPage: React.VFC = () => {
         )}
         <Descriptions.Item label="이미지" span={4} labelStyle={{ width: 100 }}>
           {image && image[0] ? (
-            <img src={image[0].url} alt={image[0].fileName} />
+            <Image width={300} src={image[0].url} />
           ) : (
             <Typography.Text>업로드 된 이미지가 없습니다</Typography.Text>
           )}

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Container } from "../LinkManager/styles";
+import { Container } from "./styles";
 import styled from "@emotion/styled";
 import YouTube, { Options } from "react-youtube";
 import useInput from "../../../hooks/useInput";

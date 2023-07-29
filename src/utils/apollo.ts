@@ -16,7 +16,6 @@ const cache: InMemoryCache = new InMemoryCache();
 const httpLink = new HttpLink({
   // uri: "/graphql",
   uri: "http://localhost:4000/graphql",
-  // uri: "http://ec2-15-165-19-80.ap-northeast-2.compute.amazonaws.com/graphql",
 });
 
 const errLink = onError(({ graphQLErrors, networkError }: any) => {
