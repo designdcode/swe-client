@@ -29,6 +29,9 @@ const Detail = () => {
   const { param, subparam } = useParams<ParamProps>();
   const { boards, loading } = useBoardContext();
 
+  // TODO: create a component for the members map and redirect the user to there
+  console.log(subparam);
+
   const renderButton = useCallback(() => {
     switch (subparam.split("-")[1]) {
       case "cs":

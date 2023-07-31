@@ -1,9 +1,10 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Button, Table } from "antd";
+import { Button, Descriptions, Image, Spin, Table, Typography } from "antd";
 import Column from "antd/lib/table/Column";
-import { useMembersQuery } from "../../../../typings/api.d";
+import { BoardQuery, useMembersQuery } from "../../../../typings/api.d";
 import { departments } from "./department";
+import { useBoardContext } from "../../../../contexts";
 
 interface MemberTableProps {
   id: string;
@@ -19,6 +20,9 @@ interface MemberTableProps {
 export const IntroMemberList: FC = () => {
   const history = useHistory();
   const [members, setMembers] = useState<MemberTableProps[]>();
+  const { boards } = useBoardContext();
+  const [board, setBoard] = useState<BoardQuery["board"]>();
+
   const { loading } = useMembersQuery({
     fetchPolicy: "network-only",
     onCompleted: ({ members }) => {
@@ -41,15 +45,68 @@ export const IntroMemberList: FC = () => {
     },
   });
 
+  useEffect(() => {
+    if (boards) {
+      const foundBoards = boards.filter((b) => b.category === "intro-task");
+      if (foundBoards) {
+        setBoard(foundBoards[foundBoards.length - 1]);
+      }
+    }
+  }, [boards]);
+
   if (loading) {
     return <>loading</>;
   }
 
   return (
     <div>
-      <Link to="/admin/intro/member-create">
-        <Button type="primary">인원 추가</Button>
-      </Link>
+      <div>
+        <Link to="/admin/intro/member-create">
+          <Button type="primary">인원 추가</Button>
+        </Link>
+        {board ? (
+          <Link
+            to={`/admin/intro/edit/intro-task/${board._id}`}
+            style={{
+              marginLeft: "10px",
+            }}
+          >
+            <Button type="primary">조직도 이미지 수정하기</Button>
+          </Link>
+        ) : (
+          <Link
+            to="/admin/intro/create/intro-task"
+            style={{
+              marginLeft: "10px",
+            }}
+          >
+            <Button type="primary">조직도 이미지 올리기</Button>
+          </Link>
+        )}
+      </div>
+      <Descriptions
+        size="middle"
+        bordered
+        style={{
+          marginTop: "20px",
+          marginBottom: "20px",
+          backgroundColor: "white",
+          padding: "15px",
+        }}
+      >
+        <Descriptions.Item label="업로드된 이미지">
+          {loading && (
+            <Spin tip="업로드된 이미지를 불러오고 있습니다">
+              <div className="content" />
+            </Spin>
+          )}
+          {!board || !board.images ? (
+            <Typography>업로드된 이미지가 없습니다</Typography>
+          ) : (
+            <Image width={300} src={board.images[0].url} />
+          )}
+        </Descriptions.Item>
+      </Descriptions>
       <Table
         dataSource={members}
         style={{
