@@ -6,6 +6,7 @@ import {
   useMemberQuery,
   useRemoveMemberMutation,
 } from "../../../../typings/api.d";
+import { departments } from "./department";
 
 export const IntroMemberShow: FC = () => {
   const { pathname } = useLocation();
@@ -63,7 +64,11 @@ export const IntroMemberShow: FC = () => {
           {data?.member.phoneNumber}
         </Descriptions.Item>
         <Descriptions.Item label="담당부서">
-          {data?.member.department}
+          {departments.find((d) => d.value === data?.member.department)
+            ?.label || ""}
+        </Descriptions.Item>
+        <Descriptions.Item label="직책 / 구분">
+          {data?.member.jobTitle || ""}
         </Descriptions.Item>
         <Descriptions.Item label="담당업무">
           {data?.member.job}

@@ -117,6 +117,7 @@ export type CreateMemberInput = {
   department: Scalars["String"]["input"];
   email: Scalars["String"]["input"];
   job?: Scalars["String"]["input"];
+  jobTitle: Scalars["String"]["input"];
   memberName: Scalars["String"]["input"];
   phoneNumber: Scalars["String"]["input"];
 };
@@ -149,6 +150,7 @@ export type Member = {
   department: Scalars["String"]["output"];
   email: Scalars["String"]["output"];
   job?: Maybe<Scalars["String"]["output"]>;
+  jobTitle: Scalars["String"]["output"];
   memberName: Scalars["String"]["output"];
   phoneNumber: Scalars["String"]["output"];
   updatedAt: Scalars["DateTime"]["output"];
@@ -350,6 +352,7 @@ export type UpdateMemberInput = {
   department?: InputMaybe<Scalars["String"]["input"]>;
   email?: InputMaybe<Scalars["String"]["input"]>;
   job?: InputMaybe<Scalars["String"]["input"]>;
+  jobTitle?: InputMaybe<Scalars["String"]["input"]>;
   memberName?: InputMaybe<Scalars["String"]["input"]>;
   phoneNumber?: InputMaybe<Scalars["String"]["input"]>;
 };
@@ -565,6 +568,7 @@ export type CreateMemberMutation = {
     email: string;
     job?: string | null;
     department: string;
+    jobTitle: string;
   };
 };
 
@@ -582,6 +586,7 @@ export type UpdateMemberMutation = {
     email: string;
     job?: string | null;
     department: string;
+    jobTitle: string;
   };
 };
 
@@ -767,6 +772,7 @@ export type MembersQuery = {
       email: string;
       job?: string | null;
       department: string;
+      jobTitle: string;
       createdAt: any;
       updatedAt: any;
     }>;
@@ -787,6 +793,7 @@ export type MemberQuery = {
     email: string;
     job?: string | null;
     department: string;
+    jobTitle: string;
     createdAt: any;
     updatedAt: any;
   };
@@ -1505,6 +1512,7 @@ export const CreateMemberDocument = gql`
       email
       job
       department
+      jobTitle
     }
   }
 `;
@@ -1560,6 +1568,7 @@ export const UpdateMemberDocument = gql`
       email
       job
       department
+      jobTitle
     }
   }
 `;
@@ -2020,6 +2029,7 @@ export const MembersDocument = gql`
         email
         job
         department
+        jobTitle
         createdAt
         updatedAt
       }
@@ -2077,6 +2087,7 @@ export const MemberDocument = gql`
       email
       job
       department
+      jobTitle
       createdAt
       updatedAt
     }

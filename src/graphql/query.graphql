@@ -116,6 +116,7 @@ query members($args: PaginationArgs) {
       email
       job
       department
+      jobTitle
       createdAt
       updatedAt
     }
@@ -131,6 +132,7 @@ query member($_id: String!) {
     email
     job
     department
+    jobTitle
     createdAt
     updatedAt
   }

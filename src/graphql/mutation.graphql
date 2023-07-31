@@ -138,6 +138,7 @@ mutation createMember($args: CreateMemberInput!) {
     email
     job
     department
+    jobTitle
   }
 }
 
@@ -149,6 +150,7 @@ mutation updateMember($args: UpdateMemberInput!) {
     email
     job
     department
+    jobTitle
   }
 }
 

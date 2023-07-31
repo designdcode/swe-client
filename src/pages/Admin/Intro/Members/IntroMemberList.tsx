@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import { Button, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import { useMembersQuery } from "../../../../typings/api.d";
+import { departments } from "./department";
 
 interface MemberTableProps {
   id: string;
@@ -30,7 +31,8 @@ export const IntroMemberList: FC = () => {
             index: members.data.length - i,
             job: v.job || "",
             memberName: v.memberName,
-            department: v.department,
+            department:
+              departments.find((d) => d.value === v.department)?.label || "",
             phoneNumber: v.phoneNumber,
           })
         );
@@ -46,7 +48,7 @@ export const IntroMemberList: FC = () => {
   return (
     <div>
       <Link to="/admin/intro/member-create">
-        <Button type="primary">멤버 추가</Button>
+        <Button type="primary">인원 추가</Button>
       </Link>
       <Table
         dataSource={members}

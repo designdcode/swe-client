@@ -13,6 +13,7 @@ import {
   useCreateMemberMutation,
 } from "../../../../typings/api.d";
 import { useHistory } from "react-router";
+import { departments } from "./department";
 
 export const IntroMemberCreate: FC = () => {
   const history = useHistory();
@@ -21,6 +22,7 @@ export const IntroMemberCreate: FC = () => {
   const [phoneNumber, setPhoneNumber] = useState<string>();
   const [job, setJob] = useState<string>();
   const [department, setDepartment] = useState<string>();
+  const [jobTitle, setJobTitle] = useState<string>();
 
   const [createMember] = useCreateMemberMutation();
 
@@ -42,7 +44,7 @@ export const IntroMemberCreate: FC = () => {
         },
         onCompleted: () => {
           history.push({
-            pathname: `/admin/intro/intro-task`,
+            pathname: `/admin/intro/list/intro-task`,
           });
         },
       });
@@ -63,25 +65,32 @@ export const IntroMemberCreate: FC = () => {
           },
         }}
       >
-        <Form.Item name="memberName" label="이름">
+        <Form.Item name="memberName" label="이름" required>
           <Input
             type="text"
             onChange={(e) => handleChange(e, setName)}
             value={name}
           />
         </Form.Item>
-        <Form.Item name="email" label="이메일">
+        <Form.Item name="email" label="이메일" required>
           <Input
             type="email"
             onChange={(e) => handleChange(e, setEmail)}
             value={email}
           />
         </Form.Item>
-        <Form.Item name="phoneNumber" label="연락처">
+        <Form.Item name="phoneNumber" label="내선번호" required>
           <Input
             type="text"
             onChange={(e) => handleChange(e, setPhoneNumber)}
             value={phoneNumber}
+          />
+        </Form.Item>
+        <Form.Item name="jobTitle" label="직책 / 구분" required>
+          <Input
+            type="text"
+            onChange={(e) => handleChange(e, setJobTitle)}
+            value={jobTitle}
           />
         </Form.Item>
         <Form.Item name="job" label="담당업무">
@@ -91,17 +100,13 @@ export const IntroMemberCreate: FC = () => {
             value={job}
           />
         </Form.Item>
-        <Form.Item name="department" label="담당부서">
+        <Form.Item name="department" label="담당부서" required>
           <Select
             value={department}
             onChange={(v) => {
               setDepartment(v);
             }}
-            options={[
-              { value: "sunmoon1", label: "1" },
-              { value: "sunmoon2", label: "2" },
-              { value: "sunmoon3", label: "3" },
-            ]}
+            options={departments}
           />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
