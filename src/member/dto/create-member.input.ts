@@ -16,4 +16,7 @@ export class CreateMemberInput {
 
   @Field(() => String, { nullable: false })
   department: string;
+
+  @Field(() => String, { nullable: false })
+  jobTitle: string;
 }

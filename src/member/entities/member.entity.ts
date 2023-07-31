@@ -28,6 +28,10 @@ export class Member {
   @Field(() => String, { nullable: false, defaultValue: '' })
   department: string;
 
+  @Prop()
+  @Field(() => String, { nullable: false, defaultValue: '' })
+  jobTitle: string;
+
   @Prop({ default: Date.now })
   @Field(() => Date)
   createdAt!: Date;

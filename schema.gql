@@ -63,6 +63,7 @@ type Member {
   email: String!
   job: String
   department: String!
+  jobTitle: String!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -144,7 +145,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-07-29T12:38:50.463Z"
+  inputCreatedAt: DateTime! = "2023-07-31T17:50:19.775Z"
 }
 
 input AttachementInput {
@@ -163,7 +164,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-07-29T12:38:50.463Z"
+  inputCreatedAt: DateTime = "2023-07-31T17:50:19.775Z"
   _id: String!
 }
 
@@ -213,6 +214,7 @@ input CreateMemberInput {
   email: String!
   job: String! = ""
   department: String!
+  jobTitle: String!
 }
 
 input UpdateMemberInput {
@@ -221,5 +223,6 @@ input UpdateMemberInput {
   email: String
   job: String = ""
   department: String
+  jobTitle: String
   _id: String!
 }
