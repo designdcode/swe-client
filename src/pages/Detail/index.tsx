@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { useParams } from "react-router";
 import { NavigationData } from "../../assets/NavigationData";
@@ -11,6 +11,7 @@ import { useWindowSize } from "../../hooks/useWindowSize";
 import { Link } from "react-router-dom";
 import Map from "../../components/Map";
 import { useBoardContext } from "../../contexts";
+import { BoardQuery } from "../../typings/api.d";
 interface ParamProps {
   param: string;
   subparam: string;
@@ -28,8 +29,19 @@ const Detail = () => {
   const screen = useWindowSize();
   const { param, subparam } = useParams<ParamProps>();
   const { boards, loading } = useBoardContext();
+  const [board, setBoard] = useState<BoardQuery["board"]>();
+
+  useEffect(() => {
+    if (boards) {
+      const foundBoards = boards.filter((b) => b.category === subparam);
+      if (foundBoards) {
+        setBoard(foundBoards[foundBoards.length - 1]);
+      }
+    }
+  }, [boards, subparam]);
 
   // TODO: create a component for the members map and redirect the user to there
+
   console.log(subparam);
 
   const renderButton = useCallback(() => {
@@ -171,8 +183,8 @@ const Detail = () => {
       </Cover>
       <Content>
         <ContentImage>
-          {boards && boards[0] && boards[0].images && (
-            <img src={boards[0].images[0]?.url} alt="uploadedImage" />
+          {board && board.images && (
+            <img src={board.images[0]?.url} alt="uploadedImage" />
           )}
         </ContentImage>
         {param.toString() === "sitelink" && (
