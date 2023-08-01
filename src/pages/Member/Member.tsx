@@ -117,14 +117,28 @@ export const Member: FC = () => {
           alignItems: "center",
         }}
       >
-        <Typography.Title level={3}>SW중심대학 조직 및 인력</Typography.Title>
+        <Typography.Title
+          level={3}
+          style={{
+            color: "#0c1b58",
+          }}
+        >
+          SW중심대학 조직 및 인력
+        </Typography.Title>
       </div>
       <ContentImage>
         {images && images.length > 0 && (
           <img src={images[0]?.url} alt="uploadedImage" />
         )}
       </ContentImage>
-      <Typography.Title level={3}>구성원 및 담당업무</Typography.Title>
+      <Typography.Title
+        level={3}
+        style={{
+          color: "#0c1b58",
+        }}
+      >
+        구성원 및 담당업무
+      </Typography.Title>
       <Table
         dataSource={handleDataSource([
           president,
@@ -148,7 +162,12 @@ export const Member: FC = () => {
                 marginBottom: "50px",
               }}
             >
-              <Typography.Title level={4}>
+              <Typography.Title
+                level={4}
+                style={{
+                  color: "#0c1b58",
+                }}
+              >
                 {handleTableTitle(k)}
               </Typography.Title>
               <Table dataSource={handleDataSource(m)} pagination={false}>
