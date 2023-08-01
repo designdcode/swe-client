@@ -11,11 +11,11 @@ import { Button, Dropdown, Menu, Space, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import { Link } from "react-router-dom";
 import { ConvertTitle } from "../../utils/convertTitle";
-import { NavigationData } from "../../assets/NavigationData";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import useInput from "../../hooks/useInput";
 import { useBoardContext } from "../../contexts";
 import moment from "moment";
+import Cover from "../../components/Cover";
 
 interface ParamProps {
   param: string;
@@ -51,7 +51,7 @@ const Board: React.VFC = () => {
       data.map((elem, i) => {
         const obj: TableBoardProps = {
           id: elem._id,
-          index: boardsContext.length - i,
+          index: data.length - i,
           title: elem.title || "",
           createdAt: moment(elem.createdAt).format("YYYY-MM-DD"),
           category: elem.category,
@@ -101,14 +101,20 @@ const Board: React.VFC = () => {
   }, [setTerm, subBoards, term, searchCategory]);
 
   const menu = (
-    <Menu>
-      <Menu.Item key={"all"}>
-        <div onClick={() => setSearchCategory("전체보기")}>전체보기</div>
-      </Menu.Item>
-      <Menu.Item key={"title"}>
-        <div onClick={() => setSearchCategory("제목")}>제목</div>
-      </Menu.Item>
-    </Menu>
+    <Menu
+      items={[
+        {
+          key: "all",
+          label: "전체보기",
+          onClick: () => setSearchCategory("전체보기"),
+        },
+        {
+          key: "title",
+          label: "제목",
+          onClick: () => setSearchCategory("제목"),
+        },
+      ]}
+    />
   );
 
   if (loading && !boards) {
@@ -116,55 +122,7 @@ const Board: React.VFC = () => {
   }
   return (
     <Wrapper>
-      <Cover>
-        <CoverTitle margin={screen.width > 1500 ? "25%" : "15%"}>
-          {NavigationData.map((item, idx) => {
-            if (item.title === param.split("-")[0]) {
-              return (
-                <div key={item.key}>
-                  <span className="cover-main-title">{item.ko_title}</span>
-                  <span className="cover-description">{item.description}</span>
-                </div>
-              );
-            } else {
-              return null;
-            }
-          })}
-        </CoverTitle>
-        <SubMenu isBigger={param === "major" ? true : false} margin="5%">
-          <div className="submenu-content">
-            {NavigationData.map((item, idx) => {
-              if (item.title === param) {
-                return item.subMenu.map((elem, i) => {
-                  const colored = elem.key === subparam ? 0 : 1;
-                  return (
-                    <ContentCell
-                      className="submenu-col"
-                      first={colored}
-                      key={`${i}key`}
-                    >
-                      <FakeLine first={colored} />
-                      <StyleLink
-                        to={
-                          elem.key.split("-")[1] === "sitemap"
-                            ? `/main/detail/${param.split("-")[0]}/${elem.key}`
-                            : `/main/board/${param.split("-")[0]}/${elem.key}`
-                        }
-                        first={colored}
-                      >
-                        <span style={{ fontWeight: 400 }}>{elem.ko_title}</span>
-                      </StyleLink>
-                    </ContentCell>
-                  );
-                });
-              } else {
-                return null;
-              }
-            })}
-          </div>
-        </SubMenu>
-        <img src="/img/detailBG.jpeg" alt="cover" />
-      </Cover>
+      <Cover param={param} subparam={subparam} />
       <Container>
         <BoardTitle>
           <div className={"board-page"}>
@@ -282,19 +240,6 @@ const Board: React.VFC = () => {
 
 export default Board;
 
-interface CoverTitleMarginProps {
-  margin: string;
-}
-
-interface middleMenuProps {
-  isBigger: boolean;
-  margin?: string;
-}
-
-interface MenuCellProps {
-  first: number;
-}
-
 const Wrapper = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
   }
@@ -303,154 +248,6 @@ const Wrapper = styled.div`
     min-width: 800px;
     max-width: 1920px;
     min-height: 80vh;
-  }
-`;
-
-const Cover = styled.div`
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    width: 100%;
-    height: 120px;
-    & img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-  }
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 100%;
-    min-width: 1280px;
-    height: 350px;
-    margin: 0 auto;
-    position: relative;
-    & img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-  }
-`;
-
-const CoverTitle = styled.div<CoverTitleMarginProps>`
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    position: absolute;
-    top: 10%;
-    left: 5%;
-    & .cover-main-title {
-      font-size: 20px;
-      font-weight: 500px;
-      color: white;
-      display: block;
-    }
-    & .cover-description {
-      display: block;
-      font-size: 10px;
-      letter-spacing: 0.43px;
-      color: #ffffff;
-    }
-  }
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    position: absolute;
-    font-size: 20px;
-    margin-left: ${(props) => props.margin};
-    margin-top: 50px;
-    & .cover-main-title {
-      font-size: 40px;
-      font-weight: 500;
-      letter-spacing: 0.43px;
-      color: #ffffff;
-      text-shadow: 3px 3px 3px #000000e3;
-      display: block;
-    }
-
-    & .cover-description {
-      display: block;
-      font-size: 20px;
-      letter-spacing: 0.43px;
-      color: #ffffff;
-      text-shadow: 3px 3px 3px #000000e3;
-    }
-  }
-`;
-
-const SubMenu = styled.div<middleMenuProps>`
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    display: none;
-  }
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 100%;
-    background-color: #e5e2e2b8;
-    position: absolute;
-    bottom: 0;
-    font-size: 15px;
-    & .submenu-content {
-      max-width: 1280px;
-      min-width: 1000px;
-      min-height: 50px;
-      height: 50px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      padding-left: 5%;
-      align-items: center;
-    }
-    & .submenu-col {
-      width: 16%;
-      height: 50px;
-      display: flex;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-`;
-
-const StyleLink = styled(Link)<MenuCellProps>`
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-  }
-
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2px 5px;
-    font-size: 16px;
-    color: ${(props) => (props.first === 0 ? "white" : "black")};
-    &:hover {
-      color: white;
-    }
-  }
-`;
-
-const ContentCell = styled.div<MenuCellProps>`
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-  }
-
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    background-color: ${(props) => (props.first === 0 ? "#0c1b58" : "")};
-    color: ${(props) => (props.first === 0 ? "white" : "black")};
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    &:hover {
-      background-color: #0c1b58;
-      transition: 0.2s linear;
-      color: white;
-    }
-  }
-`;
-
-const FakeLine = styled.div<MenuCellProps>`
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-  }
-
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 50%;
-    height: 2px;
-    border-top: ${(props) => (props.first === 0 ? "2px solid white" : "")};
   }
 `;
 
