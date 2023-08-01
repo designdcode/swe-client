@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction } from "react";
 import styled from "@emotion/styled";
-import { Button, Dropdown, Menu } from "antd";
+import { Button, Dropdown, Menu, Typography } from "antd";
 import { Link } from "react-router-dom";
 import {
   BREAKPOINT_BIGGER_THAN_PC,
@@ -53,7 +53,14 @@ export const ListHead: FC<ListHeadProps> = ({
   return (
     <BoardTitle>
       <div className={"board-page"}>
-        <span className={"board-page-title"}>{title}</span>
+        <Typography.Title
+          level={1}
+          style={{
+            color: "#04083e",
+          }}
+        >
+          {title}
+        </Typography.Title>
       </div>
       <div className={"board-search"}>
         <Dropdown overlay={menu} className="dropdown">
