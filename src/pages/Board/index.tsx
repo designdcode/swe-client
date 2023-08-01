@@ -7,7 +7,7 @@ import {
   mediaQueries,
 } from "../../utils/mediaQuery";
 import { useParams } from "react-router";
-import { Button, Dropdown, Menu, Space, Table } from "antd";
+import { Space, Table } from "antd";
 import Column from "antd/lib/table/Column";
 import { Link } from "react-router-dom";
 import { ConvertTitle } from "../../utils/convertTitle";
@@ -16,6 +16,7 @@ import useInput from "../../hooks/useInput";
 import { useBoardContext } from "../../contexts";
 import moment from "moment";
 import Cover from "../../components/Cover";
+import { ListHead } from "../../components/ListHead";
 
 interface ParamProps {
   param: string;
@@ -100,23 +101,6 @@ const Board: React.VFC = () => {
     }
   }, [setTerm, subBoards, term, searchCategory]);
 
-  const menu = (
-    <Menu
-      items={[
-        {
-          key: "all",
-          label: "전체보기",
-          onClick: () => setSearchCategory("전체보기"),
-        },
-        {
-          key: "title",
-          label: "제목",
-          onClick: () => setSearchCategory("제목"),
-        },
-      ]}
-    />
-  );
-
   if (loading && !boards) {
     return <div>loading...</div>;
   }
@@ -124,33 +108,24 @@ const Board: React.VFC = () => {
     <Wrapper>
       <Cover param={param} subparam={subparam} />
       <Container>
-        <BoardTitle>
-          <div className={"board-page"}>
-            <span className={"board-page-title"}>{title}</span>
-          </div>
-          <div className={"board-search"}>
-            <Dropdown overlay={menu} className="dropdown">
-              <Button>{searchCategory}&ensp;&ensp;&or;</Button>
-            </Dropdown>
-            <input
-              placeholder="검색어를 입력해 주세요"
-              value={term}
-              onChange={onChangeTerm}
-            />
-            <button className="board-search-button" onClick={onSearchBoard}>
-              검색
-            </button>
-            {writeAble && (
-              <Link
-                className="board-button"
-                to={`/main/write/${param}/${subparam}`}
-              >
-                글쓰기
-              </Link>
-            )}
-          </div>
-        </BoardTitle>
-        <StyledTable dataSource={boards} rowKey={"id"}>
+        <ListHead
+          onChangeTerm={onChangeTerm}
+          onSearchBoard={onSearchBoard}
+          param={param}
+          subparam={subparam}
+          searchCategory={searchCategory}
+          setSearchCategory={setSearchCategory}
+          term={term}
+          title={title || ""}
+          writeAble={writeAble}
+        />
+        <StyledTable
+          dataSource={boards}
+          rowKey={"id"}
+          style={{
+            cursor: "pointer",
+          }}
+        >
           <Column
             align={"center"}
             title={() => {
@@ -261,105 +236,6 @@ const Container = styled.div`
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 30px;
-  }
-`;
-
-const BoardTitle = styled.div`
-  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    width: 100%;
-    height: 80px;
-    font-size: 20px;
-    color: #0c1b58;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    & .board-search {
-      display: none;
-    }
-  }
-
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    margin-bottom: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 250px;
-    & .board-page {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 80%;
-      & .board-page-title {
-        text-align: center;
-        min-width: 350px;
-        margin: 0 auto;
-        font-size: 40px;
-        color: #0c1b58;
-        display: block;
-      }
-    }
-
-    & .board-search {
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-
-      & .board-button {
-        cursor: pointer;
-        width: 80px;
-        height: 50px;
-        padding: 8px;
-        border: none;
-        background-color: #04083e;
-        color: white;
-        font-size: 14px;
-        margin-left: 15px;
-      }
-
-      & .board-search-button {
-        cursor: pointer;
-        width: 80px;
-        height: 50px;
-        padding: 8px;
-        border: none;
-        background-color: #e5e2e2b8;
-        color: black;
-        font-size: 14px;
-        margin-left: 15px;
-      }
-
-      & input {
-        width: 300px;
-        height: 50px;
-        background-color: #f8f8f8;
-        border: none;
-        margin-left: 15px;
-      }
-
-      & .dropdown {
-        background-color: #f8f8f8;
-        border: none;
-        color: black;
-        width: 150px;
-        height: 50px;
-      }
-    }
-
-    & a {
-      background-color: #0c1b58;
-      font-size: 18px;
-      padding: 8px 12px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      &:hover {
-        color: #f03fa8;
-        transition: 0.2s linear;
-      }
-    }
   }
 `;
 
