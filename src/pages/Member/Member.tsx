@@ -132,7 +132,7 @@ export const Member: FC = () => {
         )}
       </ContentImage>
       <Typography.Title
-        level={3}
+        level={4}
         style={{
           color: "#0c1b58",
         }}
