@@ -106,10 +106,19 @@ export const Member: FC = () => {
   return (
     <div
       style={{
-        marginTop: "20px",
+        marginTop: "50px",
       }}
     >
-      <Typography.Title level={3}>조직도</Typography.Title>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Typography.Title level={3}>SW중심대학 조직 및 인력</Typography.Title>
+      </div>
       <ContentImage>
         {images && images.length > 0 && (
           <img src={images[0]?.url} alt="uploadedImage" />
@@ -121,6 +130,7 @@ export const Member: FC = () => {
           president,
           vicePresident,
         ] as MembersQuery["members"]["data"])}
+        pagination={false}
       >
         <Column title="직책 / 구분" dataIndex={"jobTitle"} key={"jobTitle"} />
         <Column title="이름" dataIndex={"memberName"} key={"memberName"} />
@@ -131,11 +141,17 @@ export const Member: FC = () => {
       {memberGroup &&
         Object.entries(memberGroup).map(([k, m], i) => {
           return (
-            <div key={i}>
+            <div
+              key={i}
+              style={{
+                marginTop: "50px",
+                marginBottom: "50px",
+              }}
+            >
               <Typography.Title level={4}>
                 {handleTableTitle(k)}
               </Typography.Title>
-              <Table dataSource={handleDataSource(m)}>
+              <Table dataSource={handleDataSource(m)} pagination={false}>
                 <Column
                   title="직책 / 구분"
                   dataIndex={"jobTitle"}
@@ -174,6 +190,7 @@ const ContentImage = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     padding: 60px 0;
+    padding-top: 30px;
     width: 100%;
     display: flex;
     justify-content: center;
