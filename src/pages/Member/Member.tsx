@@ -1,0 +1,185 @@
+import React, { FC, useCallback, useEffect, useState } from "react";
+import styled from "@emotion/styled";
+import { useBoardContext } from "../../contexts";
+import {
+  BoardQuery,
+  MemberQuery,
+  MembersQuery,
+  useMembersQuery,
+} from "../../typings/api.d";
+import {
+  BREAKPOINT_BIGGER_THAN_PC,
+  BREAKPOINT_PHONE_MEDIUM,
+  mediaQueries,
+} from "../../utils/mediaQuery";
+import { Table, Typography } from "antd";
+import Column from "antd/lib/table/Column";
+
+interface TableDataSourceProps {
+  key: number;
+  jobTitle: string;
+  memberName: string;
+  phoneNumber: string;
+  email: string;
+  job?: string;
+}
+
+interface MemberGroupProps {
+  eduCenter: MembersQuery["members"]["data"];
+  helpCenter: MembersQuery["members"]["data"];
+  valueCenter: MembersQuery["members"]["data"];
+  jobCenter: MembersQuery["members"]["data"];
+}
+
+export const Member: FC = () => {
+  const { boards } = useBoardContext();
+  const [images, setImages] = useState<BoardQuery["board"]["images"]>();
+  const [memberGroup, setMemberGroup] = useState<MemberGroupProps>();
+  const [president, setPresident] = useState<MemberQuery["member"]>();
+  const [vicePresident, setVicePresident] = useState<MemberQuery["member"]>();
+
+  const { loading } = useMembersQuery({
+    onCompleted: ({ members: { data: memberData } }) => {
+      setMemberGroup({
+        eduCenter: memberData.filter((m) => m.department === "edu-center"),
+        helpCenter: memberData.filter((m) => m.department === "help-center"),
+        valueCenter: memberData.filter((m) => m.department === "value-center"),
+        jobCenter: memberData.filter((m) => m.department === "job-center"),
+      });
+      const presidents = memberData.filter((m) => m.department === "president");
+      const vicePresidents = memberData.filter(
+        (m) => m.department === "vice-president"
+      );
+
+      if (presidents) {
+        setPresident(presidents[presidents.length - 1]);
+      }
+      if (vicePresidents) {
+        setVicePresident(vicePresidents[vicePresidents.length - 1]);
+      }
+    },
+  });
+
+  const handleDataSource = useCallback(
+    (data: MembersQuery["members"]["data"]): Array<TableDataSourceProps> => {
+      return data.map((d, i) => ({
+        key: data.length - i,
+        memberName: d?.memberName || "",
+        email: d?.email || "",
+        jobTitle: d?.jobTitle || "",
+        phoneNumber: d?.phoneNumber || "",
+        job: d?.job || undefined,
+      }));
+    },
+    []
+  );
+
+  const handleTableTitle = useCallback((key: string) => {
+    switch (key) {
+      case "eduCenter":
+        return "SW융합교육원운영실";
+      case "helpCenter":
+        return "SW교육지원센터";
+      case "valueCenter":
+        return "SW가치확산센터";
+      case "jobCenter":
+        return "SW직무교육센터";
+      default:
+        return;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (boards) {
+      const foundboards = boards.filter((b) => b.category === "intro-task");
+      if (foundboards) {
+        const foundImages = foundboards[foundboards.length - 1].images;
+        setImages(foundImages);
+      }
+    }
+  }, [boards]);
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
+
+  return (
+    <div
+      style={{
+        marginTop: "20px",
+      }}
+    >
+      <Typography.Title level={3}>조직도</Typography.Title>
+      <ContentImage>
+        {images && images.length > 0 && (
+          <img src={images[0]?.url} alt="uploadedImage" />
+        )}
+      </ContentImage>
+      <Typography.Title level={3}>구성원 및 담당업무</Typography.Title>
+      <Table
+        dataSource={handleDataSource([
+          president,
+          vicePresident,
+        ] as MembersQuery["members"]["data"])}
+      >
+        <Column title="직책 / 구분" dataIndex={"jobTitle"} key={"jobTitle"} />
+        <Column title="이름" dataIndex={"memberName"} key={"memberName"} />
+        <Column title="이메일" dataIndex={"email"} key={"email"} />
+        <Column title="연락처" dataIndex={"phoneNumber"} key={"phoneNumber"} />
+        <Column title="담당업무" dataIndex={"job"} key={"job"} />
+      </Table>
+      {memberGroup &&
+        Object.entries(memberGroup).map(([k, m], i) => {
+          return (
+            <div key={i}>
+              <Typography.Title level={4}>
+                {handleTableTitle(k)}
+              </Typography.Title>
+              <Table dataSource={handleDataSource(m)}>
+                <Column
+                  title="직책 / 구분"
+                  dataIndex={"jobTitle"}
+                  key={"jobTitle"}
+                />
+                <Column
+                  title="이름"
+                  dataIndex={"memberName"}
+                  key={"memberName"}
+                />
+                <Column title="이메일" dataIndex={"email"} key={"email"} />
+                <Column
+                  title="연락처"
+                  dataIndex={"phoneNumber"}
+                  key={"phoneNumber"}
+                />
+                <Column title="담당업무" dataIndex={"job"} key={"job"} />
+              </Table>
+            </div>
+          );
+        })}
+    </div>
+  );
+};
+
+const ContentImage = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    width: 100%;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+    & img {
+      width: 80%;
+      object-fit: contain;
+    }
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    padding: 60px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    & img {
+      width: 80%;
+      margin: 0 auto;
+    }
+  }
+`;

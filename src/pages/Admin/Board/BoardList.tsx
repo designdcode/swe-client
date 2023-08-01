@@ -51,10 +51,11 @@ export const BoardList: FC = () => {
       const boardWithCategory = boardsContext.filter(
         (v) => v.category === category
       );
-      const dataSource: Array<TableBoardProps> = boardWithCategory.map(
-        (elem, i) => ({
+      const dataSource: Array<TableBoardProps> = boardWithCategory
+        .reverse()
+        .map((elem, i) => ({
           id: elem._id,
-          index: boardsContext.length - i,
+          index: boardWithCategory.length - i,
           title: elem.title || "",
           createdAt:
             elem.inputCreatedAt.slice(0, 10) || elem.createdAt.split(0, 10),
@@ -62,8 +63,7 @@ export const BoardList: FC = () => {
           private: elem.private || false,
           type: handleType(elem.type) || "",
           writer: elem.writer || "",
-        })
-      );
+        }));
       setBoards(dataSource);
     }
   }, [boardsContext, category, handleType]);

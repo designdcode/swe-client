@@ -7,6 +7,7 @@ import { departments } from "./department";
 import { useBoardContext } from "../../../../contexts";
 
 interface MemberTableProps {
+  key: number;
   id: string;
   index: number | null;
   memberName: string;
@@ -27,8 +28,10 @@ export const IntroMemberList: FC = () => {
     fetchPolicy: "network-only",
     onCompleted: ({ members }) => {
       if (members) {
-        const dataSource: Array<MemberTableProps> = members.data.map(
-          (v, i) => ({
+        const dataSource: Array<MemberTableProps> = members.data
+          .reverse()
+          .map((v, i) => ({
+            key: members.data.length - i,
             id: v._id,
             createdAt: (v.createdAt || "").slice(0, 10),
             email: v.email,
@@ -38,8 +41,7 @@ export const IntroMemberList: FC = () => {
             department:
               departments.find((d) => d.value === v.department)?.label || "",
             phoneNumber: v.phoneNumber,
-          })
-        );
+          }));
         setMembers(dataSource);
       }
     },
