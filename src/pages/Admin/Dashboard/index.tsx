@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Container, Col, TableRowSpan } from "./styles";
+import { Container, Col } from "./styles";
 import { Row, Typography, Table, Divider } from "antd";
 import Column from "antd/lib/table/Column";
-import { Link, useLocation } from "react-router-dom";
-import { getDate } from "../../../utils/convertDate";
-import Moment from "react-moment";
-import { useBoardContext } from "../../../contexts";
-import { BoardQuery, BoardsQuery } from "../../../typings/api.d";
+import { useHistory, useLocation } from "react-router-dom";
+import { useBoardContext, useMenuContext } from "../../../contexts";
+import { BoardsQuery } from "../../../typings/api.d";
 
 interface LocationProps {
   refresh?: boolean;
 }
 
 const Dashboard: React.VFC = () => {
+  const history = useHistory();
   const { boards, loading, refetch } = useBoardContext();
   const { state } = useLocation<LocationProps>();
+  const { setChildMenu, setParentMenu, setShowMenuTitle } = useMenuContext();
   const [notice, setNotice] = useState<BoardsQuery["boards"]["data"]>();
   const [admission, setAdmission] = useState<BoardsQuery["boards"]["data"]>();
 
@@ -23,11 +23,21 @@ const Dashboard: React.VFC = () => {
       setNotice(
         boards
           .filter((item) => item.category === "community-notice")
+          .map((v) => ({
+            ...v,
+            inputCreatedAt:
+              v.inputCreatedAt.slice(0, 10) || v.createdAt.slice(0, 10),
+          }))
           .slice(0, 5)
       );
       setAdmission(
         boards
           .filter((item) => item.category === "community-administration")
+          .map((v) => ({
+            ...v,
+            inputCreatedAt:
+              v.inputCreatedAt.slice(0, 10) || v.createdAt.slice(0, 10),
+          }))
           .slice(0, 5)
       );
     }
@@ -43,10 +53,17 @@ const Dashboard: React.VFC = () => {
 
   return (
     <Container>
+      <Typography.Title level={2}>대시보드</Typography.Title>
       {loading ? (
         <>loading...</>
       ) : (
-        <Row gutter={[30, 40]} justify={"space-between"}>
+        <Row
+          gutter={[30, 40]}
+          justify={"space-between"}
+          style={{
+            marginTop: "20px",
+          }}
+        >
           <Col span={11}>
             <Table
               title={() => (
@@ -54,42 +71,33 @@ const Dashboard: React.VFC = () => {
               )}
               dataSource={notice}
               showHeader={false}
-              rowKey={"noticeid"}
+              rowKey={"_id"}
               pagination={false}
               size="middle"
+              style={{
+                cursor: "pointer",
+              }}
+              onRow={(record) => {
+                return {
+                  onClick: () => {
+                    setShowMenuTitle(true);
+                    setParentMenu("알림마당");
+                    setChildMenu("공지사항");
+                    history.push(`/admin/community/show/${record._id}`);
+                  },
+                };
+              }}
             >
               <Column
                 dataIndex="title"
                 align="left"
                 ellipsis={true}
                 key={"noticesubid"}
-                render={(value, record: BoardQuery["board"], i) => {
-                  return (
-                    <TableRowSpan key={i}>
-                      <Link
-                        to={`/admin/community/detail-community?category=${record.category}&id=${record._id}`}
-                      >
-                        {value}
-                      </Link>
-                    </TableRowSpan>
-                  );
-                }}
               />
               <Column
                 dataIndex="inputCreatedAt"
                 align="right"
                 key={"noticetime"}
-                render={(value, record: BoardQuery["board"], i) => {
-                  return (
-                    <span key={i}>
-                      <Link
-                        to={`/admin/community/detail-community?category=${record.category}&id=${record._id}`}
-                      >
-                        <Moment format={"YYYY/MM/DD"}>{value}</Moment>
-                      </Link>
-                    </span>
-                  );
-                }}
               />
             </Table>
           </Col>
@@ -100,42 +108,33 @@ const Dashboard: React.VFC = () => {
               )}
               dataSource={admission}
               showHeader={false}
-              rowKey={"admissionkey"}
+              rowKey={"_id"}
               pagination={false}
               size="middle"
+              style={{
+                cursor: "pointer",
+              }}
+              onRow={(record) => {
+                return {
+                  onClick: () => {
+                    setShowMenuTitle(true);
+                    setParentMenu("알림마당");
+                    setChildMenu("학사공지");
+                    history.push(`/admin/community/show/${record._id}`);
+                  },
+                };
+              }}
             >
               <Column
                 dataIndex="title"
                 align="left"
                 ellipsis={true}
                 key={"subadmissionkey"}
-                render={(value, record: BoardQuery["board"], id) => {
-                  return (
-                    <TableRowSpan key={id}>
-                      <Link
-                        to={`/admin/community/detail-community?category=${record.category}&id=${record._id}`}
-                      >
-                        {value}
-                      </Link>
-                    </TableRowSpan>
-                  );
-                }}
               />
               <Column
-                dataIndex="createdAt"
+                dataIndex="inputCreatedAt"
                 align="right"
                 key={"subadmissionkeydate"}
-                render={(value, record: BoardQuery["board"], idx) => {
-                  return (
-                    <span key={idx}>
-                      <Link
-                        to={`/admin/community/detail-community?category=${record.category}&id=${record._id}`}
-                      >
-                        {getDate(value)}
-                      </Link>
-                    </span>
-                  );
-                }}
               />
             </Table>
           </Col>

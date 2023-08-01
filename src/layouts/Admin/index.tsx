@@ -1,33 +1,32 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Layout, Menu, Breadcrumb, Form, Input, Button } from "antd";
 import { AdminNavData, NavProps, ObjProps } from "../../assets/AdminNavData";
 import AdminRouteHandler from "../../utils/AdminRouteHandler";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useReactiveVar } from "@apollo/client";
 import { adminLoginVar } from "../../utils/apollo";
 import useInput from "../../hooks/useInput";
 import { adminLogin, adminLogOut } from "../../utils/loginResolver";
 import { toast } from "react-toastify";
-import { UserOutlined, LockOutlined, LogoutOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { LoginContainer } from "./styles";
-import { getSubTitle, getTitle } from "../../utils/getTitle";
 import styled from "@emotion/styled";
-
-interface ParamProps {
-  param: string;
-  subparam: string;
-}
+import { ItemType } from "antd/lib/menu/hooks/useItems";
+import { useMenuContext } from "../../contexts";
 
 const Admin: React.FC = () => {
   const loginStatus = useReactiveVar(adminLoginVar);
   const history = useHistory();
-  const { param, subparam } = useParams<ParamProps>();
   const [adminId, adminIdOnChange, setAdminId] = useInput("");
   const [adminPW, adminPWOnChange, setAdminPW] = useInput("");
-  const [pickMenu, setPickMenu] = useState<string>("대시보드");
-  const [parentMenu, setParentMenu] = useState<string>("대시보드");
-  const [showBreadCrumb, setShowBreadCrumb] = useState<boolean>(false);
-  const { SubMenu } = Menu;
+  const {
+    parentMenu,
+    setParentMenu,
+    childMenu,
+    setChildMenu,
+    showMenuTitle,
+    setShowMenuTitle,
+  } = useMenuContext();
   const { Header, Content, Sider } = Layout;
 
   const onFinish = useCallback(() => {
@@ -41,25 +40,20 @@ const Admin: React.FC = () => {
     }
   }, [adminId, adminPW, setAdminId, setAdminPW]);
 
-  const handlePickMenu = useCallback((koMenu, koParentMenu) => {
-    setShowBreadCrumb(true);
-    setParentMenu(koParentMenu);
-    setPickMenu(koMenu);
-  }, []);
+  const handlePickMenu = useCallback(
+    (koMenu, koParentMenu) => {
+      setShowMenuTitle(true);
+      setParentMenu(koParentMenu);
+      setChildMenu(koMenu);
+    },
+    [setParentMenu, setChildMenu, setShowMenuTitle]
+  );
 
   const handleClickDashboard = useCallback(() => {
-    setShowBreadCrumb(false);
+    setShowMenuTitle(false);
     setParentMenu("대시보드");
-    setPickMenu("대시보드");
-  }, []);
-
-  useEffect(() => {
-    if (param !== "dashboard") {
-      setShowBreadCrumb(true);
-      setParentMenu(getTitle(param));
-      setPickMenu(getSubTitle(param, subparam));
-    }
-  }, [param, subparam, history]);
+    setChildMenu("대시보드");
+  }, [setParentMenu, setChildMenu, setShowMenuTitle]);
 
   useEffect(() => {
     const time = localStorage.getItem("admin");
@@ -74,7 +68,13 @@ const Admin: React.FC = () => {
     <Layout style={{ minHeight: "100vh" }}>
       {loginStatus ? (
         <>
-          <Header className="header">
+          <Header
+            className="header"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
             <div className="logo">
               <img src="/img/admin_logo.png" alt="logoimg" width={200} />
             </div>
@@ -82,20 +82,24 @@ const Admin: React.FC = () => {
               theme="dark"
               mode="horizontal"
               style={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <Menu.Item
-                key={1}
-                onClick={() => {
-                  adminLogOut();
-                  history.push("/main");
-                }}
-              >
-                메인으로 가기
-              </Menu.Item>
-              <Menu.Item key={2} onClick={() => adminLogOut()}>
-                <LogoutOutlined /> Logout
-              </Menu.Item>
-            </Menu>
+              items={[
+                {
+                  key: "main",
+                  label: "메인으로가기",
+                  onClick: () => {
+                    adminLogOut();
+                    history.push("/main");
+                  },
+                },
+                {
+                  key: "logout",
+                  label: "로그아웃",
+                  onClick: () => {
+                    adminLogOut();
+                  },
+                },
+              ]}
+            />
           </Header>
           <Layout>
             <Sider width={200} className="site-layout-background">
@@ -104,74 +108,79 @@ const Admin: React.FC = () => {
                 defaultSelectedKeys={["dashboard"]}
                 defaultOpenKeys={["dashboard"]}
                 style={{ height: "100%", borderRight: 0 }}
-              >
-                <Menu.Item key={"dashboard"} title="대시보드">
-                  <Link
-                    to={{
-                      pathname: `/admin/dashboard/dashboard`,
-                      state: { refresh: true },
-                    }}
-                    onClick={handleClickDashboard}
-                  >
-                    <span>대시보드</span>
-                  </Link>
-                </Menu.Item>
-                {AdminNavData.map((data: NavProps) => {
-                  return (
-                    <SubMenu key={data.ko_title} title={data.ko_title}>
-                      {data.subMenu.map((elem: ObjProps, i) => {
-                        return (
-                          <Menu.Item key={elem.title}>
-                            <Link
-                              to={`/admin/${data.title}/${
-                                elem.isList ? "list" : "show"
-                              }/${elem.key}`}
-                              onClick={() =>
-                                handlePickMenu(elem.ko_title, data.ko_title)
-                              }
-                            >
-                              <span>{elem.ko_title}</span>
-                            </Link>
-                          </Menu.Item>
-                        );
-                      })}
-                    </SubMenu>
-                  );
-                })}
-                <SubMenu title="홍보영상">
-                  <Menu.Item
-                    onClick={() => {
-                      setParentMenu("홍보영상");
-                      setPickMenu("홍보영상링크");
-                    }}
-                  >
-                    <Link to={`/admin/link/link`}>
-                      <span>홍보영상링크</span>
-                    </Link>
-                  </Menu.Item>
-                </SubMenu>
-                <SubMenu title="팝업">
-                  <Menu.Item
-                    onClick={() => {
-                      setParentMenu("팝업");
-                      setPickMenu("팝업관리");
-                    }}
-                  >
-                    <Link to={`/admin/popup/popup`}>
-                      <span>팝업관리</span>
-                    </Link>
-                  </Menu.Item>
-                </SubMenu>
-              </Menu>
+                items={[
+                  {
+                    key: "dashboard",
+                    label: "대시보드",
+                    onClick: () => {
+                      history.push({
+                        pathname: `/admin/dashboard/dashboard`,
+                        state: { refresh: true },
+                      });
+                      handleClickDashboard();
+                    },
+                  },
+                  ...AdminNavData.map((d: NavProps, i): ItemType => {
+                    return {
+                      key: i,
+                      label: d.ko_title,
+                      children: d.subMenu.map((sub: ObjProps, i): ItemType => {
+                        return {
+                          key: `${sub.ko_title}/${d.title}, ${i}`,
+                          label: sub.ko_title,
+                          onClick: () => {
+                            history.push(
+                              `/admin/${d.title}/${
+                                sub.isList ? "list" : "show"
+                              }/${sub.key}`
+                            );
+                            handlePickMenu(sub.ko_title, d.ko_title);
+                          },
+                        };
+                      }),
+                    };
+                  }),
+                  {
+                    key: "홍보영상",
+                    label: "홍보영상",
+                    children: [
+                      {
+                        key: "홍보영상링크",
+                        label: "홍보영상링크",
+                        onClick: () => {
+                          setParentMenu("홍보영상");
+                          setChildMenu("홍보영상링크");
+                          history.push(`/admin/link/link`);
+                        },
+                      },
+                    ],
+                  },
+                  {
+                    key: "팝업",
+                    label: "팝업",
+                    children: [
+                      {
+                        key: "팝업관리",
+                        label: "팝업관리",
+                        onClick: () => {
+                          setParentMenu("팝업");
+                          setChildMenu("팝업관리");
+                          history.push(`/admin/popup/popup`);
+                        },
+                      },
+                    ],
+                  },
+                ]}
+              />
             </Sider>
             <Layout style={{ padding: "0 24px 24px" }}>
-              {showBreadCrumb && (
+              {showMenuTitle && (
                 <StyledBread style={{ margin: "16px 0" }}>
                   <Breadcrumb.Item className="bread-item">
                     {parentMenu}
                   </Breadcrumb.Item>
                   <Breadcrumb.Item className="bread-item">
-                    {pickMenu}
+                    {childMenu}
                   </Breadcrumb.Item>
                 </StyledBread>
               )}

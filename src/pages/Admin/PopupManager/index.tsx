@@ -84,10 +84,9 @@ const PopupManager: React.FC = () => {
 
   return (
     <Container>
-      <Descriptions bordered layout="horizontal">
+      <Descriptions bordered layout="horizontal" column={1}>
         <Descriptions.Item
           label="게시여부"
-          span={4}
           key={"게시"}
           labelStyle={{ width: 120 }}
         >
@@ -98,7 +97,6 @@ const PopupManager: React.FC = () => {
         </Descriptions.Item>
         <Descriptions.Item
           label="팝업링크"
-          span={4}
           key={"링크"}
           labelStyle={{ width: 120 }}
         >

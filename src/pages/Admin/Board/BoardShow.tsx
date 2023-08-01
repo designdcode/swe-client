@@ -1,4 +1,4 @@
-import { Button, Descriptions, Typography } from "antd";
+import { Button, Descriptions, Image, Typography } from "antd";
 import { FC, useCallback, useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useBoardContext } from "../../../contexts";
@@ -59,7 +59,7 @@ export const BoardShow: FC = () => {
           backgroundColor: "white",
           padding: "15px",
         }}
-        column={{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }}
+        column={1}
       >
         <Descriptions.Item label="제목">{board?.title}</Descriptions.Item>
         <Descriptions.Item label="상태">
@@ -115,12 +115,11 @@ export const BoardShow: FC = () => {
         {(param === "achievement" || param === "community") && (
           <Descriptions.Item
             label="이미지"
-            span={4}
             labelStyle={{ width: 100 }}
             key="image"
           >
             {board?.images && board.images.length !== 0 ? (
-              <img
+              <Image
                 src={board.images[board.images.length - 1]!.url}
                 alt="newsimage"
                 width={300}
