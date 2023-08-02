@@ -170,6 +170,21 @@ const Admin: React.FC = () => {
                       },
                     ],
                   },
+                  {
+                    key: "파일",
+                    label: "파일",
+                    children: [
+                      {
+                        key: "파일관리",
+                        label: "파일관리",
+                        onClick: () => {
+                          setParentMenu("파일");
+                          setChildMenu("파일관리");
+                          history.push(`/admin/file/file`);
+                        },
+                      },
+                    ],
+                  },
                 ]}
               />
             </Sider>

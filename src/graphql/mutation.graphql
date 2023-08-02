@@ -159,3 +159,7 @@ mutation removeMember($_id: String!) {
     _id
   }
 }
+
+mutation createFile($args: CreateFileInput!) {
+  createFile(args: $args)
+}
