@@ -12,7 +12,7 @@ import {
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
 } from "../../utils/mediaQuery";
-import { Table, Typography } from "antd";
+import { Image, Table, Typography } from "antd";
 import Column from "antd/lib/table/Column";
 
 interface TableDataSourceProps {
@@ -128,7 +128,14 @@ export const Member: FC = () => {
       </div>
       <ContentImage>
         {images && images.length > 0 && (
-          <img src={images[0]?.url} alt="uploadedImage" />
+          <Image
+            style={{
+              minWidth: "250px",
+              maxWidth: "800px",
+            }}
+            src={images[0]?.url}
+            alt="uploadedImage"
+          />
         )}
       </ContentImage>
       <Typography.Title
