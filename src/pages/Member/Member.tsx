@@ -103,6 +103,8 @@ export const Member: FC = () => {
     return <div>loading...</div>;
   }
 
+  // TODO: Table breaks the mobile view
+
   return (
     <div
       style={{
