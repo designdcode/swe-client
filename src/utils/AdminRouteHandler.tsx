@@ -19,6 +19,7 @@ import {
   ImageUploadWithModal,
 } from "../pages/Admin/ImageUploadWithModal";
 import { Folder } from "../pages/Admin/Folder";
+import { FolderContextProvider } from "../contexts";
 
 interface IProps {
   param: string;
@@ -99,7 +100,11 @@ const AdminRouteHandler: React.VFC = () => {
       case "popup":
         return <PopupManager />;
       case "folder":
-        return <Folder />;
+        return (
+          <FolderContextProvider>
+            <Folder />
+          </FolderContextProvider>
+        );
       default:
         return;
     }

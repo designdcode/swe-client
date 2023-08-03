@@ -481,6 +481,92 @@
         "possibleTypes": null
       },
       {
+        "kind": "INPUT_OBJECT",
+        "name": "ChildrenInputType",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "_id",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "label",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ChildrenType",
+        "description": null,
+        "fields": [
+          {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "label",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "Comment",
         "description": null,
@@ -673,7 +759,7 @@
                 "ofType": null
               }
             },
-            "defaultValue": "\"2023-08-03T07:03:31.356Z\"",
+            "defaultValue": "\"2023-08-03T10:13:18.863Z\"",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -812,7 +898,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "childrenIds",
+            "name": "children",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -821,8 +907,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "kind": "INPUT_OBJECT",
+                  "name": "ChildrenInputType",
                   "ofType": null
                 }
               }
@@ -853,6 +939,18 @@
           },
           {
             "name": "label",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "parentId",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -1191,7 +1289,7 @@
             "deprecationReason": null
           },
           {
-            "name": "childrenIds",
+            "name": "children",
             "description": null,
             "args": [],
             "type": {
@@ -1201,8 +1299,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "kind": "OBJECT",
+                  "name": "ChildrenType",
                   "ofType": null
                 }
               }
@@ -1258,6 +1356,18 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "parentId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -1928,14 +2038,14 @@
             "description": null,
             "args": [
               {
-                "name": "id",
+                "name": "_id",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "String",
                     "ofType": null
                   }
                 },
@@ -2126,7 +2236,7 @@
             "description": null,
             "args": [
               {
-                "name": "updateFolderInput",
+                "name": "args",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -2585,14 +2695,14 @@
             "description": null,
             "args": [
               {
-                "name": "id",
+                "name": "_id",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "Int",
+                    "name": "String",
                     "ofType": null
                   }
                 },
@@ -2608,6 +2718,30 @@
                 "kind": "OBJECT",
                 "name": "Folder",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "folders",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Folder",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,
@@ -2976,7 +3110,7 @@
               "name": "DateTime",
               "ofType": null
             },
-            "defaultValue": "\"2023-08-03T07:03:31.356Z\"",
+            "defaultValue": "\"2023-08-03T10:13:18.863Z\"",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -3115,7 +3249,23 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "childrenIds",
+            "name": "_id",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "children",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -3124,8 +3274,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "kind": "INPUT_OBJECT",
+                  "name": "ChildrenInputType",
                   "ofType": null
                 }
               }
@@ -3155,23 +3305,19 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
+            "name": "label",
             "description": null,
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "label",
+            "name": "parentId",
             "description": null,
             "type": {
               "kind": "SCALAR",

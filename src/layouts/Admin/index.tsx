@@ -180,7 +180,7 @@ const Admin: React.FC = () => {
                         onClick: () => {
                           setParentMenu("폴더");
                           setChildMenu("폴더관리");
-                          history.push(`/admin/folder/folder`);
+                          history.push(`/admin/folder/layout`);
                         },
                       },
                     ],

@@ -79,6 +79,17 @@ export type BoardReturnType = {
   total: Scalars["Int"]["output"];
 };
 
+export type ChildrenInputType = {
+  _id: Scalars["String"]["input"];
+  label: Scalars["String"]["input"];
+};
+
+export type ChildrenType = {
+  __typename?: "ChildrenType";
+  _id: Scalars["String"]["output"];
+  label: Scalars["String"]["output"];
+};
+
 export type Comment = {
   __typename?: "Comment";
   _id: Scalars["String"]["output"];
@@ -109,9 +120,10 @@ export type CreateCommentInput = {
 };
 
 export type CreateFolderInput = {
-  childrenIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  children?: InputMaybe<Array<ChildrenInputType>>;
   files?: InputMaybe<Array<FileInputType>>;
   label?: InputMaybe<Scalars["String"]["input"]>;
+  parentId?: InputMaybe<Scalars["String"]["input"]>;
   value?: InputMaybe<Scalars["String"]["input"]>;
 };
 
@@ -149,10 +161,11 @@ export type FileType = {
 export type Folder = {
   __typename?: "Folder";
   _id: Scalars["String"]["output"];
-  childrenIds?: Maybe<Array<Scalars["String"]["output"]>>;
+  children?: Maybe<Array<ChildrenType>>;
   createdAt: Scalars["DateTime"]["output"];
   files?: Maybe<Array<FileType>>;
   label: Scalars["String"]["output"];
+  parentId?: Maybe<Scalars["String"]["output"]>;
   updatedAt: Scalars["DateTime"]["output"];
   value: Scalars["String"]["output"];
 };
@@ -247,7 +260,7 @@ export type MutationRemoveCommentArgs = {
 };
 
 export type MutationRemoveFolderArgs = {
-  id: Scalars["Int"]["input"];
+  _id: Scalars["String"]["input"];
 };
 
 export type MutationRemoveLinkArgs = {
@@ -271,7 +284,7 @@ export type MutationUpdateCommentArgs = {
 };
 
 export type MutationUpdateFolderArgs = {
-  updateFolderInput: UpdateFolderInput;
+  args: UpdateFolderInput;
 };
 
 export type MutationUpdateLinkArgs = {
@@ -318,6 +331,7 @@ export type Query = {
   board: Board;
   boards: BoardReturnType;
   folder: Folder;
+  folders: Array<Folder>;
   link: Link;
   links: LinkReturnType;
   member: Member;
@@ -335,7 +349,7 @@ export type QueryBoardsArgs = {
 };
 
 export type QueryFolderArgs = {
-  id: Scalars["Int"]["input"];
+  _id: Scalars["String"]["input"];
 };
 
 export type QueryLinkArgs = {
@@ -391,10 +405,11 @@ export type UpdateCommentInput = {
 };
 
 export type UpdateFolderInput = {
-  childrenIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  _id: Scalars["String"]["input"];
+  children?: InputMaybe<Array<ChildrenInputType>>;
   files?: InputMaybe<Array<FileInputType>>;
-  id: Scalars["Int"]["input"];
   label?: InputMaybe<Scalars["String"]["input"]>;
+  parentId?: InputMaybe<Scalars["String"]["input"]>;
   value?: InputMaybe<Scalars["String"]["input"]>;
 };
 
@@ -667,12 +682,43 @@ export type CreateFolderMutation = {
     _id: string;
     label: string;
     value: string;
-    childrenIds?: Array<string> | null;
+    parentId?: string | null;
     createdAt: any;
     files?: Array<{
       __typename?: "FileType";
       fileName: string;
       filePath: string;
+    }> | null;
+    children?: Array<{
+      __typename?: "ChildrenType";
+      _id: string;
+      label: string;
+    }> | null;
+  };
+};
+
+export type UpdateFolderMutationVariables = Exact<{
+  args: UpdateFolderInput;
+}>;
+
+export type UpdateFolderMutation = {
+  __typename?: "Mutation";
+  updateFolder: {
+    __typename?: "Folder";
+    _id: string;
+    label: string;
+    value: string;
+    parentId?: string | null;
+    createdAt: any;
+    files?: Array<{
+      __typename?: "FileType";
+      fileName: string;
+      filePath: string;
+    }> | null;
+    children?: Array<{
+      __typename?: "ChildrenType";
+      _id: string;
+      label: string;
     }> | null;
   };
 };
@@ -874,6 +920,56 @@ export type MemberQuery = {
     jobTitle: string;
     createdAt: any;
     updatedAt: any;
+  };
+};
+
+export type FoldersQueryVariables = Exact<{ [key: string]: never }>;
+
+export type FoldersQuery = {
+  __typename?: "Query";
+  folders: Array<{
+    __typename?: "Folder";
+    _id: string;
+    label: string;
+    value: string;
+    parentId?: string | null;
+    createdAt: any;
+    files?: Array<{
+      __typename?: "FileType";
+      fileName: string;
+      filePath: string;
+    }> | null;
+    children?: Array<{
+      __typename?: "ChildrenType";
+      _id: string;
+      label: string;
+    }> | null;
+  }>;
+};
+
+export type FolderQueryVariables = Exact<{
+  _id: Scalars["String"]["input"];
+}>;
+
+export type FolderQuery = {
+  __typename?: "Query";
+  folder: {
+    __typename?: "Folder";
+    _id: string;
+    label: string;
+    value: string;
+    parentId?: string | null;
+    createdAt: any;
+    files?: Array<{
+      __typename?: "FileType";
+      fileName: string;
+      filePath: string;
+    }> | null;
+    children?: Array<{
+      __typename?: "ChildrenType";
+      _id: string;
+      label: string;
+    }> | null;
   };
 };
 
@@ -1753,7 +1849,11 @@ export const CreateFolderDocument = gql`
         fileName
         filePath
       }
-      childrenIds
+      parentId
+      children {
+        _id
+        label
+      }
       createdAt
     }
   }
@@ -1800,6 +1900,68 @@ export type CreateFolderMutationResult =
 export type CreateFolderMutationOptions = Apollo.BaseMutationOptions<
   CreateFolderMutation,
   CreateFolderMutationVariables
+>;
+export const UpdateFolderDocument = gql`
+  mutation updateFolder($args: UpdateFolderInput!) {
+    updateFolder(args: $args) {
+      _id
+      label
+      value
+      files {
+        fileName
+        filePath
+      }
+      parentId
+      children {
+        _id
+        label
+      }
+      createdAt
+    }
+  }
+`;
+export type UpdateFolderMutationFn = Apollo.MutationFunction<
+  UpdateFolderMutation,
+  UpdateFolderMutationVariables
+>;
+
+/**
+ * __useUpdateFolderMutation__
+ *
+ * To run a mutation, you first call `useUpdateFolderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateFolderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateFolderMutation, { data, loading, error }] = useUpdateFolderMutation({
+ *   variables: {
+ *      args: // value for 'args'
+ *   },
+ * });
+ */
+export function useUpdateFolderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateFolderMutation,
+    UpdateFolderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateFolderMutation,
+    UpdateFolderMutationVariables
+  >(UpdateFolderDocument, options);
+}
+export type UpdateFolderMutationHookResult = ReturnType<
+  typeof useUpdateFolderMutation
+>;
+export type UpdateFolderMutationResult =
+  Apollo.MutationResult<UpdateFolderMutation>;
+export type UpdateFolderMutationOptions = Apollo.BaseMutationOptions<
+  UpdateFolderMutation,
+  UpdateFolderMutationVariables
 >;
 export const BoardsDocument = gql`
   query boards($args: PaginationArgs) {
@@ -2269,4 +2431,123 @@ export type MemberLazyQueryHookResult = ReturnType<typeof useMemberLazyQuery>;
 export type MemberQueryResult = Apollo.QueryResult<
   MemberQuery,
   MemberQueryVariables
+>;
+export const FoldersDocument = gql`
+  query folders {
+    folders {
+      _id
+      label
+      value
+      parentId
+      files {
+        fileName
+        filePath
+      }
+      children {
+        _id
+        label
+      }
+      createdAt
+    }
+  }
+`;
+
+/**
+ * __useFoldersQuery__
+ *
+ * To run a query within a React component, call `useFoldersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFoldersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFoldersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useFoldersQuery(
+  baseOptions?: Apollo.QueryHookOptions<FoldersQuery, FoldersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FoldersQuery, FoldersQueryVariables>(
+    FoldersDocument,
+    options
+  );
+}
+export function useFoldersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<FoldersQuery, FoldersQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<FoldersQuery, FoldersQueryVariables>(
+    FoldersDocument,
+    options
+  );
+}
+export type FoldersQueryHookResult = ReturnType<typeof useFoldersQuery>;
+export type FoldersLazyQueryHookResult = ReturnType<typeof useFoldersLazyQuery>;
+export type FoldersQueryResult = Apollo.QueryResult<
+  FoldersQuery,
+  FoldersQueryVariables
+>;
+export const FolderDocument = gql`
+  query folder($_id: String!) {
+    folder(_id: $_id) {
+      _id
+      label
+      value
+      parentId
+      files {
+        fileName
+        filePath
+      }
+      children {
+        _id
+        label
+      }
+      createdAt
+    }
+  }
+`;
+
+/**
+ * __useFolderQuery__
+ *
+ * To run a query within a React component, call `useFolderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFolderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFolderQuery({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useFolderQuery(
+  baseOptions: Apollo.QueryHookOptions<FolderQuery, FolderQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FolderQuery, FolderQueryVariables>(
+    FolderDocument,
+    options
+  );
+}
+export function useFolderLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<FolderQuery, FolderQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<FolderQuery, FolderQueryVariables>(
+    FolderDocument,
+    options
+  );
+}
+export type FolderQueryHookResult = ReturnType<typeof useFolderQuery>;
+export type FolderLazyQueryHookResult = ReturnType<typeof useFolderLazyQuery>;
+export type FolderQueryResult = Apollo.QueryResult<
+  FolderQuery,
+  FolderQueryVariables
 >;

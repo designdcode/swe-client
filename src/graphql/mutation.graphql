@@ -169,7 +169,29 @@ mutation createFolder($args: CreateFolderInput!) {
       fileName
       filePath
     }
-    childrenIds
+    parentId
+    children {
+      _id
+      label
+    }
+    createdAt
+  }
+}
+
+mutation updateFolder($args: UpdateFolderInput!) {
+  updateFolder(args: $args) {
+    _id
+    label
+    value
+    files {
+      fileName
+      filePath
+    }
+    parentId
+    children {
+      _id
+      label
+    }
     createdAt
   }
 }

@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { FolderLayout } from "./components";
+import { FolderLayout, FolderShow } from "./components";
 
 export const Folder: FC = () => {
   return (
     <FolderLayout>
-      <div>test</div>
+      <FolderShow />
     </FolderLayout>
   );
 };
