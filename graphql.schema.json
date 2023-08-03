@@ -673,7 +673,7 @@
                 "ofType": null
               }
             },
-            "defaultValue": "\"2023-08-02T13:19:42.376Z\"",
+            "defaultValue": "\"2023-08-03T07:03:31.356Z\"",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -807,12 +807,12 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "CreateFileInput",
+        "name": "CreateFolderInput",
         "description": null,
         "fields": null,
         "inputFields": [
           {
-            "name": "children",
+            "name": "childrenIds",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -821,8 +821,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "CreateFileInput",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }
@@ -835,9 +835,17 @@
             "name": "files",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Upload",
-              "ofType": null
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "FileInputType",
+                  "ofType": null
+                }
+              }
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -847,13 +855,9 @@
             "name": "label",
             "description": null,
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -863,13 +867,9 @@
             "name": "value",
             "description": null,
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -1084,20 +1084,210 @@
         "possibleTypes": null
       },
       {
+        "kind": "INPUT_OBJECT",
+        "name": "FileInputType",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "fileName",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "filePath",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
-        "name": "File",
+        "name": "FileType",
         "description": null,
         "fields": [
           {
-            "name": "exampleField",
-            "description": "Example field (placeholder)",
+            "name": "fileName",
+            "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "filePath",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Folder",
+        "description": null,
+        "fields": [
+          {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "childrenIds",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "createdAt",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "files",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "FileType",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "label",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updatedAt",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "value",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
                 "ofType": null
               }
             },
@@ -1536,7 +1726,7 @@
             "deprecationReason": null
           },
           {
-            "name": "createFile",
+            "name": "createFolder",
             "description": null,
             "args": [
               {
@@ -1547,7 +1737,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "CreateFileInput",
+                    "name": "CreateFolderInput",
                     "ofType": null
                   }
                 },
@@ -1560,8 +1750,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "OBJECT",
+                "name": "Folder",
                 "ofType": null
               }
             },
@@ -1734,7 +1924,7 @@
             "deprecationReason": null
           },
           {
-            "name": "removeFile",
+            "name": "removeFolder",
             "description": null,
             "args": [
               {
@@ -1759,7 +1949,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "File",
+                "name": "Folder",
                 "ofType": null
               }
             },
@@ -1932,18 +2122,18 @@
             "deprecationReason": null
           },
           {
-            "name": "updateFile",
+            "name": "updateFolder",
             "description": null,
             "args": [
               {
-                "name": "updateFileInput",
+                "name": "updateFolderInput",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "UpdateFileInput",
+                    "name": "UpdateFolderInput",
                     "ofType": null
                   }
                 },
@@ -1957,7 +2147,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "File",
+                "name": "Folder",
                 "ofType": null
               }
             },
@@ -2391,7 +2581,7 @@
             "deprecationReason": null
           },
           {
-            "name": "file",
+            "name": "folder",
             "description": null,
             "args": [
               {
@@ -2416,32 +2606,8 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "File",
+                "name": "Folder",
                 "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "files",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "OBJECT",
-                    "name": "File",
-                    "ofType": null
-                  }
-                }
               }
             },
             "isDeprecated": false,
@@ -2810,7 +2976,7 @@
               "name": "DateTime",
               "ofType": null
             },
-            "defaultValue": "\"2023-08-02T13:19:42.376Z\"",
+            "defaultValue": "\"2023-08-03T07:03:31.356Z\"",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -2944,12 +3110,12 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "UpdateFileInput",
+        "name": "UpdateFolderInput",
         "description": null,
         "fields": null,
         "inputFields": [
           {
-            "name": "children",
+            "name": "childrenIds",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -2958,8 +3124,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "CreateFileInput",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 }
               }
@@ -2972,9 +3138,17 @@
             "name": "files",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Upload",
-              "ofType": null
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "FileInputType",
+                  "ofType": null
+                }
+              }
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -3234,16 +3408,6 @@
             "deprecationReason": null
           }
         ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "SCALAR",
-        "name": "Upload",
-        "description": "The `Upload` scalar type represents a file upload.",
-        "fields": null,
-        "inputFields": null,
         "interfaces": null,
         "enumValues": null,
         "possibleTypes": null

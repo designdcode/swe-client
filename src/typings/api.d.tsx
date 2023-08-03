@@ -29,7 +29,6 @@ export type Scalars = {
   Int: { input: number; output: number };
   Float: { input: number; output: number };
   DateTime: { input: any; output: any };
-  Upload: { input: any; output: any };
 };
 
 export type AttachementInput = {
@@ -109,11 +108,11 @@ export type CreateCommentInput = {
   content: Scalars["String"]["input"];
 };
 
-export type CreateFileInput = {
-  children?: InputMaybe<Array<CreateFileInput>>;
-  files?: InputMaybe<Scalars["Upload"]["input"]>;
-  label: Scalars["String"]["input"];
-  value: Scalars["String"]["input"];
+export type CreateFolderInput = {
+  childrenIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  files?: InputMaybe<Array<FileInputType>>;
+  label?: InputMaybe<Scalars["String"]["input"]>;
+  value?: InputMaybe<Scalars["String"]["input"]>;
 };
 
 export type CreateLinkInput = {
@@ -136,10 +135,26 @@ export type CreatePopupInput = {
   url?: InputMaybe<Scalars["String"]["input"]>;
 };
 
-export type File = {
-  __typename?: "File";
-  /** Example field (placeholder) */
-  exampleField: Scalars["Int"]["output"];
+export type FileInputType = {
+  fileName: Scalars["String"]["input"];
+  filePath: Scalars["String"]["input"];
+};
+
+export type FileType = {
+  __typename?: "FileType";
+  fileName: Scalars["String"]["output"];
+  filePath: Scalars["String"]["output"];
+};
+
+export type Folder = {
+  __typename?: "Folder";
+  _id: Scalars["String"]["output"];
+  childrenIds?: Maybe<Array<Scalars["String"]["output"]>>;
+  createdAt: Scalars["DateTime"]["output"];
+  files?: Maybe<Array<FileType>>;
+  label: Scalars["String"]["output"];
+  updatedAt: Scalars["DateTime"]["output"];
+  value: Scalars["String"]["output"];
 };
 
 export type Link = {
@@ -180,19 +195,19 @@ export type Mutation = {
   __typename?: "Mutation";
   createBoard: Board;
   createComment: Comment;
-  createFile: Scalars["String"]["output"];
+  createFolder: Folder;
   createLink: Link;
   createMember: Member;
   createPopup: Popup;
   removeBoard: Board;
   removeComment: Comment;
-  removeFile: File;
+  removeFolder: Folder;
   removeLink: Link;
   removeMember: Member;
   removePopup: Popup;
   updateBoard: Board;
   updateComment: Comment;
-  updateFile: File;
+  updateFolder: Folder;
   updateLink: Link;
   updateMember: Member;
   updatePopup: Popup;
@@ -207,8 +222,8 @@ export type MutationCreateCommentArgs = {
   args: CreateCommentInput;
 };
 
-export type MutationCreateFileArgs = {
-  args: CreateFileInput;
+export type MutationCreateFolderArgs = {
+  args: CreateFolderInput;
 };
 
 export type MutationCreateLinkArgs = {
@@ -231,7 +246,7 @@ export type MutationRemoveCommentArgs = {
   _id: Scalars["String"]["input"];
 };
 
-export type MutationRemoveFileArgs = {
+export type MutationRemoveFolderArgs = {
   id: Scalars["Int"]["input"];
 };
 
@@ -255,8 +270,8 @@ export type MutationUpdateCommentArgs = {
   args: UpdateCommentInput;
 };
 
-export type MutationUpdateFileArgs = {
-  updateFileInput: UpdateFileInput;
+export type MutationUpdateFolderArgs = {
+  updateFolderInput: UpdateFolderInput;
 };
 
 export type MutationUpdateLinkArgs = {
@@ -302,8 +317,7 @@ export type Query = {
   __typename?: "Query";
   board: Board;
   boards: BoardReturnType;
-  file: File;
-  files: Array<File>;
+  folder: Folder;
   link: Link;
   links: LinkReturnType;
   member: Member;
@@ -320,7 +334,7 @@ export type QueryBoardsArgs = {
   args?: InputMaybe<PaginationArgs>;
 };
 
-export type QueryFileArgs = {
+export type QueryFolderArgs = {
   id: Scalars["Int"]["input"];
 };
 
@@ -376,9 +390,9 @@ export type UpdateCommentInput = {
   content?: InputMaybe<Scalars["String"]["input"]>;
 };
 
-export type UpdateFileInput = {
-  children?: InputMaybe<Array<CreateFileInput>>;
-  files?: InputMaybe<Scalars["Upload"]["input"]>;
+export type UpdateFolderInput = {
+  childrenIds?: InputMaybe<Array<Scalars["String"]["input"]>>;
+  files?: InputMaybe<Array<FileInputType>>;
   id: Scalars["Int"]["input"];
   label?: InputMaybe<Scalars["String"]["input"]>;
   value?: InputMaybe<Scalars["String"]["input"]>;
@@ -642,13 +656,25 @@ export type RemoveMemberMutation = {
   removeMember: { __typename?: "Member"; _id: string };
 };
 
-export type CreateFileMutationVariables = Exact<{
-  args: CreateFileInput;
+export type CreateFolderMutationVariables = Exact<{
+  args: CreateFolderInput;
 }>;
 
-export type CreateFileMutation = {
+export type CreateFolderMutation = {
   __typename?: "Mutation";
-  createFile: string;
+  createFolder: {
+    __typename?: "Folder";
+    _id: string;
+    label: string;
+    value: string;
+    childrenIds?: Array<string> | null;
+    createdAt: any;
+    files?: Array<{
+      __typename?: "FileType";
+      fileName: string;
+      filePath: string;
+    }> | null;
+  };
 };
 
 export type BoardsQueryVariables = Exact<{
@@ -1717,53 +1743,63 @@ export type RemoveMemberMutationOptions = Apollo.BaseMutationOptions<
   RemoveMemberMutation,
   RemoveMemberMutationVariables
 >;
-export const CreateFileDocument = gql`
-  mutation createFile($args: CreateFileInput!) {
-    createFile(args: $args)
+export const CreateFolderDocument = gql`
+  mutation createFolder($args: CreateFolderInput!) {
+    createFolder(args: $args) {
+      _id
+      label
+      value
+      files {
+        fileName
+        filePath
+      }
+      childrenIds
+      createdAt
+    }
   }
 `;
-export type CreateFileMutationFn = Apollo.MutationFunction<
-  CreateFileMutation,
-  CreateFileMutationVariables
+export type CreateFolderMutationFn = Apollo.MutationFunction<
+  CreateFolderMutation,
+  CreateFolderMutationVariables
 >;
 
 /**
- * __useCreateFileMutation__
+ * __useCreateFolderMutation__
  *
- * To run a mutation, you first call `useCreateFileMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateFileMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateFolderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFolderMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createFileMutation, { data, loading, error }] = useCreateFileMutation({
+ * const [createFolderMutation, { data, loading, error }] = useCreateFolderMutation({
  *   variables: {
  *      args: // value for 'args'
  *   },
  * });
  */
-export function useCreateFileMutation(
+export function useCreateFolderMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    CreateFileMutation,
-    CreateFileMutationVariables
+    CreateFolderMutation,
+    CreateFolderMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateFileMutation, CreateFileMutationVariables>(
-    CreateFileDocument,
-    options
-  );
+  return Apollo.useMutation<
+    CreateFolderMutation,
+    CreateFolderMutationVariables
+  >(CreateFolderDocument, options);
 }
-export type CreateFileMutationHookResult = ReturnType<
-  typeof useCreateFileMutation
+export type CreateFolderMutationHookResult = ReturnType<
+  typeof useCreateFolderMutation
 >;
-export type CreateFileMutationResult =
-  Apollo.MutationResult<CreateFileMutation>;
-export type CreateFileMutationOptions = Apollo.BaseMutationOptions<
-  CreateFileMutation,
-  CreateFileMutationVariables
+export type CreateFolderMutationResult =
+  Apollo.MutationResult<CreateFolderMutation>;
+export type CreateFolderMutationOptions = Apollo.BaseMutationOptions<
+  CreateFolderMutation,
+  CreateFolderMutationVariables
 >;
 export const BoardsDocument = gql`
   query boards($args: PaginationArgs) {

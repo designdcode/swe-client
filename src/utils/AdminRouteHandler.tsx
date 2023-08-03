@@ -18,7 +18,7 @@ import {
   ImageUploadWithLink,
   ImageUploadWithModal,
 } from "../pages/Admin/ImageUploadWithModal";
-import { File } from "../pages/Admin/File";
+import { Folder } from "../pages/Admin/Folder";
 
 interface IProps {
   param: string;
@@ -98,8 +98,8 @@ const AdminRouteHandler: React.VFC = () => {
         return <VideoLink />;
       case "popup":
         return <PopupManager />;
-      case "file":
-        return <File />;
+      case "folder":
+        return <Folder />;
       default:
         return;
     }

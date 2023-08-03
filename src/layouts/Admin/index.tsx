@@ -171,16 +171,16 @@ const Admin: React.FC = () => {
                     ],
                   },
                   {
-                    key: "파일",
-                    label: "파일",
+                    key: "폴더",
+                    label: "폴더",
                     children: [
                       {
-                        key: "파일관리",
-                        label: "파일관리",
+                        key: "폴더관리",
+                        label: "폴더관리",
                         onClick: () => {
-                          setParentMenu("파일");
-                          setChildMenu("파일관리");
-                          history.push(`/admin/file/file`);
+                          setParentMenu("폴더");
+                          setChildMenu("폴더관리");
+                          history.push(`/admin/folder/folder`);
                         },
                       },
                     ],

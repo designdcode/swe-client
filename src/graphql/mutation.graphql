@@ -160,6 +160,16 @@ mutation removeMember($_id: String!) {
   }
 }
 
-mutation createFile($args: CreateFileInput!) {
-  createFile(args: $args)
+mutation createFolder($args: CreateFolderInput!) {
+  createFolder(args: $args) {
+    _id
+    label
+    value
+    files {
+      fileName
+      filePath
+    }
+    childrenIds
+    createdAt
+  }
 }

@@ -1,39 +1,26 @@
 import React, { FC, useCallback, useState } from "react";
-import { useCreateFileMutation } from "../../../typings/api.d";
-import { Button, Upload, UploadProps } from "antd";
+import { Button, Form, FormItemProps, Input, Upload, UploadProps } from "antd";
+import { useCreateFolderMutation } from "../../../../typings/api.d";
 
 interface FileResponseProp {
   fileName: string;
   filePath: string;
 }
 
-export const File: FC = () => {
+export const FolderCreate: FC = () => {
+  const [form] = Form.useForm();
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [response, setResponse] = useState<FileResponseProp[]>([]);
-  const [createFile] = useCreateFileMutation();
+  const [depth, setDepth] = useState<number>(2);
 
-  const postData = async (data = {}) => {
-    if (data) {
-      const submitData = new FormData();
-      submitData.append("files", JSON.stringify(data));
-      const response = await fetch("http://localhost:4000/upload", {
-        method: "POST",
-        body: submitData,
-      });
-      return response.json();
-    }
-  };
+  const [createFolder] = useCreateFolderMutation();
 
-  const handleUpload = useCallback(
-    async ({ file }) => {
-      setUploadedFiles((prev) => [...uploadedFiles, file]);
+  const handleSubmit = useCallback(
+    async (v) => {
+      console.log(v, response);
     },
-    [uploadedFiles]
+    [response]
   );
-
-  const handleSubmit = useCallback(async () => {
-    await postData(uploadedFiles);
-  }, [uploadedFiles]);
 
   const uploadProps: UploadProps = {
     name: "file",
@@ -52,20 +39,37 @@ export const File: FC = () => {
       }
       if (info.file.status === "done" && info.file.response) {
         setResponse(() => [...response, info.file.response]);
+        return info.file.response;
       } else if (info.file.status === "error") {
         console.log("failed");
       }
     },
   };
 
-  console.log(response);
+  const getFile: FormItemProps["getValueFromEvent"] = (e) => {
+    console.log("Upload event:", e);
+
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
 
   return (
     <div>
       <Upload {...uploadProps} multiple>
         <Button>파일 올리기</Button>
       </Upload>
-      <Button onClick={handleSubmit}>Upload file</Button>
+      <Form form={form} onFinish={handleSubmit}>
+        <Form.Item name="label" label="폴더 제목">
+          <Input />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };
