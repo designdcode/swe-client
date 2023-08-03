@@ -8,6 +8,7 @@ import {
   Input,
   Modal,
   Tabs,
+  Typography,
   Upload,
   UploadProps,
 } from "antd";
@@ -15,6 +16,7 @@ import { FileAddOutlined, FileTextOutlined } from "@ant-design/icons";
 import Meta from "antd/lib/card/Meta";
 import { useParams } from "react-router";
 import {
+  FileType,
   FolderQuery,
   useCreateFolderMutation,
   useUpdateFolderMutation,
@@ -83,6 +85,7 @@ export const FolderShow: FC = () => {
   const [selectedTab, setSelectedTab] = useState<"FILE" | "FOLDER">("FILE");
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [response, setResponse] = useState<FileResponseProp[]>([]);
+  const [label, setLabel] = useState<string>();
   const [files, setFiles] = useState<FolderQuery["folder"]["files"]>();
 
   const [createFolder] = useCreateFolderMutation();
@@ -95,6 +98,7 @@ export const FolderShow: FC = () => {
           _id: params.subparam,
         },
         onCompleted: ({ folder }) => {
+          setLabel(folder.label);
           setFiles(folder.files);
         },
       });
@@ -107,6 +111,8 @@ export const FolderShow: FC = () => {
     headers: {
       authorization: "authorization-text",
     },
+    listType: "picture",
+    openFileDialogOnClick: true,
     onChange: (info) => {
       if (info) {
         if (info.file.status !== "uploading") {
@@ -131,7 +137,12 @@ export const FolderShow: FC = () => {
         toast.error("파일을 업로드 해주세요");
         return;
       }
-      const compiledFiles = (files || []).concat({
+      const compiledFiles = (
+        files?.map((v) => ({
+          fileName: v.fileName,
+          filePath: v.filePath,
+        })) || []
+      ).concat({
         fileName: response[0].filename,
         filePath: response[0].path,
       });
@@ -182,8 +193,29 @@ export const FolderShow: FC = () => {
     updateFolder,
   ]);
 
+  const handleDownload = useCallback(async (file: FileType) => {
+    console.log(file.filePath);
+    await fetch(`http://localhost:4000/download/${file.filePath}`, {
+      method: "GET",
+    })
+      .then((response) => response.blob())
+      .then((blob) => {
+        const href = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = href;
+        link.setAttribute("download", file.fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch((err) => {
+        return Promise.reject({ Error: "Something Went Wrong", err });
+      });
+  }, []);
+
   return (
     <Content>
+      <Typography.Title level={4}>{label}</Typography.Title>
       <Modal
         title="파일올리기"
         open={openModal}
@@ -228,7 +260,13 @@ export const FolderShow: FC = () => {
           const fileName = `${trimmedfileName}.${
             extention[extention.length - 1]
           }`;
-          return <CardBox key={f.fileName} title={fileName} />;
+          return (
+            <CardBox
+              key={f.fileName}
+              title={fileName}
+              onClick={() => handleDownload(f)}
+            />
+          );
         })}
         <CardBox
           title="새로만들기"

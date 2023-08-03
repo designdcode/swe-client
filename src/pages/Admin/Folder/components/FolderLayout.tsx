@@ -1,11 +1,13 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
 import type { MenuProps } from "antd";
-import { Breadcrumb, Form, Input, Layout, Menu, Modal, Typography } from "antd";
+import { Form, Input, Layout, Menu, Modal, Typography } from "antd";
 import { useFolderContext } from "../../../../contexts";
 import { useHistory, useParams } from "react-router";
-import { useCreateFolderMutation } from "../../../../typings/api.d";
+import {
+  FolderQuery,
+  useCreateFolderMutation,
+} from "../../../../typings/api.d";
 import { toast } from "react-toastify";
-import { PlusCircleOutlined } from "@ant-design/icons";
 import { ItemType } from "antd/lib/menu/hooks/useItems";
 
 const { Content, Sider } = Layout;
@@ -40,7 +42,7 @@ export const FolderLayout: FC = ({ children }) => {
   const params: Record<string, string> = useParams();
   const history = useHistory();
   const [collapsed, setCollapsed] = useState(false);
-  const { parentFolders, refetch } = useFolderContext();
+  const { folders, parentFolders, refetch } = useFolderContext();
   const [createFolder] = useCreateFolderMutation();
   const [openModal, setOpenModal] = useState<boolean>(false);
 
@@ -58,7 +60,9 @@ export const FolderLayout: FC = ({ children }) => {
       parentFolders &&
       parentFolders.length > 0
     ) {
-      history.push(`/admin/folder/${parentFolders[0]._id}`);
+      history.push(
+        `/admin/folder/${parentFolders[0]._id}/${parentFolders[0].label}`
+      );
     }
   }, [params, parentFolders, history]);
 
@@ -82,10 +86,46 @@ export const FolderLayout: FC = ({ children }) => {
     }
   }, [form, createFolder, refetch]);
 
+  const renderMenuItem = useCallback(
+    (children: NonNullable<FolderQuery["folder"]["children"]>) => {
+      return children.map((c) => {
+        const foundFolder = folders.find((f) => f._id === c._id);
+        if (foundFolder?.children && foundFolder.children.length > 0) {
+          return (
+            <Menu.SubMenu
+              key={c._id}
+              title={foundFolder.label}
+              onTitleClick={() => {
+                history.push(
+                  `/admin/folder/${foundFolder._id}/${foundFolder.label}`
+                );
+              }}
+            >
+              {renderMenuItem(foundFolder.children)}
+            </Menu.SubMenu>
+          );
+        } else {
+          return (
+            <Menu.Item
+              key={c._id}
+              onClick={() => {
+                history.push(`/admin/folder/${c._id}/${c.label}`);
+              }}
+            >
+              {foundFolder?.label}
+            </Menu.Item>
+          );
+        }
+      });
+    },
+    [folders, history]
+  );
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
         collapsible
+        width={250}
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
@@ -94,16 +134,38 @@ export const FolderLayout: FC = ({ children }) => {
           theme="dark"
           defaultSelectedKeys={[(menuItems[0]?.key as string) || "1"]}
           mode="inline"
-          items={[
-            ...menuItems,
-            {
-              key: "create",
-              label: "폴더 생성하기",
-              icon: <PlusCircleOutlined />,
-              onClick: () => setOpenModal(true),
-            },
-          ]}
-        />
+        >
+          {parentFolders?.map((f, i) => {
+            if (f.children && f.children.length > 0) {
+              const childFolder = folders.find((child) => f._id === child._id);
+              return (
+                <Menu.SubMenu
+                  key={f._id}
+                  title={f.label}
+                  onTitleClick={() => {
+                    history.push(`/admin/folder/${f._id}/${f.label}`);
+                  }}
+                >
+                  {renderMenuItem(childFolder?.children || [])}
+                </Menu.SubMenu>
+              );
+            } else {
+              return (
+                <Menu.Item
+                  key={f._id}
+                  onClick={() => {
+                    history.push(`/admin/folder/${f._id}/${f.label}`);
+                  }}
+                >
+                  {f.label}
+                </Menu.Item>
+              );
+            }
+          })}
+          <Menu.Item key="create" onClick={() => setOpenModal(true)}>
+            폴더 생성하기
+          </Menu.Item>
+        </Menu>
       </Sider>
       <Layout>
         <Modal
@@ -118,13 +180,7 @@ export const FolderLayout: FC = ({ children }) => {
           </Form>
         </Modal>
         {parentFolders && parentFolders.length > 0 ? (
-          <Content style={{ margin: "0 16px" }}>
-            <Breadcrumb style={{ margin: "16px 0" }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            {children}
-          </Content>
+          <Content style={{ margin: "0 16px" }}>{children}</Content>
         ) : (
           <Content
             style={{
