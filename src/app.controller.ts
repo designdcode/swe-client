@@ -46,7 +46,6 @@ export class AppController {
     @UploadedFile()
     files: Array<Express.Multer.File>,
   ) {
-    console.log(files);
     return files;
   }
 }

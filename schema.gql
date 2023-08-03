@@ -93,6 +93,27 @@ type Auth {
   stno: String!
 }
 
+type FileType {
+  fileName: String!
+  filePath: String!
+}
+
+type ChildrenType {
+  _id: String!
+  label: String
+}
+
+type Folder {
+  _id: String!
+  label: String!
+  value: String!
+  files: [FileType!]
+  parentId: String
+  children: [ChildrenType!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Query {
   boards(args: PaginationArgs): BoardReturnType!
   board(_id: String!): Board!
@@ -102,6 +123,8 @@ type Query {
   link(_id: String!): Link!
   members(args: PaginationArgs): MemberReturnType!
   member(_id: String!): Member!
+  folders: [Folder!]!
+  folder(_id: String!): Folder!
 }
 
 input PaginationArgs {
@@ -132,6 +155,9 @@ type Mutation {
   createMember(args: CreateMemberInput!): Member!
   updateMember(args: UpdateMemberInput!): Member!
   removeMember(_id: String!): Member!
+  createFolder(args: CreateFolderInput!): Folder!
+  updateFolder(args: UpdateFolderInput!): Folder!
+  removeFolder(_id: String!): Folder!
 }
 
 input CreateBoardInput {
@@ -145,7 +171,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-08-02T17:08:19.250Z"
+  inputCreatedAt: DateTime! = "2023-08-03T10:58:08.586Z"
 }
 
 input AttachementInput {
@@ -164,7 +190,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-08-02T17:08:19.250Z"
+  inputCreatedAt: DateTime = "2023-08-03T10:58:08.586Z"
   _id: String!
 }
 
@@ -224,5 +250,32 @@ input UpdateMemberInput {
   job: String = ""
   department: String
   jobTitle: String
+  _id: String!
+}
+
+input CreateFolderInput {
+  label: String
+  value: String
+  files: [FileInputType!]
+  children: [ChildrenInputType!]
+  parentId: String
+}
+
+input FileInputType {
+  fileName: String!
+  filePath: String!
+}
+
+input ChildrenInputType {
+  _id: String!
+  label: String!
+}
+
+input UpdateFolderInput {
+  label: String
+  value: String
+  files: [FileInputType!]
+  children: [ChildrenInputType!]
+  parentId: String
   _id: String!
 }
