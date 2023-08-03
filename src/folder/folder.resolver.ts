@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { FolderService } from './folder.service';
 import { Folder } from './entities/folder.entity';
 import { CreateFolderInput } from './dto/create-folder.input';

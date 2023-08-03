@@ -1,24 +1,23 @@
 import {
   Controller,
   Get,
+  Param,
   Post,
+  Res,
+  StreamableFile,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { InjectModel } from '@nestjs/mongoose';
-import { Explorer } from './explorer.schema';
 import { diskStorage } from 'multer';
-import { Model } from 'mongoose';
-import { extname } from 'path';
+import { extname, join } from 'path';
+import { Response } from 'express';
+import { createReadStream } from 'fs';
 
 @Controller()
 export class AppController {
-  constructor(
-    @InjectModel(Explorer.name) private readonly explorerModel: Model<Explorer>,
-    private readonly appService: AppService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get()
   getHello(): string {
@@ -47,5 +46,13 @@ export class AppController {
     files: Array<Express.Multer.File>,
   ) {
     return files;
+  }
+
+  @Get('download/*')
+  getFile(@Res() res: Response, @Param() params: { path: string }) {
+    const path = Object.values(params)[0];
+    const file = createReadStream(join(process.cwd(), path));
+    file.pipe(res);
+    return new StreamableFile(file);
   }
 }
