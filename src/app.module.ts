@@ -8,6 +8,9 @@ import { PopupModule } from './popup/popup.module';
 import { LinkModule } from './link/link.module';
 import { AuthModule } from './auth/auth.module';
 import { MemberModule } from './member/member.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Explorer, ExplorerSchema } from './explorer.schema';
+import { FolderModule } from './folder/folder.module';
 
 @Module({
   imports: [
@@ -18,6 +21,13 @@ import { MemberModule } from './member/member.module';
     LinkModule,
     AuthModule,
     MemberModule,
+    MongooseModule.forFeature([
+      {
+        name: Explorer.name,
+        schema: ExplorerSchema,
+      },
+    ]),
+    FolderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
