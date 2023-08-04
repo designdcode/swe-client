@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
 import type { MenuProps } from "antd";
 import { Form, Input, Layout, Menu, Modal, Typography } from "antd";
+import styled from "@emotion/styled";
 import { useFolderContext } from "../../../../contexts";
 import { useHistory, useParams } from "react-router";
 import {
@@ -10,7 +11,7 @@ import {
 import { toast } from "react-toastify";
 import { ItemType } from "antd/lib/menu/hooks/useItems";
 
-const { Content, Sider } = Layout;
+const { Content } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -196,3 +197,14 @@ export const FolderLayout: FC = ({ children }) => {
     </Layout>
   );
 };
+
+const Sider = styled(Layout.Sider)`
+  .ant-menu > .ant-menu-item-active,
+  .ant-menu > .ant-menu-item-open,
+  .ant-menu > .ant-menu-submenu-open,
+  .ant-menu > .ant-menu-item-selected,
+  .ant-menu > .ant-menu-submenu-selected {
+    font-size: 18px;
+    transition: font-size 0.05s;
+  }
+`;
