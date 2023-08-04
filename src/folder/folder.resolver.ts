@@ -32,4 +32,12 @@ export class FolderResolver {
   async removeFolder(@Args('_id') _id: string) {
     return await this.folderService.remove(_id);
   }
+
+  @Mutation(() => Folder)
+  async removeFile(
+    @Args('folderId') folderId: string,
+    @Args('filePath') filePath: string,
+  ) {
+    return await this.folderService.removeFile(folderId, filePath);
+  }
 }

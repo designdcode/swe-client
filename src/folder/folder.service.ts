@@ -80,6 +80,47 @@ export class FolderService {
   }
 
   async remove(_id: string) {
-    return `This action removes a #${_id} folder`;
+    try {
+      const folder = await this.folderModel.findById({ _id });
+      if (folder.parentId) {
+        const parentFolder = await this.folderModel.findById({
+          _id: folder.parentId,
+        });
+        const compiliedChildren = parentFolder.children?.filter(
+          (c) => String(c._id) !== String(_id),
+        );
+        const updated = await this.folderModel.findByIdAndUpdate(
+          { _id: folder.parentId },
+          {
+            $set: {
+              children: compiliedChildren,
+            },
+          },
+        );
+        updated.save();
+      }
+      return await this.folderModel.findByIdAndRemove({ _id });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  async removeFile(folderId: string, filePath: string) {
+    try {
+      const folder = await this.folderModel.findById({ _id: folderId });
+      const compiledFiles = folder.files?.filter(
+        (f) => f.filePath !== filePath,
+      );
+      return await this.folderModel.findByIdAndUpdate(
+        { _id: folderId },
+        {
+          $set: {
+            files: compiledFiles,
+          },
+        },
+      );
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 }
