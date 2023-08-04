@@ -10,6 +10,7 @@ import {
   Tabs,
   Typography,
   Upload,
+  UploadFile,
   UploadProps,
 } from "antd";
 import { FileAddOutlined, FileTextOutlined } from "@ant-design/icons";
@@ -134,6 +135,7 @@ export const FolderShow: FC = () => {
   const [label, setLabel] = useState<string>();
   const [files, setFiles] = useState<FolderQuery["folder"]["files"]>();
   const [openRemoveModal, setOpenRemoveModal] = useState<boolean>(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const { parentFolders } = useFolderContext();
 
   const [createFolder] = useCreateFolderMutation();
@@ -167,6 +169,12 @@ export const FolderShow: FC = () => {
     },
     listType: "picture",
     openFileDialogOnClick: true,
+    beforeUpload: (file) => {
+      setFileList([file]);
+    },
+    onRemove: () => {
+      setFileList([]);
+    },
     onChange: (info) => {
       if (info) {
         if (info.file.status !== "uploading") {
@@ -187,7 +195,7 @@ export const FolderShow: FC = () => {
 
   const handleSubmit = useCallback(async () => {
     if (selectedTab === "FILE") {
-      if (!response) {
+      if (!response || !response[0]) {
         toast.error("파일을 업로드 해주세요");
         return;
       }
@@ -212,6 +220,7 @@ export const FolderShow: FC = () => {
           refetch();
           setOpenModal(false);
           toast.success("파일이 생성되었습니다.");
+          setFileList([]);
           setResponse([]);
         },
       });
@@ -274,7 +283,6 @@ export const FolderShow: FC = () => {
           history.push(
             `/admin/folder/${parentFolders[0]._id}/${parentFolders[0].label}`
           );
-          // setTimeout(() => window.location.reload(), 500);
         }
         refetch();
       },
@@ -291,7 +299,6 @@ export const FolderShow: FC = () => {
         onCompleted: () => {
           toast.success("파일을 삭제 하였습니다.");
           refetch();
-          // setTimeout(() => window.location.reload(), 500);
         },
       });
     },
@@ -339,7 +346,7 @@ export const FolderShow: FC = () => {
               key: "FILE",
               label: "파일 올리기",
               children: (
-                <Upload {...uploadProps}>
+                <Upload {...uploadProps} fileList={fileList}>
                   <Button>파일 올리기</Button>
                 </Upload>
               ),
