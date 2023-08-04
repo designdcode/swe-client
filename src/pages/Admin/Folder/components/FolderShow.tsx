@@ -14,11 +14,13 @@ import {
 } from "antd";
 import { FileAddOutlined, FileTextOutlined } from "@ant-design/icons";
 import Meta from "antd/lib/card/Meta";
-import { useParams } from "react-router";
+import { useHistory, useParams } from "react-router";
 import {
   FileType,
   FolderQuery,
   useCreateFolderMutation,
+  useRemoveFileMutation,
+  useRemoveFolderMutation,
   useUpdateFolderMutation,
 } from "../../../../typings/api.d";
 import { toast } from "react-toastify";
@@ -27,6 +29,7 @@ interface CardBoxProps {
   title: string;
   onClick?: () => void;
   icon?: "NEW" | "FILE";
+  onDelete?: () => void;
 }
 
 interface FileResponseProp {
@@ -40,56 +43,107 @@ interface FileResponseProp {
   size: number;
 }
 
-const CardBox: FC<CardBoxProps> = ({ title, onClick, icon = "FILE" }) => {
+const CardBox: FC<CardBoxProps> = ({
+  title,
+  onClick,
+  icon = "FILE",
+  onDelete,
+}) => {
+  const [openFileRemoveModal, setOpenFileRemoveModal] =
+    useState<boolean>(false);
+
   return (
-    <Card
-      hoverable
+    <div
       style={{
-        margin: "10px",
-        backgroundColor: "transparent",
-        width: "120px",
-        paddingTop: "15px",
-        paddingBottom: "5px",
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        flexDirection: "column",
       }}
-      onClick={onClick}
-      size="small"
-      cover={
-        icon === "FILE" ? (
-          <FileTextOutlined
-            style={{
-              fontSize: "40px",
-            }}
-          />
-        ) : (
-          <FileAddOutlined
-            style={{
-              fontSize: "40px",
-            }}
-          />
-        )
-      }
     >
-      <Meta description={title} />
-    </Card>
+      {onDelete && (
+        <Modal
+          title="파일 삭제하기"
+          open={openFileRemoveModal}
+          onCancel={() => setOpenFileRemoveModal(false)}
+          onOk={() => {
+            onDelete();
+            setOpenFileRemoveModal(false);
+          }}
+        >
+          <Typography.Text>
+            정말로 <strong>{title}</strong> 삭제 하시겠습니까?.
+          </Typography.Text>
+        </Modal>
+      )}
+      <Card
+        hoverable
+        style={{
+          margin: "10px",
+          backgroundColor: "transparent",
+          width: "120px",
+          paddingTop: "15px",
+          paddingBottom: "5px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+        onClick={onClick}
+        size="small"
+        cover={
+          icon === "FILE" ? (
+            <FileTextOutlined
+              style={{
+                fontSize: "40px",
+              }}
+            />
+          ) : (
+            <FileAddOutlined
+              style={{
+                fontSize: "40px",
+              }}
+            />
+          )
+        }
+      >
+        <Meta description={title} />
+      </Card>
+      {onDelete && (
+        <div
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={() => setOpenFileRemoveModal(true)}
+        >
+          <Button danger>파일삭제</Button>
+        </div>
+      )}
+    </div>
   );
 };
 
 export const FolderShow: FC = () => {
   const { getFolder, refetch } = useFolderContext();
   const [form] = Form.useForm();
+  const history = useHistory();
   const params: Record<string, any> = useParams();
   const [selectedTab, setSelectedTab] = useState<"FILE" | "FOLDER">("FILE");
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [response, setResponse] = useState<FileResponseProp[]>([]);
   const [label, setLabel] = useState<string>();
   const [files, setFiles] = useState<FolderQuery["folder"]["files"]>();
+  const [openRemoveModal, setOpenRemoveModal] = useState<boolean>(false);
+  const { parentFolders } = useFolderContext();
 
   const [createFolder] = useCreateFolderMutation();
   const [updateFolder] = useUpdateFolderMutation();
+  const [removeFolder] = useRemoveFolderMutation({
+    variables: {
+      _id: params.subparam,
+    },
+  });
+  const [removeFile] = useRemoveFileMutation();
 
   useEffect(() => {
     if (params.subparam && params.subparam !== "layout") {
@@ -194,7 +248,6 @@ export const FolderShow: FC = () => {
   ]);
 
   const handleDownload = useCallback(async (file: FileType) => {
-    console.log(file.filePath);
     await fetch(`http://localhost:4000/download/${file.filePath}`, {
       method: "GET",
     })
@@ -213,9 +266,65 @@ export const FolderShow: FC = () => {
       });
   }, []);
 
+  const handleRemoveFolder = useCallback(async () => {
+    await removeFolder({
+      onCompleted: () => {
+        toast.success("폴더를 삭제하였습니다.");
+        if (parentFolders && parentFolders[0]) {
+          history.push(
+            `/admin/folder/${parentFolders[0]._id}/${parentFolders[0].label}`
+          );
+          // setTimeout(() => window.location.reload(), 500);
+        }
+        refetch();
+      },
+    });
+  }, [removeFolder, parentFolders, history, refetch]);
+
+  const handleRemoveFile = useCallback(
+    async (filePath) => {
+      await removeFile({
+        variables: {
+          filePath,
+          folderId: params.subparam,
+        },
+        onCompleted: () => {
+          toast.success("파일을 삭제 하였습니다.");
+          refetch();
+          // setTimeout(() => window.location.reload(), 500);
+        },
+      });
+    },
+    [removeFile, params, refetch]
+  );
+
   return (
     <Content>
-      <Typography.Title level={4}>{label}</Typography.Title>
+      <Modal
+        title="폴더 삭제하기"
+        open={openRemoveModal}
+        onOk={() => {
+          handleRemoveFolder();
+          setOpenRemoveModal(false);
+        }}
+        onCancel={() => setOpenRemoveModal(false)}
+      >
+        <Typography.Text>
+          정말로 <strong>{label || ""}</strong> 폴더를 삭제하시겠습니까?
+        </Typography.Text>
+      </Modal>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography.Title level={4}>{label}</Typography.Title>
+        <Button danger onClick={() => setOpenRemoveModal(true)}>
+          삭제하기
+        </Button>
+      </div>
       <Modal
         title="파일올리기"
         open={openModal}
@@ -264,6 +373,7 @@ export const FolderShow: FC = () => {
             <CardBox
               key={f.fileName}
               title={fileName}
+              onDelete={() => handleRemoveFile(f.filePath)}
               onClick={() => handleDownload(f)}
             />
           );

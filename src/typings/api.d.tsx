@@ -87,7 +87,7 @@ export type ChildrenInputType = {
 export type ChildrenType = {
   __typename?: "ChildrenType";
   _id: Scalars["String"]["output"];
-  label: Scalars["String"]["output"];
+  label?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type Comment = {
@@ -214,6 +214,7 @@ export type Mutation = {
   createPopup: Popup;
   removeBoard: Board;
   removeComment: Comment;
+  removeFile: Folder;
   removeFolder: Folder;
   removeLink: Link;
   removeMember: Member;
@@ -257,6 +258,11 @@ export type MutationRemoveBoardArgs = {
 
 export type MutationRemoveCommentArgs = {
   _id: Scalars["String"]["input"];
+};
+
+export type MutationRemoveFileArgs = {
+  filePath: Scalars["String"]["input"];
+  folderId: Scalars["String"]["input"];
 };
 
 export type MutationRemoveFolderArgs = {
@@ -692,7 +698,7 @@ export type CreateFolderMutation = {
     children?: Array<{
       __typename?: "ChildrenType";
       _id: string;
-      label: string;
+      label?: string | null;
     }> | null;
   };
 };
@@ -718,9 +724,28 @@ export type UpdateFolderMutation = {
     children?: Array<{
       __typename?: "ChildrenType";
       _id: string;
-      label: string;
+      label?: string | null;
     }> | null;
   };
+};
+
+export type RemoveFolderMutationVariables = Exact<{
+  _id: Scalars["String"]["input"];
+}>;
+
+export type RemoveFolderMutation = {
+  __typename?: "Mutation";
+  removeFolder: { __typename?: "Folder"; _id: string };
+};
+
+export type RemoveFileMutationVariables = Exact<{
+  folderId: Scalars["String"]["input"];
+  filePath: Scalars["String"]["input"];
+}>;
+
+export type RemoveFileMutation = {
+  __typename?: "Mutation";
+  removeFile: { __typename?: "Folder"; _id: string };
 };
 
 export type BoardsQueryVariables = Exact<{
@@ -942,7 +967,7 @@ export type FoldersQuery = {
     children?: Array<{
       __typename?: "ChildrenType";
       _id: string;
-      label: string;
+      label?: string | null;
     }> | null;
   }>;
 };
@@ -968,7 +993,7 @@ export type FolderQuery = {
     children?: Array<{
       __typename?: "ChildrenType";
       _id: string;
-      label: string;
+      label?: string | null;
     }> | null;
   };
 };
@@ -1962,6 +1987,107 @@ export type UpdateFolderMutationResult =
 export type UpdateFolderMutationOptions = Apollo.BaseMutationOptions<
   UpdateFolderMutation,
   UpdateFolderMutationVariables
+>;
+export const RemoveFolderDocument = gql`
+  mutation removeFolder($_id: String!) {
+    removeFolder(_id: $_id) {
+      _id
+    }
+  }
+`;
+export type RemoveFolderMutationFn = Apollo.MutationFunction<
+  RemoveFolderMutation,
+  RemoveFolderMutationVariables
+>;
+
+/**
+ * __useRemoveFolderMutation__
+ *
+ * To run a mutation, you first call `useRemoveFolderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveFolderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeFolderMutation, { data, loading, error }] = useRemoveFolderMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useRemoveFolderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveFolderMutation,
+    RemoveFolderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RemoveFolderMutation,
+    RemoveFolderMutationVariables
+  >(RemoveFolderDocument, options);
+}
+export type RemoveFolderMutationHookResult = ReturnType<
+  typeof useRemoveFolderMutation
+>;
+export type RemoveFolderMutationResult =
+  Apollo.MutationResult<RemoveFolderMutation>;
+export type RemoveFolderMutationOptions = Apollo.BaseMutationOptions<
+  RemoveFolderMutation,
+  RemoveFolderMutationVariables
+>;
+export const RemoveFileDocument = gql`
+  mutation removeFile($folderId: String!, $filePath: String!) {
+    removeFile(folderId: $folderId, filePath: $filePath) {
+      _id
+    }
+  }
+`;
+export type RemoveFileMutationFn = Apollo.MutationFunction<
+  RemoveFileMutation,
+  RemoveFileMutationVariables
+>;
+
+/**
+ * __useRemoveFileMutation__
+ *
+ * To run a mutation, you first call `useRemoveFileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveFileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeFileMutation, { data, loading, error }] = useRemoveFileMutation({
+ *   variables: {
+ *      folderId: // value for 'folderId'
+ *      filePath: // value for 'filePath'
+ *   },
+ * });
+ */
+export function useRemoveFileMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemoveFileMutation,
+    RemoveFileMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<RemoveFileMutation, RemoveFileMutationVariables>(
+    RemoveFileDocument,
+    options
+  );
+}
+export type RemoveFileMutationHookResult = ReturnType<
+  typeof useRemoveFileMutation
+>;
+export type RemoveFileMutationResult =
+  Apollo.MutationResult<RemoveFileMutation>;
+export type RemoveFileMutationOptions = Apollo.BaseMutationOptions<
+  RemoveFileMutation,
+  RemoveFileMutationVariables
 >;
 export const BoardsDocument = gql`
   query boards($args: PaginationArgs) {

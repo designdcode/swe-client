@@ -195,3 +195,15 @@ mutation updateFolder($args: UpdateFolderInput!) {
     createdAt
   }
 }
+
+mutation removeFolder($_id: String!) {
+  removeFolder(_id: $_id) {
+    _id
+  }
+}
+
+mutation removeFile($folderId: String!, $filePath: String!) {
+  removeFile(folderId: $folderId, filePath: $filePath) {
+    _id
+  }
+}
