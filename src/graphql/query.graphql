@@ -137,3 +137,39 @@ query member($_id: String!) {
     updatedAt
   }
 }
+
+query folders {
+  folders {
+    _id
+    label
+    value
+    parentId
+    files {
+      fileName
+      filePath
+    }
+    children {
+      _id
+      label
+    }
+    createdAt
+  }
+}
+
+query folder($_id: String!) {
+  folder(_id: $_id) {
+    _id
+    label
+    value
+    parentId
+    files {
+      fileName
+      filePath
+    }
+    children {
+      _id
+      label
+    }
+    createdAt
+  }
+}

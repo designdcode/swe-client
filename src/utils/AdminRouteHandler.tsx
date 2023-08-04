@@ -18,6 +18,8 @@ import {
   ImageUploadWithLink,
   ImageUploadWithModal,
 } from "../pages/Admin/ImageUploadWithModal";
+import { Folder } from "../pages/Admin/Folder";
+import { FolderContextProvider } from "../contexts";
 
 interface IProps {
   param: string;
@@ -97,6 +99,12 @@ const AdminRouteHandler: React.VFC = () => {
         return <VideoLink />;
       case "popup":
         return <PopupManager />;
+      case "folder":
+        return (
+          <FolderContextProvider>
+            <Folder />
+          </FolderContextProvider>
+        );
       default:
         return;
     }

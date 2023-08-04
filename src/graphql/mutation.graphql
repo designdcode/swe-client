@@ -159,3 +159,51 @@ mutation removeMember($_id: String!) {
     _id
   }
 }
+
+mutation createFolder($args: CreateFolderInput!) {
+  createFolder(args: $args) {
+    _id
+    label
+    value
+    files {
+      fileName
+      filePath
+    }
+    parentId
+    children {
+      _id
+      label
+    }
+    createdAt
+  }
+}
+
+mutation updateFolder($args: UpdateFolderInput!) {
+  updateFolder(args: $args) {
+    _id
+    label
+    value
+    files {
+      fileName
+      filePath
+    }
+    parentId
+    children {
+      _id
+      label
+    }
+    createdAt
+  }
+}
+
+mutation removeFolder($_id: String!) {
+  removeFolder(_id: $_id) {
+    _id
+  }
+}
+
+mutation removeFile($folderId: String!, $filePath: String!) {
+  removeFile(folderId: $folderId, filePath: $filePath) {
+    _id
+  }
+}
