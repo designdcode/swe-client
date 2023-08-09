@@ -24,7 +24,8 @@ export const BoardList: FC = () => {
   const param = pathname.split("/")[2];
   const { boards: boardsContext, refetch } = useBoardContext();
   const [boards, setBoards] = useState<TableBoardProps[]>();
-  const hasType = category.includes("achievement");
+  const hasType =
+    category.includes("achievement") && category !== "achievement-news";
 
   const handleType = useCallback(
     (type?: string | null) => {
@@ -48,9 +49,13 @@ export const BoardList: FC = () => {
 
   useEffect(() => {
     if (boardsContext) {
-      const boardWithCategory = boardsContext.filter(
-        (v) => v.category === category
-      );
+      const boardWithCategory = boardsContext
+        .filter((v) => v.category === category)
+        .sort(
+          (a, b) =>
+            new Date(a.inputCreatedAt).getTime() -
+            new Date(b.inputCreatedAt).getTime()
+        );
       const dataSource: Array<TableBoardProps> = boardWithCategory
         .reverse()
         .map((elem, i) => ({

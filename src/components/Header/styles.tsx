@@ -92,7 +92,7 @@ export const MainDesktop = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     & .main-content-desktop {
-      width: ${breakpoints.pc}px;
+      /* width: ${breakpoints.pc}px; */
       align-items: center;
       display: flex;
       justify-content: space-between;
@@ -103,6 +103,7 @@ export const MainDesktop = styled.div`
     & .main-menu {
       height: 55px;
       width: 100%;
+      min-width: 1280px;
       color: white;
       display: flex;
       justify-content: center;
@@ -112,7 +113,6 @@ export const MainDesktop = styled.div`
         transform: scaleY(1);
         height: 320px;
         opacity: 0.8;
-        /* padding-top: 7px; */
         transition: height 0.1s ease-in;
         position: absolute;
         z-index: 1000;

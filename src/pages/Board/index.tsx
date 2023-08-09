@@ -48,13 +48,15 @@ const Board: React.VFC = () => {
   useEffect(() => {
     if (boardsContext) {
       let dataSource: Array<TableBoardProps> = [];
-      const data = boardsContext.filter((v) => v.category === subparam);
+      const data = boardsContext
+        .filter((v) => v.category === subparam)
+        .reverse();
       data.map((elem, i) => {
         const obj: TableBoardProps = {
           id: elem._id,
           index: data.length - i,
           title: elem.title || "",
-          createdAt: moment(elem.createdAt).format("YYYY-MM-DD"),
+          createdAt: moment(elem.inputCreatedAt).format("YYYY-MM-DD"),
           category: elem.category,
           private: elem.private || false,
           writer: elem.writer || "",
@@ -124,6 +126,7 @@ const Board: React.VFC = () => {
           rowKey={"id"}
           style={{
             cursor: "pointer",
+            margin: "10px 0",
           }}
         >
           <Column
@@ -220,8 +223,8 @@ const Wrapper = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     margin-top: 15px;
-    min-width: 800px;
-    max-width: 1920px;
+    /* min-width: 800px;
+    max-width: 1920px; */
     min-height: 80vh;
   }
 `;
@@ -232,8 +235,8 @@ const Container = styled.div`
   }
 
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    min-width: 800px;
-    max-width: 1280px;
+    /* min-width: 800px; */
+    /* max-width: 1280px; */
     margin: 0 auto;
     padding: 0 30px;
   }

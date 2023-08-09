@@ -139,8 +139,8 @@ export const BoardEdit: FC = () => {
         args: {
           _id: id,
           title: title?.trim() ? title : "제목없음",
-          content: content.trim() ? content : null,
-          link: link.trim() ? link : null,
+          content: content.trim() !== "" ? content : null,
+          link: link.trim() !== "" ? link : null,
           category: subparam as string,
           files: file.length !== 0 ? file : null,
           images: imgUrl?.trim()
@@ -417,6 +417,7 @@ export const BoardEdit: FC = () => {
               onChange={handleContentChange}
               content={content}
               setLoading={setLoading}
+              category={subparam}
             />
           </Form.Item>
         )}

@@ -25,26 +25,42 @@ const HomeSWNews: React.VFC = () => {
 
   useEffect(() => {
     if (boards) {
-      const aidNews = boards.filter(
-        (v) => v.category === "achievement-aidnews"
-      );
-      const valueNews = boards.filter(
-        (v) => v.category === "achievement-valuenews"
-      );
-      const coopNews = boards.filter(
-        (v) => v.category === "achievement-coopnews"
-      );
-      const startupNews = boards.filter(
-        (v) => v.category === "achievement-startup"
-      );
+      const aidNews = boards
+        .filter((v) => v.category === "achievement-aidnews")
+        .sort(
+          (a, b) =>
+            new Date(a.inputCreatedAt).getTime() -
+            new Date(b.inputCreatedAt).getTime()
+        );
+      const valueNews = boards
+        .filter((v) => v.category === "achievement-valuenews")
+        .sort(
+          (a, b) =>
+            new Date(a.inputCreatedAt).getTime() -
+            new Date(b.inputCreatedAt).getTime()
+        );
+      const coopNews = boards
+        .filter((v) => v.category === "achievement-coopnews")
+        .sort(
+          (a, b) =>
+            new Date(a.inputCreatedAt).getTime() -
+            new Date(b.inputCreatedAt).getTime()
+        );
+      const startupNews = boards
+        .filter((v) => v.category === "achievement-startup")
+        .sort(
+          (a, b) =>
+            new Date(a.inputCreatedAt).getTime() -
+            new Date(b.inputCreatedAt).getTime()
+        );
 
-      setAurl(aidNews[0]?.images);
+      setAurl(aidNews[aidNews.length - 1]?.images);
       setAdata(aidNews);
-      setVurl(valueNews[0]?.images);
+      setVurl(valueNews[valueNews.length - 1]?.images);
       setVdata(valueNews);
-      setCurl(coopNews[0]?.images);
+      setCurl(coopNews[coopNews.length - 1]?.images);
       setCdata(coopNews);
-      setSurl(startupNews[0]?.images);
+      setSurl(startupNews[startupNews.length - 1]?.images);
       setSdata(startupNews);
     }
   }, [boards]);
@@ -63,19 +79,47 @@ const HomeSWNews: React.VFC = () => {
       data?: BoardsQuery["boards"]["data"] | undefined,
       url?: BoardQuery["board"]["images"] | null | undefined
     ) => {
+      let imageUrl: string | undefined = "";
+      if (data && data[data.length - 1] && data[data.length - 1].content) {
+        const content = data[data.length - 1].content || "";
+        const imgTag =
+          content.match(/<img[^>]+src="http([^">]+)/g)?.toString() || "";
+        imageUrl = imgTag.split('src="')[1];
+      }
+
       return (
         <SectionBox>
           <SectionImage>
-            {url ? renderSectionImage(url[0]) : renderSectionImage(null)}
+            {url && url.length > 0
+              ? renderSectionImage(url[0])
+              : renderSectionImage({
+                  url: imageUrl,
+                  fileName: "image",
+                })}
           </SectionImage>
           <SectionDesc>
-            <div className="section-title">{data && data[0]?.title}</div>
-            <div
-              className="section-desc"
-              dangerouslySetInnerHTML={{
-                __html: (data && data[0]?.content) || "",
-              }}
-            ></div>
+            <div className="section-title">
+              {data && data[data.length - 1]?.title}
+            </div>
+            {data && data[data.length - 1]?.content?.includes("<img src=") ? (
+              <div
+                className="section-desc"
+                dangerouslySetInnerHTML={{
+                  __html:
+                    (data && data[data.length - 1]?.content)?.replace(
+                      /<img .*?>/g,
+                      ""
+                    ) || "",
+                }}
+              />
+            ) : (
+              <div
+                className="section-desc"
+                dangerouslySetInnerHTML={{
+                  __html: (data && data[data.length - 1]?.content) || "",
+                }}
+              />
+            )}
           </SectionDesc>
         </SectionBox>
       );
@@ -147,7 +191,7 @@ const HomeSWNews: React.VFC = () => {
             ) : (
               <SectionContent
                 to={`/main/detail/achievement/achievement-aidnews/${
-                  adata && adata[0]?._id
+                  adata && adata[adata.length - 1]?._id
                 }`}
               >
                 {handleRoute(adata, aurl)}
@@ -161,7 +205,7 @@ const HomeSWNews: React.VFC = () => {
             ) : (
               <SectionContent
                 to={`/main/detail/achievement/achievement-coopnews/${
-                  cdata && cdata[0]?._id
+                  cdata && cdata[cdata.length - 1]?._id
                 }`}
               >
                 {handleRoute(cdata, curl)}
@@ -177,7 +221,7 @@ const HomeSWNews: React.VFC = () => {
             ) : (
               <SectionContent
                 to={`/main/detail/achievement/achievement-valuenews/${
-                  vdata && vdata[0]?._id
+                  vdata && vdata[vdata.length - 1]?._id
                 }`}
               >
                 {handleRoute(vdata, vurl)}
@@ -190,7 +234,9 @@ const HomeSWNews: React.VFC = () => {
               <div />
             ) : (
               <SectionContent
-                to={`/main/detail/achievement/achievement-startup/${sdata[0]?._id}`}
+                to={`/main/detail/achievement/achievement-startup/${
+                  sdata[sdata.length - 1]?._id
+                }`}
               >
                 {handleRoute(sdata, surl)}
               </SectionContent>
@@ -408,22 +454,15 @@ const SectionDesc = styled.div`
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     padding: 12px;
     display: flex;
+    max-width: 240px;
     flex-direction: column;
-    justify-content: flex-end;
     & .section-title {
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
       max-height: 30%;
       font-size: 16px;
       font-weight: 600;
     }
     & .section-desc {
-      max-height: 40%;
       display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-top: 10px;

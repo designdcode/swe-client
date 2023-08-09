@@ -22,7 +22,9 @@ const HomeBNews: React.VFC = () => {
 
   useEffect(() => {
     if (boards) {
-      const filtered = boards.filter((v) => v.category === "achievement-news");
+      const filtered = boards
+        .filter((v) => v.category === "achievement-news")
+        .reverse();
       setNewsData(filtered);
     }
   }, [boards]);
@@ -99,6 +101,13 @@ const HomeBNews: React.VFC = () => {
                 <div className="card-container">
                   {newsData.map((item, idx) => {
                     let url: string | undefined = "";
+                    if (item.content?.includes("<img src=")) {
+                      const imgTag =
+                        item.content
+                          .match(/<img[^>]+src="http([^">]+)/g)
+                          ?.toString() || "";
+                      url = imgTag.split('src="')[1];
+                    }
                     if (item.images && item.images.length > 0) {
                       url = item.images[item.images.length - 1]?.url;
                     }

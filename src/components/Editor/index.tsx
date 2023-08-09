@@ -18,6 +18,7 @@ interface Props extends SunEditorReactProps {
   onChange: (value: any) => void;
   content: string;
   setLoading: Dispatch<SetStateAction<boolean>>;
+  category?: string;
 }
 
 const editorOptions: SunEditorOptions = {
@@ -36,6 +37,7 @@ const Editor: FC<Props> = ({
   placeholder,
   defaultValue,
   setLoading,
+  category,
 }) => {
   const editor = useRef<SunEditorCore>();
 
@@ -47,30 +49,33 @@ const Editor: FC<Props> = ({
     useCallback(
       (files, info, uploadHandler): UploadBeforeReturn => {
         setLoading(true);
+        console.log(info, files);
         if (files && files[0]) {
           Promise.resolve(
             attachmentUploader({
               type: "image",
               file: files[0],
+              category: category || "",
+              fileName: `${category}-${new Date().getTime().toString()}`,
             })
           ).then((url) => {
-            const image = {
+            const tmp = {
               result: [
                 {
                   url,
-                  name: "uploadedImage",
+                  name: "url",
                 },
               ],
             };
             setLoading(false);
-            return uploadHandler(image);
+            return uploadHandler(tmp);
           });
         } else {
           setLoading(false);
           return false;
         }
       },
-      [setLoading]
+      [setLoading, category]
     );
 
   return (

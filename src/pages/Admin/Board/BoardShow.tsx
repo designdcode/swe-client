@@ -1,5 +1,6 @@
-import { Button, Descriptions, Image, Typography } from "antd";
 import { FC, useCallback, useEffect, useState } from "react";
+import styled from "@emotion/styled";
+import { Button, Descriptions, Image, Typography } from "antd";
 import { useHistory, useLocation } from "react-router";
 import { useBoardContext } from "../../../contexts";
 import { BoardQuery, useRemoveBoardMutation } from "../../../typings/api.d";
@@ -130,10 +131,9 @@ export const BoardShow: FC = () => {
           </Descriptions.Item>
         )}
         <Descriptions.Item label="내용" span={4} key="content">
-          <span
-            style={{ whiteSpace: "pre-wrap" }}
+          <ContentDiv
             dangerouslySetInnerHTML={{ __html: board?.content || "" }}
-          ></span>
+          />
         </Descriptions.Item>
       </Descriptions>
       <div
@@ -165,3 +165,9 @@ export const BoardShow: FC = () => {
     </div>
   );
 };
+
+const ContentDiv = styled.div`
+  & img {
+    max-width: 600px;
+  }
+`;
