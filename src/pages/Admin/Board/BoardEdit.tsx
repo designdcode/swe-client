@@ -416,6 +416,7 @@ export const BoardEdit: FC = () => {
               defaultValue={data.board.content || ""}
               onChange={handleContentChange}
               content={content}
+              setLoading={setLoading}
             />
           </Form.Item>
         )}

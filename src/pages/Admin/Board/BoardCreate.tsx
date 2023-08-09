@@ -355,7 +355,11 @@ export const BoardCreate: FC = () => {
             initialValue=""
             rules={[{ required: true }]}
           >
-            <Editor onChange={handleContentChange} content={content} />
+            <Editor
+              onChange={handleContentChange}
+              content={content}
+              setLoading={setLoading}
+            />
           </Form.Item>
         )}
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
