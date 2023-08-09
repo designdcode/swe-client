@@ -186,7 +186,11 @@ const Write: React.VFC = () => {
               </Radio>
             </div>
 
-            <Editor onChange={handleChange} content={content} />
+            <Editor
+              onChange={handleChange}
+              content={content}
+              setLoading={setUploading}
+            />
 
             <div className="content-upload">
               <div>{uploading && <LoadingOutlined size={40} />}</div>

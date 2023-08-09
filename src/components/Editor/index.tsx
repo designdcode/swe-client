@@ -1,14 +1,23 @@
-import React, { FC, useCallback, useRef } from "react";
+import React, {
+  Dispatch,
+  FC,
+  SetStateAction,
+  useCallback,
+  useRef,
+} from "react";
 import styled from "@emotion/styled";
 import SunEditor from "suneditor-react";
 import SunEditorCore from "suneditor/src/lib/core";
 import "suneditor/dist/css/suneditor.min.css"; // Import Sun Editor's CSS File
 import { SunEditorOptions } from "suneditor/src/options";
 import { SunEditorReactProps } from "suneditor-react/dist/types/SunEditorReactProps";
+import { UploadBeforeReturn } from "suneditor-react/dist/types/upload";
+import { attachmentUploader } from "../../utils/attachmentUploader";
 
 interface Props extends SunEditorReactProps {
   onChange: (value: any) => void;
   content: string;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 const editorOptions: SunEditorOptions = {
@@ -26,6 +35,7 @@ const Editor: FC<Props> = ({
   onChange,
   placeholder,
   defaultValue,
+  setLoading,
 }) => {
   const editor = useRef<SunEditorCore>();
 
@@ -33,13 +43,41 @@ const Editor: FC<Props> = ({
     editor.current = sunEditor;
   }, []);
 
-  const handleImageUpload = useCallback((props) => {}, []);
+  const handleImageUpload: SunEditorReactProps["onImageUploadBefore"] =
+    useCallback(
+      (files, info, uploadHandler): UploadBeforeReturn => {
+        setLoading(true);
+        if (files && files[0]) {
+          Promise.resolve(
+            attachmentUploader({
+              type: "image",
+              file: files[0],
+            })
+          ).then((url) => {
+            const image = {
+              result: [
+                {
+                  url,
+                  name: "uploadedImage",
+                },
+              ],
+            };
+            setLoading(false);
+            return uploadHandler(image);
+          });
+        } else {
+          setLoading(false);
+          return false;
+        }
+      },
+      [setLoading]
+    );
 
   return (
     <StyledEditor
       getSunEditorInstance={getEditorInstance}
       onChange={onChange}
-      onImageUpload={handleImageUpload}
+      onImageUploadBefore={handleImageUpload}
       defaultValue={defaultValue}
       setOptions={editorOptions}
       placeholder={placeholder}

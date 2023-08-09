@@ -570,7 +570,11 @@ const EditBoardPage: React.VFC = () => {
         )}
 
         <Descriptions.Item label="내용" span={4}>
-          <Editor onChange={handleChange} content={content} />
+          <Editor
+            onChange={handleChange}
+            content={content}
+            setLoading={setUploadLoading}
+          />
         </Descriptions.Item>
       </Descriptions>
       <div className="button-group">
