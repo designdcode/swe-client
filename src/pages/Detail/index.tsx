@@ -19,20 +19,28 @@ interface ParamProps {
 
 const Detail = () => {
   const { param, subparam } = useParams<ParamProps>();
-  const { boards, loading } = useBoardContext();
+  const { boards } = useBoardContext();
+  const [loading, setLoading] = useState<boolean>(false);
   const [board, setBoard] = useState<BoardQuery["board"]>();
 
   useEffect(() => {
+    setLoading(true);
     if (boards) {
       const foundBoards = boards.filter((b) => b.category === subparam);
       if (foundBoards) {
         setBoard(foundBoards[foundBoards.length - 1]);
       }
     }
+    setLoading(false);
   }, [boards, subparam]);
 
   if (loading) {
-    return <div>loading...</div>;
+    return (
+      <Wrapper>
+        <Cover param={param} subparam={subparam} />
+        <div>loading...</div>
+      </Wrapper>
+    );
   }
 
   return (

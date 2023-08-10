@@ -103,6 +103,7 @@ const StyledCover = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     width: 100%;
+    min-width: 1280px;
     height: 350px;
     margin: 0 auto;
     position: relative;
@@ -179,8 +180,6 @@ const SubMenu = styled.div<MiddleMenuProps>`
     bottom: 0;
     font-size: 15px;
     & .submenu-content {
-      max-width: 1280px;
-      min-width: 1000px;
       min-height: 50px;
       height: 50px;
       margin: 0 auto;
@@ -188,14 +187,17 @@ const SubMenu = styled.div<MiddleMenuProps>`
       display: flex;
       flex-wrap: wrap;
       align-items: center;
+      justify-content: center;
     }
     & .submenu-col {
-      min-width: 14%;
-      padding: 0 5px;
       height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
+      cursor: pointer;
+      :hover {
+        color: white;
+      }
     }
   }
 `;
@@ -210,7 +212,7 @@ const StyleLink = styled(Link)<MenuCellProps>`
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2px 5px;
+    padding: 2px 30px;
     font-size: 16px;
     color: ${(props) => (props.first === 0 ? "white" : "black")};
     &:hover {

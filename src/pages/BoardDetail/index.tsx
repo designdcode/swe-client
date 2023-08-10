@@ -144,7 +144,7 @@ const BoardDetail: React.VFC = () => {
               dangerouslySetInnerHTML={{
                 __html: data?.content || "",
               }}
-            ></div>
+            />
             {data?.showAttach && data?.files && data.files.length > 0 && (
               <div className="content-body-attachment">
                 {data?.files.map((item, idx) => {
@@ -529,6 +529,7 @@ const ContentBody = styled.div`
     & img {
       width: 80%;
       height: 550px;
+      object-fit: contain;
     }
 
     & .content-body-desc {

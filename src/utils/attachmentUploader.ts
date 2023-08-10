@@ -5,14 +5,17 @@ interface ImageUploaderProps {
   type: string;
   file: File;
   category?: string;
+  fileName?: string;
 }
 
 export const attachmentUploader = async ({
   type,
   file,
   category,
+  fileName,
 }: ImageUploaderProps): Promise<string> => {
-  const imageRef = ref(storage, `/${type}/${category}/${file.name}`);
+  const name = fileName ? fileName : file.name;
+  const imageRef = ref(storage, `/${type}/${category}/${name}`);
   const uploadTask = uploadBytesResumable(imageRef, file);
 
   await uploadTask;

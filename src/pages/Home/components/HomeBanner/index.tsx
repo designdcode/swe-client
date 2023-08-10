@@ -110,7 +110,7 @@ const Wrapper = styled.div`
 
 const ImageBox = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    width: 80%;
+    width: 100%;
     height: 100%;
     margin: 0;
   }

@@ -21,7 +21,9 @@ export const ImageShow: FC = () => {
 
   useEffect(() => {
     if (boards) {
-      setData(boards.find((v) => v.category === category));
+      const boardsWithCategory = boards.filter((v) => v.category === category);
+      if (boardsWithCategory)
+        setData(boardsWithCategory[boardsWithCategory.length - 1]);
     }
   }, [category, boards]);
 
