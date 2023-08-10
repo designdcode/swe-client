@@ -12,6 +12,7 @@ import { BoardQuery } from "../../typings/api.d";
 import { Member } from "../Member";
 import Cover from "../../components/Cover";
 import { RedirectButton } from "./components";
+import { SiteMap } from "../../components";
 interface ParamProps {
   param: string;
   subparam: string;
@@ -56,12 +57,15 @@ const Detail = () => {
                 <img src={board.images[0]?.url} alt="uploadedImage" />
               )}
             </ContentImage>
-            {param.toString() === "sitelink" && (
-              <div className="button-text">
-                버튼을 클릭하시면 해당 사이트로 이동합니다
-                <RedirectButton subparam={subparam} />
-              </div>
-            )}
+            {param.toString() === "sitelink" &&
+              (subparam !== "site-map" ? (
+                <div className="button-text">
+                  버튼을 클릭하시면 해당 사이트로 이동합니다
+                  <RedirectButton subparam={subparam} />
+                </div>
+              ) : (
+                <SiteMap />
+              ))}
             {subparam.split("-")[1] === "online" && (
               <div className="platform">
                 <div className="platform-text">

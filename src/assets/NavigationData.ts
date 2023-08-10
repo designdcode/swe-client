@@ -278,6 +278,11 @@ export const NavigationData: NavProps[] = [
     description: "Site-Link",
     subMenu: [
       {
+        key: "site-map",
+        title: "sitelink",
+        ko_title: "사이트맵",
+      },
+      {
         key: "site-cs",
         title: "sitelink",
         ko_title: "컴퓨터공학부",
