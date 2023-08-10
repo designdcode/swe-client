@@ -50,7 +50,12 @@ const Board: React.VFC = () => {
       let dataSource: Array<TableBoardProps> = [];
       const data = boardsContext
         .filter((v) => v.category === subparam)
-        .reverse();
+        .sort(
+          (a, b) =>
+            new Date(b.inputCreatedAt).getTime() -
+            new Date(a.inputCreatedAt).getTime()
+        );
+      // .reverse();
       data.map((elem, i) => {
         const obj: TableBoardProps = {
           id: elem._id,

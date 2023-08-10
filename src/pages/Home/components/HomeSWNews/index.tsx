@@ -29,7 +29,7 @@ const HomeSWNews: React.VFC = () => {
         .filter((v) => v.category === "achievement-aidnews")
         .sort(
           (a, b) =>
-            new Date(a.inputCreatedAt).getTime() -
+            new Date(b.inputCreatedAt).getTime() -
             new Date(b.inputCreatedAt).getTime()
         );
       const valueNews = boards
