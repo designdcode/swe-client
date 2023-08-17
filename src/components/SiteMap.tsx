@@ -6,7 +6,14 @@ import { NavigationData } from "../assets/NavigationData";
 
 export const SiteMap: FC = () => {
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Typography.Title
         level={2}
         style={{
@@ -103,7 +110,7 @@ const Cover = styled.div`
   width: 100%;
   height: 100%;
   padding: 30px;
-  background-image: url(/img/loginBG.jpeg);
+  /* background-image: url(/img/loginBG.jpeg); */
   background-size: cover;
 `;
 

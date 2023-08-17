@@ -46,6 +46,7 @@ export const BoardEdit: FC = () => {
   const [content, setContent] = useState<string>("");
   const [link, onChangeLink, setLink] = useInput("");
   const [writerName, setWriterName] = useState<string>();
+  const [thumbNailcontent, setThumbNailcontent] = useState<string>();
   const [showLink, setShowLink] = useState<boolean>(false);
   const [imgUrl, setImgUrl] = useState<string | undefined>();
   const [imgName, setImgName] = useState<string>();
@@ -68,6 +69,7 @@ export const BoardEdit: FC = () => {
       _id: id,
     },
     onCompleted: ({ board }) => {
+      setThumbNailcontent(board.thumbNailcontent || "");
       setCreatedAt(board.inputCreatedAt || board.createdAt);
       setTitle(board.title || "");
       setContent(board.content || "");
@@ -125,6 +127,7 @@ export const BoardEdit: FC = () => {
       setLink("");
       setImgUrl("");
       setWriterName("");
+      setThumbNailcontent("");
       toast.success("게시물을 생성 하였습니다");
       history.push({
         pathname: `/admin/${param}/list/${subparam}`,
@@ -149,6 +152,7 @@ export const BoardEdit: FC = () => {
           private: checkPublic ? false : true,
           type,
           showAttach: showAttach ? true : false,
+          thumbNailcontent,
           inputCreatedAt: createdAt,
           writer: writerName || "관리자",
         },
@@ -169,6 +173,7 @@ export const BoardEdit: FC = () => {
     createdAt,
     showAttach,
     updateBoard,
+    thumbNailcontent,
   ]);
 
   const handleContentChange = (value: string) => {
@@ -263,7 +268,7 @@ export const BoardEdit: FC = () => {
         onFinish={onFinish}
         labelCol={{
           style: {
-            width: "100px",
+            width: "120px",
           },
         }}
       >
@@ -405,6 +410,14 @@ export const BoardEdit: FC = () => {
             </div>
           </Form.Item>
         </>
+        <Form.Item name={"thumbNailcontent"} label="본문(썸네일용)">
+          <Input
+            type="text"
+            placeholder={thumbNailcontent}
+            onChange={(e) => handleChange(e, setThumbNailcontent)}
+            value={thumbNailcontent}
+          />
+        </Form.Item>
         {isContentNeeded && (
           <Form.Item
             name={"content"}

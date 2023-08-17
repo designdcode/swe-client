@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import PopUp from "../../components/PopUp";
 import { useWindowSize } from "../../hooks/useWindowSize";
-import { breakpoints } from "../../utils/mediaQuery";
-import { Wrapper } from "../styles";
+import {
+  BREAKPOINT_BIGGER_THAN_PC,
+  BREAKPOINT_PHONE_MEDIUM,
+  breakpoints,
+  mediaQueries,
+} from "../../utils/mediaQuery";
 import HomeBanner from "./components/HomeBanner";
-import HomeBNews from "./components/HomeBNews";
 import HomeBoard from "./components/HomeBoard";
-import HomeSWNews from "./components/HomeSWNews";
 import { usePopupContext } from "../../contexts";
+import styled from "@emotion/styled";
+import { Wrapper } from "../styles";
+import { HomeCardNews } from "./components/HomeCardNews";
+import { HomeSWNews } from "./components/HomeSWNews";
 
 const Home: React.VFC = () => {
   const [showPopUp, setShowPopUp] = useState<boolean>(false);
@@ -45,10 +51,23 @@ const Home: React.VFC = () => {
         )}
       <HomeBanner />
       <HomeBoard />
-      <HomeBNews />
+      <HomeCardNews />
       <HomeSWNews />
     </Wrapper>
   );
 };
 
 export default Home;
+
+export const Container = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    max-width: 1280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+  }
+`;

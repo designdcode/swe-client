@@ -6,6 +6,7 @@ import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 import useInput from "../../../hooks/useInput";
 import {
   PopupQuery,
+  useCreatePopupMutation,
   usePopupsQuery,
   useUpdatePopupMutation,
 } from "../../../typings/api.d";
@@ -19,6 +20,15 @@ const PopupManager: React.FC = () => {
   const { data, loading, refetch } = usePopupsQuery();
   const [uploading, setUploading] = useState<boolean>(false);
   const [popup, setPopup] = useState<PopupQuery["popup"]>();
+
+  const [createPopup] = useCreatePopupMutation({
+    onCompleted: () => {
+      toast.success("팝업이 성공적으로 설정 되었습니다");
+      setLink("");
+      setEditLink(false);
+      refetch();
+    },
+  });
   const [editPopup] = useUpdatePopupMutation({
     onCompleted: () => {
       toast.success("팝업이 성공적으로 설정 되었습니다");
@@ -75,8 +85,20 @@ const PopupManager: React.FC = () => {
           },
         },
       });
+    } else {
+      await createPopup({
+        variables: {
+          args: {
+            up: status === "on" ? true : false,
+            url: imgUrl,
+            link: link.includes("http") ? link : `http://${link}`,
+          },
+        },
+      });
     }
-  }, [status, imgUrl, editPopup, link, popup]);
+  }, [status, imgUrl, editPopup, link, popup, createPopup]);
+
+  console.log(popup);
 
   if (loading) {
     return <div>loading...</div>;

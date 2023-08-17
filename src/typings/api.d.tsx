@@ -67,6 +67,7 @@ export type Board = {
   link?: Maybe<Scalars["String"]["output"]>;
   private: Scalars["Boolean"]["output"];
   showAttach: Scalars["Boolean"]["output"];
+  thumbNailcontent?: Maybe<Scalars["String"]["output"]>;
   title?: Maybe<Scalars["String"]["output"]>;
   type?: Maybe<Scalars["String"]["output"]>;
   updatedAt: Scalars["DateTime"]["output"];
@@ -109,6 +110,7 @@ export type CreateBoardInput = {
   link?: InputMaybe<Scalars["String"]["input"]>;
   private?: Scalars["Boolean"]["input"];
   showAttach?: Scalars["Boolean"]["input"];
+  thumbNailcontent?: InputMaybe<Scalars["String"]["input"]>;
   title?: InputMaybe<Scalars["String"]["input"]>;
   type?: InputMaybe<Scalars["String"]["input"]>;
   writer?: InputMaybe<Scalars["String"]["input"]>;
@@ -399,6 +401,7 @@ export type UpdateBoardInput = {
   link?: InputMaybe<Scalars["String"]["input"]>;
   private?: InputMaybe<Scalars["Boolean"]["input"]>;
   showAttach?: InputMaybe<Scalars["Boolean"]["input"]>;
+  thumbNailcontent?: InputMaybe<Scalars["String"]["input"]>;
   title?: InputMaybe<Scalars["String"]["input"]>;
   type?: InputMaybe<Scalars["String"]["input"]>;
   writer?: InputMaybe<Scalars["String"]["input"]>;
@@ -458,6 +461,7 @@ export type CreateBoardMutation = {
     link?: string | null;
     private: boolean;
     showAttach: boolean;
+    thumbNailcontent?: string | null;
     inputCreatedAt?: any | null;
     createdAt: any;
     updatedAt: any;
@@ -490,6 +494,7 @@ export type UpdateBoardMutation = {
     type?: string | null;
     link?: string | null;
     private: boolean;
+    thumbNailcontent?: string | null;
     showAttach: boolean;
     inputCreatedAt?: any | null;
     createdAt: any;
@@ -769,6 +774,7 @@ export type BoardsQuery = {
       private: boolean;
       showAttach: boolean;
       inputCreatedAt?: any | null;
+      thumbNailcontent?: string | null;
       createdAt: any;
       updatedAt: any;
       files?: Array<{
@@ -810,6 +816,7 @@ export type BoardQuery = {
     private: boolean;
     showAttach: boolean;
     inputCreatedAt?: any | null;
+    thumbNailcontent?: string | null;
     createdAt: any;
     updatedAt: any;
     files?: Array<{
@@ -1009,6 +1016,7 @@ export const CreateBoardDocument = gql`
       link
       private
       showAttach
+      thumbNailcontent
       inputCreatedAt
       files {
         url
@@ -1077,6 +1085,7 @@ export const UpdateBoardDocument = gql`
       type
       link
       private
+      thumbNailcontent
       showAttach
       inputCreatedAt
       files {
@@ -2103,6 +2112,7 @@ export const BoardsDocument = gql`
         private
         showAttach
         inputCreatedAt
+        thumbNailcontent
         files {
           url
           fileName
@@ -2178,6 +2188,7 @@ export const BoardDocument = gql`
       private
       showAttach
       inputCreatedAt
+      thumbNailcontent
       files {
         url
         fileName

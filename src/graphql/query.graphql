@@ -11,6 +11,7 @@ query boards($args: PaginationArgs) {
       private
       showAttach
       inputCreatedAt
+      thumbNailcontent
       files {
         url
         fileName
@@ -44,6 +45,7 @@ query board($_id: String!) {
     private
     showAttach
     inputCreatedAt
+    thumbNailcontent
     files {
       url
       fileName
