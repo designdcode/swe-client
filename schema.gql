@@ -25,6 +25,7 @@ type Board {
   _id: String!
   title: String
   content: String
+  thumbNailcontent: String
   writer: String
   category: String!
   type: String
@@ -164,6 +165,7 @@ type Mutation {
 input CreateBoardInput {
   title: String
   content: String
+  thumbNailcontent: String
   category: String!
   type: String
   writer: String
@@ -172,7 +174,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-08-10T15:37:07.709Z"
+  inputCreatedAt: DateTime! = "2023-08-21T14:50:27.887Z"
 }
 
 input AttachementInput {
@@ -183,6 +185,7 @@ input AttachementInput {
 input UpdateBoardInput {
   title: String
   content: String
+  thumbNailcontent: String
   category: String
   type: String
   writer: String
@@ -191,7 +194,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-08-10T15:37:07.709Z"
+  inputCreatedAt: DateTime = "2023-08-21T14:50:27.887Z"
   _id: String!
 }
 

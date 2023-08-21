@@ -39,6 +39,10 @@ export class Board {
 
   @Prop()
   @Field(() => String, { nullable: true })
+  thumbNailcontent: string | null;
+
+  @Prop()
+  @Field(() => String, { nullable: true })
   writer: string | null;
 
   @Prop()

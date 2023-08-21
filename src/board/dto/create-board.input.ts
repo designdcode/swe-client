@@ -17,6 +17,9 @@ export class CreateBoardInput {
   @Field((type) => String, { nullable: true })
   content: string | null;
 
+  @Field((type) => String, { nullable: true })
+  thumbNailcontent: string | null;
+
   @Field((type) => String, { nullable: false })
   category: string;
 
