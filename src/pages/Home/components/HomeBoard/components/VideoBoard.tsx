@@ -18,7 +18,7 @@ export const VideoBoard: FC<VideoBoardProps> = ({ videoLink }) => {
       <Typography.Title
         level={3}
         style={{
-          color: "white",
+          color: window.innerWidth > 420 ? "white" : "black",
           padding: "12px 0",
         }}
       >
@@ -29,7 +29,7 @@ export const VideoBoard: FC<VideoBoardProps> = ({ videoLink }) => {
         />
         홍보영상
       </Typography.Title>
-      <div>
+      <Container style={{}}>
         <video
           style={{
             width: "100%",
@@ -40,17 +40,19 @@ export const VideoBoard: FC<VideoBoardProps> = ({ videoLink }) => {
         >
           <source src={videoLink} type="video/mp4" />
         </video>
-      </div>
+      </Container>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
-  margin: 20px;
+  padding: 20px;
+`;
+
+const Container = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
-    width: 90%;
+    width: 100%;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 45%;
   }
 `;

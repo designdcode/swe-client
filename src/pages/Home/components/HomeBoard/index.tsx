@@ -33,8 +33,17 @@ const HomeBoard: React.VFC = () => {
   return (
     <Wrapper>
       <Container>
-        <NoticeTable />
-        <VideoBoard videoLink={videoData?.link || ""} />
+        {window.innerWidth > 420 ? (
+          <>
+            <NoticeTable />
+            <VideoBoard videoLink={videoData?.link || ""} />
+          </>
+        ) : (
+          <>
+            <VideoBoard videoLink={videoData?.link || ""} />
+            <NoticeTable />
+          </>
+        )}
       </Container>
     </Wrapper>
   );

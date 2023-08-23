@@ -10,6 +10,7 @@ import {
 } from "../../../../../utils/mediaQuery";
 import { MenuOutlined } from "@ant-design/icons";
 import { useBoardContext } from "../../../../../contexts";
+import { Link } from "react-router-dom";
 
 const MobileListItem = BaseMobileList.Item;
 
@@ -146,14 +147,63 @@ export const NoticeTable: FC = () => {
       />
       <MobileList
         header={
-          <Typography.Title
-            level={4}
-            style={{
-              color: "#0C1B58",
-            }}
-          >
-            <MenuOutlined /> SW 중심대학공지사항
-          </Typography.Title>
+          <div>
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+                margin: "20px 0",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                }}
+              >
+                <Radio.Group
+                  onChange={handleChange}
+                  optionType="button"
+                  defaultValue={"community-notice"}
+                  buttonStyle="solid"
+                >
+                  <Radio.Button
+                    style={{
+                      border: "none",
+                      backgroundColor:
+                        category === "community-notice" ? "#f03fa8" : "white",
+                      color:
+                        category === "community-notice" ? "white" : "black",
+                    }}
+                    value="community-notice"
+                  >
+                    공지사항
+                  </Radio.Button>
+                  <Radio.Button
+                    style={{
+                      border: "none",
+                      backgroundColor:
+                        category === "achievement-news" ? "#f03fa8" : "white",
+                      color:
+                        category === "achievement-news" ? "white" : "black",
+                    }}
+                    value="achievement-news"
+                  >
+                    사업성과
+                  </Radio.Button>
+                </Radio.Group>
+              </div>
+              <Link to={`/main/board/${category}/${category}`}>더보기+</Link>
+            </div>
+            <Typography.Title
+              level={4}
+              style={{
+                color: "#0C1B58",
+              }}
+            >
+              <MenuOutlined /> SW 중심대학공지사항
+            </Typography.Title>
+          </div>
         }
         style={{}}
       >
@@ -183,6 +233,9 @@ export const NoticeTable: FC = () => {
 const Wrapper = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
     /* max-width: 85vw; */
+
+    -webkit-box-shadow: inset 0px 12px 30px 0px rgba(0, 0, 0, 0.28);
+    box-shadow: inset 0px 10px 15px -10px rgba(0, 0, 0, 0.28);
     margin: 10px 0;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
