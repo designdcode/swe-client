@@ -246,7 +246,7 @@ export const AdminNavData: NavProps[] = [
       {
         key: "community-administration",
         title: "community-administration",
-        ko_title: "학사공지",
+        ko_title: "카드뉴스",
         isList: true,
       },
       {

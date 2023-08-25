@@ -92,12 +92,27 @@ export const MainDesktop = styled.div`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     & .main-content-desktop {
-      /* width: ${breakpoints.pc}px; */
       align-items: center;
       display: flex;
       justify-content: space-between;
       margin: 0 auto;
       height: 80px;
+      width: 100%;
+
+      & .last-content-desktop {
+        display: flex;
+        align-items: center;
+
+        & .col {
+          display: flex;
+          flex-direction: column;
+          margin-right: 15px;
+
+          & img {
+            width: 120px;
+          }
+        }
+      }
     }
 
     & .main-menu {

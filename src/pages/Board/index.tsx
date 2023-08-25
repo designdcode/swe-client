@@ -85,7 +85,7 @@ const Board: React.VFC = () => {
 
   useEffect(() => {
     setTitle(ConvertTitle(subparam));
-    if (subparam.split("-")[1] === "request") {
+    if (subparam.split("-")[1] === "oss") {
       setWriteAble(true);
     } else if (subparam.split("-")[1] === "help") {
       setWriteAble(true);

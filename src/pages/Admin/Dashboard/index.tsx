@@ -104,7 +104,7 @@ const Dashboard: React.VFC = () => {
           <Col span={11}>
             <Table
               title={() => (
-                <Typography.Title level={4}>학사공지</Typography.Title>
+                <Typography.Title level={4}>카드뉴스</Typography.Title>
               )}
               dataSource={admission}
               showHeader={false}
@@ -119,7 +119,7 @@ const Dashboard: React.VFC = () => {
                   onClick: () => {
                     setShowMenuTitle(true);
                     setParentMenu("알림마당");
-                    setChildMenu("학사공지");
+                    setChildMenu("카드뉴스");
                     history.push(`/admin/community/show/${record._id}`);
                   },
                 };

@@ -162,7 +162,7 @@ const Write: React.VFC = () => {
       <Body>
         <div className="head">
           <div className="head-title">
-            {subparam.split("-")[1] === "request" ? "건의사항" : "헬프데스크"}
+            {subparam.split("-")[1] === "oss" ? "오픈소스SW" : "헬프데스크"}
           </div>
         </div>
         <Content>

@@ -112,7 +112,7 @@ export const NavigationData: NavProps[] = [
       {
         key: "major-verify",
         title: "major-verify",
-        ko_title: "소프트웨어역량인증제",
+        ko_title: "SW전문역량인증제",
       },
       {
         key: "major-training",
@@ -191,12 +191,12 @@ export const NavigationData: NavProps[] = [
       {
         key: "cooperation-project",
         title: "cooperation-project",
-        ko_title: "국내·외 기관과의프로젝트",
+        ko_title: "산학협력프로젝트",
       },
       {
         key: "cooperation-internship",
         title: "cooperation-internship",
-        ko_title: "국내·외 기관과연계인턴쉽",
+        ko_title: "인턴쉽",
       },
     ],
   },
@@ -209,27 +209,27 @@ export const NavigationData: NavProps[] = [
       {
         key: "achievement-news",
         title: "achievement-news",
-        ko_title: "사업단 소식",
+        ko_title: "전체보기",
       },
       {
         key: "achievement-aidnews",
         title: "achievement-aidnews",
-        ko_title: "SW교육지원센터 소식",
+        ko_title: "SW교육성과",
       },
       {
         key: "achievement-valuenews",
         title: "achievement-valuenews",
-        ko_title: "SW가치확산센터 소식",
+        ko_title: "SW가치확산",
       },
       {
         key: "achievement-coopnews",
         title: "achievement-coopnews",
-        ko_title: "SW산학협력소식",
+        ko_title: "SW산학협력",
       },
       {
         key: "achievement-startup",
         title: "achievement-startup",
-        ko_title: "창업지원 소식",
+        ko_title: "SW직무교육",
       },
     ],
   },
@@ -247,7 +247,7 @@ export const NavigationData: NavProps[] = [
       {
         key: "community-administration",
         title: "community-administration",
-        ko_title: "학사공지",
+        ko_title: "카드뉴스",
       },
       {
         key: "community-storage",
@@ -255,9 +255,9 @@ export const NavigationData: NavProps[] = [
         ko_title: "서식자료실",
       },
       {
-        key: "community-request",
-        title: "community-request",
-        ko_title: "건의사항",
+        key: "community-oss",
+        title: "community-oss",
+        ko_title: "오픈소스SW",
       },
       {
         key: "community-help",

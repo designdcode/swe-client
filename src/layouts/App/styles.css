@@ -1,1 +1,9 @@
 @import "~antd/dist/antd.css";
+
+:root:root {
+  --adm-color-background: transparent;
+}
+
+.slick-slide {
+  display: flex;
+}

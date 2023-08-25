@@ -362,6 +362,18 @@
             "deprecationReason": null
           },
           {
+            "name": "thumbNailcontent",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "title",
             "description": null,
             "args": [],
@@ -755,7 +767,7 @@
                 "ofType": null
               }
             },
-            "defaultValue": "\"2023-08-04T11:23:21.726Z\"",
+            "defaultValue": "\"2023-08-21T14:50:27.887Z\"",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -800,6 +812,18 @@
               }
             },
             "defaultValue": "true",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "thumbNailcontent",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -3155,7 +3179,7 @@
               "name": "DateTime",
               "ofType": null
             },
-            "defaultValue": "\"2023-08-04T11:23:21.726Z\"",
+            "defaultValue": "\"2023-08-21T14:50:27.887Z\"",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -3192,6 +3216,18 @@
               "ofType": null
             },
             "defaultValue": "true",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "thumbNailcontent",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
           },

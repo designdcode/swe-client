@@ -288,6 +288,12 @@ const ContentBody = styled.div`
       font-size: 10px;
       margin-top: 30px;
       width: 310px;
+
+      & img {
+        max-width: 310px;
+        max-height: 150px;
+        object-fit: contain;
+      }
     }
 
     & .content-body-attachment {

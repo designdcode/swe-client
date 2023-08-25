@@ -8,6 +8,7 @@ mutation createBoard($args: CreateBoardInput!) {
     link
     private
     showAttach
+    thumbNailcontent
     inputCreatedAt
     files {
       url
@@ -32,6 +33,7 @@ mutation updateBoard($args: UpdateBoardInput!) {
     type
     link
     private
+    thumbNailcontent
     showAttach
     inputCreatedAt
     files {

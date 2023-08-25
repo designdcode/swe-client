@@ -50,6 +50,7 @@ export const BoardCreate: FC = () => {
   const [link, onChangeLink, setLink] = useInput("");
   const [writerName, setWriterName] = useState<string>();
   const [showLink, setShowLink] = useState<boolean>(false);
+  const [thumbNailcontent, setThumbNailcontent] = useState<string>();
   const [imgUrl, setImgUrl] = useState<string | undefined>();
   const [imgName, setImgName] = useState<string>();
   const [file, setFile] = useState<FileProps[]>([]);
@@ -92,6 +93,7 @@ export const BoardCreate: FC = () => {
       setLink("");
       setImgUrl("");
       setWriterName("");
+      setThumbNailcontent("");
       toast.success("게시물을 생성 하였습니다");
       history.push({
         pathname: `/admin/${param}/list/${subparam}`,
@@ -113,6 +115,7 @@ export const BoardCreate: FC = () => {
             ? [{ url: imgUrl, fileName: imgName || "" }]
             : undefined,
           private: checkPublic ? false : true,
+          thumbNailcontent,
           type,
           showAttach: showAttach ? true : false,
           inputCreatedAt: createdAt,
@@ -134,6 +137,7 @@ export const BoardCreate: FC = () => {
     createdAt,
     showAttach,
     createBoard,
+    thumbNailcontent,
   ]);
 
   const handleContentChange = (value: string) => {
@@ -347,6 +351,13 @@ export const BoardCreate: FC = () => {
             </div>
           </Form.Item>
         </>
+        {/* <Form.Item name={"thumbNailcontent"} label="본문(썸네일 용)">
+          <Input
+            type="text"
+            onChange={(e) => handleChange(e, setThumbNailcontent)}
+            value={thumbNailcontent}
+          />
+        </Form.Item> */}
         {isContentNeeded && (
           <Form.Item
             name={"content"}

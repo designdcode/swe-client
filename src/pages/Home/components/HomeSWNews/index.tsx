@@ -30,28 +30,28 @@ const HomeSWNews: React.VFC = () => {
         .sort(
           (a, b) =>
             new Date(b.inputCreatedAt).getTime() -
-            new Date(b.inputCreatedAt).getTime()
+            new Date(a.inputCreatedAt).getTime()
         );
       const valueNews = boards
         .filter((v) => v.category === "achievement-valuenews")
         .sort(
           (a, b) =>
-            new Date(a.inputCreatedAt).getTime() -
-            new Date(b.inputCreatedAt).getTime()
+            new Date(b.inputCreatedAt).getTime() -
+            new Date(a.inputCreatedAt).getTime()
         );
       const coopNews = boards
         .filter((v) => v.category === "achievement-coopnews")
         .sort(
           (a, b) =>
-            new Date(a.inputCreatedAt).getTime() -
-            new Date(b.inputCreatedAt).getTime()
+            new Date(b.inputCreatedAt).getTime() -
+            new Date(a.inputCreatedAt).getTime()
         );
       const startupNews = boards
         .filter((v) => v.category === "achievement-startup")
         .sort(
           (a, b) =>
-            new Date(a.inputCreatedAt).getTime() -
-            new Date(b.inputCreatedAt).getTime()
+            new Date(b.inputCreatedAt).getTime() -
+            new Date(a.inputCreatedAt).getTime()
         );
 
       setAurl(aidNews[aidNews.length - 1]?.images);

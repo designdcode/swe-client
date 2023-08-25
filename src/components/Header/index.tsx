@@ -14,6 +14,7 @@ import { BsPersonCircle } from "react-icons/bs";
 import { IoIosLogOut } from "react-icons/io";
 import { userLogOut } from "../../utils/loginResolver";
 import { Box, Drawer, List, ListItem, ListItemText } from "@mui/material";
+import { Image } from "antd";
 
 const Header: React.VFC = () => {
   const history = useHistory();
@@ -107,13 +108,37 @@ const Header: React.VFC = () => {
       <HeaderMain>
         <MainDesktop>
           <div className="main-content-desktop">
-            <div></div>
+            <div />
             <Link to="/main">
-              <img src={"/img/logo.png"} alt="logo" />
+              <Image
+                height={"70px"}
+                preview={false}
+                src={"/img/logo.png"}
+                alt="logo"
+              />
             </Link>
-            <div>
+            <div className="last-content-desktop">
+              <div className="last-content-desktop">
+                <div className="col">
+                  <Link to="https://mpp.sunmoon.ac.kr">
+                    <Image preview={false} src="/img/value.png" />
+                  </Link>
+                  <Link to="https://www.instagram.com/sw_sunmoonuniv/">
+                    <Image preview={false} src="/img/instaButton.png" />
+                  </Link>
+                </div>
+                <div className="col">
+                  <Link to="https://mpp.sunmoon.ac.kr/">
+                    <Image preview={false} src="/img/platform.png" />
+                  </Link>
+                  <Link to="https://www.youtube.com/@SW-hj4ss">
+                    <Image preview={false} src="/img/youtubeButton.png" />
+                  </Link>
+                </div>
+              </div>
               <Link to="/main">
-                <img
+                <Image
+                  preview={false}
                   src={"/img/homeIcon.jpeg"}
                   alt="home"
                   width={40}
@@ -128,7 +153,8 @@ const Header: React.VFC = () => {
                     cursor: "pointer",
                   }}
                 >
-                  <img
+                  <Image
+                    preview={false}
                     src={"/img/logout.jpeg"}
                     alt="logout"
                     width={35}
@@ -137,7 +163,8 @@ const Header: React.VFC = () => {
                 </div>
               ) : (
                 <Link to="/main/login" style={{ marginLeft: 15 }}>
-                  <img
+                  <Image
+                    preview={false}
                     src={"/img/homeLogin.jpeg"}
                     alt="login"
                     width={40}
