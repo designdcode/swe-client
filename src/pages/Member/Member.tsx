@@ -14,6 +14,7 @@ import {
 } from "../../utils/mediaQuery";
 import { Image, Table, Typography } from "antd";
 import Column from "antd/lib/table/Column";
+import { List } from "antd-mobile";
 
 interface TableDataSourceProps {
   key: number;
@@ -140,70 +141,140 @@ export const Member: FC = () => {
           />
         )}
       </ContentImage>
-      <Typography.Title
+      <Title
         level={4}
         style={{
           color: "#0c1b58",
         }}
       >
         구성원 및 담당업무
-      </Typography.Title>
-      <Table
-        dataSource={handleDataSource([
-          president,
-          vicePresident,
-        ] as MembersQuery["members"]["data"])}
-        pagination={false}
-      >
-        <Column title="직책 / 구분" dataIndex={"jobTitle"} key={"jobTitle"} />
-        <Column title="이름" dataIndex={"memberName"} key={"memberName"} />
-        <Column title="이메일" dataIndex={"email"} key={"email"} />
-        <Column title="연락처" dataIndex={"phoneNumber"} key={"phoneNumber"} />
-        <Column title="담당업무" dataIndex={"job"} key={"job"} />
-      </Table>
-      {memberGroup &&
-        Object.entries(memberGroup).map(([k, m], i) => {
-          return (
-            <div
-              key={i}
-              style={{
-                marginTop: "50px",
-                marginBottom: "50px",
-              }}
-            >
-              <Typography.Title
-                level={4}
+      </Title>
+      <Div>
+        <Table
+          dataSource={handleDataSource([
+            president,
+            vicePresident,
+          ] as MembersQuery["members"]["data"])}
+          pagination={false}
+        >
+          <Column title="직책 / 구분" dataIndex={"jobTitle"} key={"jobTitle"} />
+          <Column title="이름" dataIndex={"memberName"} key={"memberName"} />
+          <Column title="이메일" dataIndex={"email"} key={"email"} />
+          <Column
+            title="연락처"
+            dataIndex={"phoneNumber"}
+            key={"phoneNumber"}
+          />
+          <Column title="담당업무" dataIndex={"job"} key={"job"} />
+        </Table>
+        {memberGroup &&
+          Object.entries(memberGroup).map(([k, m], i) => {
+            return (
+              <div
+                key={i}
                 style={{
-                  color: "#0c1b58",
+                  marginTop: "50px",
+                  marginBottom: "50px",
                 }}
               >
-                {handleTableTitle(k)}
-              </Typography.Title>
-              <Table dataSource={handleDataSource(m)} pagination={false}>
-                <Column
-                  title="직책 / 구분"
-                  dataIndex={"jobTitle"}
-                  key={"jobTitle"}
-                />
-                <Column
-                  title="이름"
-                  dataIndex={"memberName"}
-                  key={"memberName"}
-                />
-                <Column title="이메일" dataIndex={"email"} key={"email"} />
-                <Column
-                  title="연락처"
-                  dataIndex={"phoneNumber"}
-                  key={"phoneNumber"}
-                />
-                <Column title="담당업무" dataIndex={"job"} key={"job"} />
-              </Table>
-            </div>
-          );
-        })}
+                <Typography.Title
+                  level={4}
+                  style={{
+                    color: "#0c1b58",
+                  }}
+                >
+                  {handleTableTitle(k)}
+                </Typography.Title>
+                <Table dataSource={handleDataSource(m)} pagination={false}>
+                  <Column
+                    title="직책 / 구분"
+                    dataIndex={"jobTitle"}
+                    key={"jobTitle"}
+                  />
+                  <Column
+                    title="이름"
+                    dataIndex={"memberName"}
+                    key={"memberName"}
+                  />
+                  <Column title="이메일" dataIndex={"email"} key={"email"} />
+                  <Column
+                    title="연락처"
+                    dataIndex={"phoneNumber"}
+                    key={"phoneNumber"}
+                  />
+                  <Column title="담당업무" dataIndex={"job"} key={"job"} />
+                </Table>
+              </div>
+            );
+          })}
+      </Div>
+      <MobileDiv>
+        <List
+          style={{
+            paddingTop: "20px",
+          }}
+        >
+          {handleDataSource([
+            president,
+            vicePresident,
+          ] as MembersQuery["members"]["data"]).map((v, i) => {
+            return (
+              <List.Item
+                key={i}
+                prefix={
+                  <Typography.Title level={5}>{v.jobTitle}</Typography.Title>
+                }
+                description={`${v.email} | ${v.phoneNumber}`}
+              >
+                {v.memberName} | {v.job}
+              </List.Item>
+            );
+          })}
+        </List>
+        <List>
+          {memberGroup &&
+            Object.entries(memberGroup).map(([k, m], i) => {
+              return (
+                <div
+                  key={i}
+                  style={{
+                    paddingTop: "30px",
+                  }}
+                >
+                  <Typography.Title level={5}>
+                    {handleTableTitle(k)}
+                  </Typography.Title>
+                  {handleDataSource(m).map((v, idx) => {
+                    return (
+                      <List.Item
+                        key={idx}
+                        prefix={
+                          <Typography.Title level={5}>
+                            {v.jobTitle}
+                          </Typography.Title>
+                        }
+                        description={`${v.email} | ${v.phoneNumber}`}
+                      >
+                        {v.memberName} | {v.job}
+                      </List.Item>
+                    );
+                  })}
+                </div>
+              );
+            })}
+        </List>
+      </MobileDiv>
     </div>
   );
 };
+
+const Title = styled(Typography.Title)`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    margin-left: 10px;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+  }
+`;
 
 const ContentImage = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
@@ -226,5 +297,22 @@ const ContentImage = styled.div`
       width: 80%;
       margin: 0 auto;
     }
+  }
+`;
+
+const Div = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    display: none;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+  }
+`;
+
+const MobileDiv = styled.div`
+  ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    padding: 10px;
+  }
+  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
+    display: none;
   }
 `;

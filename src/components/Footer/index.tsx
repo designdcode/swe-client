@@ -11,10 +11,24 @@ const Footer = () => {
     <FooterContaier>
       <Div>
         <div className="banner-group">
-          <Image src={"/img/footerBanner2.jpg"} />
-          <Image src={"/img/footerBanner1.jpg"} />
+          <a
+            href={
+              "https://docs.google.com/forms/d/e/1FAIpQLSdpCBD4dNPsNWguHfat1s620Fmxqpi-TBAK6ehdCoMeL23eQw/viewform"
+            }
+          >
+            <Image preview={false} src={"/img/footerBanner2.jpg"} />
+          </a>
+          <a href={"https://www.swuniv.kr/45"}>
+            <Image
+              preview={false}
+              src={"/img/footerBanner1.jpg"}
+              style={{
+                cursor: "pointer",
+              }}
+            />
+          </a>
         </div>
-        <img src={"/img/footerLogo.jpg"} alt="logoimg" className="logo" />
+        <img src={"/img/footerLogo.png"} alt="logoimg" className="logo" />
         <div
           style={{
             display: "flex",
@@ -58,7 +72,28 @@ const Footer = () => {
           </a>
         </div>
       </Div>
-      <MobileDiv>mobile</MobileDiv>
+      <MobileDiv>
+        <img src={"/img/footerLogo.png"} alt="logoimg" className="logo" />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Typography.Text style={{ color: "#707070", fontSize: "10px" }}>
+            {" "}
+            TEL . 041-530-8311 FAX. 041-530-8315
+          </Typography.Text>
+          <Typography.Text style={{ color: "#707070", fontSize: "10px" }}>
+            우) 31460 충남 아산시 탕정면 선문로 221번길 70 선문대학교
+            SW융합관(원화관) 506호
+          </Typography.Text>
+          <Typography.Text style={{ color: "#707070", fontSize: "10px" }}>
+            Sunmoon-ro 221 beon-gil, Tangjeong-myeon, Asan-si,
+            Chungcheongnam-do, korea , 31460
+          </Typography.Text>
+        </div>
+      </MobileDiv>
     </FooterContaier>
   );
 };
@@ -66,13 +101,13 @@ const Footer = () => {
 export default Footer;
 export const FooterContaier = styled.div`
   width: 100%;
-  background-image: url("/img/footerBG.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    background-color: #f7f7f7;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    width: 100%;
+    background-image: url("/img/footerBG.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 `;
 
@@ -102,6 +137,7 @@ const Div = styled.div`
 
 const MobileDiv = styled.div`
   ${mediaQueries(BREAKPOINT_PHONE_MEDIUM)} {
+    padding: 20px;
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     display: none;

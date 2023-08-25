@@ -120,18 +120,18 @@ const Header: React.VFC = () => {
             <div className="last-content-desktop">
               <div className="last-content-desktop">
                 <div className="col">
-                  <Link to="#">
+                  <Link to="https://mpp.sunmoon.ac.kr">
                     <Image preview={false} src="/img/value.png" />
                   </Link>
-                  <Link to="#">
+                  <Link to="https://www.instagram.com/sw_sunmoonuniv/">
                     <Image preview={false} src="/img/instaButton.png" />
                   </Link>
                 </div>
                 <div className="col">
-                  <Link to="#">
+                  <Link to="https://mpp.sunmoon.ac.kr/">
                     <Image preview={false} src="/img/platform.png" />
                   </Link>
-                  <Link to="#">
+                  <Link to="https://www.youtube.com/@SW-hj4ss">
                     <Image preview={false} src="/img/youtubeButton.png" />
                   </Link>
                 </div>
