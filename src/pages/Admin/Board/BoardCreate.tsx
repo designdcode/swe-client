@@ -227,6 +227,14 @@ export const BoardCreate: FC = () => {
             value={title}
           />
         </Form.Item>
+
+        <Form.Item name="thumbNailcontent" label="소제목">
+          <Input
+            type="text"
+            onChange={(e) => handleChange(e, setThumbNailcontent)}
+            value={thumbNailcontent}
+          />
+        </Form.Item>
         <Form.Item name={"writer"} label="작성자">
           <Input
             type="text"

@@ -54,7 +54,7 @@ export const ListHead: FC<ListHeadProps> = ({
     <BoardTitle>
       <div className={"board-page"}>
         <Typography.Title
-          level={1}
+          level={2}
           style={{
             color: "#04083e",
           }}

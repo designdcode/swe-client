@@ -166,11 +166,15 @@ export const HomeCardNews: FC = () => {
                           flexDirection: "column",
                           justifyContent: "center",
                           alignItems: "center",
+                          cursor: "pointer",
                         }}
                       >
                         <Image
                           height={250}
                           preview={false}
+                          style={{
+                            objectFit: "cover",
+                          }}
                           src={url || "/img/blackLogo.jpeg"}
                         />
                         <Typography.Paragraph>

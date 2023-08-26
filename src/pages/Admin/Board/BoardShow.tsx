@@ -63,6 +63,9 @@ export const BoardShow: FC = () => {
         column={1}
       >
         <Descriptions.Item label="제목">{board?.title}</Descriptions.Item>
+        <Descriptions.Item label="소제목">
+          {board?.thumbNailcontent || "소제목 없음"}
+        </Descriptions.Item>
         <Descriptions.Item label="상태">
           <Typography.Text type={board?.private ? "danger" : "success"}>
             {board?.private ? "비공개" : "공개"}

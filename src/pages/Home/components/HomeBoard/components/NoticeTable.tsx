@@ -54,7 +54,10 @@ export const NoticeTable: FC = () => {
                 color: "white",
               }}
             >
-              <MenuOutlined /> SW 중심대학공지사항
+              <MenuOutlined />{" "}
+              {category.includes("notice")
+                ? "SW 중심대학 공지사항"
+                : "SW 중심대학 사업성과"}
             </Typography.Title>
             <Radio.Group
               onChange={handleChange}
@@ -201,7 +204,10 @@ export const NoticeTable: FC = () => {
                 color: "#0C1B58",
               }}
             >
-              <MenuOutlined /> SW 중심대학공지사항
+              <MenuOutlined />{" "}
+              {category.includes("notice")
+                ? "SW 중심대학 공지사항"
+                : "SW 중심대학 사업성과"}
             </Typography.Title>
           </div>
         }
