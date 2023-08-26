@@ -264,11 +264,6 @@ export const NavigationData: NavProps[] = [
         title: "community-help",
         ko_title: "헬프데스크",
       },
-      {
-        key: "community-sitemap",
-        title: "community-sitemap",
-        ko_title: "사이트맵",
-      },
     ],
   },
   {
