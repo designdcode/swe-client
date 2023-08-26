@@ -104,8 +104,6 @@ export const Member: FC = () => {
     return <div>loading...</div>;
   }
 
-  // TODO: Table breaks the mobile view
-
   return (
     <div
       style={{
@@ -131,14 +129,7 @@ export const Member: FC = () => {
       </div>
       <ContentImage>
         {images && images.length > 0 && (
-          <Image
-            style={{
-              minWidth: "250px",
-              maxWidth: "800px",
-            }}
-            src={images[0]?.url}
-            alt="uploadedImage"
-          />
+          <Image preview={false} src={images[0]?.url} alt="uploadedImage" />
         )}
       </ContentImage>
       <Title
@@ -283,7 +274,7 @@ const ContentImage = styled.div`
     display: flex;
     justify-content: center;
     & img {
-      width: 80%;
+      width: 100%;
       object-fit: contain;
     }
   }
@@ -293,8 +284,9 @@ const ContentImage = styled.div`
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
     & img {
-      width: 80%;
+      width: 100%;
       margin: 0 auto;
     }
   }
