@@ -265,7 +265,7 @@ const ImageWrapper = styled.div`
     img {
       width: 120px;
     }
-    box-shadow: 5px 5px 14px #000000;
+    box-shadow: 5px 5px 14px #cccccc;
   }
 `;
 
