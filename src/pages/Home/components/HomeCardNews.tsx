@@ -144,6 +144,8 @@ export const HomeCardNews: FC = () => {
             selectedItem={selected}
             showIndicators={false}
             showThumbs={false}
+            autoPlay
+            interval={5000}
           >
             {data.map((menu, i) => {
               return (
@@ -177,7 +179,12 @@ export const HomeCardNews: FC = () => {
                           }}
                           src={url || "/img/blackLogo.jpeg"}
                         />
-                        <Typography.Paragraph>
+                        <Typography.Paragraph
+                          ellipsis
+                          style={{
+                            margin: "20px 0",
+                          }}
+                        >
                           {subMenu.title}
                         </Typography.Paragraph>
                       </div>
@@ -197,6 +204,8 @@ export const HomeCardNews: FC = () => {
             showIndicators={false}
             showThumbs={false}
             swipeable={false}
+            autoPlay
+            interval={5000}
           >
             {mobileData &&
               mobileData.map((d, i) => {

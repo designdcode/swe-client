@@ -6,27 +6,43 @@ import {
   mediaQueries,
 } from "../../../../../utils/mediaQuery";
 import { Typography } from "antd";
+import { Stack } from "@mui/material";
 
 interface NumberBoxProps {
   fill: boolean;
+  createdAt: Date;
 }
 
-export const NumberBox: FC<NumberBoxProps> = ({ fill }) => {
+export const NumberBox: FC<NumberBoxProps> = ({ fill, createdAt }) => {
+  const year = new Date(createdAt).getFullYear();
+  const month = new Date(createdAt).getMonth() + 1;
+  const date = new Date(createdAt).getDate();
+
   return (
     <Wrapper
       style={{
         backgroundColor: fill ? "#0c1b58" : "#CCCCCC",
       }}
     >
-      <Typography.Title
-        style={{
-          color: "white",
-          margin: 0,
-        }}
-        level={2}
-      >
-        01
-      </Typography.Title>
+      <Stack direction={"column"} alignItems={"center"}>
+        <Typography.Text
+          style={{
+            color: "white",
+            margin: 0,
+          }}
+        >
+          {year}
+        </Typography.Text>
+        <Typography.Title
+          level={5}
+          style={{
+            color: "white",
+            margin: 0,
+          }}
+        >
+          {month > 10 ? month : `0${month}`}.{date}
+        </Typography.Title>
+      </Stack>
     </Wrapper>
   );
 };

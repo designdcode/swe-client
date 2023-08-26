@@ -11,6 +11,33 @@ import { Carousel } from "react-responsive-carousel";
 import { IoIosArrowDropleft, IoIosArrowDropright } from "react-icons/io";
 import { useWindowSize } from "../../../../hooks/useWindowSize";
 
+const bannerGroup = [
+  {
+    url: "img/banner1.jpg",
+  },
+  {
+    url: "img/banner2.jpg",
+  },
+  {
+    url: "img/banner3.jpg",
+  },
+  {
+    url: "img/banner4.jpg",
+  },
+  {
+    url: "img/banner5.jpg",
+  },
+];
+
+const mobileBannerGroup = [
+  {
+    url: "img/mobileBanner.jpeg",
+  },
+  {
+    url: "img/MobileBanner2.jpeg",
+  },
+];
+
 const HomeBanner: React.VFC = () => {
   const size = useWindowSize();
 
@@ -63,32 +90,21 @@ const HomeBanner: React.VFC = () => {
             : undefined
         }
       >
-        <ImageBox>
-          <Image
-            src={
-              size.width > breakpoints.phoneMedium
-                ? "img/banner1.jpeg"
-                : "img/mobileBanner.jpeg"
-            }
-            alt="banner"
-          />
-          {size.width > breakpoints.phoneMedium && (
-            <ImageCover src={"img/banner2_cover.jpeg"} alt="banner cover" />
-          )}
-        </ImageBox>
-        <ImageBox>
-          <Image
-            src={
-              size.width > breakpoints.phoneMedium
-                ? "img/banner2.jpeg"
-                : "img/MobileBanner2.jpeg"
-            }
-            alt="banner2"
-          />
-          {size.width > breakpoints.phoneMedium && (
-            <ImageCover src={"img/banner1_cover.jpeg"} alt="banner2 cover" />
-          )}
-        </ImageBox>
+        {window.innerWidth > 400
+          ? bannerGroup.map((d, i) => {
+              return (
+                <ImageBox key={i}>
+                  <Image src={d.url} alt="banner" />
+                </ImageBox>
+              );
+            })
+          : mobileBannerGroup.map((m, idx) => {
+              return (
+                <ImageBox key={idx}>
+                  <Image src={m.url} alt="banner" />
+                </ImageBox>
+              );
+            })}
       </Carousel>
     </Wrapper>
   );
@@ -128,16 +144,9 @@ const Image = styled.img`
   }
   ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
     height: 550px;
-    width: 1280px;
-  }
-`;
-
-const ImageCover = styled.img`
-  height: 400px;
-  object-fit: cover;
-  position: absolute;
-  ${mediaQueries(BREAKPOINT_BIGGER_THAN_PC)} {
-    height: 640px;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
   }
 `;
 

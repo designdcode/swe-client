@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { BoardQuery } from "../../../../typings/api.d";
+import { BoardQuery } from "../../../../../typings/api.d";
 import styled from "@emotion/styled";
 import { Image, Typography } from "antd";
 import { Image as MobileImage } from "antd-mobile";
@@ -7,13 +7,13 @@ import {
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
-} from "../../../../utils/mediaQuery";
-import { NumberBox } from "./components";
+} from "../../../../../utils/mediaQuery";
+import { NumberBox } from ".";
 import {
   optionCooperate,
   optionEducate,
   optionValue,
-} from "../../../Admin/Board/selectOptionts";
+} from "../../../../Admin/Board/selectOptionts";
 import { Link } from "react-router-dom";
 import { MenuOutlined } from "@ant-design/icons";
 
@@ -97,7 +97,7 @@ export const SWListItem: FC<SWListItemProps> = ({ data, even, title }) => {
                   alignItems: "center",
                 }}
               >
-                <NumberBox fill={even} />
+                <NumberBox fill={even} createdAt={data?.inputCreatedAt} />
                 <div
                   style={{
                     display: "flex",
@@ -129,15 +129,14 @@ export const SWListItem: FC<SWListItemProps> = ({ data, even, title }) => {
                 margin: "10px 0",
               }}
             >
-              <Typography.Title
+              <Typography.Paragraph
                 ellipsis
-                level={4}
                 style={{
                   margin: 0,
                 }}
               >
-                {data?.title}
-              </Typography.Title>
+                {data?.thumbNailcontent}
+              </Typography.Paragraph>
             </Row>
           </Container>
         </Link>
@@ -266,7 +265,7 @@ const ImageWrapper = styled.div`
     img {
       width: 120px;
     }
-    box-shadow: 5px 5px 14px #000000;
+    box-shadow: 5px 5px 14px #cccccc;
   }
 `;
 

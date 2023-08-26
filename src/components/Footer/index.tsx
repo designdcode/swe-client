@@ -61,14 +61,14 @@ const Footer = () => {
             target="_blank"
             rel="noreferrer"
           >
-            <img src={"/img/insta.png"} alt="insta" />
+            <img src={"/img/insta.png"} alt="insta" width={"40"} />
           </a>
           <a
             href="https://www.youtube.com/channel/UC6CYp3QV8cL-D4-hBXb_Nbw"
             target="_blank"
             rel="noreferrer"
           >
-            <img src={"/img/youtube.png"} alt="youtube" />
+            <img src={"/img/youtube.png"} alt="youtube" width={"45"} />
           </a>
         </div>
       </Div>

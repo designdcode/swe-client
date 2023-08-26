@@ -109,7 +109,12 @@ const Header: React.VFC = () => {
         <MainDesktop>
           <div className="main-content-desktop">
             <div />
-            <Link to="/main">
+            <Link
+              to="/main"
+              style={{
+                marginLeft: "12rem",
+              }}
+            >
               <Image
                 height={"70px"}
                 preview={false}

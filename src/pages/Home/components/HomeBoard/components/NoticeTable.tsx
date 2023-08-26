@@ -106,15 +106,9 @@ export const NoticeTable: FC = () => {
                   [Title]{item.title}
                 </Typography.Title>
                 <Content>
-                  <span
-                    style={{
-                      color: "white",
-                    }}
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        item.content?.replace(/<img .*?><h1 .*?>/g, "") || "",
-                    }}
-                  />
+                  <Typography.Text style={{ color: "white" }}>
+                    {item.thumbNailcontent}
+                  </Typography.Text>
                 </Content>
                 <Divider
                   style={{
