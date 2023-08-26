@@ -129,15 +129,14 @@ export const SWListItem: FC<SWListItemProps> = ({ data, even, title }) => {
                 margin: "10px 0",
               }}
             >
-              <Typography.Title
+              <Typography.Paragraph
                 ellipsis
-                level={4}
                 style={{
                   margin: 0,
                 }}
               >
-                {data?.title}
-              </Typography.Title>
+                {data?.thumbNailcontent}
+              </Typography.Paragraph>
             </Row>
           </Container>
         </Link>
