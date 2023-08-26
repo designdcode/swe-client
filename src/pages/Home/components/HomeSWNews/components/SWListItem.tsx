@@ -97,7 +97,7 @@ export const SWListItem: FC<SWListItemProps> = ({ data, even, title }) => {
                   alignItems: "center",
                 }}
               >
-                <NumberBox fill={even} />
+                <NumberBox fill={even} createdAt={data?.inputCreatedAt} />
                 <div
                   style={{
                     display: "flex",
