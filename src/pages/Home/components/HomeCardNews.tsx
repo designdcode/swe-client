@@ -144,6 +144,8 @@ export const HomeCardNews: FC = () => {
             selectedItem={selected}
             showIndicators={false}
             showThumbs={false}
+            autoPlay
+            interval={2000}
           >
             {data.map((menu, i) => {
               return (
@@ -197,6 +199,8 @@ export const HomeCardNews: FC = () => {
             showIndicators={false}
             showThumbs={false}
             swipeable={false}
+            autoPlay
+            interval={2000}
           >
             {mobileData &&
               mobileData.map((d, i) => {

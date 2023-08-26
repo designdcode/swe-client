@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { BoardQuery } from "../../../../typings/api.d";
+import { BoardQuery } from "../../../../../typings/api.d";
 import styled from "@emotion/styled";
 import { Image, Typography } from "antd";
 import { Image as MobileImage } from "antd-mobile";
@@ -7,13 +7,13 @@ import {
   BREAKPOINT_BIGGER_THAN_PC,
   BREAKPOINT_PHONE_MEDIUM,
   mediaQueries,
-} from "../../../../utils/mediaQuery";
-import { NumberBox } from "./components";
+} from "../../../../../utils/mediaQuery";
+import { NumberBox } from ".";
 import {
   optionCooperate,
   optionEducate,
   optionValue,
-} from "../../../Admin/Board/selectOptionts";
+} from "../../../../Admin/Board/selectOptionts";
 import { Link } from "react-router-dom";
 import { MenuOutlined } from "@ant-design/icons";
 
