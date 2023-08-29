@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { BoardService } from './board.service';
 import { Board } from './entities/board.entity';
 import { CreateBoardInput } from './dto/create-board.input';
@@ -37,5 +37,10 @@ export class BoardResolver {
   @Mutation(() => Board)
   async removeBoard(@Args('_id', { type: () => String }) _id: string) {
     return await this.boardService.remove(_id);
+  }
+
+  @Mutation(() => Board)
+  async incrementClicked(@Args('_id', { type: () => String }) _id: string) {
+    return await this.boardService.incrementClicked(_id);
   }
 }

@@ -1,6 +1,6 @@
 import { Schema as MongooseSchema, Document } from 'mongoose';
 import * as mongoose from 'mongoose';
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Comment } from '../../comment/entities/comment.entity';
 
@@ -44,6 +44,10 @@ export class Board {
   @Prop()
   @Field(() => String, { nullable: true })
   writer: string | null;
+
+  @Prop()
+  @Field(() => String, { defaultValue: '0' })
+  clicked: string;
 
   @Prop()
   @Field(() => String, { nullable: false })

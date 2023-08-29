@@ -27,6 +27,7 @@ type Board {
   content: String
   thumbNailcontent: String
   writer: String
+  clicked: String!
   category: String!
   type: String
   link: String
@@ -143,6 +144,7 @@ type Mutation {
   createBoard(args: CreateBoardInput!): Board!
   updateBoard(args: UpdateBoardInput!): Board!
   removeBoard(_id: String!): Board!
+  incrementClicked(_id: String!): Board!
   createComment(args: CreateCommentInput!): Comment!
   updateComment(args: UpdateCommentInput!): Comment!
   removeComment(_id: String!): Comment!
@@ -174,7 +176,7 @@ input CreateBoardInput {
   images: [AttachementInput!]
   private: Boolean! = false
   showAttach: Boolean! = true
-  inputCreatedAt: DateTime! = "2023-08-25T08:14:22.158Z"
+  inputCreatedAt: DateTime! = "2023-08-28T13:17:05.173Z"
 }
 
 input AttachementInput {
@@ -194,7 +196,7 @@ input UpdateBoardInput {
   images: [AttachementInput!]
   private: Boolean = false
   showAttach: Boolean = true
-  inputCreatedAt: DateTime = "2023-08-25T08:14:22.158Z"
+  inputCreatedAt: DateTime = "2023-08-28T13:17:05.173Z"
   _id: String!
 }
 

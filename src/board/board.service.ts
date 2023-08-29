@@ -91,4 +91,19 @@ export class BoardService {
       throw new Error(err);
     }
   }
+
+  async incrementClicked(_id: string) {
+    try {
+      const board = await this.boardModel.findById({ _id });
+      const Clicked = parseInt(board.clicked || '0', 10) + 1;
+
+      return await this.boardModel.findByIdAndUpdate(_id, {
+        $set: {
+          clicked: Clicked,
+        },
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
 }
